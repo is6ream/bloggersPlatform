@@ -1,4 +1,6 @@
-export interface VideoDBType {
+import { availableResolutions } from "./core/resolutions"
+
+export interface VideoType {
     id: string,
     title: string,
     author: string,
@@ -6,18 +8,25 @@ export interface VideoDBType {
     minAgeRestriction: number | null,
     createdAt: string,
     publicationDate: string,
-    availableResolutions: string[]
+    availableResolutions: string
 }
 
-export const newVideo: VideoDBType = {
-    id: new Date().toISOString() + Math.random(),
-    title: 'new title',
-    author: 'new author',
-    canBeDownloaded: true,
-    minAgeRestriction: null,
-    createdAt: new Date().toISOString(),
-    publicationDate: new Date().toISOString() + Math.random(),
-    availableResolutions: [
-        "P144"
+
+export interface DBType {
+    videos: VideoType[]
+}
+
+export const db: DBType = {
+    videos: [
+        {
+            id: new Date().toISOString(),
+            title: 't1',
+            author: 'a1',
+            canBeDownloaded: true,
+            minAgeRestriction: null,
+            createdAt: new Date().toISOString(),
+            publicationDate: new Date().toISOString(),
+            availableResolutions: availableResolutions.P1440,
+        }
     ]
 }
