@@ -1,4 +1,5 @@
 import express, { Express } from "express"
+import { newVideo } from "./db";
 
 export const setupApp = (app: Express) => {
     app.use(express.json());
@@ -7,8 +8,8 @@ export const setupApp = (app: Express) => {
         res.status(200).send("Hello world")
     })
 
-    app.get('/', (req, res) => {
-     
+    app.get('/video', (req, res) => {
+        res.send(newVideo).status(200)
     })
 
     return app;
