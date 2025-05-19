@@ -8,6 +8,10 @@ const express_1 = __importDefault(require("express"));
 const db_1 = require("./db");
 const setupApp = (app) => {
     app.use(express_1.default.json());
+    app.delete('/videos/testing/all-data', (req, res) => {
+        db_1.db.videos = [];
+        res.status(201).send();
+    });
     app.get('/videos', (req, res) => {
         res.status(200).send(db_1.db.videos);
     });
@@ -32,14 +36,31 @@ const setupApp = (app) => {
                     "P144" /* availableResolutions.P144 */
                 ]
             };
+            db_1.db.videos.push(newVideo);
             res.status(201).send(newVideo);
         });
     app.put('/videos/:id', (req, res) => {
         const findVideo = db_1.db.videos.find(v => v.id === +req.params.id);
-        if (!findVideo) {
+        if (findVideo === undefined) {
             res.status(404).send({ message: "Video not  found" });
+            return;
         }
-        findVideo.title = req.body.title || (findVideo === null || findVideo === void 0 ? void 0 : findVideo.title);
+        findVideo.title = req.body.title || findVideo.title;
+        findVideo.author = req.body.author || findVideo.author;
+        findVideo.canBeDownloaded = req.body.canBeDownloaded || findVideo.canBeDownloaded;
+        findVideo.minAgeRestriction = req.body.minAgeRestriction || findVideo.minAgeRestriction;
+        findVideo.publicationDate = req.body.publicationDate || findVideo.publicationDate;
+        findVideo.availableResolutions = req.body.availableResolutions || findVideo.availableResolutions;
+        res.status(204).send();
+    });
+    app.delete('/videos:id', (req, res) => {
+        const findVideo = db_1.db.videos.find(v => v.id === +req.params.id);
+        if (!findVideo) {
+            res.status(404).send({ message: "Video is not defined!" });
+        }
+        const id = findVideo === null || findVideo === void 0 ? void 0 : findVideo.id;
+        db_1.db.videos.splice(() => );
+        //порабоать с delete
     });
     return app;
 };
