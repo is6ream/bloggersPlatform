@@ -1,14 +1,14 @@
 import { availableResolutions } from "./core/resolutions"
 
 export interface VideoType {
-    id: string,
+    id: number,
     title: string,
     author: string,
     canBeDownloaded: boolean,
     minAgeRestriction: number | null,
     createdAt: string,
     publicationDate: string,
-    availableResolutions: string
+    availableResolutions: string[]
 }
 
 
@@ -19,14 +19,16 @@ export interface DBType {
 export const db: DBType = {
     videos: [
         {
-            id: new Date().toISOString(),
+            id: 0,
             title: 't1',
             author: 'a1',
             canBeDownloaded: true,
             minAgeRestriction: null,
             createdAt: new Date().toISOString(),
             publicationDate: new Date().toISOString(),
-            availableResolutions: availableResolutions.P1440,
+            availableResolutions: [
+                availableResolutions.P1440
+            ] 
         }
     ]
 }
