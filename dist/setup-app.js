@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const db_1 = require("./db");
 const setupApp = (app) => {
     app.use(express_1.default.json());
-    app.delete('/videos/testing/all-data', (req, res) => {
+    app.delete('/testing/all-data', (req, res) => {
         db_1.db.videos = [];
         res.status(201).send();
     });
@@ -25,7 +25,7 @@ const setupApp = (app) => {
     }),
         app.post('/videos', (req, res) => {
             const newVideo = {
-                id: Number(new Date().toISOString()),
+                id: Math.floor(Date.now() + Math.random()),
                 title: req.body.title,
                 author: req.body.author,
                 canBeDownloaded: true,
@@ -53,15 +53,14 @@ const setupApp = (app) => {
         findVideo.availableResolutions = req.body.availableResolutions || findVideo.availableResolutions;
         res.status(204).send();
     });
-    app.delete('/videos:id', (req, res) => {
-        const findVideo = db_1.db.videos.find(v => v.id === +req.params.id);
+    app.delete('/videos/:id', (req, res) => {
+        const id = +req.params.id;
+        const findVideo = db_1.db.videos.find(v => v.id === id);
         if (!findVideo) {
-            res.status(404).send({ message: "Video is not defined!" });
+            res.status(404).send({ message: "Video is not found!" });
         }
-        const id = findVideo === null || findVideo === void 0 ? void 0 : findVideo.id;
-        db_1.db.videos.splice(() => );
-        //порабоать с delete
+        db_1.db.videos = db_1.db.videos.filter(v => v.id !== id);
+        res.status(204).send();
     });
-    return app;
 };
 exports.setupApp = setupApp;

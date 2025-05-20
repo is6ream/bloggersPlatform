@@ -7,7 +7,7 @@ import { availableResolutions } from "./core/resolutions";
 export const setupApp = (app: Express) => {
     app.use(express.json());
 
-    app.delete('/videos/testing/all-data', (req: Request, res: Response) => {
+    app.delete('/testing/all-data', (req: Request, res: Response) => {
         db.videos = [];
         res.status(201).send();
     })
@@ -27,7 +27,7 @@ export const setupApp = (app: Express) => {
         app.post('/videos', (req: Request, res: Response) => {
 
             const newVideo: VideoType = {
-                id: Number(new Date().toISOString()),
+                id: Math.floor(Date.now() + Math.random()),
                 title: req.body.title,
                 author: req.body.author,
                 canBeDownloaded: true,
@@ -60,20 +60,16 @@ export const setupApp = (app: Express) => {
         res.status(204).send();
     });
 
-    app.delete('/videos:id', (req: Request, res: Response) => {
-        const findVideo: VideoType | undefined= db.videos.find(v => v.id === +req.params.id);
-        if(!findVideo){
-            res.status(404).send({message: "Video is not defined!"});
+    app.delete('/videos/:id', (req: Request, res: Response) => {
+        const id = +req.params.id
+        const findVideo: VideoType | undefined = db.videos.find(v => v.id === id);
+        if (!findVideo) {
+            res.status(404).send({ message: "Video is not found!" });
         }
-
-        const id = findVideo?.id
-
-        db.videos.splice(() => )
-
-//порабоать с delete
-    })
-
-
-    return app;
+        db.videos = db.videos.filter(v => v.id !== id)
+        res.status(204).send()
+    });
 }
+
+
 
