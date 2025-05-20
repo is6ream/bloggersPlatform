@@ -5,7 +5,7 @@ const express_1 = require("express");
 const getVideosHandler_1 = require("./handlers/getVideosHandler");
 exports.videosRouter = (0, express_1.Router)();
 exports.videosRouter
-    .get('/videos', getVideosHandler_1.getVideosHandlers.getAllVideos);
+    .get('/', getVideosHandler_1.getVideosHandlers.getAllVideos);
 // .get('/videos/:id', (req: Request, res: Response) => {
 //     const video: VideoType | undefined = db.videos.find(v => v.id === +req.params.id)
 //     if (video === undefined) {

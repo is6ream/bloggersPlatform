@@ -2,7 +2,7 @@ import express from "express"
 import { setupApp } from "./setup-app"
 import { Request, Response } from "express";
 import dotenv from "dotenv"
-
+import { videosRouter } from "./videos/routes";
 
 dotenv.config();
 const app = express();
@@ -17,3 +17,5 @@ app.get('/', (req: Request, res: Response) => {
 app.listen(PORT, () => {
     console.log(`Example app listening on port: ${PORT}`)
 })
+
+app.use('/hometask_01/api/videos', videosRouter)

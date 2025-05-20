@@ -7,7 +7,7 @@ import { getVideosHandlers } from "./handlers/getVideosHandler";
 export const videosRouter = Router();
 
 videosRouter
-    .get('/videos', getVideosHandlers.getAllVideos)
+    .get('/', getVideosHandlers.getAllVideos)
 
 
     // .get('/videos/:id', (req: Request, res: Response) => {
