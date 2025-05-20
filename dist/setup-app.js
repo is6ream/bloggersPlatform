@@ -12,9 +12,6 @@ const setupApp = (app) => {
         db_1.db.videos = [];
         res.status(201).send();
     });
-    app.get('/videos', (req, res) => {
-        res.status(200).send(db_1.db.videos);
-    });
     app.get('/videos/:id', (req, res) => {
         const video = db_1.db.videos.find(v => v.id === +req.params.id);
         if (video === undefined) {

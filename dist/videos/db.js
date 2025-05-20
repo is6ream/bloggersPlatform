@@ -1,6 +1,7 @@
-import { availableResolutions } from "./core/resolutions"
-import { DBType } from "./core/video-types"
-export const db: DBType = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.db = void 0;
+exports.db = {
     videos: [
         {
             id: 0,
@@ -11,8 +12,8 @@ export const db: DBType = {
             createdAt: new Date().toISOString(),
             publicationDate: new Date().toISOString(),
             availableResolutions: [
-                availableResolutions.P1440
+                "P1440" /* availableResolutions.P1440 */
             ]
         }
     ]
-}
+};
