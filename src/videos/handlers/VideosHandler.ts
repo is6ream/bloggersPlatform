@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { db } from "../../db";
 import { VideoType } from "../../core/video-types";
 import { availableResolutions } from "../../core/resolutions";
+import { body, check, validationResult } from "express-validator"
+
 
 export const VideosHandlers = {
     deleteAllData: ((req: Request, res: Response) => {
@@ -17,24 +19,31 @@ export const VideosHandlers = {
             .json(videos)
     }),
 
-    createVideo: ((req: Request, res: Response) => {
-        
-        const newVideo: VideoType = {
-            id: Math.floor(Date.now() + Math.random()),
-            title: req.body.title,
-            author: req.body.author,
-            canBeDownloaded: true,
-            minAgeRestriction: null,
-            createdAt: new Date().toISOString(),
-            publicationDate: new Date().toISOString(),
-            availableResolutions: [
-                availableResolutions.P144
-            ]
-        }
+    createVideo: (
+        check('title').isLength({ min: 1, max: 5 }).withMessage({ message: 'Неверный формат title' }), //нужно разобраться с middleware для валидации
+        (req: Request, res: Response) => {
+            const errors = validationResult(req)
 
-        db.videos.push(newVideo);
-        res.status(201).send(newVideo)
-    }),
+            if (!errors.isEmpty()) {
+                res.status(400).json({ errors: errors.array })
+            }
+
+            const newVideo: VideoType = {
+                id: Math.floor(Date.now() + Math.random()),
+                title: req.body.title,
+                author: req.body.author,
+                canBeDownloaded: true,
+                minAgeRestriction: null,
+                createdAt: new Date().toISOString(),
+                publicationDate: new Date().toISOString(),
+                availableResolutions: [
+                    availableResolutions.P144
+                ]
+            }
+
+            db.videos.push(newVideo);
+            res.status(201).send(newVideo)
+        }),
 
     findVideo: ((req: Request, res: Response) => {
         const video: VideoType | undefined = db.videos.find(v => v.id === +req.params.id);

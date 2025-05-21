@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VideosHandlers = void 0;
 const db_1 = require("../../db");
+const express_validator_1 = require("express-validator");
 exports.VideosHandlers = {
     deleteAllData: ((req, res) => {
         db_1.db.videos = [];
@@ -13,22 +14,27 @@ exports.VideosHandlers = {
             .status(200)
             .json(videos);
     }),
-    createVideo: ((req, res) => {
-        const newVideo = {
-            id: Math.floor(Date.now() + Math.random()),
-            title: req.body.title,
-            author: req.body.author,
-            canBeDownloaded: true,
-            minAgeRestriction: null,
-            createdAt: new Date().toISOString(),
-            publicationDate: new Date().toISOString(),
-            availableResolutions: [
-                "P144" /* availableResolutions.P144 */
-            ]
-        };
-        db_1.db.videos.push(newVideo);
-        res.status(201).send(newVideo);
-    }),
+    createVideo: ((0, express_validator_1.check)('title').isLength({ min: 1, max: 5 }).withMessage({ message: 'Неверный формат title' }), //нужно разобраться с middleware для валидации
+        (req, res) => {
+            const errors = (0, express_validator_1.validationResult)(req);
+            if (!errors.isEmpty()) {
+                res.status(400).json({ errors: errors.array });
+            }
+            const newVideo = {
+                id: Math.floor(Date.now() + Math.random()),
+                title: req.body.title,
+                author: req.body.author,
+                canBeDownloaded: true,
+                minAgeRestriction: null,
+                createdAt: new Date().toISOString(),
+                publicationDate: new Date().toISOString(),
+                availableResolutions: [
+                    "P144" /* availableResolutions.P144 */
+                ]
+            };
+            db_1.db.videos.push(newVideo);
+            res.status(201).send(newVideo);
+        }),
     findVideo: ((req, res) => {
         const video = db_1.db.videos.find(v => v.id === +req.params.id);
         if (!video) {
