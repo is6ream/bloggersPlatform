@@ -36,8 +36,7 @@ export const VideosHandlers = {
     }),
 
     findVideo: ((req: Request, res: Response) => {
-        console.log(req.params.id)
-        const video: VideoType | undefined = db.videos.find(v => v.id === +req.params);
+        const video: VideoType | undefined = db.videos.find(v => v.id === +req.params.id);
         if (!video) {
             res.status(404).send({ message: "Video not found" })
             return

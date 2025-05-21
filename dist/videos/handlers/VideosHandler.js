@@ -30,8 +30,7 @@ exports.VideosHandlers = {
         res.status(201).send(newVideo);
     }),
     findVideo: ((req, res) => {
-        console.log(req.params.id);
-        const video = db_1.db.videos.find(v => v.id === +req.params);
+        const video = db_1.db.videos.find(v => v.id === +req.params.id);
         if (!video) {
             res.status(404).send({ message: "Video not found" });
             return;
