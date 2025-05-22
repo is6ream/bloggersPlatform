@@ -1,9 +1,19 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { db } from "../../db";
 import { VideoType } from "../../core/video-types";
 import { availableResolutions } from "../../core/resolutions";
 import { body, check, validationResult } from "express-validator"
 
+interface VideoInputDto{
+    title: string,
+    author: string,
+    availableResolutions: string,
+    canBeDownloaded: boolean,
+    minAgeRescriction: number,
+    publicationDate: string ///прописал тип dto для валидации
+
+}
+export const videoInputValidation = (data: )
 
 export const VideosHandlers = {
     deleteAllData: ((req: Request, res: Response) => {
@@ -20,9 +30,8 @@ export const VideosHandlers = {
     }),
 
     createVideo: (
-        check('title').isLength({ min: 1, max: 5 }).withMessage({ message: 'Неверный формат title' }), //нужно разобраться с middleware для валидации
-        (req: Request, res: Response) => {
-            const errors = validationResult(req)
+        (req: Request, res: Response, next: NextFunction) => { 
+            const errors = validationResult(req) //собираем ошибки
 
             if (!errors.isEmpty()) {
                 res.status(400).json({ errors: errors.array })
