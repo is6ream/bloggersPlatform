@@ -2,9 +2,8 @@ import { error } from 'console';
 import { NextFunction, Request, Response } from "express";
 import { db } from "../../db";
 import { VideoType } from "../../core/video-types";
-import { body, check, validationResult } from "express-validator"
 import { RESOLUTIONS, typeRESOLUTIONS } from "../../core/resolutions";
-
+import { CreateInputValidation, updateInputValidation } from "../validation/create-update.validation";
 
 
 
@@ -25,12 +24,10 @@ export const VideosHandlers = {
 
     createVideo: (
         (req: Request, res: Response, next: NextFunction) => {
-            const errors = validationResult(req) //собираем ошибки
-
-            if (!errors.isEmpty()) {
-                res.status(400).json({ errors: errors.array })
+            const errors = CreateInputValidation(req.body)
+            if (errors.errorsMessages.length) {
+                res.status(400).json(errors)
             }
-
             const newVideo: VideoType = {
                 id: Math.floor(Date.now() + Math.random()),
                 title: req.body.title,
@@ -58,6 +55,10 @@ export const VideosHandlers = {
     }),
 
     updateVideo: ((req: Request, res: Response) => {
+        const errors = updateInputValidation(req.body)
+        if (errors?.errorsMessages.length) {
+            res.status(400).json(errors)
+        }
         const findVideo: VideoType | undefined = db.videos.find(v => v.id === +req.params.id);
         if (findVideo === undefined) {
             res.status(404).send({ message: "Video not  found" })
