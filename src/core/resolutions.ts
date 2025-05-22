@@ -1,4 +1,4 @@
-export const enum availableResolutions {
+export  enum RESOLUTIONS {
     P144 = "P144",
     P240 = "P240",
     P360 = "P360",
@@ -8,3 +8,6 @@ export const enum availableResolutions {
     P1440 = "P1440",
     P2160 = "P2160"
 }
+
+
+export type typeRESOLUTIONS = keyof typeof RESOLUTIONS;
