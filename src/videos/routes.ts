@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { VideosHandlers } from "./handlers/VideosHandler";
+import { VideosHandlers } from "./handlers/videosHandler";
 
 export const videosRouter = Router();
 

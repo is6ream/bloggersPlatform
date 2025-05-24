@@ -1,4 +1,4 @@
-import { availableResolutions } from "./core/resolutions"
+import { RESOLUTIONS } from "./core/resolutions"
 import { DBType } from "./core/video-types"
 export const db: DBType = {
     videos: [
@@ -11,7 +11,7 @@ export const db: DBType = {
             createdAt: new Date().toISOString(),
             publicationDate: new Date().toISOString(),
             availableResolutions: [
-                availableResolutions.P1440
+                RESOLUTIONS.P1440
             ]
         }
     ]

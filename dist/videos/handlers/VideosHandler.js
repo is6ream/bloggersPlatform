@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VideosHandlers = exports.videoInputValidation = void 0;
+exports.VideosHandlers = void 0;
 const db_1 = require("../../db");
-const express_validator_1 = require("express-validator");
-const videoInputValidation = (data) => ;
-exports.videoInputValidation = videoInputValidation;
+const resolutions_1 = require("../../core/resolutions");
+const create_update_validation_1 = require("../validation/create-update.validation");
 exports.VideosHandlers = {
     deleteAllData: ((req, res) => {
         db_1.db.videos = [];
@@ -17,9 +16,9 @@ exports.VideosHandlers = {
             .json(videos);
     }),
     createVideo: ((req, res, next) => {
-        const errors = (0, express_validator_1.validationResult)(req); //собираем ошибки
-        if (!errors.isEmpty()) {
-            res.status(400).json({ errors: errors.array });
+        const errors = (0, create_update_validation_1.createInputValidation)(req.body);
+        if (errors) {
+            res.status(400).json(errors);
         }
         const newVideo = {
             id: Math.floor(Date.now() + Math.random()),
@@ -30,7 +29,7 @@ exports.VideosHandlers = {
             createdAt: new Date().toISOString(),
             publicationDate: new Date().toISOString(),
             availableResolutions: [
-                "P144" /* availableResolutions.P144 */
+                resolutions_1.RESOLUTIONS.P144
             ]
         };
         db_1.db.videos.push(newVideo);
@@ -45,6 +44,10 @@ exports.VideosHandlers = {
         res.status(200).send(video);
     }),
     updateVideo: ((req, res) => {
+        const errors = (0, create_update_validation_1.updateInputValidation)(req.body);
+        if (errors) {
+            res.status(400).json(errors);
+        }
         const findVideo = db_1.db.videos.find(v => v.id === +req.params.id);
         if (findVideo === undefined) {
             res.status(404).send({ message: "Video not  found" });

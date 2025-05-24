@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
+const resolutions_1 = require("./core/resolutions");
 exports.db = {
     videos: [
         {
@@ -12,7 +13,7 @@ exports.db = {
             createdAt: new Date().toISOString(),
             publicationDate: new Date().toISOString(),
             availableResolutions: [
-                "P1440" /* availableResolutions.P1440 */
+                resolutions_1.RESOLUTIONS.P1440
             ]
         }
     ]

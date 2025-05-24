@@ -1,12 +1,8 @@
-import { error } from 'console';
 import { NextFunction, Request, Response } from "express";
 import { db } from "../../db";
 import { VideoType } from "../../core/video-types";
 import { RESOLUTIONS, typeRESOLUTIONS } from "../../core/resolutions";
-import { CreateInputValidation, updateInputValidation } from "../validation/create-update.validation";
-
-
-
+import { createInputValidation, updateInputValidation } from "../validation/create-update.validation";
 
 export const VideosHandlers = {
     deleteAllData: ((req: Request, res: Response) => {
@@ -24,8 +20,8 @@ export const VideosHandlers = {
 
     createVideo: (
         (req: Request, res: Response, next: NextFunction) => {
-            const errors = CreateInputValidation(req.body)
-            if (errors.errorsMessages.length) {
+            const errors = createInputValidation(req.body)
+            if (errors) {
                 res.status(400).json(errors)
             }
             const newVideo: VideoType = {
@@ -56,7 +52,7 @@ export const VideosHandlers = {
 
     updateVideo: ((req: Request, res: Response) => {
         const errors = updateInputValidation(req.body)
-        if (errors?.errorsMessages.length) {
+        if (errors) {
             res.status(400).json(errors)
         }
         const findVideo: VideoType | undefined = db.videos.find(v => v.id === +req.params.id);
@@ -86,7 +82,4 @@ export const VideosHandlers = {
         db.videos = db.videos.filter(v => v.id !== id)
         res.status(204).send();
     })
-
-
-
 }

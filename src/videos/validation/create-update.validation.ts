@@ -1,7 +1,7 @@
 import { RESOLUTIONS, typeRESOLUTIONS } from "../../core/resolutions"
 import { OutputErrorType, VideoCreateInputDto, VideoUpdateInputDto } from "./validation-types"
 
-export const updateInputValidation = (video: VideoUpdateInputDto) => {
+export const updateInputValidation = (video: VideoUpdateInputDto): OutputErrorType | undefined => {
     const errors: OutputErrorType = {
         errorsMessages: []
     }
@@ -31,7 +31,7 @@ export const updateInputValidation = (video: VideoUpdateInputDto) => {
 }
 
 
-export const CreateInputValidation = (video: VideoCreateInputDto) => {
+export const createInputValidation = (video: VideoCreateInputDto): OutputErrorType | undefined => {
     const errors: OutputErrorType = {
         errorsMessages: []
     }
