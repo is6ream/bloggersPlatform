@@ -8,7 +8,6 @@ export const VideosHandlers = {
     deleteAllData: ((req: Request, res: Response) => {
         db.videos = []
         res.status(204).send()
-
     }),
 
     getAllVideos: ((req: Request, res: Response) => {
@@ -21,9 +20,12 @@ export const VideosHandlers = {
     createVideo: (
         (req: Request, res: Response, next: NextFunction) => {
             const errors = createInputValidation(req.body)
-            if (errors) {
+
+            if (errors.errorsMessages.length) {
                 res.status(400).json(errors)
+                return
             }
+
             const newVideo: VideoType = {
                 id: Math.floor(Date.now() + Math.random()),
                 title: req.body.title,
@@ -32,9 +34,7 @@ export const VideosHandlers = {
                 minAgeRestriction: null,
                 createdAt: new Date().toISOString(),
                 publicationDate: new Date().toISOString(),
-                availableResolutions: [
-                    RESOLUTIONS.P144
-                ]
+                availableResolutions: req.body.availableResolutions
             }
 
             db.videos.push(newVideo);
@@ -52,9 +52,11 @@ export const VideosHandlers = {
 
     updateVideo: ((req: Request, res: Response) => {
         const errors = updateInputValidation(req.body)
-        if (errors) {
+        if (errors.errorsMessages.length) {
             res.status(400).json(errors)
+            return
         }
+
         const findVideo: VideoType | undefined = db.videos.find(v => v.id === +req.params.id);
         if (findVideo === undefined) {
             res.status(404).send({ message: "Video not  found" })

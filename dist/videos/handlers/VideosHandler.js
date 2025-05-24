@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VideosHandlers = void 0;
 const db_1 = require("../../db");
-const resolutions_1 = require("../../core/resolutions");
 const create_update_validation_1 = require("../validation/create-update.validation");
 exports.VideosHandlers = {
     deleteAllData: ((req, res) => {
@@ -17,8 +16,9 @@ exports.VideosHandlers = {
     }),
     createVideo: ((req, res, next) => {
         const errors = (0, create_update_validation_1.createInputValidation)(req.body);
-        if (errors) {
+        if (errors.errorsMessages.length) {
             res.status(400).json(errors);
+            return;
         }
         const newVideo = {
             id: Math.floor(Date.now() + Math.random()),
@@ -28,9 +28,7 @@ exports.VideosHandlers = {
             minAgeRestriction: null,
             createdAt: new Date().toISOString(),
             publicationDate: new Date().toISOString(),
-            availableResolutions: [
-                resolutions_1.RESOLUTIONS.P144
-            ]
+            availableResolutions: req.body.availableResolutions
         };
         db_1.db.videos.push(newVideo);
         res.status(201).send(newVideo);
@@ -45,8 +43,9 @@ exports.VideosHandlers = {
     }),
     updateVideo: ((req, res) => {
         const errors = (0, create_update_validation_1.updateInputValidation)(req.body);
-        if (errors) {
+        if (errors.errorsMessages.length) {
             res.status(400).json(errors);
+            return;
         }
         const findVideo = db_1.db.videos.find(v => v.id === +req.params.id);
         if (findVideo === undefined) {

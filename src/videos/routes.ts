@@ -9,4 +9,5 @@ videosRouter
     .get('/:id', VideosHandlers.findVideo)
     .put('/:id', VideosHandlers.updateVideo)
     .delete('/:id', VideosHandlers.deleteVideo)
+    .delete('/testing/all-data', VideosHandlers.deleteAllData)
 

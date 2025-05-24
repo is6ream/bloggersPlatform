@@ -9,4 +9,5 @@ exports.videosRouter
     .post('/', videosHandler_1.VideosHandlers.createVideo)
     .get('/:id', videosHandler_1.VideosHandlers.findVideo)
     .put('/:id', videosHandler_1.VideosHandlers.updateVideo)
-    .delete('/:id', videosHandler_1.VideosHandlers.deleteVideo);
+    .delete('/:id', videosHandler_1.VideosHandlers.deleteVideo)
+    .delete('/testing/all-data', videosHandler_1.VideosHandlers.deleteAllData);
