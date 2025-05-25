@@ -10,4 +10,4 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.status(200).send('Hello world!')
 })
-app.use('/hometask_01/api/videos/', videosRouter)
+app.use('/hometask_01/api/videos', videosRouter)

@@ -2,7 +2,11 @@ import { RESOLUTIONS } from "./core/resolutions"
 import { DBType } from "./core/video-types"
 export const db: DBType = {
     videos: [
-        {
+       
+    ]
+}
+
+const dbEntity =  {
             id: 0,
             title: 't1',
             author: 'a1',
@@ -14,5 +18,3 @@ export const db: DBType = {
                 RESOLUTIONS.P1440
             ]
         }
-    ]
-}
