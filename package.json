@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "tsc -w",
     "dev": "nodemon --inspect dist/index.js",
-    "jest": "jest -i",
+    "jest": "jest --detectOpenHandles",
     "lint": "eslint --fix .",
     "format": "prettier --write .",
     "test": "jest"
