@@ -13,4 +13,4 @@ exports.app.use((0, cors_1.default)());
 exports.app.get('/', (req, res) => {
     res.status(200).send('Hello world!');
 });
-exports.app.use('/hometask_01/api/videos/', routes_1.videosRouter);
+exports.app.use('/hometask_01/api/videos', routes_1.videosRouter);
