@@ -1,36 +1,28 @@
-import js from "@eslint/js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
-import { defineConfig } from "eslint/config";
+import prettierPlugin from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
+import typescriptPlugin from '@typescript-eslint/eslint-plugin';
+import typescriptParser from '@typescript-eslint/parser';
 
-
-// export default defineConfig([
-//   { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], plugins: { js }, extends: ["js/recommended"] },
-//   { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], languageOptions: { globals: globals.browser } },
-//   tseslint.configs.recommended,
-// ]);
-
-
-export default defineConfig({
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
-  "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
-  ],
-  "rules": {
-    "@typescript-eslint/no-explicit-any": "off", // Пример отключения правила
-    "quotes": ["warn", "single"],                // Настройка цитирования
-    "semi": ["error", "always"]                 // Настройка точек с запятой
+export default [
+  {
+    ignores: ['node_modules', 'dist'],
   },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
-      }
-    }
+  {
+    files: ['**/*.ts'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      parser: typescriptParser,
+    },
+    plugins: {
+      '@typescript-eslint': typescriptPlugin,
+      prettier: prettierPlugin,
+    },
+    rules: {
+      'prettier/prettier': 'error',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      eqeqeq: ['error', 'always'],
+    },
   },
-  "ignorePatterns": ["dist/", "node_modules/"]
-})
+  prettierConfig,
+];
