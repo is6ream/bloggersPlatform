@@ -1,7 +1,7 @@
 export interface VideoUpdateInputDto {
   title: string;
   author: string;
-  availableResolutions: string;
+  availableResolutions: string[];
   canBeDownloaded: boolean;
   minAgeRescriction: number;
   publicationDate: string; ///прописал тип dto для валидации
