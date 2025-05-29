@@ -30,7 +30,7 @@ export const updateInputValidation = (
   if (
     !Array.isArray(video.availableResolutions) ||
     video.availableResolutions.find(
-      (p: typeRESOLUTIONS) => !RESOLUTIONS[p as keyof typeof RESOLUTIONS],
+      (p: string) => !RESOLUTIONS[p as keyof typeof RESOLUTIONS],
     )
   ) {
     errors.errorsMessages.push({
