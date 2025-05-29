@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { videosRouter } from "./videos/routes";
+import { videosRouter } from "./blogs/routes";
 import { VIDEOS_PATH } from "./core/paths";
 import { Express } from "express";
 export const app = express();

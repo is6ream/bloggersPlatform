@@ -1,14 +1,10 @@
-export interface VideoType {
-  id: number;
-  title: string;
-  author: string;
-  canBeDownloaded: boolean;
-  minAgeRestriction: number | null;
-  createdAt: string;
-  publicationDate: string;
-  availableResolutions: string[];
+export interface BlogType {
+  id: string;
+  name: string;
+  description: string;
+  websiteUrl: string;
 }
 
 export interface DBType {
-  videos: VideoType[];
+  blogs: BlogType[];
 }
