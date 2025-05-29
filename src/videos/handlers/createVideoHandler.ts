@@ -1,7 +1,6 @@
-import { db } from "../../db";
 import { Request, Response } from "express";
 import { createInputValidation } from "../validation/create-update.validation";
-import { VideoType } from "../../core/video-types";
+import { videoRepository } from "../repositories/video.repository";
 
 export function createVideoHandler(req: Request, res: Response) {
   const errors = createInputValidation(req.body);
@@ -10,17 +9,7 @@ export function createVideoHandler(req: Request, res: Response) {
     res.status(400).json(errors);
     return;
   }
-  const newVideo: VideoType = {
-    id: Math.floor(Date.now() + Math.random()),
-    title: req.body.title,
-    author: req.body.author,
-    canBeDownloaded: true,
-    minAgeRestriction: null,
-    createdAt: new Date().toISOString(),
-    publicationDate: new Date().toISOString(),
-    availableResolutions: req.body.availableResolutions,
-  };
-
-  db.videos.push(newVideo);
+  let newVideo = req.body;
+  videoRepository.create(newVideo);
   res.status(201).send(newVideo);
 }
