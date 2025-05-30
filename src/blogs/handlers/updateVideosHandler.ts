@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 
 export function updateVideoHandler(req: Request, res: Response) {
   const findBlog: BlogType | undefined = db.blogs.find(
-    (b) => b.id === +req.params.id
+    (b) => b.id === +req.params.id,
   );
   if (!findBlog) {
     res.status(404).send({ message: "Video not found!" });

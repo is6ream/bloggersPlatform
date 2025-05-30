@@ -5,8 +5,6 @@ import {
   VideoUpdateInputDto,
 } from "./validation-types";
 
-
-
 export const updateInputValidation = (
   video: VideoUpdateInputDto,
 ): OutputErrorType => {

@@ -3,7 +3,7 @@ import { VideosHandlers } from "./handlers/videosHandler";
 import { inputValidationResultMiddleware } from "./validation/input-validation-result.middleware";
 import { idValidation } from "./validation/params-id.validation-middleware";
 import { getAllVideosHandler } from "./handlers/getAllVideosHandler";
-import { createVideoHandler } from "./handlers/createVideoHandler";
+import { createVideoHandler } from "./handlers/createBlogHandler";
 import { findVideoHandler } from "./handlers/findVideoHandler";
 import { updateVideoHandler } from "./handlers/updateVideosHandler";
 import { deleteVideoHandler } from "./handlers/deleteVideoHandler";
