@@ -2,11 +2,11 @@ import { Router } from "express";
 import { VideosHandlers } from "./handlers/videosHandler";
 import { inputValidationResultMiddleware } from "./validation/input-validation-result.middleware";
 import { idValidation } from "./validation/params-id.validation-middleware";
-import { getAllVideosHandler } from "./handlers/getAllVideosHandler";
+import { getAllVideosHandler } from "./handlers/getAllBlogsHandler";
 import { createVideoHandler } from "./handlers/createBlogHandler";
-import { findVideoHandler } from "./handlers/findVideoHandler";
-import { updateVideoHandler } from "./handlers/updateVideosHandler";
-import { deleteVideoHandler } from "./handlers/deleteVideoHandler";
+import { findVideoHandler } from "./handlers/findBlogHandler";
+import { updateVideoHandler } from "./handlers/updateBlogsHandler";
+import { deleteVideoHandler } from "./handlers/deleteBlogHandler";
 export const videosRouter = Router();
 
 videosRouter

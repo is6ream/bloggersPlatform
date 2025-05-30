@@ -1,4 +1,4 @@
-import { BlogType } from "../../core/video-types";
+import { BlogType } from "../../core/blogs-types";
 import { db } from "../../db";
 import { Request, Response } from "express";
 

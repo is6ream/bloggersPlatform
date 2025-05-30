@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BlogType } from "../../core/video-types";
+import { BlogType } from "../../core/blogs-types";
 import { db } from "../../db";
 
 export function deleteBlogHandler(req: Request, res: Response) {

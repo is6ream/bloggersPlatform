@@ -1,5 +1,5 @@
 import { RESOLUTIONS } from "./core/resolutions";
-import { DBType } from "./core/video-types";
+import { DBType } from "./core/blogs-types";
 export const db: DBType = {
   videos: [],
 };

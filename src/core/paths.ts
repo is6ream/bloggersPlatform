@@ -1,1 +1,1 @@
-export const VIDEOS_PATH = "/hometask_01/api/videos";
+export const VIDEOS_PATH = "/hometask_02/api/blogs";
