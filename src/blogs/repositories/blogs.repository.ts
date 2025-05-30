@@ -17,9 +17,10 @@ export const blogsRepository = {
     return db.blogs.find((b) => b.id === id) ?? null;
   },  
 
-  create(newBlog: BlogInputDto): BlogType {
-   
-  }, //остановился на разборе этой ошибки
+  create(newBlog: BlogType) {
+   db.blogs.push(newBlog)
+   return newBlog
+  },
 
   update(id: number, dto: ): void {
     const blog = db.blogs.find((b) => b.id === id);
