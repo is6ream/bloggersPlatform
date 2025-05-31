@@ -1,13 +1,7 @@
 import { Request, Response } from "express";
-import { db } from "../../db";
-import { BlogType } from "../../core/blogs-types";
+import { blogsRepository } from "../repositories/blogs.repository";
 
 export function findBlogHandler(req: Request, res: Response) {
-  const findBlog: BlogType | undefined = db.blogs.find(
-    (b) => b.id === req.params.id,
-  );
-  if (!findBlog) {
-    res.status(404).send({ message: "Blog not found!" });
-  }
+  const findBlog = blogsRepository.findById(req.params.id);
   res.status(200).send(findBlog);
 }
