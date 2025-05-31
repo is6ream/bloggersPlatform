@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { blogsRepository } from "../repositories/blogs.repository";
+import { HttpStatus } from "../../core/types";
 
-export function updateVideoHandler(req: Request, res: Response) {
+export function updateBlogHandler(req: Request, res: Response) {
   blogsRepository.update(req.params.id, req.body);
-  res.status(204).send();
+  res.status(HttpStatus.NoContent).send();
 }

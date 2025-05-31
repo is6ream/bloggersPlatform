@@ -1,23 +1,24 @@
 import { Router } from "express";
-import { VideosHandlers } from "./handlers/videosHandler";
 import { inputValidationResultMiddleware } from "./validation/input-validation-result.middleware";
 import { idValidation } from "./validation/params-id.validation-middleware";
-import { getAllVideosHandler } from "./handlers/getAllBlogsHandler";
-import { createVideoHandler } from "./handlers/createBlogHandler";
-import { findVideoHandler } from "./handlers/findBlogHandler";
-import { updateVideoHandler } from "./handlers/updateBlogsHandler";
-import { deleteVideoHandler } from "./handlers/deleteBlogHandler";
+import { getAllBlogsHandler } from "./handlers/getAllBlogsHandler";
+import { createBlogHandler } from "./handlers/createBlogHandler";
+import { findBlogHandler } from "./handlers/findBlogHandler";
+import { updateBlogHandler } from "./handlers/updateBlogsHandler";
+import { deleteBlogHandler } from "./handlers/deleteBlogHandler";
 export const videosRouter = Router();
 
 videosRouter
-  .get("/", getAllVideosHandler)
-  .post("/", createVideoHandler)
-  .get("/:id", idValidation, inputValidationResultMiddleware, findVideoHandler)
-  .put("/:id", idValidation, updateVideoHandler) //подключить валдиацию dto
+  .get("/", getAllBlogsHandler)
+  .post("/", createBlogHandler)
+  .get("/:id", idValidation, inputValidationResultMiddleware, findBlogHandler)
+  .put("/:id", idValidation, updateBlogHandler) //подключить валдиацию dto
+
   .delete(
     "/:id",
     idValidation,
     inputValidationResultMiddleware,
-    deleteVideoHandler,
+    deleteBlogHandler,
   )
-  .delete("/testing/all-data", deleteVideoHandler);
+
+  .delete("/testing/all-data");

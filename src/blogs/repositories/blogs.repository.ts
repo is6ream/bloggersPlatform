@@ -43,4 +43,9 @@ export const blogsRepository = {
     db.blogs.splice(index, 1);
     return;
   },
+
+  deleteAll(): void {
+    db.blogs = [];
+    return;
+  },
 };
