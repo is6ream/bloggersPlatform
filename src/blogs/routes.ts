@@ -6,9 +6,10 @@ import { createBlogHandler } from "./handlers/createBlogHandler";
 import { findBlogHandler } from "./handlers/findBlogHandler";
 import { updateBlogHandler } from "./handlers/updateBlogsHandler";
 import { deleteBlogHandler } from "./handlers/deleteBlogHandler";
-export const videosRouter = Router();
+import { deleteAllBlogs } from "./handlers/deleteAllBlogsHandler";
+export const blogsRouter = Router();
 
-videosRouter
+blogsRouter
   .get("/", getAllBlogsHandler)
   .post("/", createBlogHandler)
   .get("/:id", idValidation, inputValidationResultMiddleware, findBlogHandler)
@@ -21,4 +22,4 @@ videosRouter
     deleteBlogHandler,
   )
 
-  .delete("/testing/all-data");
+  .delete("/testing/all-data", deleteAllBlogs);

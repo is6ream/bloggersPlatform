@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { videosRouter } from "./blogs/routes";
-import { VIDEOS_PATH } from "./core/paths";
+import { blogsRouter } from "./blogs/routes";
+import { BLOGS_PATH } from "./core/paths";
 import { Express } from "express";
 export const app = express();
 
@@ -12,6 +12,9 @@ export const setupApp = (app: Express) => {
   app.get("/", (req, res) => {
     res.status(200).send("Hello world!");
   });
-  app.use(VIDEOS_PATH, videosRouter);
+
+  app.use(BLOGS_PATH, blogsRouter);
   return app;
 };
+
+setupApp(app);
