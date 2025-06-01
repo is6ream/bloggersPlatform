@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { blogsRepository } from "../repositories/blogs.repository";
-import { BlogType } from "../../core/blogs-types";
+import { BlogType } from "../types/blogs-types";
 
 function generateNumericId(length = 10) {
   const randomNumber = Math.floor(Math.random() * Math.pow(10, length));

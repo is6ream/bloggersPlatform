@@ -1,5 +1,5 @@
-import { db } from "../../db";
-import { BlogType } from "../../core/blogs-types";
+import { db } from "../../db/db";
+import { BlogType } from "../types/blogs-types";
 
 interface BlogInputDto {
   name: string;

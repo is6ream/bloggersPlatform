@@ -5,6 +5,6 @@ export interface BlogType {
   websiteUrl: string;
 }
 
-export interface DBType {
+export interface BlogDBType {
   blogs: BlogType[];
 }
