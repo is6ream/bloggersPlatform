@@ -7,12 +7,6 @@ function generateNumericId(length = 10) {
   return randomNumber.toString().padStart(length, "0");
 }
 export function createBlogHandler(req: Request, res: Response) {
-  // const errors = createInputValidation(req.body);
-
-  // if (errors.errorsMessages.length) {
-  //   res.status(400).json(errors);
-  //   return;
-  // }
   const newBlog: BlogType = {
     id: generateNumericId(),
     name: req.body.name,
