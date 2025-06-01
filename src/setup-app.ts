@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { blogsRouter } from "./blogs/routes";
+import { blogsRouter } from "./blogs/routes/routes";
 import { BLOGS_PATH } from "./core/paths";
 import { Express } from "express";
 export const app = express();
