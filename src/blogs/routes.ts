@@ -7,13 +7,21 @@ import { findBlogHandler } from "./handlers/findBlogHandler";
 import { updateBlogHandler } from "./handlers/updateBlogsHandler";
 import { deleteBlogHandler } from "./handlers/deleteBlogHandler";
 import { deleteAllBlogs } from "./handlers/deleteAllBlogsHandler";
+import { blogValidators } from "../core/middlewares/blog-input-dto.validation";
 export const blogsRouter = Router();
 
 blogsRouter
   .get("/", getAllBlogsHandler)
-  .post("/", createBlogHandler)
+  .post("/", blogValidators, inputValidationResultMiddleware, createBlogHandler)
   .get("/:id", idValidation, inputValidationResultMiddleware, findBlogHandler)
-  .put("/:id", idValidation, updateBlogHandler) //подключить валдиацию dto
+
+  .put(
+    "/:id",
+    idValidation,
+    blogValidators,
+    inputValidationResultMiddleware,
+    updateBlogHandler,
+  ) //подключить валдиацию dto
 
   .delete(
     "/:id",
