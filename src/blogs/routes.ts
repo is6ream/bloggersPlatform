@@ -7,7 +7,7 @@ import { findBlogHandler } from "./handlers/findBlogHandler";
 import { updateBlogHandler } from "./handlers/updateBlogsHandler";
 import { deleteBlogHandler } from "./handlers/deleteBlogHandler";
 import { deleteAllBlogs } from "./handlers/deleteAllBlogsHandler";
-import { blogValidators } from "../core/middlewares/blog-input-dto.validation";
+import { blogValidators } from "../core/middlewares/validation/blog-input-dto.validation";
 export const blogsRouter = Router();
 
 blogsRouter
@@ -21,7 +21,7 @@ blogsRouter
     blogValidators,
     inputValidationResultMiddleware,
     updateBlogHandler,
-  ) //подключить валдиацию dto
+  )
 
   .delete(
     "/:id",
