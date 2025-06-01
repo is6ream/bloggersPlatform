@@ -10,7 +10,7 @@ const superAdminGuardMiddleware = (req, res, next) => {
         res.sendStatus(types_1.HttpStatus.Unauthorized);
         return;
     }
-    const [authType, token] = auth.split("");
+    const [authType, token] = auth.split(" ");
     if (authType !== "Basic") {
         res.sendStatus(types_1.HttpStatus.Unauthorized);
         return;
