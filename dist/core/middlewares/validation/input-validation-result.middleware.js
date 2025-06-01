@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.inputValidationResultMiddleware = void 0;
 const express_validator_1 = require("express-validator");
+const types_1 = require("../../types");
 const formatErrors = (error) => ({
-  field: error.type,
+  field: error.param,
   message: error.msg,
 });
 const inputValidationResultMiddleware = (req, res, next) => {
@@ -11,8 +12,10 @@ const inputValidationResultMiddleware = (req, res, next) => {
     .formatWith(formatErrors)
     .array();
   if (errors.length) {
-    res.status(400).json({ errorsMessages: errors });
+    return res
+      .status(types_1.HttpStatus.BadRequest)
+      .json({ errorMessages: errors });
   }
-  next();
+  next;
 };
 exports.inputValidationResultMiddleware = inputValidationResultMiddleware;

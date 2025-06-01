@@ -33,19 +33,17 @@ export const blogsRepository = {
     return;
   },
 
-  delete(id: string): void {
+  delete(id: string) {
     const index = db.blogs.findIndex((b) => b.id === id);
 
     if (index === -1) {
       throw new Error("Video not exist");
     }
 
-    db.blogs.splice(index, 1);
-    return;
+    return db.blogs.splice(index, 1);
   },
 
-  deleteAll(): void {
-    db.blogs = [];
-    return;
+  deleteAll() {
+    return (db.blogs = []);
   },
 };

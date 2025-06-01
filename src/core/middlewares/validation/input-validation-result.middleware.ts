@@ -1,8 +1,9 @@
 import { validationResult, ValidationError } from "express-validator";
 import { Request, Response, NextFunction } from "express";
+import { HttpStatus } from "../../types";
 
 const formatErrors = (error: ValidationError) => ({
-  field: error.type,
+  field: "path" in error ? error.path : "unknown",
   message: error.msg,
 });
 
@@ -14,7 +15,8 @@ export const inputValidationResultMiddleware = (
   const errors = validationResult(req).formatWith(formatErrors).array();
 
   if (errors.length) {
-    res.status(400).json({ errorsMessages: errors });
+    return res.status(HttpStatus.BadRequest).json({ errorMessages: errors });
   }
-  next();
+
+  next;
 };
