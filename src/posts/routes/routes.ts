@@ -10,7 +10,7 @@ export const postRouter = Router();
 
 postRouter
   .get("/", getAllPostsHandler)
-  .post("/", superAdminGuardMiddleware,createPostHandler)
+  .post("/", superAdminGuardMiddleware, createPostHandler)
   .get("/:id", findPostHandler)
   .put("/:id", updatePostHandler)
   .delete("/:id", deletePostHandler);

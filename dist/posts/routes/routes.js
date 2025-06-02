@@ -10,8 +10,12 @@ const deletePostHandler_1 = require("../handlers/deletePostHandler");
 const super_admin_guard_middleware_1 = require("../../core/middlewares/validation/super-admin.guard-middleware");
 exports.postRouter = (0, express_1.Router)();
 exports.postRouter
-    .get("/", getAllpostsHandler_1.getAllPostsHandler)
-    .post("/", super_admin_guard_middleware_1.superAdminGuardMiddleware, createPostHandler_1.createPostHandler)
-    .get("/:id", findPostHandler_1.findPostHandler)
-    .put("/:id", updatePostHandler_1.updatePostHandler)
-    .delete("/:id", deletePostHandler_1.deletePostHandler);
+  .get("/", getAllpostsHandler_1.getAllPostsHandler)
+  .post(
+    "/",
+    super_admin_guard_middleware_1.superAdminGuardMiddleware,
+    createPostHandler_1.createPostHandler,
+  )
+  .get("/:id", findPostHandler_1.findPostHandler)
+  .put("/:id", updatePostHandler_1.updatePostHandler)
+  .delete("/:id", deletePostHandler_1.deletePostHandler);
