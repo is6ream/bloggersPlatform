@@ -21,13 +21,14 @@ postRouter
     createPostHandler,
   )
   .get("/:id", idValidation, inputValidationResultMiddleware, findPostHandler)
+
   .put(
     "/:id",
     superAdminGuardMiddleware,
     idValidation,
     postValidators,
-    updatePostHandler,
     inputValidationResultMiddleware,
+    updatePostHandler,
   )
   .delete(
     "/:id",
