@@ -10,7 +10,7 @@ const findBlogHandler_1 = require("../handlers/findBlogHandler");
 const updateBlogsHandler_1 = require("../handlers/updateBlogsHandler");
 const deleteBlogHandler_1 = require("../handlers/deleteBlogHandler");
 const deleteAllBlogsHandler_1 = require("../handlers/deleteAllBlogsHandler");
-const blog_input_dto_validation_1 = require("../../core/middlewares/validation/blog-input-dto.validation");
+const blog_input_dto_validation_1 = require("../../core/middlewares/blogValidation/blog-input-dto.validation");
 const super_admin_guard_middleware_1 = require("../../core/middlewares/validation/super-admin.guard-middleware");
 exports.blogsRouter = (0, express_1.Router)();
 exports.blogsRouter

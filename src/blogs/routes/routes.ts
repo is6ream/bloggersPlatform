@@ -7,7 +7,7 @@ import { findBlogHandler } from "../handlers/findBlogHandler";
 import { updateBlogHandler } from "../handlers/updateBlogsHandler";
 import { deleteBlogHandler } from "../handlers/deleteBlogHandler";
 import { deleteAllBlogs } from "../handlers/deleteAllBlogsHandler";
-import { blogValidators } from "../../core/middlewares/validation/blog-input-dto.validation";
+import { blogValidators } from "../../core/middlewares/blogValidation/blog-input-dto.validation";
 import { superAdminGuardMiddleware } from "../../core/middlewares/validation/super-admin.guard-middleware";
 export const blogsRouter = Router();
 
