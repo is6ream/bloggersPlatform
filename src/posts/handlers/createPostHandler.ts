@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
 import { PostType } from "../posts-types";
 import { db } from "../../db/db";
+import { HttpStatus } from "../../core/types";
 
 function generateNumericId(length = 10) {
   const randomNumber = Math.floor(Math.random() * Math.pow(10, length));
@@ -12,7 +13,7 @@ export function createPostHandler(req: Request, res: Response) {
   const foundBlog = db.blogs.find((blog) => blog.id === req.body.blogId);
 
   if (!foundBlog) {
-    res.status(404).send("Blog not found");
+    res.status(HttpStatus.NotFound).send("Blog not found");
     return;
   }
   const newPost: PostType = {
@@ -25,5 +26,5 @@ export function createPostHandler(req: Request, res: Response) {
   };
 
   postRepository.create(newPost);
-  res.status(201).send(newPost);
+  res.status(HttpStatus.Created).send(newPost);
 }
