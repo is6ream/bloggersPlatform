@@ -45,4 +45,48 @@ describe("Blog API body validation check", () => {
 
     expect(invalidDataset1.body.errorMessages).toHaveLength(4);
   });
+
+  it("should not create blog with correct body passed and unsuccess authorization", async () => {
+    const inValidCredentials = Buffer.from("admin:werty").toString("base64");
+    const invalidDataset1 = await request(app)
+      .post(BLOGS_PATH)
+      .set("Authorization", `Basic ${inValidCredentials}`)
+      .send({
+        ...correctTestBlogData,
+        name: "dan",
+        description: "dan",
+        websiteUrl: "https://www.deepseek.com/",
+      })
+      .expect(HttpStatus.Unauthorized);
+  });
+
+  it("should not update blog with incorrect body passed", async () => {
+    const validCredentials = Buffer.from("admin:qwerty").toString("base64");
+    const invalidaDataset2 = await request(app)
+      .put(`${BLOGS_PATH}/123`)
+      .set("Authorization", `Basic ${validCredentials}`)
+      .send({
+        ...correctTestBlogData,
+        name: "   ",
+        description: "   ",
+        websiteUrl: "  ",
+      })
+      .expect(HttpStatus.BadRequest);
+    expect(invalidaDataset2.body.errorMessages).toHaveLength(4);
+  });
+
+  it("should update blog with correct body passed", async () => {
+    const validCredentials = Buffer.from("admin:qwerty").toString("base64");
+    const validDataset = await request(app)
+      .put(`${BLOGS_PATH}/123`)
+      .set("Authorization", `Basic ${validCredentials}`)
+      .send({
+        ...correctTestBlogData,
+        name: "ssss",
+        description: "sss",
+        websiteUrl: "https://www.deepseek.com/",
+      })
+      .expect(HttpStatus.NoContent);
+    expect(validDataset.body.errorsMessages).toHaveLength(0);
+  });
 });
