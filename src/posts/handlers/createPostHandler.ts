@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
 import { PostType } from "../posts-types";
-import { title } from "process";
 import { db } from "../../db/db";
 
 function generateNumericId(length = 10) {
