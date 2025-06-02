@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 import { blogsRouter } from "./blogs/routes/routes";
-import { BLOGS_PATH } from "./core/paths";
+import { BLOGS_PATH, POSTS_PATH } from "./core/paths";
 import { Express } from "express";
+import { postRouter } from "./posts/routes/routes";
 export const app = express();
 
 export const setupApp = (app: Express) => {
@@ -14,6 +15,7 @@ export const setupApp = (app: Express) => {
   });
 
   app.use(BLOGS_PATH, blogsRouter);
+  app.use(POSTS_PATH, postRouter);
   return app;
 };
 
