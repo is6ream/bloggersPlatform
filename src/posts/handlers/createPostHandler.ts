@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
 import { PostType } from "../posts-types";
-import { db } from "../../db/db";
+import { db } from "../../db/mongo.db";
 import { HttpStatus } from "../../core/types";
 
 function generateNumericId(length = 10) {

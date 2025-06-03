@@ -1,4 +1,4 @@
-import { db } from "../../db/db";
+import { db } from "../../db/mongo.db";
 import { PostType } from "../posts-types";
 
 interface PostInputDto {
