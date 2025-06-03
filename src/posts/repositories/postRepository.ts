@@ -1,5 +1,5 @@
 import { db } from "../../db/mongo.db";
-import { PostType } from "../posts-types";
+import { PostType } from "../types/posts-types";
 
 interface PostInputDto {
   title: string;
