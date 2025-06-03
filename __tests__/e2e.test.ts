@@ -88,5 +88,7 @@ describe("Blog API body validation check", () => {
       })
       .expect(HttpStatus.NoContent);
     expect(validDataset.body.errorsMessages).toHaveLength(0);
+
+    //тут почему-то падает 500 ошибка
   });
 });
