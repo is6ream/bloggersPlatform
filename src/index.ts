@@ -1,7 +1,7 @@
-import { app } from "./setup-app";
 import express from "express";
 import { setupApp } from "./setup-app";
 import { SETTINGS } from "./core/settings/settings";
+import { runDB } from "./db/mongo.db";
 
 const bootStrap = async () => {
   const app = express();
