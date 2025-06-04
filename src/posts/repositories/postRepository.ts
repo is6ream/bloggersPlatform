@@ -17,17 +17,24 @@ export const postRepository = {
     return { ...newPost, _id: insertResult.insertedId };
   },
 
-  update(id: string, dto: PostInputDto): void {
-    const post = db.posts.find((p) => p.id === id);
+  async update(id: string, dto: PostInputDto): Promise<void> {
+    const updateResult = await postCollection.updateOne(
+      {
+        _id: new ObjectId(id),
+      },
+      {
+        $set: {
+          title: dto.title,
+          shortDescription: dto.shortDescription,
+          content: dto.content,
+          blogId: dto.blogId,
+        },
+      }
+    );
 
-    if (!post) {
+    if (updateResult.matchedCount < 1) {
       throw new Error("Post not exist");
     }
-
-    post.title = dto.title || post.title;
-    post.shortDescription = dto.shortDescription || post.shortDescription;
-    post.content = dto.content || post.content;
-    post.blogId = dto.blogId || post.blogId;
     return;
   },
 
