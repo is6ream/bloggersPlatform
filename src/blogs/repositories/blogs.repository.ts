@@ -29,7 +29,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       throw new Error("Blog not exist");
@@ -37,14 +37,14 @@ export const blogsRepository = {
     return;
   },
 
-  delete(id: string) {
-    const index = db.blogs.findIndex((b) => b.id === id);
-
-    if (index === -1) {
-      throw new Error("Video not exist");
+  async delete(id: string): Promise<void> {
+    const deleteResult = await blogCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+    if (deleteResult.deletedCount < 1) {
+      throw new Error("Blog not exist");
     }
-
-    return db.blogs.splice(index, 1);
+    return;
   },
 
   deleteAll() {
