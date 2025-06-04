@@ -5,16 +5,16 @@ import { postCollection } from "../../db/mongo.db";
 
 export const postRepository = {
   async findAll(): Promise<WithId<PostType>[]> {
-    return postCollection.find().toArray();
+    return await postCollection.find().toArray();
   },
 
-  findById(id: string): Promise<WithId<PostType> | null> {
-    return postCollection.findOne({ _id: new ObjectId(id) });
+  async findById(id: string): Promise<WithId<PostType> | null> {
+    return await postCollection.findOne({ _id: new ObjectId(id) });
   },
 
-  create(newPost: PostType) {
-    db.posts.push(newPost);
-    return newPost;
+  async create(newPost: PostType): Promise<WithId<PostType>> {
+    const insertResult = await postCollection.insertOne(newPost);
+    return { ...newPost, _id: insertResult.insertedId };
   },
 
   update(id: string, dto: PostInputDto): void {
