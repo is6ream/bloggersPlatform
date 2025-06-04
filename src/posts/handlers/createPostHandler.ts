@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
 import { PostType } from "../types/posts-types";
-import { db } from "../../db/mongo.db";
 import { HttpStatus } from "../../core/types";
+import { blogCollection } from "../../db/mongo.db";
 
 function generateNumericId(length = 10) {
   const randomNumber = Math.floor(Math.random() * Math.pow(10, length));
@@ -10,7 +10,7 @@ function generateNumericId(length = 10) {
 }
 
 export function createPostHandler(req: Request, res: Response) {
-  const foundBlog = db.blogs.find((blog) => blog.id === req.body.blogId);
+  const foundBlog = blogCollection.findOne({ _id: req.body.id });
 
   if (!foundBlog) {
     res.status(HttpStatus.NotFound).send("Blog not found");
@@ -23,6 +23,7 @@ export function createPostHandler(req: Request, res: Response) {
     content: req.body.content,
     blogId: foundBlog.id,
     blogName: foundBlog.name,
+    createdAt: req.body.createdAt,
   };
 
   postRepository.create(newPost);
