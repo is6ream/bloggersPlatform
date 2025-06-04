@@ -1,7 +1,7 @@
 import { BlogType } from "../types/blogs-types";
 import { BlogInputDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
-import { ObjectId, W, WithId } from "mongodb";
+import { ObjectId, WithId } from "mongodb";
 
 export const blogsRepository = {
   async findAll(): Promise<WithId<BlogType>[]> {
@@ -29,7 +29,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      }
+      },
     );
     if (updateResult.matchedCount < 1) {
       throw new Error("Blog not exist");

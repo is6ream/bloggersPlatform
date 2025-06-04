@@ -1,20 +1,15 @@
-import { db } from "../../db/mongo.db";
 import { PostType } from "../types/posts-types";
-
-interface PostInputDto {
-  title: string;
-  shortDescription: string;
-  content: string;
-  blogId: string;
-}
+import { PostInputDto } from "../types/posts-types";
+import { ObjectId, WithId } from "mongodb";
+import { postCollection } from "../../db/mongo.db";
 
 export const postRepository = {
-  findAll(): PostType[] {
-    return db.posts;
+  async findAll(): Promise<WithId<PostType>[]> {
+    return postCollection.find().toArray();
   },
 
-  findById(id: string): PostType | null {
-    return db.posts.find((p) => p.id === id) ?? null;
+  findById(id: string): Promise<WithId<PostType> | null> {
+    return postCollection.findOne({ _id: new ObjectId(id) });
   },
 
   create(newPost: PostType) {
