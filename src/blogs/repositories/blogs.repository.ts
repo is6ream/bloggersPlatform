@@ -18,15 +18,22 @@ export const blogsRepository = {
     return { ...newBlog, _id: insertResult.insertedId };
   },
 
-  update(id: string, dto: BlogInputDto): void {
-    const blog = db.blogs.find((b) => b.id === id);
-
-    if (!blog) {
+  async update(id: string, dto: BlogInputDto): Promise<void> {
+    const updateResult = await blogCollection.updateOne(
+      {
+        _id: new ObjectId(id),
+      },
+      {
+        $set: {
+          name: dto.name,
+          description: dto.description,
+          websiteUrl: dto.websiteUrl,
+        },
+      },
+    );
+    if (updateResult.matchedCount < 1) {
       throw new Error("Blog not exist");
     }
-    blog.name = dto.name || blog.name;
-    blog.description = dto.description || blog.description;
-    blog.websiteUrl = dto.websiteUrl || blog.websiteUrl;
     return;
   },
 
