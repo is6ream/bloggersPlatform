@@ -38,11 +38,13 @@ export const postRepository = {
     return;
   },
 
-  delete(id: string) {
-    const index = db.posts.findIndex((p) => p.id === id);
-    if (index === -1) {
+  async delete(id: string): Promise<void> {
+    const deleteResult = await postCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+    if (deleteResult.deletedCount < 1) {
       throw new Error("Post not exist");
     }
-    return db.posts.splice(index, 1);
+    return;
   },
 };
