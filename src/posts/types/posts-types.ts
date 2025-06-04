@@ -5,6 +5,7 @@ export interface PostType {
   content: string;
   blogId: string;
   blogName: string;
+  createdAt: string;
 }
 
 export interface PostInputDto {
