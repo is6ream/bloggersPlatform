@@ -29,7 +29,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       throw new Error("Blog not exist");
@@ -47,7 +47,7 @@ export const blogsRepository = {
     return;
   },
 
-  async deleteAll() {
-    return await blogCollection.deleteMany();
+  async deleteAll(): Promise<boolean> {
+    return await blogCollection.drop();
   },
 };

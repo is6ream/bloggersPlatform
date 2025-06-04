@@ -47,4 +47,8 @@ export const postRepository = {
     }
     return;
   },
+
+  async deleteAll(): Promise<boolean> {
+    return postCollection.drop();
+  },
 };
