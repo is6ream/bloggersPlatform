@@ -8,8 +8,8 @@ export const blogsRepository = {
     return blogCollection.find().toArray();
   },
 
-  findById(id: string): BlogType | null {
-    return db.blogs.find((b) => b.id === id) ?? null;
+  findById(id: string): Promise<WithId<BlogType> | null> {
+    return blogCollection.findOne({ _id: new ObjectId(id) });
   },
 
   create(newBlog: BlogType) {
