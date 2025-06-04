@@ -1,15 +1,11 @@
-import { db } from "../../db/mongo.db";
 import { BlogType } from "../types/blogs-types";
-
-interface BlogInputDto {
-  name: string;
-  description: string;
-  websiteUrl: string;
-}
+import { BlogInputDto } from "../types/blogs-types";
+import { blogCollection } from "../../db/mongo.db";
+import { ObjectId, WithId } from "mongodb";
 
 export const blogsRepository = {
-  findAll(): BlogType[] {
-    return db.blogs;
+  async findAll(): Promise<WithId<BlogType[]>> {
+    return blogCollection.find().toArray();
   },
 
   findById(id: string): BlogType | null {
