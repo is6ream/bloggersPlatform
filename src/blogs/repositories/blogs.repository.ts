@@ -47,7 +47,7 @@ export const blogsRepository = {
     return;
   },
 
-  deleteAll() {
-    return (db.blogs = []);
+  async deleteAll() {
+    return await blogCollection.deleteMany();
   },
 };
