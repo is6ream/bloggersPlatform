@@ -14,7 +14,13 @@ const blogs_repository_1 = require("../repositories/blogs.repository");
 const types_1 = require("../../core/types");
 function findBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const findBlog = yield blogs_repository_1.blogsRepository.findById(req.params.id);
-        res.status(types_1.HttpStatus.Ok).send(findBlog);
+        try {
+            const findBlog = yield blogs_repository_1.blogsRepository.findById(req.params.id);
+            res.status(types_1.HttpStatus.Ok).send(findBlog);
+        }
+        catch (e) {
+            console.error(e);
+            res.status(400).send();
+        }
     });
 }
