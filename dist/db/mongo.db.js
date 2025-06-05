@@ -29,6 +29,7 @@ function runDB(url) {
             console.log("✅ Connected to the database");
         }
         catch (e) {
+            console.log(e);
             yield exports.client.close();
             throw new Error(`❌ Database not connected: ${e}`);
         }
