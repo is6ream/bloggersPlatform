@@ -4,7 +4,7 @@ import { blogsRouter } from "./blogs/routes/routes";
 import { BLOGS_PATH, POSTS_PATH, TESTING_PATH } from "./core/paths";
 import { Express } from "express";
 import { postRouter } from "./posts/routes/routes";
-import { testingRouter } from "./testing/routers/testing.router";
+// import { testingRouter } from "./testing/routers/testing.router";
 export const app = express();
 
 export const setupApp = (app: Express) => {
@@ -17,7 +17,7 @@ export const setupApp = (app: Express) => {
 
   app.use(BLOGS_PATH, blogsRouter);
   app.use(POSTS_PATH, postRouter);
-  app.use(TESTING_PATH, testingRouter);
+  // app.use(TESTING_PATH, testingRouter);
   return app;
 };
 
