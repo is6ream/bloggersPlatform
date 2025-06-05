@@ -6,7 +6,7 @@ function generateNumericId(length = 10) {
   const randomNumber = Math.floor(Math.random() * Math.pow(10, length));
   return randomNumber.toString().padStart(length, "0");
 }
-export function createBlogHandler(req: Request, res: Response) {
+export async function createBlogHandler(req: Request, res: Response) {
   const newBlog: BlogType = {
     id: generateNumericId(),
     name: req.body.name,
@@ -16,6 +16,6 @@ export function createBlogHandler(req: Request, res: Response) {
     isMembership: req.body.isMembership,
   };
 
-  blogsRepository.create(newBlog);
+  await blogsRepository.create(newBlog);
   res.status(201).send(newBlog);
 }
