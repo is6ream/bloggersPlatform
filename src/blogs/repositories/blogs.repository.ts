@@ -5,7 +5,7 @@ import { ObjectId, WithId } from "mongodb";
 import { BlogViewModel } from "../types/blogs-types";
 
 export const blogsRepository = {
-  async findAll(): Promise<WithId<BlogType>[]> {
+  async findAll(): Promise<WithId<BlogViewModel>[]> {
     return blogCollection.find().toArray();
   },
 
