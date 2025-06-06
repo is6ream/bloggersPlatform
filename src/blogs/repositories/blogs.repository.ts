@@ -2,14 +2,14 @@ import { BlogType } from "../types/blogs-types";
 import { BlogInputDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
-
+import { BlogViewModel } from "../types/blogs-types";
 
 export const blogsRepository = {
   async findAll(): Promise<WithId<BlogType>[]> {
     return blogCollection.find().toArray();
   },
 
-  async findById(id: string): Promise<BlogType | null> {
+  async findById(id: string): Promise<BlogViewModel | null> {
     const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
     if (!blog) {
       return null;
