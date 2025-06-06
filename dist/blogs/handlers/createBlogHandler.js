@@ -11,14 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBlogHandler = createBlogHandler;
 const blogs_repository_1 = require("../repositories/blogs.repository");
-function generateNumericId(length = 10) {
-    const randomNumber = Math.floor(Math.random() * Math.pow(10, length));
-    return randomNumber.toString().padStart(length, "0");
-}
 function createBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const newBlog = {
-            id: generateNumericId(),
             name: req.body.name,
             description: req.body.description,
             websiteUrl: req.body.websiteUrl,

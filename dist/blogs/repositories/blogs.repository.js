@@ -15,7 +15,15 @@ const mongodb_1 = require("mongodb");
 exports.blogsRepository = {
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            return mongo_db_1.blogCollection.find().toArray();
+            const blogs = yield mongo_db_1.blogCollection.find().toArray();
+            return blogs.map((b) => ({
+                id: b._id.toString(),
+                name: b.name,
+                description: b.description,
+                websiteUrl: b.websiteUrl,
+                createdAt: b.createdAt,
+                isMembership: b.isMembership,
+            }));
         });
     },
     findById(id) {

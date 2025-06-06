@@ -5,8 +5,16 @@ import { ObjectId, WithId } from "mongodb";
 import { BlogViewModel } from "../types/blogs-types";
 
 export const blogsRepository = {
-  async findAll(): Promise<WithId<BlogViewModel>[]> {
-    return blogCollection.find().toArray();
+  async findAll(): Promise<BlogViewModel[]> {
+    const blogs = await blogCollection.find().toArray();
+    return blogs.map((b) => ({
+      id: b._id.toString(),
+      name: b.name,
+      description: b.description,
+      websiteUrl: b.websiteUrl,
+      createdAt: b.createdAt,
+      isMembership: b.isMembership,
+    }));
   },
 
   async findById(id: string): Promise<BlogViewModel | null> {
@@ -41,7 +49,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       throw new Error("Blog not exist");
