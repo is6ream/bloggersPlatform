@@ -3,13 +3,25 @@ import { BlogInputDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 
+
 export const blogsRepository = {
   async findAll(): Promise<WithId<BlogType>[]> {
     return blogCollection.find().toArray();
   },
 
-  async findById(id: string): Promise<WithId<BlogType> | null> {
-    return blogCollection.findOne({ _id: new ObjectId(id) });
+  async findById(id: string): Promise<BlogType | null> {
+    const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
+    if (!blog) {
+      return null;
+    }
+    return {
+      id: blog._id.toString(),
+      name: blog.name,
+      description: blog.description,
+      websiteUrl: blog.websiteUrl,
+      createdAt: blog.createdAt,
+      isMembership: blog.isMembership,
+    };
   },
 
   async create(newBlog: BlogType): Promise<WithId<BlogType>> {

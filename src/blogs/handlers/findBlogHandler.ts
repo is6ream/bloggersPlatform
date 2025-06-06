@@ -1,20 +1,19 @@
 import { Request, Response } from "express";
 import { blogsRepository } from "../repositories/blogs.repository";
 import { HttpStatus } from "../../core/types";
-import { WithId } from "mongodb";
 import { BlogType } from "../types/blogs-types";
 import { createErrorMessages } from "../../core/error.utils";
 
 export async function findBlogHandler(req: Request, res: Response) {
   try {
     const id: string = req.params.id;
-    const blog: WithId<BlogType> | null = await blogsRepository.findById(id);
+    const blog: BlogType | null = await blogsRepository.findById(id);
 
     if (!blog) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "Blog not found" }])
+          createErrorMessages([{ field: "id", message: "Blog not found" }]),
         );
     }
     return;
