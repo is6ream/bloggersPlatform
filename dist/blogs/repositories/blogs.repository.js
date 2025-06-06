@@ -45,7 +45,15 @@ exports.blogsRepository = {
     create(newBlog) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.blogCollection.insertOne(newBlog);
-            return Object.assign(Object.assign({}, newBlog), { _id: insertResult.insertedId });
+            const insertedId = insertResult.insertedId;
+            return {
+                id: insertedId.toString(),
+                name: newBlog.name,
+                description: newBlog.description,
+                websiteUrl: newBlog.websiteUrl,
+                createdAt: newBlog.createdAt,
+                isMembership: newBlog.isMembership,
+            };
         });
     },
     update(id, dto) {

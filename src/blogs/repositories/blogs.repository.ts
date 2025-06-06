@@ -32,10 +32,17 @@ export const blogsRepository = {
     };
   },
 
-  async create(newBlog: BlogType): Promise<WithId<BlogViewModel>> {
+  async create(newBlog: BlogType): Promise<BlogViewModel> {
     const insertResult = await blogCollection.insertOne(newBlog);
-
-    return { ...newBlog, _id: insertResult.insertedId };
+    const insertedId = insertResult.insertedId;
+    return {
+      id: insertedId.toString(),
+      name: newBlog.name,
+      description: newBlog.description,
+      websiteUrl: newBlog.websiteUrl,
+      createdAt: newBlog.createdAt,
+      isMembership: newBlog.isMembership,
+    };
   },
 
   async update(id: string, dto: BlogInputDto): Promise<void> {
