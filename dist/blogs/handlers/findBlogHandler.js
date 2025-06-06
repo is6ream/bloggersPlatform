@@ -22,12 +22,13 @@ function findBlogHandler(req, res) {
                 res
                     .status(types_1.HttpStatus.NotFound)
                     .send((0, error_utils_1.createErrorMessages)([{ field: "id", message: "Blog not found" }]));
+                return;
             }
-            return;
         }
         catch (error) {
             console.log(error);
             res.sendStatus(types_1.HttpStatus.InternalServerError);
+            return;
         }
     });
 }

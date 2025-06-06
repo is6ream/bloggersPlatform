@@ -17,8 +17,8 @@ function createBlogHandler(req, res) {
             name: req.body.name,
             description: req.body.description,
             websiteUrl: req.body.websiteUrl,
-            createdAt: req.body.createdAt,
-            isMembership: req.body.isMembership,
+            createdAt: new Date().toISOString(),
+            isMembership: true,
         };
         yield blogs_repository_1.blogsRepository.create(newBlog);
         res.status(201).send(newBlog);
