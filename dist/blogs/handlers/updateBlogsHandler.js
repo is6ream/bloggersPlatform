@@ -24,5 +24,6 @@ function updateBlogHandler(req, res) {
             res.sendStatus(types_1.HttpStatus.InternalServerError);
             return;
         }
+        //закончил с репозиторием постов
     });
 }
