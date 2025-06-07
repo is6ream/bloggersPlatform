@@ -1,6 +1,6 @@
 import { PostType } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
-import { ObjectId, WithId } from "mongodb";
+import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 
 export const postRepository = {
@@ -59,7 +59,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      }
+      },
     );
 
     if (updateResult.matchedCount < 1) {

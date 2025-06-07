@@ -4,11 +4,6 @@ import { PostType } from "../types/posts-types";
 import { HttpStatus } from "../../core/types";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
 
-function generateNumericId(length = 10) {
-  const randomNumber = Math.floor(Math.random() * Math.pow(10, length));
-  return randomNumber.toString().padStart(length, "0");
-}
-
 export async function createPostHandler(req: Request, res: Response) {
   const foundBlog = await blogsRepository.findById(req.body.blogId);
 
@@ -17,7 +12,6 @@ export async function createPostHandler(req: Request, res: Response) {
     return;
   }
   const newPost: PostType = {
-    id: generateNumericId(),
     title: req.body.title,
     shortDescription: req.body.shortDescription,
     content: req.body.content,

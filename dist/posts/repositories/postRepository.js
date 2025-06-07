@@ -15,18 +15,48 @@ const mongo_db_1 = require("../../db/mongo.db");
 exports.postRepository = {
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongo_db_1.postCollection.find().toArray();
+            const posts = yield mongo_db_1.postCollection.find().toArray();
+            return posts.map((p) => ({
+                id: p._id.toString(),
+                title: p.title,
+                shortDescription: p.shortDescription,
+                content: p.content,
+                blogId: p.blogId,
+                blogName: p.blogName,
+                createdAt: p.createdAt,
+            }));
         });
     },
     findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongo_db_1.postCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            const post = yield mongo_db_1.postCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            if (!post) {
+                return null;
+            }
+            return {
+                id: post._id.toString(),
+                title: post.title,
+                shortDescription: post.shortDescription,
+                content: post.content,
+                blogId: post.blogId,
+                blogName: post.blogName,
+                createdAt: post.createdAt,
+            };
         });
     },
     create(newPost) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.postCollection.insertOne(newPost);
-            return Object.assign(Object.assign({}, newPost), { _id: insertResult.insertedId });
+            const insertedId = insertResult.insertedId;
+            return {
+                id: insertedId.toString(),
+                title: newPost.title,
+                shortDescription: newPost.shortDescription,
+                content: newPost.content,
+                blogId: newPost.blogId,
+                blogName: newPost.blogName,
+                createdAt: newPost.createdAt,
+            };
         });
     },
     update(id, dto) {

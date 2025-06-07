@@ -13,10 +13,6 @@ exports.createPostHandler = createPostHandler;
 const postRepository_1 = require("../repositories/postRepository");
 const types_1 = require("../../core/types");
 const blogs_repository_1 = require("../../blogs/repositories/blogs.repository");
-function generateNumericId(length = 10) {
-    const randomNumber = Math.floor(Math.random() * Math.pow(10, length));
-    return randomNumber.toString().padStart(length, "0");
-}
 function createPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const foundBlog = yield blogs_repository_1.blogsRepository.findById(req.body.blogId);
@@ -25,7 +21,6 @@ function createPostHandler(req, res) {
             return;
         }
         const newPost = {
-            id: generateNumericId(),
             title: req.body.title,
             shortDescription: req.body.shortDescription,
             content: req.body.content,
