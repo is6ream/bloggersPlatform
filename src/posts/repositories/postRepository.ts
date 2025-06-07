@@ -33,9 +33,18 @@ export const postRepository = {
     };
   },
 
-  async create(newPost: PostType): Promise<WithId<PostType>> {
+  async create(newPost: PostType): Promise<PostType> {
     const insertResult = await postCollection.insertOne(newPost);
-    return { ...newPost, _id: insertResult.insertedId };
+    const insertedId = insertResult.insertedId;
+    return {
+      id: insertedId.toString(),
+      title: newPost.title,
+      shortDescription: newPost.shortDescription,
+      content: newPost.content,
+      blogId: newPost.blogId,
+      blogName: newPost.blogName,
+      createdAt: newPost.createdAt,
+    };
   },
 
   async update(id: string, dto: PostInputDto): Promise<void> {
