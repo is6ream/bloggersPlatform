@@ -4,8 +4,17 @@ import { ObjectId, WithId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 
 export const postRepository = {
-  async findAll(): Promise<WithId<PostType>[]> {
-    return await postCollection.find().toArray();
+  async findAll(): Promise<PostType[]> {
+    const posts = await postCollection.find().toArray();
+    return posts.map((p) => ({
+      id: p._id.toString(),
+      title: p.title,
+      shortDescription: p.shortDescription,
+      content: p.content,
+      blogId: p.blogId,
+      blogName: p.blogName,
+      createdAt: p.createdAt,
+    }));
   },
 
   async findById(id: string): Promise<WithId<PostType> | null> {
@@ -29,7 +38,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {
