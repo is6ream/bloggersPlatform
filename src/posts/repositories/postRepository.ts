@@ -17,8 +17,20 @@ export const postRepository = {
     }));
   },
 
-  async findById(id: string): Promise<WithId<PostType> | null> {
-    return await postCollection.findOne({ _id: new ObjectId(id) });
+  async findById(id: string): Promise<PostType | null> {
+    const post = await postCollection.findOne({ _id: new ObjectId(id) });
+    if (!post) {
+      return null;
+    }
+    return {
+      id: post._id.toString(),
+      title: post.title,
+      shortDescription: post.shortDescription,
+      content: post.content,
+      blogId: post.blogId,
+      blogName: post.blogName,
+      createdAt: post.createdAt,
+    };
   },
 
   async create(newPost: PostType): Promise<WithId<PostType>> {
