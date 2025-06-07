@@ -22,5 +22,6 @@ export async function findBlogHandler(req: Request, res: Response) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
     return;
+    //ветка с блогами работает исправно
   }
 }

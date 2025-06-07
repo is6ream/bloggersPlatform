@@ -30,6 +30,7 @@ function findBlogHandler(req, res) {
             console.log(error);
             res.sendStatus(types_1.HttpStatus.InternalServerError);
             return;
+            //ветка с блогами работает исправно
         }
     });
 }
