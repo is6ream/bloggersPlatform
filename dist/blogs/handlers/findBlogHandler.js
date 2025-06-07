@@ -22,8 +22,9 @@ function findBlogHandler(req, res) {
                 res
                     .status(types_1.HttpStatus.NotFound)
                     .send((0, error_utils_1.createErrorMessages)([{ field: "id", message: "Blog not found" }]));
-                return;
             }
+            res.status(200).json(blog);
+            return;
         }
         catch (error) {
             console.log(error);

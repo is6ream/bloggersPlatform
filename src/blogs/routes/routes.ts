@@ -20,6 +20,7 @@ blogsRouter
     inputValidationResultMiddleware,
     createBlogHandler,
   )
+
   .get("/:id", idValidation, inputValidationResultMiddleware, findBlogHandler)
 
   .put(

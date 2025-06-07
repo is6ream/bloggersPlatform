@@ -15,8 +15,9 @@ export async function findBlogHandler(req: Request, res: Response) {
         .send(
           createErrorMessages([{ field: "id", message: "Blog not found" }]),
         );
-      return;
     }
+    res.status(200).json(blog);
+    return;
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
