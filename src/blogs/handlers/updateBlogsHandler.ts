@@ -3,6 +3,13 @@ import { blogsRepository } from "../repositories/blogs.repository";
 import { HttpStatus } from "../../core/types";
 
 export async function updateBlogHandler(req: Request, res: Response) {
-  await blogsRepository.update(req.params.id, req.body);
-  res.status(HttpStatus.NoContent).send();
+  try {
+    await blogsRepository.update(req.params.id, req.body);
+    res.status(HttpStatus.NoContent).send();
+    return;
+  } catch (error: unknown) {
+    console.log(error);
+    res.sendStatus(HttpStatus.InternalServerError);
+    return;
+  }
 }
