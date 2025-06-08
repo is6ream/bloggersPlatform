@@ -23,7 +23,7 @@ export const setupApp = (app: Express) => {
   app.use(BLOGS_PATH, blogsRouter);
   app.use(POSTS_PATH, postRouter);
   // app.use(TESTING_PATH, testingRouter);
-  app.use(TESTING_HW_PATH, blogsRouter, postRouter);
+  app.use(TESTING_PATH, blogsRouter, postRouter);
   return app;
 };
 

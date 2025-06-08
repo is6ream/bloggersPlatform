@@ -40,4 +40,4 @@ blogsRouter
     deleteBlogHandler,
   )
 
-  .delete("/testing/all-data", deleteAllBlogs);
+  .delete("/all-data", deleteAllBlogs);
