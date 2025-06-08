@@ -20,7 +20,9 @@ describe("Blog API body validation check", () => {
   const adminToken = generateBasicAuthToken();
 
   beforeAll(async () => {
-    await runDB("mongodb://localhost:27017/ed-back-lessons-platform-test"); //для тестов я должен создать еще один кластер
+    await runDB(
+      "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster",
+    ); //для тестов я должен создать еще один кластер
     await clearDb(app);
   });
 
@@ -75,6 +77,5 @@ describe("Blog API body validation check", () => {
     expect(blogListResponse.body).toHaveLength(0);
   });
 });
-
 
 //еще два теста нужно прописать

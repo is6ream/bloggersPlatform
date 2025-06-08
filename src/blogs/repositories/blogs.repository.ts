@@ -36,7 +36,7 @@ export const blogsRepository = {
     const insertResult = await blogCollection.insertOne(newBlog);
     const insertedId = insertResult.insertedId;
     return {
-      id: insertedId.toString(),
+      id: insertedId.toString(), //нужно решить проблему с _id из mongoDb
       name: newBlog.name,
       description: newBlog.description,
       websiteUrl: newBlog.websiteUrl,

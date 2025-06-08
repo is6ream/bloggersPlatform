@@ -22,6 +22,7 @@ const setupApp = (app) => {
   app.use(paths_1.BLOGS_PATH, routes_1.blogsRouter);
   app.use(paths_1.POSTS_PATH, routes_2.postRouter);
   // app.use(TESTING_PATH, testingRouter);
+  app.use(paths_1.TESTING_HW_PATH, routes_1.blogsRouter, routes_2.postRouter);
   return app;
 };
 exports.setupApp = setupApp;
