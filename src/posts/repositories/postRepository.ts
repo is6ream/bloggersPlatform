@@ -47,7 +47,7 @@ export const postRepository = {
     };
   },
 
-  async update(id: string, dto: PostInputDto): Promise<void> {
+  async update(id: string, dto: PostInputDto): Promise<void | null> {
     const updateResult = await postCollection.updateOne(
       {
         _id: new ObjectId(id),
@@ -63,7 +63,7 @@ export const postRepository = {
     );
 
     if (updateResult.matchedCount < 1) {
-      throw new Error("Post not exist");
+      return null;
     }
     return;
   },

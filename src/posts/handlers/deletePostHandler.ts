@@ -1,16 +1,22 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../core/types";
 import { postRepository } from "../repositories/postRepository";
+import { createErrorMessages } from "../../core/error.utils";
 
 export async function deletePostHandler(req: Request, res: Response) {
   try {
-    const id = req.params.id;
+    const id: string = req.params.id;
     const result = await postRepository.delete(id);
     if (result === null) {
-      res.sendStatus(HttpStatus.NotFound);
+      res
+        .status(HttpStatus.NotFound)
+        .send(
+          createErrorMessages([{ field: "id", message: "Blog not found" }]),
+        );
       return;
+    } else {
+      res.status(HttpStatus.NoContent).send();
     }
-    res.status(HttpStatus.NoContent).send();
     return;
   } catch (error: unknown) {
     console.log(error);

@@ -1,10 +1,20 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
 import { HttpStatus } from "../../core/types";
+import { createErrorMessages } from "../../core/error.utils";
 
 export async function updatePostHandler(req: Request, res: Response) {
   try {
-    await postRepository.update(req.params.id, req.body);
+    const id = req.params.id;
+    const result = await postRepository.update(id, req.body);
+    if (result === null) {
+      res
+        .status(HttpStatus.NotFound)
+        .send(
+          createErrorMessages([{ field: "id", message: "Blog not found" }]),
+        );
+      return;
+    }
     res.status(HttpStatus.NoContent).send();
     return;
   } catch (error: unknown) {

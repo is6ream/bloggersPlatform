@@ -72,7 +72,7 @@ exports.postRepository = {
                 },
             });
             if (updateResult.matchedCount < 1) {
-                throw new Error("Post not exist");
+                return null;
             }
             return;
         });

@@ -12,10 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updatePostHandler = updatePostHandler;
 const postRepository_1 = require("../repositories/postRepository");
 const types_1 = require("../../core/types");
+const error_utils_1 = require("../../core/error.utils");
 function updatePostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield postRepository_1.postRepository.update(req.params.id, req.body);
+            const id = req.params.id;
+            const result = yield postRepository_1.postRepository.update(id, req.body);
+            if (result === null) {
+                res
+                    .status(types_1.HttpStatus.NotFound)
+                    .send((0, error_utils_1.createErrorMessages)([{ field: "id", message: "Blog not found" }]));
+                return;
+            }
             res.status(types_1.HttpStatus.NoContent).send();
             return;
         }

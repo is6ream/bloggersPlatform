@@ -12,16 +12,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePostHandler = deletePostHandler;
 const types_1 = require("../../core/types");
 const postRepository_1 = require("../repositories/postRepository");
+const error_utils_1 = require("../../core/error.utils");
 function deletePostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const id = req.params.id;
             const result = yield postRepository_1.postRepository.delete(id);
             if (result === null) {
-                res.sendStatus(types_1.HttpStatus.NotFound);
+                res
+                    .status(types_1.HttpStatus.NotFound)
+                    .send((0, error_utils_1.createErrorMessages)([{ field: "id", message: "Blog not found" }]));
                 return;
             }
-            res.status(types_1.HttpStatus.NoContent).send();
+            else {
+                res.status(types_1.HttpStatus.NoContent).send();
+            }
             return;
         }
         catch (error) {
