@@ -17,20 +17,20 @@ function updateBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const id = req.params.id;
-            if (typeof id !== "string" || id.length !== 24) {
-                res.status(404).send({ error: "Invalid object ID format" });
-            }
             const result = yield blogs_repository_1.blogsRepository.update(id, req.body);
             if (result === null) {
                 res
                     .status(types_1.HttpStatus.NotFound)
                     .send((0, error_utils_1.createErrorMessages)([{ field: "id", message: "Blog not found" }]));
+                return;
             }
             res.status(types_1.HttpStatus.NoContent).send();
+            return;
         }
         catch (error) {
             console.log(error);
             res.sendStatus(types_1.HttpStatus.InternalServerError);
+            return;
         }
     });
 }

@@ -79,7 +79,7 @@ exports.blogsRepository = {
                 _id: new mongodb_1.ObjectId(id),
             });
             if (deleteResult.deletedCount < 1) {
-                throw new Error("Blog not exist");
+                return null;
             }
             return;
         });

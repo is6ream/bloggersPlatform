@@ -64,12 +64,12 @@ export const blogsRepository = {
     return;
   },
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<void | null> {
     const deleteResult = await blogCollection.deleteOne({
       _id: new ObjectId(id),
     });
     if (deleteResult.deletedCount < 1) {
-      throw new Error("Blog not exist");
+      return null;
     }
     return;
   },

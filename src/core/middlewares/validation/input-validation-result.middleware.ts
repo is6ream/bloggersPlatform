@@ -3,8 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import { HttpStatus } from "../../types";
 
 const formatErrors = (error: ValidationError) => ({
-  field: "path" in error ? error.path : "unknown",
   message: error.msg,
+  field: "path" in error ? error.path : "unknown",
 });
 
 export const inputValidationResultMiddleware = (
@@ -15,8 +15,7 @@ export const inputValidationResultMiddleware = (
   const errors = validationResult(req).formatWith(formatErrors).array();
 
   if (errors.length) {
-    res.status(HttpStatus.BadRequest).json({ errorMessages: errors });
+    res.status(HttpStatus.BadRequest).send({ errorsMessages: errors });
   }
-
   next();
 };

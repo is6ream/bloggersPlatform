@@ -17,10 +17,6 @@ function findBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const id = req.params.id;
-            if (typeof id !== "string" || id.length !== 24) {
-                res.status(400).send({ error: "Invalid object ID format" });
-                return;
-            }
             const blog = yield blogs_repository_1.blogsRepository.findById(id);
             if (blog === null) {
                 res
@@ -34,6 +30,7 @@ function findBlogHandler(req, res) {
         catch (error) {
             console.log(error);
             res.sendStatus(types_1.HttpStatus.InternalServerError);
+            return;
         }
     });
 }

@@ -29,7 +29,7 @@ blogsRouter
     idValidation,
     blogValidators,
     inputValidationResultMiddleware,
-    updateBlogHandler
+    updateBlogHandler,
   )
 
   .delete(
@@ -37,7 +37,7 @@ blogsRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deleteBlogHandler
+    deleteBlogHandler,
   )
 
   .delete("/testing/all-data", deleteAllBlogs);
