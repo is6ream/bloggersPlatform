@@ -26,7 +26,7 @@ function createPostHandler(req, res) {
             content: req.body.content,
             blogId: foundBlog.id,
             blogName: foundBlog.name,
-            createdAt: req.body.createdAt,
+            createdAt: new Date().toISOString(),
         };
         const dataForResponse = yield postRepository_1.postRepository.create(newPost);
         res.status(types_1.HttpStatus.Created).send(dataForResponse);

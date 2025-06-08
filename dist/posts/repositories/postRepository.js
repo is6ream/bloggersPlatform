@@ -83,7 +83,7 @@ exports.postRepository = {
                 _id: new mongodb_1.ObjectId(id),
             });
             if (deleteResult.deletedCount < 1) {
-                throw new Error("Post not exist");
+                return null;
             }
             return;
         });

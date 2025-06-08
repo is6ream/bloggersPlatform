@@ -17,7 +17,7 @@ export async function createPostHandler(req: Request, res: Response) {
     content: req.body.content,
     blogId: foundBlog.id,
     blogName: foundBlog.name,
-    createdAt: req.body.createdAt,
+    createdAt: new Date().toISOString(),
   };
 
   const dataForResponse = await postRepository.create(newPost);

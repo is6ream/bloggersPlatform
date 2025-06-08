@@ -16,8 +16,13 @@ function deletePostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const id = req.params.id;
-            yield postRepository_1.postRepository.delete(id);
+            const result = yield postRepository_1.postRepository.delete(id);
+            if (result === null) {
+                res.sendStatus(types_1.HttpStatus.NotFound);
+                return;
+            }
             res.status(types_1.HttpStatus.NoContent).send();
+            return;
         }
         catch (error) {
             console.log(error);
