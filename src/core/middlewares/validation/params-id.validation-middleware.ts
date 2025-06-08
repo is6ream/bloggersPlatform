@@ -1,9 +1,13 @@
-import { param } from "express-validator";
+import { body, param, check } from "express-validator";
+
+const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
+
+//для route параметров
 
 export const idValidation = param("id")
   .exists()
-  .withMessage("ID is required")
-  .isString()
-  .withMessage("ID must be a string")
-  .isLength({ min: 1 })
-  .withMessage("ID must not be empty");
+  .withMessage("Id is required")
+  .trim()
+  .notEmpty()
+  .matches(ObjectIdRegex)
+  .withMessage("Invalid ObjectId format");

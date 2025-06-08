@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
-import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
 import { getAllBlogsHandler } from "../handlers/getAllBlogsHandler";
 import { createBlogHandler } from "../handlers/createBlogHandler";
 import { findBlogHandler } from "../handlers/findBlogHandler";
@@ -9,6 +8,7 @@ import { deleteBlogHandler } from "../handlers/deleteBlogHandler";
 import { deleteAllBlogs } from "../handlers/deleteAllBlogsHandler";
 import { blogValidators } from "../../core/middlewares/blogValidation/blog-input-dto.validation";
 import { superAdminGuardMiddleware } from "../../core/middlewares/validation/super-admin.guard-middleware";
+import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
 export const blogsRouter = Router();
 
 blogsRouter
@@ -29,7 +29,7 @@ blogsRouter
     idValidation,
     blogValidators,
     inputValidationResultMiddleware,
-    updateBlogHandler,
+    updateBlogHandler
   )
 
   .delete(
@@ -37,7 +37,7 @@ blogsRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deleteBlogHandler,
+    deleteBlogHandler
   )
 
   .delete("/testing/all-data", deleteAllBlogs);

@@ -47,7 +47,7 @@ exports.blogsRepository = {
             const insertResult = yield mongo_db_1.blogCollection.insertOne(newBlog);
             const insertedId = insertResult.insertedId;
             return {
-                id: insertedId.toString(), //нужно решить проблему с _id из mongoDb
+                id: insertedId.toString(),
                 name: newBlog.name,
                 description: newBlog.description,
                 websiteUrl: newBlog.websiteUrl,
@@ -68,7 +68,7 @@ exports.blogsRepository = {
                 },
             });
             if (updateResult.matchedCount < 1) {
-                throw new Error("Blog not exist");
+                return null;
             }
             return;
         });

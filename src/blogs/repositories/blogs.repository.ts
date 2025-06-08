@@ -36,7 +36,7 @@ export const blogsRepository = {
     const insertResult = await blogCollection.insertOne(newBlog);
     const insertedId = insertResult.insertedId;
     return {
-      id: insertedId.toString(), //нужно решить проблему с _id из mongoDb
+      id: insertedId.toString(),
       name: newBlog.name,
       description: newBlog.description,
       websiteUrl: newBlog.websiteUrl,
@@ -45,7 +45,7 @@ export const blogsRepository = {
     };
   },
 
-  async update(id: string, dto: BlogInputDto): Promise<void> {
+  async update(id: string, dto: BlogInputDto): Promise<void | null> {
     const updateResult = await blogCollection.updateOne(
       {
         _id: new ObjectId(id),
@@ -59,7 +59,7 @@ export const blogsRepository = {
       },
     );
     if (updateResult.matchedCount < 1) {
-      throw new Error("Blog not exist");
+      return null;
     }
     return;
   },
