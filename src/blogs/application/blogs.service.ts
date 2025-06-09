@@ -1,6 +1,8 @@
 
-
+export interface BlogQueryInput {
+    
+}
 
 export const blogService = {
-    async findM
+    async findMany(queryDto: )
 }
