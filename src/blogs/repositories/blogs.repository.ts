@@ -56,7 +56,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      }
+      },
     );
     if (updateResult.matchedCount < 1) {
       return null;
@@ -77,4 +77,4 @@ export const blogsRepository = {
   async deleteAll(): Promise<DeleteResult> {
     return await blogCollection.deleteMany();
   },
-};
+}; //уточнить у поддержки как дропнуть все данные из бд и  пройти последний тест
