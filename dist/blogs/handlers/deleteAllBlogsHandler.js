@@ -16,5 +16,6 @@ function deleteAllBlogs(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         yield blogs_repository_1.blogsRepository.deleteAll();
         res.status(types_1.HttpStatus.NoContent).send();
+        return;
     });
 }

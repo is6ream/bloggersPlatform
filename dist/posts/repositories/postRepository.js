@@ -90,7 +90,7 @@ exports.postRepository = {
     },
     deleteAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            return mongo_db_1.postCollection.drop();
+            return yield mongo_db_1.postCollection.deleteMany({});
         });
     },
 };

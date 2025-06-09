@@ -1,7 +1,7 @@
 import { BlogType } from "../types/blogs-types";
 import { BlogInputDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
-import { ObjectId } from "mongodb";
+import { DeleteResult, ObjectId } from "mongodb";
 import { BlogViewModel } from "../types/blogs-types";
 
 export const blogsRepository = {
@@ -56,7 +56,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       return null;
@@ -74,7 +74,7 @@ export const blogsRepository = {
     return;
   },
 
-  async deleteAll(): Promise<boolean> {
-    return await blogCollection.drop();
+  async deleteAll(): Promise<DeleteResult> {
+    return await blogCollection.deleteMany();
   },
 };

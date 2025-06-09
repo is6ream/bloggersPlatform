@@ -1,6 +1,6 @@
 import { PostType } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
-import { ObjectId } from "mongodb";
+import { DeleteResult, ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 
 export const postRepository = {
@@ -59,7 +59,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {
@@ -78,7 +78,7 @@ export const postRepository = {
     return;
   },
 
-  async deleteAll(): Promise<boolean> {
-    return postCollection.drop();
+  async deleteAll(): Promise<DeleteResult> {
+    return await postCollection.deleteMany({});
   },
 };

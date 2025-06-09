@@ -5,4 +5,5 @@ import { Request, Response } from "express";
 export async function deleteAllBlogs(req: Request, res: Response) {
   await blogsRepository.deleteAll();
   res.status(HttpStatus.NoContent).send();
+  return;
 }
