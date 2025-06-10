@@ -26,4 +26,9 @@ export const blogService = {
 
     return blogsRepository.create(newBlog);
   },
+
+  async update(id: string, dto: BlogInputDto): Promise<void> {
+    await blogsRepository.update(id, dto);
+    return;
+  },
 };
