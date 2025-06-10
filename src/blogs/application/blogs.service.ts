@@ -31,4 +31,9 @@ export const blogService = {
     await blogsRepository.update(id, dto);
     return;
   },
+
+  async delete(id: string): Promise<void> {
+    await blogsRepository.delete(id);
+    return;
+  },
 };
