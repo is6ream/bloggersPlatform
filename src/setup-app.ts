@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { blogsRouter } from "./blogs/routes/routes";
+import { blogsRouter } from "./blogs/blogs.routes";
 import {
   BLOGS_PATH,
   POSTS_PATH,

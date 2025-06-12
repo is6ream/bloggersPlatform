@@ -7,14 +7,14 @@ import { blogsService } from "../../application/blogs.service";
 
 export async function getAllBlogsHandler(
   req: Request<{}, {}, {}, BlogQueryInput>,
-  res: Response
+  res: Response,
 ) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
 
     const { items, totalCount } = await blogsService.findMany(queryInput);
 
-    const blogsListOutput
+    const blogsListOutput;
     const blogs = await blogsRepository.findAll();
     res.status(HttpStatus.Ok).json(blogs);
   } catch (error: unknown) {
