@@ -13,6 +13,8 @@ export async function getAllBlogsHandler(
     const queryInput = setDefaultPaginationIfNotExist(req.query);
 
     const { items, totalCount } = await blogsService.findMany(queryInput);
+
+    const blogsListOutput
     const blogs = await blogsRepository.findAll();
     res.status(HttpStatus.Ok).json(blogs);
   } catch (error: unknown) {
