@@ -3,9 +3,10 @@ import { BlogInputDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { DeleteResult, ObjectId } from "mongodb";
 import { BlogViewModel } from "../types/blogs-types";
+import { BlogQueryInput } from "../routes/input/blog-query.input";
 
 export const blogsRepository = {
-  async findAll(): Promise<BlogViewModel[]> {
+  async findAll(queryDto: BlogQueryInput): Promise<BlogViewModel[]> {
     const blogs = await blogCollection.find().toArray();
     return blogs.map((b) => ({
       id: b._id.toString(),
@@ -56,7 +57,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       return null;

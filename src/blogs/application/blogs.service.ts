@@ -1,7 +1,8 @@
 import { WithId } from "mongodb";
 import { BlogInputDto, BlogType, BlogViewModel } from "../types/blogs-types";
 import { blogsRepository } from "../repositories/blogs.repository";
-import { BlogQueryInput } from "../routes/handlers/input/blog-query.input";
+import { BlogQueryInput } from "../routes/input/blog-query.input";
+
 export const blogsService = {
   async findMany(
     queryDto: BlogQueryInput,
