@@ -9,15 +9,26 @@ export const blogsRepository = {
   async findAll(
     queryDto: BlogQueryInput,
   ): Promise<{ items: BlogType[]; totalCount: number }> {
-    const blogs = await blogCollection.find().toArray();
-    return blogs.map((b) => ({
-      id: b._id.toString(),
-      name: b.name,
-      description: b.description,
-      websiteUrl: b.websiteUrl,
-      createdAt: b.createdAt,
-      isMembership: b.isMembership,
-    }));
+    const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
+      queryDto;
+
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: any = {};
+
+    if (searchBlogNameTerm) {
+      filter.name = { $regex: searchBlogNameTerm, $options: "i" };
+    }
+
+    const items = await blogCollection
+      .find(filter)
+      .sort({ [sortBy]: sortDirection })
+      .skip(skip)
+      .limit(pageSize)
+      .toArray();
+
+    const totalCount = await blogCollection.countDocuments(filter);
+
+    return { items, totalCount };
   },
 
   async findById(id: string): Promise<BlogViewModel | null> {
@@ -59,7 +70,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      }
+      },
     );
     if (updateResult.matchedCount < 1) {
       return null;
@@ -80,4 +91,4 @@ export const blogsRepository = {
   async deleteAll(): Promise<DeleteResult> {
     return await blogCollection.deleteMany();
   },
-}; //уточнить у поддержки как дропнуть все данные из бд и  пройти последний тест
+};

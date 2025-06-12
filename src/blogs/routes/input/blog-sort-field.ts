@@ -1,5 +1,5 @@
 export enum BlogSortField {
-  SearchNameTerm = "searchNameTerm",
-  SortBy = "sortBy",
-  SortDirection = "sortDirection",
+  searchNameTerm = "searchNameTerm",
+  sortBy = "sortBy",
+  sortDirection = "sortDirection",
 }
