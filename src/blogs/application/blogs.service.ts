@@ -1,12 +1,10 @@
 import { WithId } from "mongodb";
 import { BlogInputDto, BlogType, BlogViewModel } from "../types/blogs-types";
 import { blogsRepository } from "../repositories/blogs.repository";
-
-export interface BlogQueryInput {}
-
+import { BlogQueryInput } from "../input/blog-query.input";
 export const blogService = {
   async findMany(
-    queryDto: BlogQueryInput,
+    queryDto: BlogQueryInput
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     return blogsRepository.findAll(queryDto);
   },
