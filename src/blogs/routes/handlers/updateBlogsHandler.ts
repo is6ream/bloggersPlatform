@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { blogsRepository } from "../repositories/blogs.repository";
-import { HttpStatus } from "../../core/http-statuses";
-import { createErrorMessages } from "../../core/error.utils";
+import { blogsRepository } from "../../repositories/blogs.repository";
+import { HttpStatus } from "../../../core/http-statuses";
+import { createErrorMessages } from "../../../core/error.utils";
 
 export async function updateBlogHandler(req: Request, res: Response) {
   try {

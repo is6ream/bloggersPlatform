@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { blogsRepository } from "../repositories/blogs.repository";
-import { HttpStatus } from "../../core/http-statuses";
-import { BlogType } from "../types/blogs-types";
-import { createErrorMessages } from "../../core/error.utils";
+import { blogsRepository } from "../../repositories/blogs.repository";
+import { HttpStatus } from "../../../core/http-statuses";
+import { BlogType } from "../../types/blogs-types";
+import { createErrorMessages } from "../../../core/error.utils";
 
 export async function findBlogHandler(req: Request, res: Response) {
   try {
