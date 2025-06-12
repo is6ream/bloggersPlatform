@@ -6,7 +6,7 @@ export interface BlogQueryInput {}
 
 export const blogService = {
   async findMany(
-    queryDto: BlogQueryInput
+    queryDto: BlogQueryInput,
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     return blogsRepository.findAll(queryDto);
   },
