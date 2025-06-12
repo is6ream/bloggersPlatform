@@ -1,21 +1,21 @@
 import { WithId } from "mongodb";
-import { BlogInputDto, BlogType } from "../types/blogs-types";
+import { BlogInputDto, BlogType, BlogViewModel } from "../types/blogs-types";
 import { blogsRepository } from "../repositories/blogs.repository";
 
 export interface BlogQueryInput {}
 
 export const blogService = {
   async findMany(
-    queryDto: BlogQueryInput
+    queryDto: BlogQueryInput,
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     return blogsRepository.findAll(queryDto);
   },
 
-  async findByIdOrFail(id: string): Promise<WithId<BlogType | null>> {
+  async findByIdOrFail(id: string): Promise<BlogViewModel | null> {
     return blogsRepository.findById(id);
   },
 
-  async create(dto: BlogInputDto): Promise<string> {
+  async create(dto: BlogInputDto): Promise<BlogViewModel> {
     const newBlog: BlogType = {
       name: dto.name,
       description: dto.description,
