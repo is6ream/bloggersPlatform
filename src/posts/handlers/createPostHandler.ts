@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
 import { PostType } from "../types/posts-types";
-import { HttpStatus } from "../../core/types";
+import { HttpStatus } from "../../core/http-statuses";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
 
 export async function createPostHandler(req: Request, res: Response) {

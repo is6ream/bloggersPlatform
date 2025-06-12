@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
-import { HttpStatus } from "../../core/types";
+import { HttpStatus } from "../../core/http-statuses";
 import { createErrorMessages } from "../../core/error.utils";
 
 export async function updatePostHandler(req: Request, res: Response) {

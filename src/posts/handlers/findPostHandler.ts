@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
-import { HttpStatus } from "../../core/types";
+import { HttpStatus } from "../../core/http-statuses";
 
 export async function findPostHandler(req: Request, res: Response) {
   try {

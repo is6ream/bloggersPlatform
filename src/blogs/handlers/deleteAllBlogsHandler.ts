@@ -1,4 +1,4 @@
-import { HttpStatus } from "../../core/types";
+import { HttpStatus } from "../../core/http-statuses";
 import { blogsRepository } from "../repositories/blogs.repository";
 import { Request, Response } from "express";
 

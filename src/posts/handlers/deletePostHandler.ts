@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpStatus } from "../../core/types";
+import { HttpStatus } from "../../core/http-statuses";
 import { postRepository } from "../repositories/postRepository";
 import { createErrorMessages } from "../../core/error.utils";
 

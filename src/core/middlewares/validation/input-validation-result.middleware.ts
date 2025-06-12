@@ -1,6 +1,6 @@
 import { validationResult, ValidationError } from "express-validator";
 import { Request, Response, NextFunction } from "express";
-import { HttpStatus } from "../../types";
+import { HttpStatus } from "../../http-statuses";
 
 const formatErrors = (error: ValidationError) => ({
   message: error.msg,

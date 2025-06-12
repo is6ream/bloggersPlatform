@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 import { blogsRepository } from "../repositories/blogs.repository";
-import { HttpStatus } from "../../core/types";
+import { HttpStatus } from "../../core/http-statuses";
 import { BlogQueryInput } from "../application/blogs.service";
 
-export async function getAllBlogsHandler(req: Request<{}, {}, {}, BlogQueryInput>, res: Response) {
+export async function getAllBlogsHandler(
+  req: Request<{}, {}, {}, BlogQueryInput>,
+  res: Response,
+) {
   try {
     const blogs = await blogsRepository.findAll();
     res.status(HttpStatus.Ok).json(blogs);
