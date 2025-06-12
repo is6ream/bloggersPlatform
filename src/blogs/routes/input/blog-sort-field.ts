@@ -1,5 +1,8 @@
 export enum BlogSortField {
   name = "name",
-  // sortBy = "sortBy",
-  // sortDirection = "sortDirection",
+  description = "description",
+  websiteUrl = "websiteUrl",
+  createdAt = "createdAt",
+  sortBy = "sortBy",
+  sortDirection = "sortDirection",
 }
