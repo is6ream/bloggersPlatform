@@ -6,7 +6,9 @@ import { BlogViewModel } from "../types/blogs-types";
 import { BlogQueryInput } from "../routes/input/blog-query.input";
 
 export const blogsRepository = {
-  async findAll(queryDto: BlogQueryInput): Promise<BlogViewModel[]> {
+  async findAll(
+    queryDto: BlogQueryInput,
+  ): Promise<{ items: BlogType[]; totalCount: number }> {
     const blogs = await blogCollection.find().toArray();
     return blogs.map((b) => ({
       id: b._id.toString(),
