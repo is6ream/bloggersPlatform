@@ -4,6 +4,7 @@ import { BlogQueryInput } from "../input/blog-query.input";
 import { setDefaultPaginationIfNotExist } from "../../../core/helpers/set-default-sort-and-pagination";
 import { blogsService } from "../../application/blogs.service";
 import { mapToBlogListPaginatedOutput } from "../mappers/map-to-blog-list-paginated-output.util";
+
 export async function getAllBlogsHandler(
   req: Request<{}, {}, {}, BlogQueryInput>,
   res: Response,

@@ -9,28 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePostHandler = updatePostHandler;
-const postRepository_1 = require("../repositories/postRepository");
-const http_statuses_1 = require("../../core/http-statuses");
-const error_utils_1 = require("../../core/error.utils");
-function updatePostHandler(req, res) {
+exports.getAllBlogsHandler = getAllBlogsHandler;
+const http_statuses_1 = require("../../../core/http-statuses");
+const set_default_sort_and_pagination_1 = require("../../../core/helpers/set-default-sort-and-pagination");
+const blogs_service_1 = require("../../application/blogs.service");
+const map_to_blog_list_paginated_output_util_1 = require("../mappers/map-to-blog-list-paginated-output.util");
+function getAllBlogsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const id = req.params.id;
-            const result = yield postRepository_1.postRepository.update(id, req.body);
-            if (result === null) {
-                res
-                    .status(http_statuses_1.HttpStatus.NotFound)
-                    .send((0, error_utils_1.createErrorMessages)([{ field: "id", message: "Blog not found" }]));
-                return;
-            }
-            res.status(http_statuses_1.HttpStatus.NoContent).send();
-            return;
+            const queryInput = (0, set_default_sort_and_pagination_1.setDefaultPaginationIfNotExist)(req.query);
+            const { items, totalCount } = yield blogs_service_1.blogsService.findMany(queryInput);
+            const blogsListOutput = (0, map_to_blog_list_paginated_output_util_1.mapToBlogListPaginatedOutput)(items, {
+                pageNumber: queryInput.pageNumber,
+                pageSize: queryInput.pageSize,
+                totalCount,
+            });
+            res.status(200).send(blogsListOutput);
         }
         catch (error) {
             console.log(error);
             res.sendStatus(http_statuses_1.HttpStatus.InternalServerError);
-            return;
         }
     });
 }

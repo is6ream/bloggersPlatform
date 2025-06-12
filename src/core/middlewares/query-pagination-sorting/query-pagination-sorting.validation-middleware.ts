@@ -1,17 +1,16 @@
 import { query } from "express-validator";
-import { SortDirection } from "../../../blogs/types/sort-direction";
 import { PaginationAndSorting } from "../../types/pagination-and-sorting";
-
+import { SortDirection } from "../../types/sort-direction";
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 10;
-const DEFAULT_SORT_DIRECTION = SortDirection.Desc;
+const DEFAULT_SORT_DIRECTION = SortDirection.desc;
 const DEFAULT_SORT_BY = "createdAt";
 
 export const paginationAndSortingDefault: PaginationAndSorting<string> = {
   pageNumber: DEFAULT_PAGE,
   pageSize: DEFAULT_PAGE_SIZE,
   sortBy: DEFAULT_SORT_BY,
-  SortDirection: DEFAULT_SORT_DIRECTION,
+  sortDirection: DEFAULT_SORT_DIRECTION,
 };
 
 export function paginationAndSortingValidation<T extends string>(

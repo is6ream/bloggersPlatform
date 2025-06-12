@@ -8,22 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const setup_app_1 = require("./setup-app");
-const settings_1 = require("./core/settings/settings");
-const mongo_db_1 = require("./db/mongo.db");
-const bootStrap = () => __awaiter(void 0, void 0, void 0, function* () {
-    const app = (0, express_1.default)();
-    (0, setup_app_1.setupApp)(app);
-    const PORT = process.env.PORT || 5001;
-    yield (0, mongo_db_1.runDB)(settings_1.SETTINGS.MONGO_URL);
-    app.listen(PORT, () => {
-        console.log(`Example app listening on port: ${PORT}`);
+exports.createBlogHandler = createBlogHandler;
+const blogs_repository_1 = require("../../repositories/blogs.repository");
+function createBlogHandler(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const newBlog = {
+            name: req.body.name,
+            description: req.body.description,
+            websiteUrl: req.body.websiteUrl,
+            createdAt: new Date().toISOString(),
+            isMembership: false,
+        };
+        const dataForResponse = yield blogs_repository_1.blogsRepository.create(newBlog);
+        res.status(201).send(dataForResponse);
     });
-    return app;
-});
-bootStrap();
+}

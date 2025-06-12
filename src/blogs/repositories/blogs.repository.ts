@@ -4,11 +4,12 @@ import { blogCollection } from "../../db/mongo.db";
 import { DeleteResult, ObjectId } from "mongodb";
 import { BlogViewModel } from "../types/blogs-types";
 import { BlogQueryInput } from "../routes/input/blog-query.input";
+import { WithId } from "mongodb";
 
 export const blogsRepository = {
   async findAll(
     queryDto: BlogQueryInput,
-  ): Promise<{ items: BlogType[]; totalCount: number }> {
+  ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
       queryDto;
 

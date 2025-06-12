@@ -9,22 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePostHandler = updatePostHandler;
-const postRepository_1 = require("../repositories/postRepository");
-const http_statuses_1 = require("../../core/http-statuses");
-const error_utils_1 = require("../../core/error.utils");
-function updatePostHandler(req, res) {
+exports.findBlogHandler = findBlogHandler;
+const blogs_repository_1 = require("../../repositories/blogs.repository");
+const http_statuses_1 = require("../../../core/http-statuses");
+const error_utils_1 = require("../../../core/error.utils");
+function findBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const id = req.params.id;
-            const result = yield postRepository_1.postRepository.update(id, req.body);
-            if (result === null) {
+            const blog = yield blogs_repository_1.blogsRepository.findById(id);
+            if (blog === null) {
                 res
                     .status(http_statuses_1.HttpStatus.NotFound)
                     .send((0, error_utils_1.createErrorMessages)([{ field: "id", message: "Blog not found" }]));
                 return;
             }
-            res.status(http_statuses_1.HttpStatus.NoContent).send();
+            res.status(200).json(blog);
             return;
         }
         catch (error) {
