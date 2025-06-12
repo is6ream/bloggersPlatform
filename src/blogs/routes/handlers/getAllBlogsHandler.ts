@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { blogsRepository } from "../../repositories/blogs.repository";
 import { HttpStatus } from "../../../core/http-statuses";
-import { BlogQueryInput } from "./input/blog-query.input";
+import { BlogQueryInput } from "../input/blog-query.input";
 import { setDefaultPaginationIfNotExist } from "../../../core/helpers/set-default-sort-and-pagination";
 import { blogsService } from "../../application/blogs.service";
-
+import { mapToBlogListPaginatedOutput } from "../mappers/map-to-blog-list-paginated-output.util";
 export async function getAllBlogsHandler(
   req: Request<{}, {}, {}, BlogQueryInput>,
   res: Response,
@@ -14,9 +13,12 @@ export async function getAllBlogsHandler(
 
     const { items, totalCount } = await blogsService.findMany(queryInput);
 
-    const blogsListOutput;
-    const blogs = await blogsRepository.findAll();
-    res.status(HttpStatus.Ok).json(blogs);
+    const blogsListOutput = mapToBlogListPaginatedOutput(items, {
+      pageNumber: queryInput.pageNumber,
+      pageSize: queryInput.pageSize,
+      totalCount,
+    });
+    res.status(200).send(blogsListOutput);
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);

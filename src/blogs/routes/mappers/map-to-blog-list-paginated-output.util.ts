@@ -6,7 +6,7 @@ import { BlogDataOutput } from "../output/blog-data.output";
 
 export function mapToBlogListPaginatedOutput(
   blogs: WithId<BlogType>[],
-  meta: { pageNumber: number; pageSize: number; totalCount: number }
+  meta: { pageNumber: number; pageSize: number; totalCount: number },
 ): BlogListPaginatedOutput {
   return {
     meta: {
