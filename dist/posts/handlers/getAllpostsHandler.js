@@ -12,8 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllPostsHandler = getAllPostsHandler;
 const http_statuses_1 = require("../../core/http-statuses");
 const postRepository_1 = require("../repositories/postRepository");
+const set_default_sort_and_pagination_1 = require("../../core/helpers/set-default-sort-and-pagination");
 function getAllPostsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const queryInput = (0, set_default_sort_and_pagination_1.setDefaultPaginationIfNotExist)(req.query);
+            const it;
+        }
+        finally {
+        }
         const posts = yield postRepository_1.postRepository.findAll();
         res.status(http_statuses_1.HttpStatus.Ok).json(posts);
     });
