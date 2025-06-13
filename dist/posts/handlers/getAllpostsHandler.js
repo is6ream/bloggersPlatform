@@ -17,7 +17,7 @@ function getAllPostsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const queryInput = (0, set_default_sort_and_pagination_1.setDefaultPaginationIfNotExist)(req.query);
-            const it;
+            const { items, totalCount } = yield ;
         }
         finally {
         }

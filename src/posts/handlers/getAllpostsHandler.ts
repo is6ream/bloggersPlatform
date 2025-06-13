@@ -7,7 +7,7 @@ export async function getAllPostsHandler(req: Request, res: Response) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
 
-    const it
+    const { items, totalCount } = await 
   }
   
   const posts = await postRepository.findAll();
