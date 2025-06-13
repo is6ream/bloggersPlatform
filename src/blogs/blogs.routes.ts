@@ -21,6 +21,12 @@ blogsRouter
     createBlogHandler,
   )
 
+  .post("/", 
+    superAdminGuardMiddleware,
+    blogValidators,
+    inputValidationResultMiddleware,
+  )
+
   .get("/:id", idValidation, inputValidationResultMiddleware, findBlogHandler)
 
   .put(
