@@ -4,9 +4,9 @@ import { PostType } from "../types/posts-types";
 import { ResourceType } from "../../core/types/resource-type";
 import { PostListPaginatedOutput } from "../output/post-list-paginated.output";
 
-export function mapToBlogListPaginatedOutput(
+export function mapToPostListPaginatedOutput(
   posts: WithId<PostType>[],
-  meta: { pageNumber: number; pageSize: number; totalCount: number }
+  meta: { pageNumber: number; pageSize: number; totalCount: number },
 ): PostListPaginatedOutput {
   return {
     meta: {
@@ -25,7 +25,7 @@ export function mapToBlogListPaginatedOutput(
         blogId: post.blogId,
         blogName: post.blogName,
         createdAt: post.createdAt,
-      })
+      }),
     ),
   };
 }

@@ -1,18 +1,26 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-import { postRepository } from "../repositories/postRepository";
 import { setDefaultPaginationIfNotExist } from "../../core/helpers/set-default-sort-and-pagination";
 import { postsService } from "../application/post.service";
+import { mapToPostListPaginatedOutput } from "../mappers/map-to-post-list-paginated-output.util";
+import { PostQueryInput } from "../input/post-query.input";
 
 export async function getAllPostsHandler(req: Request, res: Response) {
   try {
-    const queryInput = setDefaultPaginationIfNotExist(req.query);
+    const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
+      req.query,
+    );
 
-    const { items, totalCount } = await postsService.findMany(queryInput)
+    const { items, totalCount } = await postsService.findMany(queryInput);
 
-    const postsListOutput = 
-  } d
-  
-  const posts = await postRepository.findAll();
-  res.status(HttpStatus.Ok).json(posts);
+    const postsListOutput = mapToPostListPaginatedOutput(items, {
+      pageNumber: queryInput.pageNumber,
+      pageSize: queryInput.pageSize,
+      totalCount,
+    });
+    res.status(200).send(postsListOutput);
+  } catch (error: unknown) {
+    console.log(error);
+    res.sendStatus(HttpStatus.InternalServerError);
+  }
 }
