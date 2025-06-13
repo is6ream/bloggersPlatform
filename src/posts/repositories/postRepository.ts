@@ -1,4 +1,4 @@
-import { PostType } from "../types/posts-types";
+import { PostType, PostViewModel } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { DeleteResult, ObjectId, WithId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
@@ -30,7 +30,7 @@ export const postRepository = {
     return { items, totalCount };
   },
 
-  async findById(id: string): Promise<PostType | null> {
+  async findById(id: string): Promise<PostViewModel | null> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     if (!post) {
       return null;
@@ -46,7 +46,7 @@ export const postRepository = {
     };
   },
 
-  async create(newPost: PostType): Promise<PostType> {
+  async create(newPost: PostType): Promise<PostViewModel> {
     const insertResult = await postCollection.insertOne(newPost);
     const insertedId = insertResult.insertedId;
     return {
@@ -72,7 +72,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      }
+      },
     );
 
     if (updateResult.matchedCount < 1) {

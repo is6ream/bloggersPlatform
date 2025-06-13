@@ -3,7 +3,6 @@ import { PostInputDto, PostType, PostViewModel } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
 import { PostQueryInput } from "../input/post-query.input";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
-import { HttpStatus } from "../../core/http-statuses";
 
 export const postsService = {
   async findMany(
@@ -17,7 +16,7 @@ export const postsService = {
   },
 
   async create(dto: PostInputDto): Promise<PostViewModel> {
-    const foundBlog = await blogsRepository.findById(req.body.blogId);
+    const foundBlog = await blogsRepository.findById(dto.blogId);
 
     if (!foundBlog) {
       throw new Error("blog not found");
