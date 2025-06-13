@@ -6,17 +6,18 @@ import { PostQueryInput } from "../input/post-query.input";
 
 export const postRepository = {
   async findAll(
-    queryDto: PostQueryInput,
+    queryDto: PostQueryInput
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
 
     const skip = (pageNumber - 1) * pageSize;
-    const filter: any = [];
+    const filter: any = {};
 
     if (searchPostNameTerm) {
       filter.name = { $regex: searchPostNameTerm, $options: "i" };
     }
+    console.log(filter);
 
     const items = await postCollection
       .find(filter)
@@ -72,7 +73,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {

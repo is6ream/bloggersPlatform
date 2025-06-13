@@ -1,6 +1,6 @@
 import { postValidators } from "./../../core/middlewares/postValidation/post-input-dto.validation";
 import { Router } from "express";
-import { getAllPostsHandler } from "../handlers/getAllPostsHandler";
+import { getAllPostsHandler } from "../handlers/getAllpostsHandler";
 import { createPostHandler } from "../handlers/createPostHandler";
 import { findPostHandler } from "../handlers/findPostHandler";
 import { updatePostHandler } from "../handlers/updatePostHandler";
