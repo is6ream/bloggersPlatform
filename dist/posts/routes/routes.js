@@ -14,9 +14,33 @@ const params_id_validation_middleware_1 = require("../../core/middlewares/valida
 const deleteAllPostsHandler_1 = require("../handlers/deleteAllPostsHandler");
 exports.postRouter = (0, express_1.Router)();
 exports.postRouter
-    .delete("/all-data", deleteAllPostsHandler_1.deleteAllPosts)
-    .get("/", getAllPostsHandler_1.getAllPostsHandler)
-    .post("/", super_admin_guard_middleware_1.superAdminGuardMiddleware, post_input_dto_validation_1.postValidators, input_validation_result_middleware_1.inputValidationResultMiddleware, createPostHandler_1.createPostHandler)
-    .get("/:id", params_id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, findPostHandler_1.findPostHandler)
-    .put("/:id", super_admin_guard_middleware_1.superAdminGuardMiddleware, params_id_validation_middleware_1.idValidation, post_input_dto_validation_1.postValidators, input_validation_result_middleware_1.inputValidationResultMiddleware, updatePostHandler_1.updatePostHandler)
-    .delete("/:id", super_admin_guard_middleware_1.superAdminGuardMiddleware, params_id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, deletePostHandler_1.deletePostHandler);
+  .delete("/all-data", deleteAllPostsHandler_1.deleteAllPosts)
+  .get("/", getAllPostsHandler_1.getAllPostsHandler)
+  .post(
+    "/",
+    super_admin_guard_middleware_1.superAdminGuardMiddleware,
+    post_input_dto_validation_1.postValidators,
+    input_validation_result_middleware_1.inputValidationResultMiddleware,
+    createPostHandler_1.createPostHandler,
+  )
+  .get(
+    "/:id",
+    params_id_validation_middleware_1.idValidation,
+    input_validation_result_middleware_1.inputValidationResultMiddleware,
+    findPostHandler_1.findPostHandler,
+  )
+  .put(
+    "/:id",
+    super_admin_guard_middleware_1.superAdminGuardMiddleware,
+    params_id_validation_middleware_1.idValidation,
+    post_input_dto_validation_1.postValidators,
+    input_validation_result_middleware_1.inputValidationResultMiddleware,
+    updatePostHandler_1.updatePostHandler,
+  )
+  .delete(
+    "/:id",
+    super_admin_guard_middleware_1.superAdminGuardMiddleware,
+    params_id_validation_middleware_1.idValidation,
+    input_validation_result_middleware_1.inputValidationResultMiddleware,
+    deletePostHandler_1.deletePostHandler,
+  );
