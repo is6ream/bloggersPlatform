@@ -7,7 +7,7 @@ import { HttpStatus } from "../../core/http-statuses";
 
 export const postsService = {
   async findMany(
-    queryDto: PostQueryInput
+    queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     return postRepository.findAll(queryDto);
   },
