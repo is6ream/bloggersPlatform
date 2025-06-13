@@ -1,20 +1,33 @@
 import { PostType } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
-import { DeleteResult, ObjectId } from "mongodb";
+import { DeleteResult, ObjectId, WithId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
+import { PostQueryInput } from "../input/post-query.input";
 
 export const postRepository = {
-  async findAll(): Promise<PostType[]> {
-    const posts = await postCollection.find().toArray();
-    return posts.map((p) => ({
-      id: p._id.toString(),
-      title: p.title,
-      shortDescription: p.shortDescription,
-      content: p.content,
-      blogId: p.blogId,
-      blogName: p.blogName,
-      createdAt: p.createdAt,
-    }));
+  async findAll(
+    queryDto: PostQueryInput,
+  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
+    const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
+      queryDto;
+
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: any = [];
+
+    if (searchPostNameTerm) {
+      filter.name = { $regex: searchPostNameTerm, $options: "i" };
+    }
+
+    const items = await postCollection
+      .find(filter)
+      .sort({ [sortBy]: sortDirection })
+      .skip(skip)
+      .limit(pageSize)
+      .toArray();
+
+    const totalCount = await postCollection.countDocuments(filter);
+
+    return { items, totalCount };
   },
 
   async findById(id: string): Promise<PostType | null> {
@@ -59,7 +72,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {
