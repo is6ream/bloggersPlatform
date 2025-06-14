@@ -21,7 +21,8 @@ blogsRouter
     createBlogHandler,
   )
 
-  .post("/", 
+  .post(
+    "/",
     superAdminGuardMiddleware,
     blogValidators,
     inputValidationResultMiddleware,
