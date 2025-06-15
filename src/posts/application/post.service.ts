@@ -42,4 +42,9 @@ export const postsService = {
     postRepository.delete(id);
     return;
   },
+
+  async deleteAll(): Promise<void> {
+    postRepository.deleteAll();
+    return;
+  },
 };

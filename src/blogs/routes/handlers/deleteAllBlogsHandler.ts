@@ -1,9 +1,9 @@
 import { HttpStatus } from "../../../core/http-statuses";
-import { blogsRepository } from "../../repositories/blogs.repository";
+import { blogsService } from "../../application/blogs.service";
 import { Request, Response } from "express";
 
 export async function deleteAllBlogs(req: Request, res: Response) {
-  await blogsRepository.deleteAll();
+  await blogsService.deleteAll();
   res.status(HttpStatus.NoContent).send();
   return;
 }

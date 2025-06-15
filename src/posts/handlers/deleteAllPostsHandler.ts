@@ -1,9 +1,9 @@
-import { postRepository } from "../repositories/postRepository";
 import { HttpStatus } from "../../core/http-statuses";
 import { Request, Response } from "express";
+import { postsService } from "../application/post.service";
 
 export async function deleteAllPosts(req: Request, res: Response) {
-  await postRepository.deleteAll();
+  await postsService.deleteAll();
   res.status(HttpStatus.NoContent).send();
   return;
 }
