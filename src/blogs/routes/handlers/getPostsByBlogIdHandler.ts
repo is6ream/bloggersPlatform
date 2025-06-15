@@ -3,10 +3,13 @@ import { setDefaultPaginationIfNotExist } from "../../../core/helpers/set-defaul
 import { HttpStatus } from "../../../core/http-statuses";
 import { postsService } from "../../../posts/application/post.service";
 import { mapToPostListPaginatedOutput } from "../../../posts/mappers/map-to-post-list-paginated-output.util";
+import { PostQueryInput } from "../../../posts/input/post-query.input";
 
 export async function getPostsByBlogId(req: Request, res: Response) {
   try {
-    const queryInput = setDefaultPaginationIfNotExist(req.query);
+    const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
+      req.query,
+    );
     const { blogId } = req.params;
     const { items, totalCount } = await postsService.getPostsByBlogId(
       blogId,

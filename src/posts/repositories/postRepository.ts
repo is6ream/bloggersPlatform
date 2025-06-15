@@ -2,11 +2,11 @@ import { PostType, PostViewModel } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { DeleteResult, ObjectId, WithId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
-import { FindPostsQueryInput, PostQueryInput } from "../input/post-query.input";
+import { PostQueryInput } from "../input/post-query.input";
 
 export const postRepository = {
   async findAll(
-    queryDto: PostQueryInput
+    queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -98,7 +98,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      }
+      },
     );
 
     if (updateResult.matchedCount < 1) {
