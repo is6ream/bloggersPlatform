@@ -47,6 +47,7 @@ export const postRepository = {
 
     const items = await postCollection
       .find({ blogId })
+      .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(pageSize)
       .toArray();
