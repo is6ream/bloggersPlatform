@@ -1,3 +1,4 @@
+import { query } from "express-validator";
 import { PostType, PostViewModel } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { DeleteResult, ObjectId, WithId } from "mongodb";
@@ -30,7 +31,6 @@ export const postRepository = {
 
     return { items, totalCount };
   },
-
   async findById(id: string): Promise<PostViewModel | null> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     if (!post) {

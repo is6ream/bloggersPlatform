@@ -10,7 +10,6 @@ export const postsService = {
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     return postRepository.findAll(queryDto);
   },
-
   async findByIdOrFail(id: string): Promise<PostViewModel | null> {
     return postRepository.findById(id);
   },

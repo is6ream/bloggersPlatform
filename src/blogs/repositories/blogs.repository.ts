@@ -1,6 +1,7 @@
+import { PostType } from "./../../posts/types/posts-types";
 import { BlogType } from "../types/blogs-types";
 import { BlogInputDto } from "../types/blogs-types";
-import { blogCollection } from "../../db/mongo.db";
+import { blogCollection, postCollection } from "../../db/mongo.db";
 import { DeleteResult, ObjectId } from "mongodb";
 import { BlogViewModel } from "../types/blogs-types";
 import { BlogQueryInput } from "../routes/input/blog-query.input";
@@ -8,7 +9,7 @@ import { WithId } from "mongodb";
 
 export const blogsRepository = {
   async findAll(
-    queryDto: BlogQueryInput,
+    queryDto: BlogQueryInput
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
       queryDto;
@@ -30,6 +31,23 @@ export const blogsRepository = {
     const totalCount = await blogCollection.countDocuments(filter);
 
     return { items, totalCount };
+  },
+
+  async findPostsForBlog(
+    queryDto: BlogQueryInput
+  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
+    const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
+      queryDto;
+
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: any = {};
+
+    if (searchBlogNameTerm) {
+      filter.name = { $regex: searchBlogNameTerm, $options: "i" };
+    }
+
+    const items = await postCollection
+    .find()
   },
 
   async findById(id: string): Promise<BlogViewModel | null> {
@@ -71,7 +89,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       return null;
