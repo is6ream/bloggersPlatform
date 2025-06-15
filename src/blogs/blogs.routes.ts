@@ -45,6 +45,4 @@ blogsRouter
     idValidation,
     inputValidationResultMiddleware,
     deleteBlogHandler,
-  )
-
-  .delete("/all-data", deleteAllBlogs);
+  );

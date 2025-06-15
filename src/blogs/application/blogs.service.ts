@@ -5,7 +5,7 @@ import { BlogQueryInput } from "../routes/input/blog-query.input";
 
 export const blogsService = {
   async findMany(
-    queryDto: BlogQueryInput
+    queryDto: BlogQueryInput,
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     return blogsRepository.findAll(queryDto);
   },
