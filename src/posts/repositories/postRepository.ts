@@ -1,9 +1,8 @@
-import { query } from "express-validator";
 import { PostType, PostViewModel } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { DeleteResult, ObjectId, WithId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
-import { PostQueryInput } from "../input/post-query.input";
+import { FindPostsQueryInput, PostQueryInput } from "../input/post-query.input";
 
 export const postRepository = {
   async findAll(
@@ -31,6 +30,32 @@ export const postRepository = {
 
     return { items, totalCount };
   },
+
+  async findPostsByBlogId(
+    queryDto: FindPostsQueryInput,
+    blogId: string,
+  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
+    const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
+      queryDto;
+
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: any = {};
+
+    if (searchPostNameTerm) {
+      filter.name = { $regex: searchPostNameTerm, $options: "i" };
+    }
+
+    const items = await postCollection
+      .find({ blogId })
+      .skip(skip)
+      .limit(pageSize)
+      .toArray();
+
+    const totalCount = await postCollection.countDocuments(filter);
+
+    return { items, totalCount };
+  },
+
   async findById(id: string): Promise<PostViewModel | null> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     if (!post) {
@@ -73,7 +98,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {

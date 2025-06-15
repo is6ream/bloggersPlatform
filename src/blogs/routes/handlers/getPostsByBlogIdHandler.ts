@@ -8,7 +8,10 @@ export async function getPostsByBlogId(req: Request, res: Response) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
     const { blogId } = req.params;
-    const { items, totalCount } = await postsService.getPostByBlogId(blogId);
+    const { items, totalCount } = await postsService.getPostByBlogId(
+      blogId,
+      queryInput,
+    );
 
     const postsListOutput = mapToPostListPaginatedOutput(items, {
       pageNumber: queryInput.pageNumber,

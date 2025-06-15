@@ -4,3 +4,6 @@ export type PostQueryInput = PaginationAndSorting<PostSortField> &
   Partial<{
     searchPostNameTerm: string;
   }>;
+export type blogId = string;
+
+export type FindPostsQueryInput = PaginationAndSorting<PostSortField> & blogId;

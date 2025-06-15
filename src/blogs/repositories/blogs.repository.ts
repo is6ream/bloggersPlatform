@@ -9,7 +9,7 @@ import { WithId } from "mongodb";
 
 export const blogsRepository = {
   async findAll(
-    queryDto: BlogQueryInput
+    queryDto: BlogQueryInput,
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
       queryDto;
@@ -34,7 +34,7 @@ export const blogsRepository = {
   },
 
   async findPostsForBlog(
-    queryDto: BlogQueryInput
+    queryDto: BlogQueryInput,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
       queryDto;
@@ -46,8 +46,7 @@ export const blogsRepository = {
       filter.name = { $regex: searchBlogNameTerm, $options: "i" };
     }
 
-    const items = await postCollection
-    .find()
+    const items = await postCollection.find();
   },
 
   async findById(id: string): Promise<BlogViewModel | null> {
@@ -89,7 +88,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      }
+      },
     );
     if (updateResult.matchedCount < 1) {
       return null;
