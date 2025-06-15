@@ -1,9 +1,18 @@
 import { Request, Response } from "express";
-import { blogsRepository } from "../../repositories/blogs.repository";
 import { BlogType } from "../../types/blogs-types";
-import { PostInputDto } from "../../../posts/types/posts-types";
+import { postsService } from "../../../posts/application/post.service";
 
 export async function createPostByBlogId(req: Request, res: Response) {
   const { blogId } = req.params;
-  const dto: PostInputDto = req.body;
+
+  const newPost: BlogType = {
+    name: req.body.name,
+    description: req.body.description,
+    websiteUrl: req.body.websiteUrl,
+    createdAt: new Date().toISOString(),
+    isMembership: false,
+  };
+
+  const dataForResponse = await postsService.create(newPost, blogId);
+  res.status(201).send(dataForResponse);
 }
