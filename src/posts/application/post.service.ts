@@ -1,9 +1,8 @@
 import { WithId } from "mongodb";
 import { PostInputDto, PostType, PostViewModel } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
-import { FindPostsQueryInput, PostQueryInput } from "../input/post-query.input";
+import { PostQueryInput } from "../input/post-query.input";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
-import { getPostsByBlogId } from "../../blogs/routes/handlers/getPostsByBlogIdHandler";
 
 export const postsService = {
   async findMany(
@@ -18,7 +17,7 @@ export const postsService = {
   async getPostsByBlogId(
     queryDto: PostQueryInput,
     blogId: string,
-  ): Promise<PostViewModel[]> {
+  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     return postRepository.findPostsByBlogId(queryDto, blogId);
   },
 

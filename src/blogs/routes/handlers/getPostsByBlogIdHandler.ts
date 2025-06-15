@@ -8,7 +8,7 @@ export async function getPostsByBlogId(req: Request, res: Response) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
     const { blogId } = req.params;
-    const { items, totalCount } = await postsService.getPostByBlogId(
+    const { items, totalCount } = await postsService.getPostsByBlogId(
       blogId,
       queryInput,
     );
