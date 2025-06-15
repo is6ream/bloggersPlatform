@@ -14,11 +14,6 @@ export const blogsService = {
     return blogsRepository.findById(id);
   },
 
-  async findBlogPosts(
-    queryDto: BlogQueryInput,
-  ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
-    return blogsRepository.findPostsForBlog();
-  },
   async create(dto: BlogInputDto): Promise<BlogViewModel> {
     const newBlog: BlogType = {
       name: dto.name,

@@ -33,22 +33,6 @@ export const blogsRepository = {
     return { items, totalCount };
   },
 
-  async findPostsForBlog(
-    queryDto: BlogQueryInput,
-  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
-    const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
-      queryDto;
-
-    const skip = (pageNumber - 1) * pageSize;
-    const filter: any = {};
-
-    if (searchBlogNameTerm) {
-      filter.name = { $regex: searchBlogNameTerm, $options: "i" };
-    }
-
-    const items = await postCollection.find();
-  },
-
   async findById(id: string): Promise<BlogViewModel | null> {
     const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
     if (!blog) {

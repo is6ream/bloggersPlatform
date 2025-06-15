@@ -9,6 +9,7 @@ import { deleteAllBlogs } from "./routes/handlers/deleteAllBlogsHandler";
 import { blogValidators } from "../core/middlewares/blogValidation/blog-input-dto.validation";
 import { superAdminGuardMiddleware } from "../core/middlewares/validation/super-admin.guard-middleware";
 import { idValidation } from "../core/middlewares/validation/params-id.validation-middleware";
+import { getPostsByBlogId } from "./routes/handlers/getPostsByBlogIdHandler";
 export const blogsRouter = Router();
 
 blogsRouter
@@ -20,6 +21,7 @@ blogsRouter
     inputValidationResultMiddleware,
     createBlogHandler,
   )
+  .get("/:id/posts", getPostsByBlogId)
 
   .post(
     "/",
