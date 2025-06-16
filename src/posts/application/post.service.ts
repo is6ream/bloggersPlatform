@@ -3,11 +3,10 @@ import { PostInputDto, PostType, PostViewModel } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
 import { PostQueryInput } from "../input/post-query.input";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
-import { PostByIdInputDto } from "../../blogs/routes/handlers/createPostByBlogIdHandler";
-
+import { PostByIdInputDto } from "../types/posts-types";
 export const postsService = {
   async findMany(
-    queryDto: PostQueryInput
+    queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     return postRepository.findAll(queryDto);
   },
@@ -39,21 +38,25 @@ export const postsService = {
 
     return postRepository.create(newPost);
   },
+
   async createPostByBlogId(
     blogId: string,
     dto: PostByIdInputDto,
   ): Promise<PostViewModel> {
-    const blog = await blogsRepository.findById(blogId); //здесь скорее всего нужно будет прописать отдельный метод репозитория
+    const blog = await blogsRepository.findByBlogId(blogId);
     if (!blog) {
       throw new Error("Blog not exist!");
     }
 
-    return postRepository.createPostByBlogId(
-      ...dto,
-      blogId,
+    const newPost = {
+      title: dto.title,
+      shortDescription: dto.shortDescription,
+      content: dto.content,
+      blogId: blogId,
       blogName: blog.name,
-      createdAt: new Date().toISOString()
-    )
+      createdAt: new Date().toISOString(),
+    };
+    return postRepository.createPostByBlogId(newPost);
   },
 
   async update(id: string, dto: PostInputDto): Promise<void> {
