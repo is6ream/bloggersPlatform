@@ -50,3 +50,9 @@ export const postValidators = [
   contentValidator,
   blogIdValidator,
 ];
+
+export const createPostByBlogIdValidators = [
+  titleValidator,
+  shortDescriptionValidator,
+  contentValidator,
+];

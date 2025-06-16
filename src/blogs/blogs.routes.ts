@@ -5,11 +5,15 @@ import { createBlogHandler } from "./routes/handlers/createBlogHandler";
 import { findBlogHandler } from "./routes/handlers/findBlogHandler";
 import { updateBlogHandler } from "./routes/handlers/updateBlogsHandler";
 import { deleteBlogHandler } from "./routes/handlers/deleteBlogHandler";
-import { deleteAllBlogs } from "./routes/handlers/deleteAllBlogsHandler";
 import { blogValidators } from "../core/middlewares/blogValidation/blog-input-dto.validation";
 import { superAdminGuardMiddleware } from "../core/middlewares/validation/super-admin.guard-middleware";
 import { idValidation } from "../core/middlewares/validation/params-id.validation-middleware";
 import { getPostsByBlogId } from "./routes/handlers/getPostsByBlogIdHandler";
+import { createPostByBlogId } from "./routes/handlers/createPostByBlogIdHandler";
+import {
+  createPostByBlogIdValidators,
+  postValidators,
+} from "../core/middlewares/postValidation/post-input-dto.validation";
 export const blogsRouter = Router();
 
 blogsRouter
@@ -24,10 +28,11 @@ blogsRouter
   .get("/:id/posts", getPostsByBlogId)
 
   .post(
-    "/",
+    "/:id/posts",
     superAdminGuardMiddleware,
-    blogValidators,
+    createPostByBlogIdValidators,
     inputValidationResultMiddleware,
+    createPostByBlogId,
   )
 
   .get("/:id", idValidation, inputValidationResultMiddleware, findBlogHandler)
