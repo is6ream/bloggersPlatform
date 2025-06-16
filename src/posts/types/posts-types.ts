@@ -25,6 +25,12 @@ export interface PostInputDto {
   blogId: string;
 }
 
+export type PostByIdInputDto = {
+  title: string;
+  shortDescription: string;
+  content: string;
+};
+
 export interface PostDBType {
   posts: PostType[];
 }

@@ -23,5 +23,3 @@ export async function createPostHandler(req: Request, res: Response) {
   const dataForResponse = await postRepository.create(newPost);
   res.status(HttpStatus.Created).send(dataForResponse);
 }
-
-

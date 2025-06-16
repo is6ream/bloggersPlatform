@@ -3,10 +3,11 @@ import { PostInputDto } from "../types/posts-types";
 import { DeleteResult, ObjectId, WithId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { PostQueryInput } from "../input/post-query.input";
+import { createPostByBlogId } from "../../blogs/routes/handlers/createPostByBlogIdHandler";
 
 export const postRepository = {
   async findAll(
-    queryDto: PostQueryInput,
+    queryDto: PostQueryInput
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -33,7 +34,7 @@ export const postRepository = {
 
   async findPostsByBlogId(
     queryDto: PostQueryInput,
-    blogId: string,
+    blogId: string
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -74,6 +75,20 @@ export const postRepository = {
   },
 
   async create(newPost: PostType): Promise<PostViewModel> {
+    const insertResult = await postCollection.insertOne(newPost);
+    const insertedId = insertResult.insertedId;
+    return {
+      id: insertedId.toString(),
+      title: newPost.title,
+      shortDescription: newPost.shortDescription,
+      content: newPost.content,
+      blogId: newPost.blogId,
+      blogName: newPost.blogName,
+      createdAt: newPost.createdAt,
+    };
+  },
+
+  async createPostByBlogId(newPost: PostType): Promise<PostViewModel> {
     const insertResult = await postCollection.insertOne(newPost);
     const insertedId = insertResult.insertedId;
     return {

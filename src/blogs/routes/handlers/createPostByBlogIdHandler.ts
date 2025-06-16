@@ -1,12 +1,6 @@
 import { Request, Response } from "express";
 import { postsService } from "../../../posts/application/post.service";
 
-export interface PostByIdInputDto {
-  title: string;
-  shortDescription: string;
-  content: string;
-}
-
 export async function createPostByBlogId(req: Request, res: Response) {
   const { blogId } = req.params;
   const { title, shortDescription, content } = req.body;
