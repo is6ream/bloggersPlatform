@@ -1,7 +1,6 @@
-import { PostType } from "./../../posts/types/posts-types";
 import { BlogType } from "../types/blogs-types";
 import { BlogInputDto } from "../types/blogs-types";
-import { blogCollection, postCollection } from "../../db/mongo.db";
+import { blogCollection } from "../../db/mongo.db";
 import { DeleteResult, ObjectId } from "mongodb";
 import { BlogViewModel } from "../types/blogs-types";
 import { BlogQueryInput } from "../routes/input/blog-query.input";
@@ -9,7 +8,7 @@ import { WithId } from "mongodb";
 
 export const blogsRepository = {
   async findAll(
-    queryDto: BlogQueryInput,
+    queryDto: BlogQueryInput
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
       queryDto;
@@ -48,6 +47,20 @@ export const blogsRepository = {
     };
   },
 
+  async findByBlogId(blogId: string): Promise<BlogViewModel | null> {
+    const blog = await blogCollection.findOne({ blogId });
+    if (!blog) {
+      return null;
+    }
+    return {
+      id: blog._id.toString(),
+      name: blog.name,
+      description: blog.description,
+      websiteUrl: blog.websiteUrl,
+      createdAt: blog.createdAt,
+      isMembership: blog.isMembership,
+    };
+  },
   async create(newBlog: BlogType): Promise<BlogViewModel> {
     const insertResult = await blogCollection.insertOne(newBlog);
     const insertedId = insertResult.insertedId;
@@ -72,7 +85,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       return null;

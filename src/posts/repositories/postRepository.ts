@@ -47,7 +47,7 @@ export const postRepository = {
     }
 
     const items = await postCollection
-      .find({ blogId })
+      .findOne({ blogId }) //тут изменил на findOne
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(pageSize)
@@ -114,7 +114,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {
