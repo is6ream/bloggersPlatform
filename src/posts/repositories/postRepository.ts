@@ -46,7 +46,7 @@ export const postRepository = {
     }
 
     const items = await postCollection
-      .findOne({ blogId }) //тут изменил на findOne
+      .find({ blogId }) //тут изменил на findOne, изменил обратно, т.к нужен массив
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(pageSize)
