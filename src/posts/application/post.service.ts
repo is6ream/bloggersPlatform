@@ -3,10 +3,11 @@ import { PostInputDto, PostType, PostViewModel } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
 import { PostQueryInput } from "../input/post-query.input";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
+import { createPostByBlogId } from "../../blogs/routes/handlers/createPostByBlogId";
 
 export const postsService = {
   async findMany(
-    queryDto: PostQueryInput,
+    queryDto: PostQueryInput
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     return postRepository.findAll(queryDto);
   },
@@ -16,7 +17,7 @@ export const postsService = {
 
   async getPostsByBlogId(
     blogId: string,
-    queryDto: PostQueryInput,
+    queryDto: PostQueryInput
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     return postRepository.findPostsByBlogId(queryDto, blogId);
   },
@@ -37,6 +38,20 @@ export const postsService = {
     };
 
     return postRepository.create(newPost);
+  },
+  async createPostByBlogId(
+    id: string,
+    dto: ,
+  ): Promise<PostViewModel> {
+    const blog = await blogsRepository.findById(id);
+    if (!blog) {
+      throw new Error("Blog not exist!");
+    }
+
+    return {
+      ...dto,
+      id,
+    };
   },
 
   async update(id: string, dto: PostInputDto): Promise<void> {

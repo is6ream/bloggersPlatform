@@ -1,18 +1,21 @@
 import { Request, Response } from "express";
-import { BlogType } from "../../types/blogs-types";
 import { postsService } from "../../../posts/application/post.service";
+
+export interface PostByIdInputDto {
+  title: string;
+  shortDescription: string;
+  content: string;
+}
 
 export async function createPostByBlogId(req: Request, res: Response) {
   const { blogId } = req.params;
+  const { title, shortDescription, content } = req.body;
 
-  const newPost: BlogType = {
-    name: req.body.name,
-    description: req.body.description,
-    websiteUrl: req.body.websiteUrl,
-    createdAt: new Date().toISOString(),
-    isMembership: false,
-  };
+  const newPost = await postsService.createPostByBlogId(blogId, {
+    title,
+    shortDescription,
+    content,
+  });
 
-  const dataForResponse = await postsService.create(newPost, blogId);
-  res.status(201).send(dataForResponse);
+  res.status(201).json(newPost);
 }
