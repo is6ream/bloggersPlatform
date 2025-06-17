@@ -6,7 +6,7 @@ import { blogsRepository } from "../../blogs/repositories/blogs.repository";
 import { PostByIdInputDto } from "../types/posts-types";
 export const postsService = {
   async findMany(
-    queryDto: PostQueryInput,
+    queryDto: PostQueryInput
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     return postRepository.findAll(queryDto);
   },
@@ -16,7 +16,7 @@ export const postsService = {
 
   async getPostsByBlogId(
     blogId: string,
-    queryDto: PostQueryInput,
+    queryDto: PostQueryInput
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     return postRepository.findPostsByBlogId(queryDto, blogId);
   },
@@ -41,18 +41,18 @@ export const postsService = {
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto,
-  ): Promise<PostViewModel> {
+    dto: PostByIdInputDto
+  ): Promise<PostViewModel | null> {
     const blog = await blogsRepository.findByBlogId(blogId);
     if (!blog) {
-      throw new Error("Blog not exist!");
+      return null;
     }
 
     const newPost = {
       title: dto.title,
       shortDescription: dto.shortDescription,
       content: dto.content,
-      blogId: blogId,
+      blogId: blog.id,
       blogName: blog.name,
       createdAt: new Date().toISOString(),
     };
