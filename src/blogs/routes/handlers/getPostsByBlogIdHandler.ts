@@ -6,17 +6,20 @@ import { mapToPostListPaginatedOutput } from "../../../posts/mappers/map-to-post
 import { PostQueryInput } from "../../../posts/input/post-query.input";
 import { blogsRepository } from "../../repositories/blogs.repository";
 
-export async function getPostsByBlogId(req: Request, res: Response) {
+export async function getPostsByBlogId(
+  req: Request,
+  res: Response
+): Promise<void> {
   try {
     const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
-      req.query,
+      req.query
     );
     const { id: blogId } = req.params;
     const foundBlog = await blogsRepository.findById(blogId);
-    if (!foundBlog) return res.sendStatus(404);
+    if (!foundBlog) res.sendStatus(HttpStatus.NotFound);
     const { items, totalCount } = await postsService.getPostsByBlogId(
       blogId,
-      queryInput,
+      queryInput
     );
 
     const postsListOutput = mapToPostListPaginatedOutput(items, {
