@@ -23,7 +23,7 @@ blogsRouter
     superAdminGuardMiddleware,
     blogValidators,
     inputValidationResultMiddleware,
-    createBlogHandler
+    createBlogHandler,
   )
   .get("/:id/posts", idValidation, getPostsByBlogId)
 
@@ -33,7 +33,7 @@ blogsRouter
     idValidation,
     createPostByBlogIdValidators,
     inputValidationResultMiddleware,
-    createPostByBlogId
+    createPostByBlogId,
   )
 
   .get("/:id", idValidation, inputValidationResultMiddleware, findBlogHandler)
@@ -44,7 +44,7 @@ blogsRouter
     idValidation,
     blogValidators,
     inputValidationResultMiddleware,
-    updateBlogHandler
+    updateBlogHandler,
   )
 
   .delete(
@@ -52,5 +52,5 @@ blogsRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deleteBlogHandler
+    deleteBlogHandler,
   );

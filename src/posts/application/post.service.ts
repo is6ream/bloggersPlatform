@@ -44,10 +44,12 @@ export const postsService = {
     dto: PostByIdInputDto,
   ): Promise<PostViewModel | null> {
     const blog = await blogsRepository.findByBlogId(blogId);
+    console.log(`Found blog:`, blog); // Логируем что нашли
+
     if (!blog) {
+      console.log(`Blog not found!`); // Логируем
       return null;
     }
-
     const newPost = {
       title: dto.title,
       shortDescription: dto.shortDescription,
@@ -56,6 +58,7 @@ export const postsService = {
       blogName: blog.name,
       createdAt: new Date().toISOString(),
     };
+    console.log(`Creating post:`, newPost); // Логируем
     return postRepository.createPostByBlogId(newPost);
   },
 

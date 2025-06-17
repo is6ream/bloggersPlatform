@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { postsService } from "../../../posts/application/post.service";
 import { HttpStatus } from "../../../core/http-statuses";
+import { createErrorMessages } from "../../../core/error.utils";
 
-export async function createPostByBlogId(req: Request, res: Response) {
+export async function createPostByBlogId(
+  req: Request,
+  res: Response,
+): Promise<void> {
   try {
     const { blogId } = req.params;
     const { title, shortDescription, content } = req.body;
@@ -13,7 +17,12 @@ export async function createPostByBlogId(req: Request, res: Response) {
       content,
     });
     if (newPost === null) {
-      res.sendStatus(HttpStatus.NotFound);
+      res
+        .status(HttpStatus.NotFound)
+        .send(
+          createErrorMessages([{ field: "id", message: "blog not found!" }]),
+        );
+      return;
     }
     res.status(201).json(newPost);
   } catch (error: unknown) {
