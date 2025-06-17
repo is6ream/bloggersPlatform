@@ -39,14 +39,16 @@ export const postRepository = {
       queryDto;
 
     const skip = (pageNumber - 1) * pageSize;
-    const filter: any = {};
+    const filter: Record<string, any> = {
+      blogId,
+    };
 
     if (searchPostNameTerm) {
       filter.name = { $regex: searchPostNameTerm, $options: "i" };
     }
 
     const items = await postCollection
-      .find({ blogId }) //тут изменил на findOne, изменил обратно, т.к нужен массив
+      .find(filter) //тут изменил на findOne, изменил обратно, т.к нужен массив
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(pageSize)

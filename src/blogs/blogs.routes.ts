@@ -10,10 +10,7 @@ import { superAdminGuardMiddleware } from "../core/middlewares/validation/super-
 import { idValidation } from "../core/middlewares/validation/params-id.validation-middleware";
 import { getPostsByBlogId } from "./routes/handlers/getPostsByBlogIdHandler";
 import { createPostByBlogId } from "./routes/handlers/createPostByBlogIdHandler";
-import {
-  createPostByBlogIdValidators,
-  postValidators,
-} from "../core/middlewares/postValidation/post-input-dto.validation";
+import { createPostByBlogIdValidators } from "../core/middlewares/postValidation/post-input-dto.validation";
 export const blogsRouter = Router();
 
 blogsRouter

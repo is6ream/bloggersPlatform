@@ -8,10 +8,10 @@ export async function createPostByBlogId(
   res: Response,
 ): Promise<void> {
   try {
-    const { blogId } = req.params;
+    const { id } = req.params;
     const { title, shortDescription, content } = req.body;
 
-    const newPost = await postsService.createPostByBlogId(blogId, {
+    const newPost = await postsService.createPostByBlogId(id, {
       title,
       shortDescription,
       content,
