@@ -9,8 +9,7 @@ import {
 } from "./core/paths";
 import { Express } from "express";
 import { postRouter } from "./posts/routes/routes";
-import { testingRouter } from "./testing/testing-router";
-// import { testingRouter } from "./testing/routers/testing.router";
+import { testingRouter } from "./testing/posts.testing-router";
 export const app = express();
 
 export const setupApp = (app: Express) => {
