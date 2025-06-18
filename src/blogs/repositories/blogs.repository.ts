@@ -17,7 +17,7 @@ export const blogsRepository = {
     const filter: any = {};
 
     if (searchBlogNameTerm) {
-      console.log("SEARCHBLOGNAMETERM: ", searchBlogNameTerm);
+      console.log("SEARCHBLOGNAMETERM: ", searchBlogNameTerm); 
       filter.name = { $regex: searchBlogNameTerm, $options: "i" };
     }
     const items = await blogCollection

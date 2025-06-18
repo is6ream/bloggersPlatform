@@ -8,14 +8,14 @@ import { PostQueryInput } from "../input/post-query.input";
 export async function getAllPostsHandler(req: Request, res: Response) {
   try {
     const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
-      req.query,
+      req.query
     );
 
     const { items, totalCount } = await postsService.findMany(queryInput);
 
     const postsListOutput = mapToPostListPaginatedOutput(items, {
-      pageNumber: queryInput.pageNumber,
-      pageSize: queryInput.pageSize,
+      pageNumber: Number(queryInput.pageNumber),
+      pageSize: Number(queryInput.pageSize),
       totalCount,
     });
     res.status(200).send(postsListOutput);
