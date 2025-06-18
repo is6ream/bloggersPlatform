@@ -9,14 +9,13 @@ export function mapToBlogListPaginatedOutput(
   meta: { pageNumber: number; pageSize: number; totalCount: number },
 ): BlogListPaginatedOutput {
   return {
+    pagesCount: Math.ceil(meta.totalCount / meta.pageSize),
     page: meta.pageNumber,
     pageSize: meta.pageSize,
-    pagesCount: Math.ceil(meta.totalCount / meta.pageSize),
     totalCount: meta.totalCount,
 
     items: blogs.map(
       (blog): BlogDataOutput => ({
-        type: ResourceType.Blogs,
         id: blog._id.toString(),
         name: blog.name,
         description: blog.description,

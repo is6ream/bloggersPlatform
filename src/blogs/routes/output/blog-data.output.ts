@@ -1,7 +1,6 @@
 import { ResourceType } from "../../../core/types/resource-type";
 
 export type BlogDataOutput = {
-  type: ResourceType.Blogs;
   id: string;
   name: string;
   description: string;
