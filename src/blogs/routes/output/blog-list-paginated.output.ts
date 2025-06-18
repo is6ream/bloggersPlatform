@@ -2,6 +2,9 @@ import { BlogDataOutput } from "./blog-data.output";
 import { PaginatedOutput } from "../../../core/types/paginated.output";
 
 export type BlogListPaginatedOutput = {
-  meta: PaginatedOutput;
+  pagesCount: number;
+  page: number;
+  pageSize: number;
+  totalCount: number;
   items: BlogDataOutput[];
 };
