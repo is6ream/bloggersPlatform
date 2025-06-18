@@ -11,10 +11,11 @@ import { idValidation } from "../core/middlewares/validation/params-id.validatio
 import { getPostsByBlogId } from "./routes/handlers/getPostsByBlogIdHandler";
 import { createPostByBlogId } from "./routes/handlers/createPostByBlogIdHandler";
 import { createPostByBlogIdValidators } from "../core/middlewares/postValidation/post-input-dto.validation";
+import { paginationAndSortingValidation } from "../core/middlewares/query-pagination-sorting/query-pagination-sorting.validation-middleware";
 export const blogsRouter = Router();
 
 blogsRouter
-  .get("/", getAllBlogsHandler)
+  .get("/",paginationAndSortingValidation, getAllBlogsHandler)
   .post(
     "/",
     superAdminGuardMiddleware,

@@ -2,6 +2,9 @@ import { PostDataOutput } from "./post-data-output";
 import { PaginatedOutput } from "../../core/types/paginated.output";
 
 export type PostListPaginatedOutput = {
-  meta: PaginatedOutput;
-  data: PostDataOutput[];
+  pagesCount: number;
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  items: PostDataOutput[];
 };
