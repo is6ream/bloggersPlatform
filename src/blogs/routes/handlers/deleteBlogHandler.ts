@@ -5,7 +5,6 @@ import { createErrorMessages } from "../../../core/error.utils";
 
 export async function deleteBlogHandler(req: Request, res: Response) {
   try {
-    console.log("salam aleykum");
     const id: string = req.params.id;
     const result = await blogsRepository.delete(id);
     if (result === null) {

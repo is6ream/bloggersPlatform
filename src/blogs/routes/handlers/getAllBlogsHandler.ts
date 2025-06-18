@@ -7,7 +7,7 @@ import { mapToBlogListPaginatedOutput } from "../mappers/map-to-blog-list-pagina
 
 export async function getAllBlogsHandler(
   req: Request<{}, {}, {}, BlogQueryInput>,
-  res: Response,
+  res: Response
 ) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
@@ -15,8 +15,8 @@ export async function getAllBlogsHandler(
     const { items, totalCount } = await blogsService.findMany(queryInput);
 
     const blogsListOutput = mapToBlogListPaginatedOutput(items, {
-      pageNumber: queryInput.pageNumber,
-      pageSize: queryInput.pageSize,
+      pageNumber: Number(queryInput.pageNumber),
+      pageSize: Number(queryInput.pageSize),
       totalCount,
     });
     res.status(200).send(blogsListOutput);

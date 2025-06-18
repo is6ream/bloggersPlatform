@@ -8,7 +8,7 @@ export async function createPostByBlogId(
   res: Response,
 ): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id: id } = req.params;
     const { title, shortDescription, content } = req.body;
 
     const newPost = await postsService.createPostByBlogId(id, {

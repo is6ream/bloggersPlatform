@@ -17,13 +17,11 @@ export const postRepository = {
     if (searchPostNameTerm) {
       filter.name = { $regex: searchPostNameTerm, $options: "i" };
     }
-    console.log(filter);
-
     const items = await postCollection
       .find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
-      .limit(pageSize)
+      .limit(+pageSize)
       .toArray();
 
     const totalCount = await postCollection.countDocuments(filter);
@@ -37,7 +35,6 @@ export const postRepository = {
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
-
     const skip = (pageNumber - 1) * pageSize;
     const filter: Record<string, any> = {
       blogId,
@@ -51,7 +48,7 @@ export const postRepository = {
       .find(filter) //тут изменил на findOne, изменил обратно, т.к нужен массив
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
-      .limit(pageSize)
+      .limit(+pageSize)
       .toArray();
 
     const totalCount = await postCollection.countDocuments(filter);

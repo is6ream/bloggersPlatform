@@ -15,7 +15,7 @@ import { paginationAndSortingValidation } from "../core/middlewares/query-pagina
 export const blogsRouter = Router();
 
 blogsRouter
-  .get("/",paginationAndSortingValidation, getAllBlogsHandler)
+  .get("/", getAllBlogsHandler)
   .post(
     "/",
     superAdminGuardMiddleware,
