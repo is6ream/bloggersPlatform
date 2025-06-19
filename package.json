@@ -9,7 +9,9 @@
     "jest": "jest --detectOpenHandles",
     "lint": "eslint --fix .",
     "format": "prettier --write .",
-    "test": "jest"
+    "test": "jest",
+    "ngrok": "ngrok http 3006"
+
   },
   "keywords": [],
   "author": "",
