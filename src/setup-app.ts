@@ -1,12 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { blogsRouter } from "./blogs/blogs.routes";
-import {
-  BLOGS_PATH,
-  POSTS_PATH,
-  TESTING_HW_PATH,
-  TESTING_PATH,
-} from "./core/paths";
+import { BLOGS_PATH, POSTS_PATH, TESTING_PATH } from "./core/paths";
 import { Express } from "express";
 import { postRouter } from "./posts/routes/routes";
 import { testingRouter } from "./testing/posts.testing-router";
