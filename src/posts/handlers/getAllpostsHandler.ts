@@ -8,7 +8,7 @@ import { PostQueryInput } from "../input/post-query.input";
 export async function getAllPostsHandler(req: Request, res: Response) {
   try {
     const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
-      req.query
+      req.query,
     );
 
     const { items, totalCount } = await postsService.findMany(queryInput);
