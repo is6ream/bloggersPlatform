@@ -6,7 +6,7 @@ import { runDB } from "./db/mongo.db";
 const bootStrap = async () => {
   const app = express();
   setupApp(app);
-  const PORT = process.env.PORT || 5001;
+  const PORT = process.env.PORT || 3000;
   await runDB(SETTINGS.MONGO_URL);
 
   app.listen(PORT, () => {
