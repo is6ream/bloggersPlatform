@@ -7,7 +7,7 @@ import { mapToBlogListPaginatedOutput } from "../mappers/map-to-blog-list-pagina
 
 export async function getAllBlogsHandler(
   req: Request<{}, {}, {}, BlogQueryInput>,
-  res: Response
+  res: Response,
 ) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);

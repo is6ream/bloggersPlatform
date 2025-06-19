@@ -1,0 +1,10 @@
+{
+    "version": 1,
+    "name": "bloggers platform",
+    "builds": [
+        {"src": "index.ts", "use": "@vercel.node"}
+    ],
+    "routes": [
+        {"src":"/(.*)", "dest": "indx.ts"}
+    ]
+}
