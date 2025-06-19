@@ -10,14 +10,14 @@ export const app = express();
 export const setupApp = (app: Express) => {
   app.use(express.json());
   app.use(cors());
+  app.use(BLOGS_PATH, blogsRouter);
+  app.use(POSTS_PATH, postRouter);
+  app.use(TESTING_PATH, testingRouter);
 
   app.get("/", (req, res) => {
     res.status(200).send("Hello world!");
   });
 
-  app.use(BLOGS_PATH, blogsRouter);
-  app.use(POSTS_PATH, postRouter);
-  app.use(TESTING_PATH, testingRouter);
   return app;
 };
 
