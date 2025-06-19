@@ -14,11 +14,11 @@ export const setupApp = (app: Express) => {
   app.use(POSTS_PATH, postRouter);
   app.use(TESTING_PATH, testingRouter);
 
-  app.get("/", (req, res) => {
-    res.status(200).send("Hello world!");
-  });
-
   return app;
 };
 
 setupApp(app);
+
+app.get("/", (req, res) => {
+  res.status(200).send("Hello world!");
+});
