@@ -19,6 +19,7 @@ export async function getAllBlogsHandler(
       pageSize: Number(queryInput.pageSize),
       totalCount,
     });
+
     res.status(200).send(blogsListOutput);
   } catch (error: unknown) {
     console.log(error);

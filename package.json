@@ -10,7 +10,7 @@
     "lint": "eslint --fix .",
     "format": "prettier --write .",
     "test": "jest",
-    "ngrok": "ngrok http 3006"
+    "ngrok": "ngrok http 3000"
 
   },
   "keywords": [],
