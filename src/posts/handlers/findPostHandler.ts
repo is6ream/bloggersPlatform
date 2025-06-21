@@ -11,7 +11,7 @@ export async function findPostHandler(req: Request, res: Response) {
     res.status(HttpStatus.Ok).send(post);
     return;
   } catch (error: unknown) {
-    console.log(error);
+    // console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
     return;
   }

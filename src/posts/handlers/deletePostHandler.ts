@@ -19,7 +19,7 @@ export async function deletePostHandler(req: Request, res: Response) {
     }
     return;
   } catch (error: unknown) {
-    console.log(error);
+    // console.log(error);
     res.sendStatus(HttpStatus.NoContent);
     return;
   }

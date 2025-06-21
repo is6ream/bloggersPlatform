@@ -20,7 +20,7 @@ export async function findBlogHandler(req: Request, res: Response) {
     res.status(200).json(blog);
     return;
   } catch (error: unknown) {
-    console.log(error);
+    // console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
     return;
   }

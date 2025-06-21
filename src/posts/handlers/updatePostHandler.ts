@@ -18,7 +18,7 @@ export async function updatePostHandler(req: Request, res: Response) {
     res.status(HttpStatus.NoContent).send();
     return;
   } catch (error: unknown) {
-    console.log(error);
+    // console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
     return;
   }

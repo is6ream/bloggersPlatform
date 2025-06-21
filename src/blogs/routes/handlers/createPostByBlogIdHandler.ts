@@ -26,7 +26,7 @@ export async function createPostByBlogId(
     }
     res.status(201).json(newPost);
   } catch (error: unknown) {
-    console.log(error);
+    // console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }
