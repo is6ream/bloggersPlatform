@@ -1,5 +1,6 @@
-import { BlogInputDto } from "../../../src/blogs/types/blogs-types";
-export function getBlogDto(): BlogInputDto {
+import { BlogAttributes } from "../../e2e/blogs/types";
+
+export function getBlogDto(): BlogAttributes {
   return {
     id: "23211232",
     name: "jamick",

@@ -12,10 +12,13 @@ import { getPostsByBlogId } from "./routes/handlers/getPostsByBlogIdHandler";
 import { createPostByBlogId } from "./routes/handlers/createPostByBlogIdHandler";
 import { createPostByBlogIdValidators } from "../core/middlewares/postValidation/post-input-dto.validation";
 import { paginationAndSortingValidation } from "../core/middlewares/query-pagination-sorting/query-pagination-sorting.validation-middleware";
+import { BlogSortField } from "./routes/input/blog-sort-field";
+import { PostSortField } from "../posts/input/post-sort-field";
+
 export const blogsRouter = Router();
 
 blogsRouter
-  .get("/", getAllBlogsHandler)
+  .get("/", paginationAndSortingValidation(BlogSortField), getAllBlogsHandler)
   .post(
     "/",
     superAdminGuardMiddleware,
@@ -23,7 +26,12 @@ blogsRouter
     inputValidationResultMiddleware,
     createBlogHandler,
   )
-  .get("/:id/posts", idValidation, getPostsByBlogId)
+  .get(
+    "/:id/posts",
+    paginationAndSortingValidation(PostSortField),
+    idValidation,
+    getPostsByBlogId,
+  )
 
   .post(
     "/:id/posts",
