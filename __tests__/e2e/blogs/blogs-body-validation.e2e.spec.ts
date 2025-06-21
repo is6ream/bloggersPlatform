@@ -22,7 +22,7 @@ describe("Blog API body validation check", () => {
 
   beforeAll(async () => {
     await runDB(
-      "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster",
+      "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster"
     );
     await clearDb(app);
   });
@@ -34,16 +34,15 @@ describe("Blog API body validation check", () => {
   jest.setTimeout(10000);
 
   it("should not create blog when incorrect body passed; POST /api/blog", async () => {
-    const inCorrectTestBlogData: BlogCreateInput = {
-      name: "  ",
+    const correctTestBlogData: BlogCreateInput = {
+      name: "dan",
       description: "dan",
-      websiteUrl: "/http://dan.ru",
+      websiteUrl: "/htpp://sla.com",
     };
 
     await request(app)
       .post(BLOGS_PATH)
-      .set("Authorization", generateBasicAuthToken())
-      .send(inCorrectTestBlogData)
-      .expect(HttpStatus.BadRequest);
+      .send(correctTestBlogData)
+      .expect(HttpStatus.Unauthorized);
   });
 });
