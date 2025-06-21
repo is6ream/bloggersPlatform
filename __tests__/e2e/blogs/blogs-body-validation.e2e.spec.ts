@@ -60,7 +60,5 @@ describe("Blog API body validation check", () => {
       .expect(HttpStatus.BadRequest);
 
     expect(invalidDataSet1.body.errors).toHaveLength(3);
-
-    
   });
 });
