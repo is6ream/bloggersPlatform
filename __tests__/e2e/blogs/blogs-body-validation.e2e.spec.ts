@@ -40,9 +40,27 @@ describe("Blog API body validation check", () => {
       websiteUrl: "/htpp://sla.com",
     };
 
+    const incorrectTestBlogData: BlogCreateInput = {
+      name: " ",
+      description: " ",
+      websiteUrl: " ",
+    };
+
     await request(app)
       .post(BLOGS_PATH)
       .send(correctTestBlogData)
       .expect(HttpStatus.Unauthorized);
+
+    const invalidDataSet1 = await request(app)
+      .post(BLOGS_PATH)
+      .set("Authorization", generateBasicAuthToken())
+      .send({
+        ...incorrectTestBlogData,
+      })
+      .expect(HttpStatus.BadRequest);
+
+    expect(invalidDataSet1.body.errors).toHaveLength(3);
+
+    
   });
 });
