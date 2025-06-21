@@ -6,3 +6,9 @@ export interface BlogAttributes {
   createdAt: string;
   isMembership: boolean;
 }
+
+export interface BlogCreateInput {
+  name: string;
+  description: string;
+  websiteUrl: string;
+}

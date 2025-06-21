@@ -7,13 +7,15 @@ export const testingRouter = Router();
 
 async function deleteAllData(req: Request, res: Response) {
   try {
-    await deleteAllBlogs(req, res);
-    await deleteAllPosts(req, res);
+    deleteAllBlogs;
+    deleteAllPosts;
 
     res.sendStatus(HttpStatus.NoContent);
+    return;
   } catch (error: unknown) {
     console.log("Error deleting all data: ", error);
     res.sendStatus(HttpStatus.InternalServerError);
+    return;
   }
 }
 

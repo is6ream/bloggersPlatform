@@ -3,10 +3,9 @@ import { setupApp } from "../../../src/setup-app";
 import { generateBasicAuthToken } from "../../utils/posts/generate-admin-auth-token";
 import { runDB, stopDb } from "../../../src/db/mongo.db";
 import { clearDb } from "../../utils/posts/clear-db";
-import { after } from "node:test";
 import { BLOGS_PATH } from "../../../src/core/paths";
 import request from "supertest";
-import { HttpStatus } from "../../../src/core/types";
+import { HttpStatus } from "../../../src/core/http-statuses";
 describe("blog API repository check", () => {
   const app = express();
   setupApp(app);
