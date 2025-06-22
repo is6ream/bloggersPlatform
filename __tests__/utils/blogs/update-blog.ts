@@ -9,7 +9,7 @@ import { HttpStatus } from "../../../src/core/http-statuses";
 export async function updateBlog(
   app: Express,
   blogId: string,
-  blogDto?: BlogUpdateInput
+  blogDto?: BlogUpdateInput,
 ): Promise<void> {
   const defaultBlogData: BlogInputDto = getBlogDto();
 
