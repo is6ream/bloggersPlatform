@@ -1,4 +1,5 @@
-import { BlogCreateInput } from "./types";
+import { blogsRepository } from "./../../../src/blogs/repositories/blogs.repository";
+import { BlogCreateInput, BlogUpdateInput } from "./types";
 import { setupApp } from "../../../src/setup-app";
 import express from "express";
 import { generateBasicAuthToken } from "../../utils/posts/generate-admin-auth-token";
@@ -9,6 +10,9 @@ import { BlogInputDto } from "../../../src/blogs/types/blogs-types";
 import request from "supertest";
 import { BLOGS_PATH } from "../../../src/core/paths";
 import { HttpStatus } from "../../../src/core/http-statuses";
+import { getBlogById } from "../../utils/blogs/get-blog-by-id";
+import { updateBlog } from "../../utils/blogs/update-blog";
+import { create } from "domain";
 describe("Blog API", () => {
   const app = express();
   setupApp(app);
@@ -50,5 +54,50 @@ describe("Blog API", () => {
     expect(response.body).toHaveProperty("page");
     expect(response.body).toHaveProperty("pageSize");
     expect(response.body).toHaveProperty("totalCount");
+  });
+
+  it("should return blog by id; GET /api/blogs/:id", async () => {
+    const createdBlog = await createBlog(app); //слздаем блог
+    const createdBlogId = createdBlog.id;
+
+    const blog = await getBlogById(app, createdBlogId); //запрашиваем его по id
+
+    expect(blog).toEqual({
+      //сравниваем их
+      ...createdBlog,
+    });
+  });
+
+  it("should update blog; PUT /api/blogs/:id", async () => {
+    const createdBlog = await createBlog(app);
+    const createdBlogId = createdBlog.id;
+
+    const blogUpdateData: BlogUpdateInput = {
+      name: "testUpdate1",
+      description: "testUpdate2",
+      websiteUrl: "https://translate.google.com/?hl=ru",
+    };
+
+    await updateBlog(app, createdBlogId, blogUpdateData);
+
+    const blogResponse = await getBlogById(app, createdBlogId);
+    expect(blogResponse.id).toBe(createdBlogId);
+    expect(blogResponse.name).toBe(blogUpdateData.name);
+    expect(blogResponse.description).toBe(blogUpdateData.description);
+    expect(blogResponse.websiteUrl).toBe(blogUpdateData.websiteUrl);
+  });
+
+  it("should delete blog and check after not found; DELETE /api/blogs/:id", async () => {
+    const createdBlog = await createBlog(app);
+    const createdBlogId = createdBlog.id;
+
+    await request(app)
+      .delete(`${BLOGS_PATH}/${createdBlogId}`)
+      .set("Authorization", adminToken)
+      .expect(HttpStatus.NoContent);
+
+    await request(app)
+      .get(`${BLOGS_PATH}/${createdBlogId}`)
+      .expect(HttpStatus.NotFound);
   });
 });
