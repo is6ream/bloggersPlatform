@@ -1,12 +1,14 @@
-import { PostAttributes } from "../../e2e/posts/types/types";
-export function getPostDto(): PostAttributes {
+import { app } from "../../../src/setup-app";
+import { PostCreateInput } from "../../e2e/posts/types/types";
+import { createBlog } from "../blogs/create-blog";
+export async function getPostDto(): Promise<PostCreateInput> {
+  const blog = await createBlog(app);
+  const blogId = blog.id;
+
   return {
-    id: "123423",
     title: "forTest",
     shortDescription: "post for test",
-    content: "for test",
-    blogId: "23211232",
-    blogName: "jamick",
-    createdAt: new Date().toISOString(),
+    content: "fortest",
+    blogId: blogId,
   };
 }

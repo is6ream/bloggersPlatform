@@ -41,10 +41,7 @@ describe("Blog API", () => {
   it("should return blogs list; GET /api/blogs", async () => {
     await Promise.all([createBlog(app), createBlog(app)]);
 
-    const response = await request(app)
-      .get(BLOGS_PATH)
-      .set("Authorization", adminToken)
-      .expect(HttpStatus.Ok);
+    const response = await request(app).get(BLOGS_PATH).expect(HttpStatus.Ok);
 
     expect(response.body.items).toBeInstanceOf(Array);
 

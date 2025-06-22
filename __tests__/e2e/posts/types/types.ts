@@ -14,3 +14,10 @@ export interface PostCreateInput {
   content: string;
   blogId: string;
 }
+
+export interface PostUpdateInput {
+  title: string;
+  shortDescription: string;
+  content: string;
+  blogId: string;
+}

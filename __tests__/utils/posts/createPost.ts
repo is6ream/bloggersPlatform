@@ -1,4 +1,3 @@
-import { body } from "express-validator";
 import { Express } from "express";
 import {
   PostInputDto,
@@ -9,18 +8,19 @@ import { POSTS_PATH } from "../../../src/core/paths";
 import { generateBasicAuthToken } from "./generate-admin-auth-token";
 import { HttpStatus } from "../../../src/core/http-statuses";
 import request from "supertest";
+import { PostCreateInput } from "../../e2e/posts/types/types";
 
 export async function createPost(
   app: Express,
-  postDto?: PostInputDto,
+  postDto?: PostCreateInput,
 ): Promise<PostViewModel> {
-  const defaultPostData: PostInputDto = getPostDto();
-  const testBlogData = { ...defaultPostData, ...postDto };
+  const defaultPostData: Promise<PostInputDto> = getPostDto();
+  const testPostData = { ...defaultPostData, ...postDto };
 
   const createdPostResponse = await request(app)
     .post(POSTS_PATH)
     .set("Authorization", generateBasicAuthToken())
-    .send(testBlogData)
+    .send(testPostData)
     .expect(HttpStatus.Created);
 
   return createdPostResponse.body;
