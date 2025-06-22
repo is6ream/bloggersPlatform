@@ -31,8 +31,6 @@ describe("Blog API body validation check", () => {
     await stopDb();
   });
 
-  jest.setTimeout(10000);
-
   it("should not create blog when incorrect body passed; POST /api/blog", async () => {
     const correctTestBlogData: BlogCreateInput = {
       name: "dan",
@@ -57,6 +55,10 @@ describe("Blog API body validation check", () => {
       .send(incorrectTestBlogData)
       .expect(HttpStatus.BadRequest);
 
-    expect(invalidDataSet1.body.errors).toHaveLength(1);
+    expect(invalidDataSet1.body.errorsMessages).not.toBeUndefined();
+
+    //проверка что блог не создался
+    const blogListResponse = await request(app).get(BLOGS_PATH);
+    expect(blogListResponse.body).toHaveLength(0);
   });
 });
