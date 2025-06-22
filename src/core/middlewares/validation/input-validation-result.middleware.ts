@@ -16,6 +16,7 @@ export const inputValidationResultMiddleware = (
 
   if (errors.length) {
     res.status(HttpStatus.BadRequest).send({ errorsMessages: errors });
+    return;
   }
   next();
 };
