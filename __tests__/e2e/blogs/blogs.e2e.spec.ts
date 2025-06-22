@@ -1,5 +1,3 @@
-import { blogsRepository } from "./../../../src/blogs/repositories/blogs.repository";
-import { BlogCreateInput, BlogUpdateInput } from "./types";
 import { setupApp } from "../../../src/setup-app";
 import express from "express";
 import { generateBasicAuthToken } from "../../utils/posts/generate-admin-auth-token";
@@ -12,7 +10,6 @@ import { BLOGS_PATH } from "../../../src/core/paths";
 import { HttpStatus } from "../../../src/core/http-statuses";
 import { getBlogById } from "../../utils/blogs/get-blog-by-id";
 import { updateBlog } from "../../utils/blogs/update-blog";
-import { create } from "domain";
 describe("Blog API", () => {
   const app = express();
   setupApp(app);
