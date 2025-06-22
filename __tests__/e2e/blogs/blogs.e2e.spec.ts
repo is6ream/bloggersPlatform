@@ -10,6 +10,7 @@ import { BLOGS_PATH } from "../../../src/core/paths";
 import { HttpStatus } from "../../../src/core/http-statuses";
 import { getBlogById } from "../../utils/blogs/get-blog-by-id";
 import { updateBlog } from "../../utils/blogs/update-blog";
+import { BlogUpdateInput } from "./types";
 describe("Blog API", () => {
   const app = express();
   setupApp(app);
@@ -18,7 +19,7 @@ describe("Blog API", () => {
 
   beforeAll(async () => {
     await runDB(
-      "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster",
+      "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster"
     );
     await clearDb(app);
   });

@@ -7,3 +7,10 @@ export interface PostAttributes {
   blogName: string;
   createdAt: string;
 }
+
+export interface PostCreateInput {
+  title: string;
+  shortDescription: string;
+  content: string;
+  blogId: string;
+}
