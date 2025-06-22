@@ -130,8 +130,4 @@ export const postRepository = {
     }
     return;
   },
-
-  async deleteAll(): Promise<DeleteResult> {
-    return await postCollection.deleteMany({});
-  },
 };

@@ -102,8 +102,4 @@ export const blogsRepository = {
     }
     return;
   },
-
-  async deleteAll(): Promise<DeleteResult> {
-    return await blogCollection.deleteMany();
-  },
 };

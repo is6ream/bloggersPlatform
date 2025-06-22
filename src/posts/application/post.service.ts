@@ -68,8 +68,4 @@ export const postsService = {
     return;
   },
 
-  async deleteAll(): Promise<void> {
-    postRepository.deleteAll();
-    return;
-  },
 };
