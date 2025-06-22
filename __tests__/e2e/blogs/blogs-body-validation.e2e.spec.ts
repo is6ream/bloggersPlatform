@@ -6,12 +6,14 @@ import { generateBasicAuthToken } from "../../utils/posts/generate-admin-auth-to
 import { runDB } from "../../../src/db/mongo.db";
 import { clearDb } from "../../utils/posts/clear-db";
 import { stopDb } from "../../../src/db/mongo.db";
-import { ResourceType } from "../../../src/core/types/resource-type";
 import request from "supertest";
 import { BLOGS_PATH } from "../../../src/core/paths";
 import { BlogCreateInput } from "./types";
 import { HttpStatus } from "../../../src/core/http-statuses";
-
+import { createBlog } from "../../utils/blogs/create-blog";
+import { BlogUpdateInput } from "./types";
+import { findBlogHandler } from "../../../src/blogs/routes/handlers/findBlogHandler";
+import { blogsService } from "../../../src/blogs/application/blogs.service";
 describe("Blog API body validation check", () => {
   const app = express();
   setupApp(app);
@@ -59,6 +61,44 @@ describe("Blog API body validation check", () => {
 
     //проверка что блог не создался
     const blogListResponse = await request(app).get(BLOGS_PATH);
-    expect(blogListResponse.body).toHaveLength(0);
+    expect(blogListResponse.body.items).toHaveLength(0);
+  });
+
+  it("should not update blog when incorrect data passed; PUT api/blogs/:id", async () => {
+    const createdBlog = await createBlog(app, correctTestBlogAttributes);
+    const createdBlogId = createdBlog.id;
+    const incorrectTestBlogData1: BlogUpdateInput = {
+      name: " ",
+      description: " ",
+      websiteUrl: " ",
+    };
+
+    const invalidDataSet1 = await request(app)
+      .put(`${BLOGS_PATH}/${createdBlogId}`)
+      .set("Authorization", generateBasicAuthToken())
+      .send(incorrectTestBlogData1)
+      .expect(HttpStatus.BadRequest);
+
+    expect(invalidDataSet1.body.errorsMessages).toHaveLength(3);
+
+    const incorrectTestBlogData2: BlogUpdateInput = {
+      name: "dan22",
+      description: "da22",
+      websiteUrl: " ",
+    };
+
+    const invalidDataSet2 = await request(app)
+      .put(`${BLOGS_PATH}/${createdBlogId}`)
+      .set("Authorization", generateBasicAuthToken())
+      .send(incorrectTestBlogData2)
+      .expect(HttpStatus.BadRequest);
+
+    expect(invalidDataSet2.body.errorsMessages).toHaveLength(1);
+
+    const blogResponse = await blogsService.findByIdOrFail(createdBlogId);
+
+    expect(blogResponse).toEqual({
+      ...createdBlog, //сравниваем с созданным ранее блогом, который прошел обновление
+    });
   });
 });

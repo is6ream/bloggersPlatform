@@ -12,3 +12,9 @@ export interface BlogCreateInput {
   description: string;
   websiteUrl: string;
 }
+
+export interface BlogUpdateInput {
+  name: string;
+  description: string;
+  websiteUrl: string;
+}
