@@ -67,5 +67,4 @@ export const postsService = {
     postRepository.delete(id);
     return;
   },
-
 };
