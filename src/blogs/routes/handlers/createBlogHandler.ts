@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { blogsRepository } from "../../repositories/blogs.repository";
 import { BlogType } from "../../types/blogs-types";
 import { blogsService } from "../../application/blogs.service";
 

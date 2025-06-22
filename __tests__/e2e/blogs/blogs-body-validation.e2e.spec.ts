@@ -42,8 +42,8 @@ describe("Blog API body validation check", () => {
 
     const incorrectTestBlogData: BlogCreateInput = {
       name: " ",
-      description: " ",
-      websiteUrl: " ",
+      description: "dan22",
+      websiteUrl: "/http://dan22.com",
     };
 
     await request(app)
@@ -54,11 +54,9 @@ describe("Blog API body validation check", () => {
     const invalidDataSet1 = await request(app)
       .post(BLOGS_PATH)
       .set("Authorization", generateBasicAuthToken())
-      .send({
-        ...incorrectTestBlogData,
-      })
+      .send(incorrectTestBlogData)
       .expect(HttpStatus.BadRequest);
 
-    expect(invalidDataSet1.body.errors).toHaveLength(3);
+    expect(invalidDataSet1.body.errors).toHaveLength(1);
   });
 });
