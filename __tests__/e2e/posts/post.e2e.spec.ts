@@ -13,6 +13,7 @@ import { HttpStatus } from "../../../src/core/http-statuses";
 import { getPostById } from "../../utils/posts/get-post-by-id";
 import { PostUpdateInput } from "./types/types";
 import { updatePost } from "../../utils/posts/update-post";
+import { PostCreateInput } from "./types/types";
 describe("Post API", () => {
   const app = express();
   setupApp(app);
@@ -43,8 +44,23 @@ describe("Post API", () => {
   });
 
   it("should return posts list; GET /api/posts", async () => {
-    await Promise.all([createPost(app), createPost(app)]);
-    console.log("Тут возникает проблема");
+    const blog = createBlog(app);
+    const blogId = (await blog).id;
+
+    const postDto1: PostCreateInput = {
+      title: "t1",
+      shortDescription: "sh1",
+      content: "c1",
+      blogId: blogId,
+    };
+
+    const postDto2: PostCreateInput = {
+      title: "t2",
+      shortDescription: "sh2",
+      content: "c2",
+      blogId: blogId,
+    };
+    await Promise.all([createPost(app, postDto1), createPost(app, postDto2)]);
     const response = await request(app).get(POSTS_PATH).expect(HttpStatus.Ok);
 
     expect(response.body.items).toBeInstanceOf(Array);
@@ -56,7 +72,16 @@ describe("Post API", () => {
   });
 
   it("should return post by id; GET /api/posts/:id", async () => {
-    const createdPost = await createPost(app);
+    const blog = createBlog(app);
+    const blogId = (await blog).id;
+
+    const postDto1: PostCreateInput = {
+      title: "t1",
+      shortDescription: "sh1",
+      content: "c1",
+      blogId: blogId,
+    };
+    const createdPost = await createPost(app, postDto1);
     const createdPostId = createdPost.id;
 
     const post = await getPostById(app, createdPostId);
@@ -66,7 +91,7 @@ describe("Post API", () => {
     });
   });
 
-  it("should update blog:  PUT /api/posts/:id", async () => {
+  it("should update post:  PUT /api/posts/:id", async () => {
     const createdPost = await createPost(app);
     const createdPostId = createdPost.id;
     const blog = createBlog(app);
@@ -89,7 +114,16 @@ describe("Post API", () => {
   });
 
   it("should delete post and check after not found; DELETE /api/posts/:id", async () => {
-    const createdPost = await createPost(app);
+    const blog = createBlog(app);
+    const blogId = (await blog).id;
+
+    const postDto1: PostCreateInput = {
+      title: "t1",
+      shortDescription: "sh1",
+      content: "c1",
+      blogId: blogId,
+    };
+    const createdPost = await createPost(app, postDto1);
     const createdPostId = createdPost.id;
 
     await request(app)
