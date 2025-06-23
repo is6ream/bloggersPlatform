@@ -16,6 +16,7 @@ export async function createPost(
 ): Promise<PostViewModel> {
   const defaultPostData: Promise<PostInputDto> = getPostDto();
   const testPostData = { ...defaultPostData, ...postDto };
+  console.log(testPostData);
 
   const createdPostResponse = await request(app)
     .post(POSTS_PATH)

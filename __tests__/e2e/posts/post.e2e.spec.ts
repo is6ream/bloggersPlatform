@@ -21,7 +21,7 @@ describe("Post API", () => {
 
   beforeAll(async () => {
     await runDB(
-      "mongodb+srv://admin:admin@cluster0.ovmw16i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      "mongodb+srv://admin:admin@cluster0.ovmw16i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     await clearDb(app);
   });
@@ -44,7 +44,7 @@ describe("Post API", () => {
 
   it("should return posts list; GET /api/posts", async () => {
     await Promise.all([createPost(app), createPost(app)]);
-
+    console.log("Тут возникает проблема");
     const response = await request(app).get(POSTS_PATH).expect(HttpStatus.Ok);
 
     expect(response.body.items).toBeInstanceOf(Array);

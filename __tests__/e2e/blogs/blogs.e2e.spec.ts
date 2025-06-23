@@ -63,7 +63,7 @@ describe("Blog API", () => {
     });
   });
 
-  it("should update blog; PUT /api/blogs/:id", async () => {
+  it("should update post; PUT /api/blogs/:id", async () => {
     const createdBlog = await createBlog(app);
     const createdBlogId = createdBlog.id;
 
