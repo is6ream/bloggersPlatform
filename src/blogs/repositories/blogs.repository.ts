@@ -8,17 +8,17 @@ import { WithId } from "mongodb";
 
 export const blogsRepository = {
   async findAll(
-    queryDto: BlogQueryInput,
+    queryDto: BlogQueryInput
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
       queryDto;
+    console.log(queryDto);
 
     const skip = (pageNumber - 1) * pageSize;
     const filter: any = {};
 
     if (searchBlogNameTerm) {
-      console.log("SEARCHBLOGNAMETERM: ", searchBlogNameTerm);
-      filter.name = { $regex: searchBlogNameTerm, $options: "i" };
+      filter["name"] = { $regex: searchBlogNameTerm, $options: "i" };
     }
     const items = await blogCollection
       .find(filter)
@@ -85,7 +85,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       return null;

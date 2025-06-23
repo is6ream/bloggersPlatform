@@ -8,15 +8,18 @@ import { blogsRepository } from "../../repositories/blogs.repository";
 
 export async function getPostsByBlogId(
   req: Request,
-  res: Response,
+  res: Response
 ): Promise<void> {
   try {
     const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
-      req.query,
+      req.query
     );
     const { id: blogId } = req.params;
     const foundBlog = await blogsRepository.findById(blogId);
-    if (!foundBlog) res.sendStatus(HttpStatus.NotFound);
+    if (!foundBlog) {
+      res.sendStatus(HttpStatus.NotFound);
+      return;
+    }
     const { items, totalCount } = await postsService.getPostsByBlogId(
       blogId,
       queryInput,

@@ -7,6 +7,7 @@ export async function findPostHandler(req: Request, res: Response) {
     const post = await postRepository.findById(req.params.id);
     if (!post) {
       res.status(HttpStatus.NotFound).send("Post not found!");
+      return;
     }
     res.status(HttpStatus.Ok).send(post);
     return;
