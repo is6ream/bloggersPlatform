@@ -12,7 +12,7 @@ import { PostCreateInput } from "../../e2e/posts/types/types";
 
 export async function createPost(
   app: Express,
-  postDto?: PostCreateInput,
+  postDto?: PostCreateInput
 ): Promise<PostViewModel> {
   const defaultPostData: Promise<PostInputDto> = getPostDto();
   const testPostData = { ...defaultPostData, ...postDto };

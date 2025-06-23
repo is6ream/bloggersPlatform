@@ -10,11 +10,12 @@ import { HttpStatus } from "../../../src/core/http-statuses";
 export async function updatePost(
   app: Express,
   postId: string,
-  postDto?: PostUpdateInput,
+  postDto?: PostUpdateInput
 ): Promise<void> {
   const defaultPostData: Promise<PostUpdateInput> = getPostDto();
 
   const testPostData = { ...defaultPostData, ...postDto };
+  console.log(testPostData, " тут возможен затык");
 
   const updatedPostResponse = await request(app)
     .put(`${POSTS_PATH}/${postId}`)

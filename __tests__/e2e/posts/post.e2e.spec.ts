@@ -92,7 +92,16 @@ describe("Post API", () => {
   });
 
   it("should update post:  PUT /api/posts/:id", async () => {
-    const createdPost = await createPost(app);
+    const blog1 = createBlog(app);
+    const blogId1 = (await blog1).id;
+
+    const postDto1: PostCreateInput = {
+      title: "t1",
+      shortDescription: "sh1",
+      content: "C1",
+      blogId: blogId1,
+    };
+    const createdPost = await createPost(app, postDto1);
     const createdPostId = createdPost.id;
     const blog = createBlog(app);
     const blogId = (await blog).id;
