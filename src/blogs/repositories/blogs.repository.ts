@@ -10,15 +10,15 @@ export const blogsRepository = {
   async findAll(
     queryDto: BlogQueryInput
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
-    const { pageNumber, pageSize, sortBy, sortDirection, searchBlogNameTerm } =
+    const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
       queryDto;
-    console.log(queryDto);
+    console.log(queryDto, "Тут логаю блоги");
 
     const skip = (pageNumber - 1) * pageSize;
     const filter: any = {};
 
-    if (searchBlogNameTerm) {
-      filter["name"] = { $regex: searchBlogNameTerm, $options: "i" };
+    if (searchNameTerm) {
+      filter["name"] = { $regex: searchNameTerm, $options: "i" };
     }
     const items = await blogCollection
       .find(filter)
@@ -26,7 +26,7 @@ export const blogsRepository = {
       .skip(skip)
       .limit(+pageSize)
       .toArray();
-
+//Салам
     const totalCount = await blogCollection.countDocuments(filter);
 
     return { items, totalCount };
