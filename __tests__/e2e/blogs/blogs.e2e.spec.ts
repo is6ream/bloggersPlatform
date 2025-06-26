@@ -20,7 +20,7 @@ describe("Blog API", () => {
 
   beforeAll(async () => {
     await runDB(
-      "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster"
+      "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster",
     );
     await clearDb(app);
   });

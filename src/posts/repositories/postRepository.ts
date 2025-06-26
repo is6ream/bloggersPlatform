@@ -6,7 +6,7 @@ import { PostQueryInput } from "../input/post-query.input";
 
 export const postRepository = {
   async findAll(
-    queryDto: PostQueryInput
+    queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -32,7 +32,7 @@ export const postRepository = {
 
   async findPostsByBlogId(
     queryDto: PostQueryInput,
-    blogId: string
+    blogId: string,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -113,7 +113,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      }
+      },
     );
 
     if (updateResult.matchedCount < 1) {

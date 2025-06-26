@@ -10,7 +10,7 @@ import { HttpStatus } from "../../../src/core/http-statuses";
 export async function updatePost(
   app: Express,
   postId: string,
-  postDto?: PostUpdateInput
+  postDto?: PostUpdateInput,
 ): Promise<void> {
   const defaultPostData: Promise<PostUpdateInput> = getPostDto();
 

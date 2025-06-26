@@ -22,7 +22,7 @@ describe("Post API", () => {
 
   beforeAll(async () => {
     await runDB(
-      "mongodb+srv://admin:admin@cluster0.ovmw16i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      "mongodb+srv://admin:admin@cluster0.ovmw16i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     );
     await clearDb(app);
   });

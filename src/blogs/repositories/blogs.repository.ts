@@ -8,7 +8,7 @@ import { WithId } from "mongodb";
 
 export const blogsRepository = {
   async findAll(
-    queryDto: BlogQueryInput
+    queryDto: BlogQueryInput,
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
       queryDto;
@@ -26,7 +26,7 @@ export const blogsRepository = {
       .skip(skip)
       .limit(+pageSize)
       .toArray();
-//Салам
+    //Салам
     const totalCount = await blogCollection.countDocuments(filter);
 
     return { items, totalCount };
@@ -85,7 +85,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      }
+      },
     );
     if (updateResult.matchedCount < 1) {
       return null;

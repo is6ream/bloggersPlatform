@@ -8,11 +8,11 @@ import { blogsRepository } from "../../repositories/blogs.repository";
 
 export async function getPostsByBlogId(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   try {
     const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
-      req.query
+      req.query,
     );
     const { id: blogId } = req.params;
     const foundBlog = await blogsRepository.findById(blogId);
