@@ -64,18 +64,11 @@ type DBAuthor = {
 const videoQueryRepo = {
   getVideos(): VideoOutputModel[] {
     const dbVideos: DBVideo[] = [];
-    const authors: DBAuthor[];
+    const authors: DBAuthor[] = [];
     return dbVideos.map((dbVideo) => {
       const author = authors.find((a) => a._id === dbVideo.authorId);
 
-      return {
-        id: dbVideo._id,
-        author: {
-          id: author?._id,
-          name: author?.firstName + " " + author?.lastName,
-        },
-        title: dbVideo.title,
-      };
+      return this.mapToVideoOutputModel(dbVideo, author!);
     });
   },
 
@@ -91,6 +84,17 @@ const videoQueryRepo = {
       firstName: "das",
     };
 
-    
+    return this.mapToVideoOutputModel(dbVideos, author);
+  },
+
+  mapToVideoOutputModel(dbVideo: DBVideo, dbAuthor: DBAuthor) {
+    return {
+      id: dbVideo._id,
+      title: dbVideo.title,
+      author: {
+        id: dbAuthor!._id,
+        name: dbAuthor.firstName + " " + dbAuthor.lastName,
+      },
+    };
   },
 };
