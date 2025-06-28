@@ -1,45 +1,3 @@
-import { Db } from "mongodb";
-
-export interface CreateUserInpuDto {
-  login: string;
-  password: string;
-  email: string;
-}
-
-export interface IUserDB {
-  login: string;
-  email: string;
-  passwordHash: string;
-  createdAt: Date;
-}
-
-//пример сервиса
-export const usersService = {
-  async create(dto: CreateUserInpuDto): Promise<string> {
-    const { login, email, password } = dto;
-    const passwordHash = await bcryptService.generateHash(password);
-
-    const newUser: IUserDB = {
-      login,
-      email,
-      passwordHash,
-      createdAt: new Date(),
-    };
-    const newUserId = await usersRepository.create(newUser);
-    return newUserId;
-  },
-};
-
-//пример хендлера
-async (req: RequestWithBody<CreateUserInputDto>, res: Response<IUserView>) => {
-  const { login, password, email } = req.body;
-
-  const userId = await usersService.create({ login, password, email }); //создаем с помощью dto
-  const newUser = await usersQwRepository.findById(userId); //далее получаем из query репозитория данные
-
-  return res.status(HttpStatuses.Created).send(newUser);
-};
-
 type VideoOutputModel = {
   id: string;
   title: string;
@@ -53,6 +11,11 @@ type DBVideo = {
   _id: string;
   title: string;
   authorId: string;
+  banObject: null | {
+    isBanned: boolean;
+    banReason: string;
+  };
+  isBanned: boolean;
 };
 
 type DBAuthor = {
@@ -97,4 +60,29 @@ const videoQueryRepo = {
       },
     };
   },
+
+  getBannedVideos(id: string): BannedVideoOutputModel[] {
+    const dbVideos: DBVideo[] = [];
+    const authors: DBAuthor[] = [];
+
+    return dbVideos.map((dbVideo) => {
+      const dbAuthor = authors.find((a) => a._id === dbVideo.authorId);
+      return {
+        id: dbVideo._id,
+        title: dbVideo.title,
+        author: {
+          id: dbAuthor!._id,
+          name: dbAuthor?.firstName + " " + dbAuthor?.lastName,
+        },
+        banReason: dbVideo.banObject?.banReason,
+      };
+    });
+  },
 };
+
+export type BannedVideoOutputModel = VideoOutputModel & {
+  banReason: string;
+};
+
+
+
