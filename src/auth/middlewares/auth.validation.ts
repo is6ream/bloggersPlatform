@@ -13,3 +13,5 @@ export const passwordValidation = body("password")
   .bail()
   .isString()
   .withMessage("field password must be a string");
+
+export const authValidators = [loginOrEmailValidator, passwordValidation];
