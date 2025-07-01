@@ -8,7 +8,7 @@ export type AuthResult = {
 };
 
 export const authQueryRepository = {
-  async findById(id: string): Promise<AuthResult | null> {
+  async findById(id: ObjectId): Promise<AuthResult | null> {
     const auth = await authColletction.findOne({ _id: new ObjectId(id) });
 
     if (!auth) {
