@@ -1,6 +1,6 @@
-import { CreateAuthDto } from "../handler/auth.userHandler";
 import bcrypt from "bcrypt";
-
+import { CreateAuthDto } from "../types/input/login-input.model";
+import { authRepository } from "../repositories/auth.repository";
 export const authService = {
   async create(loginOrEmail: string, password: string): Promise<void> {
     const passwordSalt = await bcrypt.genSalt(10);

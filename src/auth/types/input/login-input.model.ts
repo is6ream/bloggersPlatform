@@ -1,4 +1,4 @@
-export type LoginInputModel = {
+export type CreateAuthDto = {
   loginOrEmail: string;
-  password: string;
+  passwordHash: string;
 };
