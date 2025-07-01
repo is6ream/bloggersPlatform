@@ -1,4 +1,4 @@
-import { CreateAuthDto } from "../handler/loginUserHandler";
+import { CreateAuthDto } from "../handler/auth.userHandler";
 import bcrypt from "bcrypt";
 
 export const authService = {

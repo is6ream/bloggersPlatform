@@ -8,6 +8,6 @@ export type CreateAuthDto = {
 export async function loginUserHandler(req: Request, res: Response) {
   const { loginOrEmail, password } = req.body;
 
-  const dataForResponse = await authService.create(req.body);
+  const dataForResponse = await authService.create(loginOrEmail, password);
   res.status(204).send(dataForResponse);
 }
