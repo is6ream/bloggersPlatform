@@ -5,7 +5,7 @@ const combinedRegex = /^(?:[a-zA-Z0-9_-]*|[\w.-]+@([\w-]+\.)+[\w-]{2,4})$/;
 export const loginOrEmailValidator = body("loginOrEmail")
   .trim()
   .notEmpty()
-  .withMessage("Требуется логин или email")
+  .withMessage("Login or email is required")
   .matches(combinedRegex)
   .withMessage("input must be string or email")
   .isLength({ min: 3, max: 20 })
