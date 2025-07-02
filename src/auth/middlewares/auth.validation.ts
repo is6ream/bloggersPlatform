@@ -1,5 +1,4 @@
 import { body } from "express-validator";
-import { authColletction } from "../../db/mongo.db";
 
 const combinedRegex = /^(?:[a-zA-Z0-9_-]*|[\w.-]+@([\w-]+\.)+[\w-]{2,4})$/;
 
