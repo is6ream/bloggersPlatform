@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
 import { HttpStatus } from "../../core/http-statuses";
+import { postQueryRepository } from "../repositories/postQueryRepository";
 
 export async function findPostHandler(req: Request, res: Response) {
   try {
-    const post = await postRepository.findById(req.params.id);
+    const post = await postQueryRepository.findById(req.params.id);
     if (!post) {
       res.status(HttpStatus.NotFound).send("Post not found!");
       return;

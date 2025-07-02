@@ -5,6 +5,7 @@ import { postsService } from "../../../posts/application/post.service";
 import { mapToPostListPaginatedOutput } from "../../../posts/mappers/map-to-post-list-paginated-output.util";
 import { PostQueryInput } from "../../../posts/input/post-query.input";
 import { blogsRepository } from "../../repositories/blogs.repository";
+import { blogQueryRepository } from "../../repositories/blogs.query.repository";
 
 export async function getPostsByBlogId(
   req: Request,
@@ -15,7 +16,7 @@ export async function getPostsByBlogId(
       req.query,
     );
     const { id: blogId } = req.params;
-    const foundBlog = await blogsRepository.findById(blogId);
+    const foundBlog = await blogQueryRepository.findById(blogId);
     if (!foundBlog) {
       res.sendStatus(HttpStatus.NotFound);
       return;

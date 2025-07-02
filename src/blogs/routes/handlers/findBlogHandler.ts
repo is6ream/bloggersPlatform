@@ -3,11 +3,12 @@ import { blogsRepository } from "../../repositories/blogs.repository";
 import { HttpStatus } from "../../../core/http-statuses";
 import { BlogType } from "../../types/blogs-types";
 import { createErrorMessages } from "../../../core/error.utils";
+import { blogQueryRepository } from "../../repositories/blogs.query.repository";
 
 export async function findBlogHandler(req: Request, res: Response) {
   try {
     const id: string = req.params.id;
-    const blog: BlogType | null = await blogsRepository.findById(id);
+    const blog: BlogType | null = await blogQueryRepository.findById(id);
 
     if (blog === null) {
       res

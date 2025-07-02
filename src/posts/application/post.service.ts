@@ -4,25 +4,27 @@ import { postRepository } from "../repositories/postRepository";
 import { PostQueryInput } from "../input/post-query.input";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
 import { PostByIdInputDto } from "../types/posts-types";
+import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
+import { postQueryRepository } from "../repositories/postQueryRepository";
 export const postsService = {
   async findMany(
     queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
-    return postRepository.findAll(queryDto);
+    return postQueryRepository.findAll(queryDto);
   },
   async findByIdOrFail(id: string): Promise<PostViewModel | null> {
-    return postRepository.findById(id);
+    return postQueryRepository.findById(id);
   },
 
   async getPostsByBlogId(
     blogId: string,
     queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
-    return postRepository.findPostsByBlogId(queryDto, blogId);
+    return postQueryRepository.findPostsByBlogId(queryDto, blogId);
   },
 
   async create(dto: PostInputDto): Promise<PostViewModel> {
-    const foundBlog = await blogsRepository.findById(dto.blogId);
+    const foundBlog = await blogQueryRepository.findById(dto.blogId);
 
     if (!foundBlog) {
       throw new Error("blog not found");
@@ -43,7 +45,7 @@ export const postsService = {
     blogId: string,
     dto: PostByIdInputDto,
   ): Promise<PostViewModel | null> {
-    const blog = await blogsRepository.findByBlogId(blogId);
+    const blog = await blogQueryRepository.findByBlogId(blogId);
     if (!blog) {
       return null;
     }
