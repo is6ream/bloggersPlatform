@@ -1,0 +1,63 @@
+import { blogCollection } from "../../db/mongo.db";
+import { BlogQueryInput } from "../routes/input/blog-query.input";
+import { WithId } from "mongodb";
+import { BlogType } from "../types/blogs-types";
+import { BlogViewModel } from "../types/blogs-types";
+import { ObjectId } from "mongodb";
+
+export const blogQueryRepository = {
+  async findAll(
+    queryDto: BlogQueryInput,
+  ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
+    const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
+      queryDto;
+    console.log(queryDto, "Тут логаю блоги");
+
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: any = {};
+
+    if (searchNameTerm) {
+      filter["name"] = { $regex: searchNameTerm, $options: "i" };
+    }
+    const items = await blogCollection
+      .find(filter)
+      .sort({ [sortBy]: sortDirection })
+      .skip(skip)
+      .limit(+pageSize)
+      .toArray();
+    //Салам
+    const totalCount = await blogCollection.countDocuments(filter);
+
+    return { items, totalCount };
+  },
+
+  async findById(id: string): Promise<BlogViewModel | null> {
+    const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
+    if (!blog) {
+      return null;
+    }
+    return {
+      id: blog._id.toString(),
+      name: blog.name,
+      description: blog.description,
+      websiteUrl: blog.websiteUrl,
+      createdAt: blog.createdAt,
+      isMembership: blog.isMembership,
+    };
+  },
+
+  async findByBlogId(blogId: string): Promise<BlogViewModel | null> {
+    const blog = await blogCollection.findOne({ _id: new ObjectId(blogId) }); //правильно
+    if (!blog) {
+      return null;
+    }
+    return {
+      id: blog._id.toString(),
+      name: blog.name,
+      description: blog.description,
+      websiteUrl: blog.websiteUrl,
+      createdAt: blog.createdAt,
+      isMembership: blog.isMembership,
+    };
+  },
+};
