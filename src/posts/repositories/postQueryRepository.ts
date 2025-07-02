@@ -1,3 +1,8 @@
+import { PostType, PostViewModel } from "./../types/posts-types";
+import { postCollection } from "./../../db/mongo.db";
+import { PostQueryInput } from "../input/post-query.input";
+import { WithId, ObjectId } from "mongodb";
+
 export const postQueryRepository = {
   async findAll(
     queryDto: PostQueryInput,
