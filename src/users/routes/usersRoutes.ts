@@ -3,4 +3,8 @@ import { paginationAndSortingValidation } from "../../core/middlewares/query-pag
 import { userSortField } from "../input/user-sort-field";
 export const usersRouter = Router();
 
-usersRouter.get("/", paginationAndSortingValidation(userSortField), getAllUsersHandler);
+usersRouter.get(
+  "/",
+  paginationAndSortingValidation(userSortField),
+  getAllUsersHandler,
+);

@@ -24,4 +24,3 @@ export const emailValidation = body("email")
   .withMessage("input must be a email")
   .isString()
   .withMessage("field email must be a string");
-
