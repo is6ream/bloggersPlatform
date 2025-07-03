@@ -4,15 +4,16 @@ import { BlogQueryInput } from "../input/blog-query.input";
 import { setDefaultPaginationIfNotExist } from "../../../core/helpers/set-default-sort-and-pagination";
 import { blogsService } from "../../application/blogs.service";
 import { mapToBlogListPaginatedOutput } from "../mappers/map-to-blog-list-paginated-output.util";
+import { blogQueryRepository } from "../../repositories/blogs.query.repository";
 
 export async function getAllBlogsHandler(
   req: Request<{}, {}, {}, BlogQueryInput>,
-  res: Response,
+  res: Response
 ) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
 
-    const { items, totalCount } = await blogsService.findMany(queryInput);
+    const { items, totalCount } = await blogQueryRepository.findAll(queryInput);
 
     const blogsListOutput = mapToBlogListPaginatedOutput(items, {
       pageNumber: Number(queryInput.pageNumber),

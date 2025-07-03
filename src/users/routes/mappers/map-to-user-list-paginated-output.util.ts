@@ -3,7 +3,7 @@ import { UserListPaginatedOutput } from "../../output/user-list-paginated.output
 
 export function mapToUserListPaginatedOutput(
   users: UserViewModel[],
-  meta: { pageNumber: number; pageSize: number; totalCount: number }
+  meta: { pageNumber: number; pageSize: number; totalCount: number },
 ): UserListPaginatedOutput {
   return {
     pagesCount: Math.ceil(meta.totalCount / meta.pageSize),
