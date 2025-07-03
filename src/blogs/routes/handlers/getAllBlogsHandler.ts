@@ -8,7 +8,7 @@ import { blogQueryRepository } from "../../repositories/blogs.query.repository";
 
 export async function getAllBlogsHandler(
   req: Request<{}, {}, {}, BlogQueryInput>,
-  res: Response
+  res: Response,
 ) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);

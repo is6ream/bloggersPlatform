@@ -5,7 +5,7 @@ import { mapToUserListPaginatedOutput } from "../mappers/map-to-user-list-pagina
 import { HttpStatus } from "../../../core/http-statuses";
 export async function getAllUsersHandler(
   req: Request<{}, {}, {}, UserQueryInput>,
-  res: Response
+  res: Response,
 ) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
