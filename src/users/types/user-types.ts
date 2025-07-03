@@ -4,6 +4,8 @@ export type UserInputModel = {
   email: string;
 };
 
+export type UserType = UserInputModel;
+
 export type UserViewModel = {
   id: string;
   login: string;
