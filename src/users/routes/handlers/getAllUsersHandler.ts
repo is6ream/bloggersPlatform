@@ -9,5 +9,7 @@ export async function getAllUsersHandler(
         const queryInput = setDefaultPaginationIfNotExist(req.query);
 
         const { items, totalCount} = setDefaultPaginationIfNotExist(req.query);
+
+        const usersListOutput = 
     }
 }
