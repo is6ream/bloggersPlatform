@@ -3,6 +3,7 @@ import { UserQueryInput } from "../../input/user-query.input";
 import { Request, Response } from "express";
 import { mapToUserListPaginatedOutput } from "../mappers/map-to-user-list-paginated-output.util";
 import { HttpStatus } from "../../../core/http-statuses";
+import { userQueryRepository } from "../../repositories/user.query.repository";
 export async function getAllUsersHandler(
   req: Request<{}, {}, {}, UserQueryInput>,
   res: Response,
@@ -10,7 +11,7 @@ export async function getAllUsersHandler(
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
 
-    const { items, totalCount } = usersQueryRepository.findAll(queryInput);
+    const { items, totalCount } = userQueryRepository.findAll(queryInput);
 
     const usersListOutput = mapToUserListPaginatedOutput(items, {
       pageNumber: Number(queryInput.pageNumber),
@@ -20,6 +21,7 @@ export async function getAllUsersHandler(
 
     res.status(200).send(usersListOutput);
   } catch (error: unknown) {
+    console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }

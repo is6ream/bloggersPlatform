@@ -11,7 +11,6 @@ export const blogQueryRepository = {
   ): Promise<{ items: WithId<BlogType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
       queryDto;
-    console.log(queryDto, "Тут логаю блоги");
 
     const skip = (pageNumber - 1) * pageSize;
     const filter: any = {};
@@ -25,7 +24,6 @@ export const blogQueryRepository = {
       .skip(skip)
       .limit(+pageSize)
       .toArray();
-    //Салам
     const totalCount = await blogCollection.countDocuments(filter);
 
     return { items, totalCount };
