@@ -7,6 +7,7 @@ import { userValidators } from "../middlewares/user-input-dto-validator";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
 import { createUserHandler } from "./handlers/createUserHandler";
 import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
+import { deleteUserHandler } from "./handlers/deleteUserHandler";
 export const usersRouter = Router();
 
 usersRouter
@@ -23,4 +24,5 @@ usersRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
+    deleteUserHandler,
   );

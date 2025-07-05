@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { UserInputModel } from "../types/user-types";
 import { CreateUserDto } from "../input/create-user-dto";
-import { userRepository } from "../repositories/users.repository";
+import { usersRepository } from "../repositories/users.repository";
 export const usersService = {
   async create(dto: UserInputModel): Promise<string> {
     const { login, password, email } = dto;
@@ -15,7 +15,7 @@ export const usersService = {
       createdAt: new Date(),
     };
 
-    const newUser = await userRepository.create(user);
+    const newUser = await usersRepository.create(user);
     const newUserId = newUser.id;
 
     return newUserId;
