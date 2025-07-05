@@ -12,7 +12,7 @@ import { BlogCreateInput } from "./types";
 import { HttpStatus } from "../../../src/core/http-statuses";
 import { createBlog } from "../../utils/blogs/create-blog";
 import { BlogUpdateInput } from "./types";
-import { blogsService } from "../../../src/blogs/application/blogs.service";
+import { blogQueryRepository } from "../../../src/blogs/repositories/blogs.query.repository";
 describe("Blog API body validation check", () => {
   const app = express();
   setupApp(app);
@@ -94,7 +94,7 @@ describe("Blog API body validation check", () => {
 
     expect(invalidDataSet2.body.errorsMessages).toHaveLength(1);
 
-    const blogResponse = await blogsService.findByIdOrFail(createdBlogId);
+    const blogResponse = await blogQueryRepository.findById(createdBlogId);
 
     expect(blogResponse).toEqual({
       ...createdBlog, //сравниваем с созданным ранее блогом, который прошел обновление

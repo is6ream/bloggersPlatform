@@ -21,7 +21,7 @@ describe("Post API body validation check", () => {
 
   beforeAll(async () => {
     await runDB(
-      "mongodb+srv://admin:admin@cluster0.ovmw16i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster",
     );
     await clearDb(app);
   });
