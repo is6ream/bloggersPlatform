@@ -7,20 +7,29 @@ export const loginValidator = body("login")
   .matches(/^[a-zA-Z0-9_-]*$/)
   .withMessage("input must be a string")
   .isLength({ min: 3, max: 10 })
-  .withMessage("More then 10 or 3");
+  .withMessage("More then 10 or 3")
+  .bail();
 
-export const passwordValidation = body("password")
+export const passwordValidator = body("password")
   .exists()
   .withMessage("field password is required")
   .isString()
   .withMessage("field password must be a string")
   .isLength({ min: 6, max: 20 })
-  .withMessage("more then 20 or 6");
+  .withMessage("more then 20 or 6")
+  .bail();
 
-export const emailValidation = body("email")
+export const emailValidator = body("email")
   .exists()
   .withMessage("field email is required")
   .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
   .withMessage("input must be a email")
   .isString()
-  .withMessage("field email must be a string");
+  .withMessage("field email must be a string")
+  .bail();
+
+export const userValidators = [
+  loginValidator,
+  passwordValidator,
+  emailValidator,
+];
