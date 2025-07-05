@@ -12,7 +12,7 @@ export const usersService = {
       passwordHash,
       login,
       email,
-      createdAt: new Date();
+      createdAt: new Date(),
     };
 
     const userId = await userRepository.create(user);
