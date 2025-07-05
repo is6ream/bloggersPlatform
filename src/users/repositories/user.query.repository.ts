@@ -6,7 +6,7 @@ import { UserViewModel } from "../types/user-types";
 export const userQueryRepository = {
   async findAll(
     queryDto: UserQueryInput,
-  ): Promise<{ items: WithId<UserViewModel>[]; totalCount: number }> {
+  ): Promise<{ items: WithId<any>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
       queryDto;
 
@@ -23,7 +23,7 @@ export const userQueryRepository = {
       .limit(+pageSize)
       .toArray();
     const totalCount = await userCollection.countDocuments(filter);
-
+    console.log(items);
     return { items, totalCount };
   },
 };
