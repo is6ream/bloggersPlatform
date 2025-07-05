@@ -4,6 +4,10 @@ export type UserInputModel = {
   email: string;
 };
 
+export type UserMappedViewModel = UserInputModel & {
+  id: string;
+};
+
 export type UserType = UserInputModel;
 
 export type UserViewModel = {
