@@ -3,15 +3,16 @@ import { UserQueryInput } from "../../input/user-query.input";
 import { Request, Response } from "express";
 import { mapToUserListPaginatedOutput } from "../mappers/map-to-user-list-paginated-output.util";
 import { HttpStatus } from "../../../core/http-statuses";
-import { userQueryRepository } from "../../repositories/user.query.repository";
+import { usersQueryRepository } from "../../repositories/user.query.repository";
 export async function getAllUsersHandler(
   req: Request<{}, {}, {}, UserQueryInput>,
-  res: Response,
+  res: Response
 ) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
 
-    const { items, totalCount } = await userQueryRepository.findAll(queryInput);
+    const { items, totalCount } =
+      await usersQueryRepository.findAll(queryInput);
 
     const usersListOutput = mapToUserListPaginatedOutput(items, {
       pageNumber: Number(queryInput.pageNumber),

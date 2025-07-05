@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { UserInputModel, UserViewModel } from "../types/user-types";
 import { CreateUserDto } from "../input/create-user-dto";
 import { userRepository } from "../repositories/users.repository";
+import { userQueryRepository } from "../repositories/user.query.repository";
 export const usersService = {
   async create(dto: UserInputModel): Promise<UserViewModel> {
     const { login, password, email } = dto;
