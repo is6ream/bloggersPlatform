@@ -1,10 +1,11 @@
 import { userCollection } from "../../db/mongo.db";
 import { UserQueryInput } from "../input/user-query.input";
 import { UserViewModel } from "../types/user-types";
+import { ObjectId } from "mongodb";
 
 export const usersQueryRepository = {
   async findAll(
-    queryDto: UserQueryInput
+    queryDto: UserQueryInput,
   ): Promise<{ items: UserViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
       queryDto;
@@ -35,6 +36,15 @@ export const usersQueryRepository = {
   },
 
   async findById(id: string): Promise<UserViewModel | null> {
-    const 
+    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+    if (!user) {
+      return null;
+    }
+    return {
+      id: user._id.toString(),
+      login: user.login,
+      email: user.email,
+      createdAt: user.createdAt,
+    };
   },
 };
