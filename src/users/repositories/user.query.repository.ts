@@ -4,7 +4,7 @@ import { UserViewModel } from "../types/user-types";
 
 export const usersQueryRepository = {
   async findAll(
-    queryDto: UserQueryInput,
+    queryDto: UserQueryInput
   ): Promise<{ items: UserViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
       queryDto;
@@ -32,5 +32,9 @@ export const usersQueryRepository = {
       };
     });
     return { items, totalCount };
+  },
+
+  async findById(id: string): Promise<UserViewModel | null> {
+    const 
   },
 };

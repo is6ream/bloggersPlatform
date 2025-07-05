@@ -6,7 +6,7 @@ import { HttpStatus } from "../../../core/http-statuses";
 import { usersQueryRepository } from "../../repositories/user.query.repository";
 export async function getAllUsersHandler(
   req: Request<{}, {}, {}, UserQueryInput>,
-  res: Response
+  res: Response,
 ) {
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
