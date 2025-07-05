@@ -18,7 +18,7 @@ describe("User API body validation check", () => {
 
   const adminToken = generateBasicAuthToken();
 
-  beforeAll(async () => {
+  beforeAll(async () => { //создать отдельный кластер или коллекцию для подключения
     await runDB(
       "mongodb+srv://admin:admin@firstcluster.atxbolf.mongodb.net/?retryWrites=true&w=majority&appName=FirstCluster",
     );
