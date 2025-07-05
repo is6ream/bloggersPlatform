@@ -6,6 +6,7 @@ import { superAdminGuardMiddleware } from "../../core/middlewares/validation/sup
 import { userValidators } from "../middlewares/user-input-dto-validator";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
 import { createUserHandler } from "./handlers/createUserHandler";
+import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
 export const usersRouter = Router();
 
 usersRouter
@@ -16,4 +17,10 @@ usersRouter
     userValidators,
     inputValidationResultMiddleware,
     createUserHandler,
+  )
+  .delete(
+    "/:id",
+    superAdminGuardMiddleware,
+    idValidation,
+    inputValidationResultMiddleware,
   );

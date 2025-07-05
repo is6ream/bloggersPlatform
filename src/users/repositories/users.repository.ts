@@ -1,8 +1,9 @@
 import { CreateUserDto } from "../input/create-user-dto";
 import { UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
+import { ObjectId } from "mongodb";
 
-export const userRepository = {
+export const usersRepository = {
   async create(newUser: CreateUserDto): Promise<UserViewModel> {
     const insertResult = await userCollection.insertOne(newUser);
     const insertId = insertResult.insertedId;
@@ -13,5 +14,15 @@ export const userRepository = {
       email: newUser.email,
       createdAt: newUser.createdAt,
     };
+  },
+
+  async delete(id: string): Promise<void | null> {
+    const deleteResult = await userCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+    if (deleteResult.deletedCount < 1) {
+      return null;
+    }
+    return;
   },
 };
