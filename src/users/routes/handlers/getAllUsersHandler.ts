@@ -11,7 +11,7 @@ export async function getAllUsersHandler(
   try {
     const queryInput = setDefaultPaginationIfNotExist(req.query);
 
-    const { items, totalCount } = userQueryRepository.findAll(queryInput);
+    const { items, totalCount } = await userQueryRepository.findAll(queryInput);
 
     const usersListOutput = mapToUserListPaginatedOutput(items, {
       pageNumber: Number(queryInput.pageNumber),
