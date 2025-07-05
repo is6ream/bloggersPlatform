@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { authColletction } from "../../db/mongo.db";
+import { authCollection } from "../../db/mongo.db";
 
 export type AuthResult = {
   id: string;
@@ -9,7 +9,7 @@ export type AuthResult = {
 
 export const authQueryRepository = {
   async findById(id: ObjectId): Promise<AuthResult | null> {
-    const auth = await authColletction.findOne({ _id: new ObjectId(id) });
+    const auth = await authCollection.findOne({ _id: new ObjectId(id) });
 
     if (!auth) {
       return null;

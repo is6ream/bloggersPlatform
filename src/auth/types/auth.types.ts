@@ -3,3 +3,8 @@ export type AuthType = {
   loginOrEmail: string;
   passwordHash: string;
 };
+
+export type AuthDBType = {
+  loginOrEmail: string;
+  passwordHash: string;
+};
