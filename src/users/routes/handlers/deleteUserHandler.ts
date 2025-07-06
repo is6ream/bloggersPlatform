@@ -11,7 +11,7 @@ export async function deleteUserHandler(req: Request, res: Response) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "User not found" }])
+          createErrorMessages([{ field: "id", message: "User not found" }]),
         );
       return;
     } else {

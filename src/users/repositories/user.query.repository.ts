@@ -22,6 +22,7 @@ export const usersQueryRepository = {
       .skip(skip)
       .limit(+pageSize)
       .toArray();
+
     const totalCount = await userCollection.countDocuments(filter);
 
     const items = dbItems.map((item) => {

@@ -15,8 +15,8 @@ export function mapToUserListPaginatedOutput(
       (user): UserViewModel => ({
         id: user.id,
         login: user.login,
-        createdAt: user.createdAt,
         email: user.email,
+        createdAt: user.createdAt,
       }),
     ),
   };
