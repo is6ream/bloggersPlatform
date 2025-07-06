@@ -25,4 +25,9 @@ export const usersService = {
     const hash = await bcrypt.hash(password, salt);
     return hash;
   },
+
+  async delete(id: string): Promise<void> {
+    usersRepository.delete(id);
+    return;
+  },
 };

@@ -8,7 +8,6 @@ import { createUser } from "../../utils/users/create-user";
 import request from "supertest";
 import { USERS_PATH } from "../../../src/core/paths";
 import { HttpStatus } from "../../../src/core/http-statuses";
-import { getUserById } from "../../utils/users/get-user-by-id";
 
 describe("Users API", () => {
   const app = express();
