@@ -8,7 +8,7 @@ import { UserViewModel } from "../../../src/users/types/user-types";
 import { HttpStatus } from "../../../src/core/http-statuses";
 export async function createUser(
   app: Express,
-  userDto: UserInputModel,
+  userDto?: UserInputModel,
 ): Promise<UserViewModel> {
   const defaultUserData: UserInputModel = getUserDto();
 
