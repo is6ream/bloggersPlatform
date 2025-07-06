@@ -15,7 +15,6 @@ export async function updatePost(
   const defaultPostData: Promise<PostUpdateInput> = getPostDto();
 
   const testPostData = { ...defaultPostData, ...postDto };
-  console.log(testPostData, " тут возможен затык");
 
   const updatedPostResponse = await request(app)
     .put(`${POSTS_PATH}/${postId}`)

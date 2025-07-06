@@ -10,6 +10,7 @@ import request from "supertest";
 import { USERS_PATH } from "../../../src/core/paths";
 import { HttpStatus } from "../../../src/core/http-statuses";
 
+//уточнить, не подключается к бд
 describe("User API body validation check", () => {
   const app = express();
   setupApp(app);
@@ -19,11 +20,10 @@ describe("User API body validation check", () => {
   const adminToken = generateBasicAuthToken();
 
   beforeAll(async () => {
-    //создать отдельный кластер или коллекцию для подключения
     await runDB(
-      "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    );
-    await clearDb(app);
+      "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    ),
+      await clearDb(app);
   });
 
   afterAll(async () => {

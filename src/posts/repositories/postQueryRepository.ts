@@ -9,7 +9,6 @@ export const postQueryRepository = {
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
-    console.log(queryDto, "Тут логаю посты");
 
     const skip = (pageNumber - 1) * pageSize;
     const filter: any = {};

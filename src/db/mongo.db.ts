@@ -17,7 +17,10 @@ export let authCollection: Collection<AuthDBType>;
 export let userCollection: Collection<UserDBType>;
 
 export async function runDB(url: string): Promise<void> {
-  client = new MongoClient(url);
+  client = new MongoClient(url, {
+    connectTimeoutMS: 5000,
+    serverSelectionTimeoutMS: 5000,
+  });
   const db: Db = client.db(SETTINGS.DB_NAME);
 
   //инициализация коллекция
