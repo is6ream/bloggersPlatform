@@ -3,7 +3,7 @@ import { PostInputDto } from "../types/posts-types";
 import { DeleteResult, ObjectId, WithId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { PostQueryInput } from "../input/post-query.input";
-
+import { RepositoryNotFoundError } from "../../core/errors/repository-not-found.error";
 export const postRepository = {
   async create(newPost: PostType): Promise<PostViewModel> {
     const insertResult = await postCollection.insertOne(newPost);
@@ -45,7 +45,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {
@@ -59,7 +59,7 @@ export const postRepository = {
       _id: new ObjectId(id),
     });
     if (deleteResult.deletedCount < 1) {
-      return null;
+      throw new RepositoryN();
     }
     return;
   },

@@ -16,10 +16,10 @@ export async function deleteUserHandler(req: Request, res: Response) {
       return;
     } else {
       res.status(HttpStatus.NoContent).send();
-      return;
     }
+    return;
   } catch (error: unknown) {
-    res.sendStatus(HttpStatus.InternalServerError);
+    res.sendStatus(HttpStatus.NoContent);
     return;
   }
 }

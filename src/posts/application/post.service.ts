@@ -2,7 +2,6 @@ import { WithId } from "mongodb";
 import { PostInputDto, PostType, PostViewModel } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
 import { PostQueryInput } from "../input/post-query.input";
-import { blogsRepository } from "../../blogs/repositories/blogs.repository";
 import { PostByIdInputDto } from "../types/posts-types";
 import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
 import { postQueryRepository } from "../repositories/postQueryRepository";

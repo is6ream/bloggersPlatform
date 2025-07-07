@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 
 export const usersQueryRepository = {
   async findAll(
-    queryDto: UserQueryInput
+    queryDto: UserQueryInput,
   ): Promise<{ items: UserViewModel[]; totalCount: number }> {
     const {
       pageNumber,
