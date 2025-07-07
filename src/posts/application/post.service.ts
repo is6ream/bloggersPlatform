@@ -1,27 +1,9 @@
-import { WithId } from "mongodb";
 import { PostInputDto, PostType, PostViewModel } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
-import { PostQueryInput } from "../input/post-query.input";
 import { PostByIdInputDto } from "../types/posts-types";
 import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
-import { postQueryRepository } from "../repositories/postQueryRepository";
+
 export const postsService = {
-  async findMany(
-    queryDto: PostQueryInput,
-  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
-    return postQueryRepository.findAll(queryDto);
-  },
-  async findByIdOrFail(id: string): Promise<PostViewModel | null> {
-    return postQueryRepository.findById(id);
-  },
-
-  async getPostsByBlogId(
-    blogId: string,
-    queryDto: PostQueryInput,
-  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
-    return postQueryRepository.findPostsByBlogId(queryDto, blogId);
-  },
-
   async create(dto: PostInputDto): Promise<PostViewModel> {
     const foundBlog = await blogQueryRepository.findById(dto.blogId);
 
@@ -42,7 +24,7 @@ export const postsService = {
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto,
+    dto: PostByIdInputDto
   ): Promise<PostViewModel | null> {
     const blog = await blogQueryRepository.findByBlogId(blogId);
     if (!blog) {

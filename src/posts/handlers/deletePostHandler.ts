@@ -11,13 +11,13 @@ export async function deletePostHandler(req: Request, res: Response) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "Post not found" }]),
+          createErrorMessages([{ field: "id", message: "Post not found" }])
         );
       return;
     } else {
       res.status(HttpStatus.NoContent).send();
+      return;
     }
-    return;
   } catch (error: unknown) {
     // console.log(error);
     res.sendStatus(HttpStatus.NoContent);

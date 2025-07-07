@@ -1,8 +1,7 @@
 import { PostType, PostViewModel } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
-import { DeleteResult, ObjectId, WithId } from "mongodb";
+import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
-import { PostQueryInput } from "../input/post-query.input";
 import { RepositoryNotFoundError } from "../../core/errors/repository-not-found.error";
 export const postRepository = {
   async create(newPost: PostType): Promise<PostViewModel> {
@@ -54,12 +53,12 @@ export const postRepository = {
     return;
   },
 
-  async delete(id: string): Promise<void | null> {
+  async delete(id: string): Promise<void> {
     const deleteResult = await postCollection.deleteOne({
       _id: new ObjectId(id),
     });
     if (deleteResult.deletedCount < 1) {
-      throw new RepositoryN();
+      throw new RepositoryNotFoundError("Post not exist");
     }
     return;
   },
