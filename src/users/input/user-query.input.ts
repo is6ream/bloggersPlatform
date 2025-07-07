@@ -3,5 +3,6 @@ import { UserSortField } from "./user-sort-field";
 
 export type UserQueryInput = PaginationAndSorting<UserSortField> &
   Partial<{
-    searchNameTerm: string;
+    searchLoginTerm: string;
+    searchEmailTerm: string;
   }>;

@@ -5,17 +5,32 @@ import { ObjectId } from "mongodb";
 
 export const usersQueryRepository = {
   async findAll(
-    queryDto: UserQueryInput,
+    queryDto: UserQueryInput
   ): Promise<{ items: UserViewModel[]; totalCount: number }> {
-    const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
-      queryDto;
+    const {
+      pageNumber,
+      pageSize,
+      sortBy,
+      sortDirection,
+      searchLoginTerm,
+      searchEmailTerm,
+    } = queryDto;
 
     const skip = (pageNumber - 1) * pageSize;
     const filter: any = {};
 
-    if (searchNameTerm) {
-      filter["name"] = { $regex: searchNameTerm, $options: "i" };
+    if (searchLoginTerm || searchEmailTerm) {
+      filter.$or = [];
+      if (searchLoginTerm) {
+        filter.$or.push({ login: { $regex: searchLoginTerm, $options: "i" } });
+      }
+      if (searchEmailTerm) {
+        filter.$or.push({
+          email: { $regex: searchEmailTerm, $options: "i" },
+        });
+      }
     }
+
     const dbItems = await userCollection
       .find(filter)
       .sort({ [sortBy]: sortDirection })
