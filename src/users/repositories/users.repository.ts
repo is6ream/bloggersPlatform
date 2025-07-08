@@ -2,7 +2,6 @@ import { CreateUserDto } from "../input/create-user-dto";
 import { UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
-import { RepositoryNotFoundError } from "../../core/errors/repository-not-found.error";
 
 export const usersRepository = {
   async create(newUser: CreateUserDto): Promise<UserViewModel> {

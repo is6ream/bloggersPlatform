@@ -43,6 +43,5 @@ export const blogsRepository = {
     if (deleteResult.deletedCount < 1) {
       return null;
     }
-    return;
   },
 };
