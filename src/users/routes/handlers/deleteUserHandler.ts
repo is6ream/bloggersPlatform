@@ -7,7 +7,8 @@ export async function deleteUserHandler(req: Request, res: Response) {
   try {
     const id: string = req.params.id;
     const result = await usersService.delete(id);
-    if (result === null) {
+    console.log(result);
+    if (result === undefined) {
       res
         .status(HttpStatus.NotFound)
         .send(
@@ -19,6 +20,7 @@ export async function deleteUserHandler(req: Request, res: Response) {
     }
     return;
   } catch (error: unknown) {
+    console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }

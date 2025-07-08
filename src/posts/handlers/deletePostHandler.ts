@@ -12,7 +12,7 @@ export async function deletePostHandler(req: Request, res: Response) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "Post not found" }])
+          createErrorMessages([{ field: "id", message: "Post not found" }]),
         );
       return;
     } else {

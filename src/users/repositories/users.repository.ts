@@ -17,13 +17,12 @@ export const usersRepository = {
     };
   },
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<void | null> {
     const deleteResult = await userCollection.deleteOne({
       _id: new ObjectId(id),
     });
     if (deleteResult.deletedCount < 1) {
-      throw new RepositoryNotFoundError("User not exist");
+      return null;
     }
-    return;
   },
 };

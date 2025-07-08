@@ -26,7 +26,7 @@ export const usersService = {
     return hash;
   },
 
-  async delete(id: string): Promise<void | null> {
+  async delete(id: string): Promise<void | undefined> {
     await usersRepository.delete(id);
     return;
   },
