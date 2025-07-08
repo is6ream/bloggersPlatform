@@ -2,6 +2,7 @@ import { CreateUserDto } from "../input/create-user-dto";
 import { UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
+import { RepositoryNotFoundError } from "../../core/errors/repository-not-found.error";
 
 export const usersRepository = {
   async create(newUser: CreateUserDto): Promise<UserViewModel> {
@@ -16,12 +17,12 @@ export const usersRepository = {
     };
   },
 
-  async delete(id: string): Promise<void | null> {
+  async delete(id: string): Promise<void> {
     const deleteResult = await userCollection.deleteOne({
       _id: new ObjectId(id),
     });
     if (deleteResult.deletedCount < 1) {
-      return null;
+      throw new RepositoryNotFoundError("User not exist");
     }
     return;
   },

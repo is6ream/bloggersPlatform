@@ -27,7 +27,7 @@ export const usersService = {
   },
 
   async delete(id: string): Promise<void | null> {
-    usersRepository.delete(id);
+    await usersRepository.delete(id);
     return;
   },
 };
