@@ -47,7 +47,8 @@ export const postsService = {
   },
 
   async delete(id: string): Promise<void> {
-    postRepository.delete(id);
+    const BLLres = await postRepository.delete(id);
+    console.log("тут логаю", BLLres);
     return;
   },
 };

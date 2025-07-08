@@ -7,7 +7,8 @@ export async function deletePostHandler(req: Request, res: Response) {
   try {
     const id: string = req.params.id;
     const result = await postsService.delete(id);
-    if (result === null) {
+    console.log("Тут логаю хендлер постов", result); //воткнул костыль, уточнить, можно ли так делать
+    if (result === undefined) {
       res
         .status(HttpStatus.NotFound)
         .send(
