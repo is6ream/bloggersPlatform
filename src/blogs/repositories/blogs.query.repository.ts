@@ -25,7 +25,6 @@ export const blogQueryRepository = {
       .limit(+pageSize)
       .toArray();
     const totalCount = await blogCollection.countDocuments(filter);
-
     return { items, totalCount };
   },
 
@@ -45,7 +44,7 @@ export const blogQueryRepository = {
   },
 
   async findByBlogId(blogId: string): Promise<BlogViewModel | null> {
-    const blog = await blogCollection.findOne({ _id: new ObjectId(blogId) }); //правильно
+    const blog = await blogCollection.findOne({ _id: new ObjectId(blogId) });
     if (!blog) {
       return null;
     }

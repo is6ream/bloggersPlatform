@@ -1,27 +1,19 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-import { createErrorMessages } from "../../core/error.utils";
-import { postsService } from "../application/post.service";
+import { usersService } from "../../users/application/users.service";
 
-export async function deletePostHandler(req: Request, res: Response) {
+export async function deletePostHandler(
+  req: Request<{ id: string }>,
+  res: Response,
+) {
   try {
-    const id: string = req.params.id;
-    const result = await postsService.delete(id);
-    console.log("Тут логаю хендлер постов", result); //воткнул костыль, уточнить, можно ли так делать
-    if (result === undefined) {
-      res
-        .status(HttpStatus.NotFound)
-        .send(
-          createErrorMessages([{ field: "id", message: "Post not found" }]),
-        );
-      return;
-    } else {
-      res.status(HttpStatus.NoContent).send();
-      return;
-    }
-  } catch (error: unknown) {
-    // console.log(error);
+    const id = req.params.id;
+
+    await usersService.delete(id);
     res.sendStatus(HttpStatus.NoContent);
+  } catch (error: unknown) {
+    console.log(error);
+    res.sendStatus(HttpStatus.InternalServerError);
     return;
   }
 }

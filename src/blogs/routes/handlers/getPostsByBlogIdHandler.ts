@@ -10,11 +10,11 @@ import { postQueryRepository } from "../../../posts/repositories/postQueryReposi
 
 export async function getPostsByBlogId(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   try {
     const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
-      req.query
+      req.query,
     );
     const { id: blogId } = req.params;
     const foundBlog = await blogQueryRepository.findById(blogId);
@@ -24,7 +24,7 @@ export async function getPostsByBlogId(
     }
     const { items, totalCount } = await postQueryRepository.findPostsByBlogId(
       queryInput,
-      blogId
+      blogId,
     );
 
     const postsListOutput = mapToPostListPaginatedOutput(items, {

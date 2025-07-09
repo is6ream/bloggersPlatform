@@ -24,7 +24,7 @@ export const postsService = {
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto
+    dto: PostByIdInputDto,
   ): Promise<PostViewModel | null> {
     const blog = await blogQueryRepository.findByBlogId(blogId);
     if (!blog) {
@@ -47,8 +47,6 @@ export const postsService = {
   },
 
   async delete(id: string): Promise<void> {
-    const BLLres = await postRepository.delete(id);
-    console.log("тут логаю", BLLres);
-    return;
+    await postRepository.delete(id);
   },
 };
