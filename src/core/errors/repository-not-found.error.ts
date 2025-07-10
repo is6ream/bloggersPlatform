@@ -1,1 +1,1 @@
-export class RespositoryNotFoundError extends Error {}
+export class RepositoryNotFoundError extends Error {}

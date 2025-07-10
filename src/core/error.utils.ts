@@ -1,6 +1,8 @@
 interface ValidationError {
-  field: string;
-  message: string;
+  field?: string;
+  message?: string;
+  status?: string | number;
+  detail?: string;
 }
 
 export const createErrorMessages = (
