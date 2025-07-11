@@ -8,7 +8,7 @@ import { ValidationErrorType } from "../../types/validationError";
 import { HttpStatus } from "../../http-statuses";
 import { ValidationErrorListOutput } from "../../types/validationError.dto";
 export const createErrorMessages = (
-  errors: ValidationErrorType[]
+  errors: ValidationErrorType[],
 ): ValidationErrorListOutput => {
   return {
     errors: errors.map((error) => ({
@@ -28,4 +28,20 @@ const formaValidationError = (error: ValidationError): ValidationErrorType => {
     source: expressError.path,
     detail: expressError.msg,
   };
+};
+
+export const inputValidationResultMiddleware = (
+  req: Request<{}, {}, {}, {}>,
+  res: Response,
+  next: NextFunction,
+) => {
+  const errors = validationResult(req)
+    .formatWith(formaValidationError)
+    .array({ onlyFirstError: true });
+
+  if (errors.length > 0) {
+    res.status(HttpStatus.BadRequest).json(createErrorMessages(errors));
+    return;
+  }
+  next();
 };
