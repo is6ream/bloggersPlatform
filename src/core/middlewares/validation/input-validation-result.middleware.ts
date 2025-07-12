@@ -13,7 +13,7 @@ export const createErrorMessages = (
   return { errorMessages: errors };
 };
 
-const formatErrors = (error: ValidationError): ValidationErrorType => {
+export const formatErrors = (error: ValidationError): ValidationErrorType => {
   const expressError = error as unknown as FieldValidationError;
 
   return {
