@@ -19,6 +19,8 @@ export const authService = {
     const newAuth = await authQueryRepository.findById(authId);
 
     return newAuth!;
+    //обратиться в репо, найти пользователя и проверить совпадает ли пароль
+    //в 6 уроке есть пример дз
   },
 
   async _generateHash(password: string, salt: string) {
