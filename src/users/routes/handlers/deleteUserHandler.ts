@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../core/http-statuses";
-import { createErrorMessages } from "../../../core/error.utils";
 import { usersService } from "../../application/users.service";
+import { createErrorMessages } from "../../../core/errors/create-error-message";
 
 export async function deleteUserHandler(req: Request, res: Response) {
   try {
@@ -12,7 +12,7 @@ export async function deleteUserHandler(req: Request, res: Response) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "User not found" }]),
+          createErrorMessages([{ field: "id", message: "User not found" }])
         );
       return;
     } else {

@@ -12,7 +12,6 @@ export const loginOrEmailValidator = body("loginOrEmail")
   .withMessage("input must be string or email")
   .isLength({ min: 3, max: 20 })
   .withMessage("More then 20 or 3");
-//вопрос, как реализовать эту аавторизацию
 
 export const passwordValidation = body("password")
   .exists()

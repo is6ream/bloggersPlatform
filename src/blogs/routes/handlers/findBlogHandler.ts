@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { blogsRepository } from "../../repositories/blogs.repository";
 import { HttpStatus } from "../../../core/http-statuses";
 import { BlogType } from "../../types/blogs-types";
-import { createErrorMessages } from "../../../core/error.utils";
 import { blogQueryRepository } from "../../repositories/blogs.query.repository";
+import { createErrorMessages } from "../../../core/errors/create-error-message";
 
 export async function findBlogHandler(req: Request, res: Response) {
   try {
@@ -14,7 +13,7 @@ export async function findBlogHandler(req: Request, res: Response) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "Blog not found" }]),
+          createErrorMessages([{ field: "id", message: "Blog not found" }])
         );
       return;
     }

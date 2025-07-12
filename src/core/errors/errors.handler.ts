@@ -1,40 +1,40 @@
-import { Response } from "express";
-import { RepositoryNotFoundError } from "./repository-not-found.error";
-import { HttpStatus } from "../http-statuses";
-import { createErrorMessages } from "../error.utils";
-import { DomainError } from "./domain.error";
+// import { Response } from "express";
+// import { RepositoryNotFoundError } from "./repository-not-found.error";
+// import { HttpStatus } from "../http-statuses";
+// import { createErrorMessages } from "./create-error-message";
+// import { DomainError } from "./domain.error";
 
-export function errorsHandler(error: unknown, res: Response): void {
-  if (error instanceof RepositoryNotFoundError) {
-    const httpStatus = HttpStatus.NotFound;
+// export function errorsHandler(error: unknown, res: Response): void {
+//   if (error instanceof RepositoryNotFoundError) {
+//     const httpStatus = HttpStatus.NotFound;
 
-    res.status(httpStatus).send(
-      createErrorMessages([
-        {
-          status: httpStatus,
-          detail: error.message,
-        },
-      ]),
-    );
+//     res.status(httpStatus).send(
+//       createErrorMessages([
+//         {
+//           status: httpStatus,
+//           detail: error.message,
+//         },
+//       ]),
+//     );
 
-    return;
-  }
+//     return;
+//   }
 
-  if (error instanceof DomainError) {
-    const httpStatus = HttpStatus.UnprocessableEntity;
+//   if (error instanceof DomainError) {
+//     const httpStatus = HttpStatus.UnprocessableEntity;
 
-    res.status(httpStatus).send(
-      createErrorMessages([
-        {
-          status: httpStatus,
-          source: error.source,
-          detail: error.message,
-          code: error.code,
-        },
-      ]),
-    );
-    return;
-  }
-  res.status(HttpStatus.InternalServerError);
-  return;
-}
+//     res.status(httpStatus).send(
+//       createErrorMessages([
+//         {
+//           status: httpStatus,
+//           source: error.source,
+//           detail: error.message,
+//           code: error.code,
+//         },
+//       ]),
+//     );
+//     return;
+//   }
+//   res.status(HttpStatus.InternalServerError);
+//   return;
+// }

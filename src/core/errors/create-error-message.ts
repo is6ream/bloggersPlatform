@@ -8,7 +8,7 @@ interface ErrorMessagesResponse {
 }
 
 export const createErrorMessages = (
-  errors: ValidationError[]
+  errors: ValidationError[],
 ): ErrorMessagesResponse => {
   return {
     errorMessages: errors.map((error) => ({

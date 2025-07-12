@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { postRepository } from "../repositories/postRepository";
 import { HttpStatus } from "../../core/http-statuses";
-import { createErrorMessages } from "../../core/error.utils";
-
+import { createErrorMessages } from "../../core/errors/create-error-message";
 export async function updatePostHandler(req: Request, res: Response) {
   try {
     const id = req.params.id;
@@ -11,7 +10,7 @@ export async function updatePostHandler(req: Request, res: Response) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "Blog not found" }]),
+          createErrorMessages([{ field: "id", message: "Blog not found" }])
         );
       return;
     }
