@@ -1,8 +1,2 @@
-export type ValidationErrorListOutput = {
-  errorsMessages: [
-    {
-      message: "string";
-      field: "string";
-    },
-  ];
-};
+import { ValidationErrorType } from "./validationError";
+export type ValidationErrorDto = { errorMessages: ValidationErrorType[] };

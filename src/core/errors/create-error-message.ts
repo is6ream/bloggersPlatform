@@ -1,9 +1,10 @@
-interface ValidationError {
+import { inputValidationResultMiddleware } from './../middlewares/validation/input-validation-result.middleware';
+export interface ValidationError {
   field: string;
   message: string;
 }
 
-interface ErrorMessagesResponse {
+export interface ErrorMessagesResponse {
   errorMessages: ValidationError[];
 }
 
@@ -17,3 +18,5 @@ export const createErrorMessages = (
     })),
   };
 };
+
+export const inputValidationResultMiddleware
