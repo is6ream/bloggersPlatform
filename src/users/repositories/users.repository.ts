@@ -16,11 +16,10 @@ export const usersRepository = {
     };
   },
 
-  async isUserExistByEmail(email: string): Promise<boolean>{
-    
-  }
-
-  ,
+  async isUserExistByEmail(email: string): Promise<boolean> {
+    const user = await userCollection.findOne({ email });
+    return !!user;
+  },
 
   async delete(id: string): Promise<void | null> {
     const deleteResult = await userCollection.deleteOne({
