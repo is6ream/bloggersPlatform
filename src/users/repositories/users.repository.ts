@@ -16,6 +16,12 @@ export const usersRepository = {
     };
   },
 
+  async isUserExistByEmail(email: string): Promise<boolean>{
+    
+  }
+
+  ,
+
   async delete(id: string): Promise<void | null> {
     const deleteResult = await userCollection.deleteOne({
       _id: new ObjectId(id),

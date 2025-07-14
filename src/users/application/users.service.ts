@@ -14,6 +14,7 @@ export const usersService = {
       login,
       email,
       createdAt: new Date(),
+      passwordSalt,
     };
 
     const newUser = await usersRepository.create(user);
