@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { UserInputModel } from "../types/user-types";
 import { CreateUserDto } from "../input/create-user-dto";
 import { usersRepository } from "../repositories/users.repository";
+
 export const usersService = {
   async create(dto: UserInputModel): Promise<string> {
     const { login, password, email } = dto;
