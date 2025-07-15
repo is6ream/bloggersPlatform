@@ -5,6 +5,7 @@ import {
   authQueryRepository,
   AuthResult,
 } from "../repositories/auth.query.repository";
+
 export const authService = {
   async create(loginOrEmail: string, password: string): Promise<AuthResult> {
     const passwordSalt = await bcrypt.genSalt(10);
@@ -13,6 +14,7 @@ export const authService = {
     const dto: CreateAuthDto = {
       passwordHash,
       loginOrEmail,
+      createdAt: new Date(),
     };
 
     const authId = await authRepository.create(dto);
