@@ -13,6 +13,7 @@ class EmailError extends Error implements IEmailError {
   constructor(message: string, field = "") {
     super(message);
     this.field = field;
+    this.message = message;
   }
 } //правила жесткие
 

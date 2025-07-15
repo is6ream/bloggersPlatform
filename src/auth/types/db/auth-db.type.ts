@@ -1,6 +1,4 @@
-export type AuthType = {
-  id: string;
+export type AuthDBType = {
   loginOrEmail: string;
   passwordHash: string;
 };
-

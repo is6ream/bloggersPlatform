@@ -17,4 +17,4 @@ export async function createUserHandler(req: Request, res: Response) {
   }
 }
 
-//globalErrorHandler принцип работы
+//globalErrorHandler принцип работы изучить
