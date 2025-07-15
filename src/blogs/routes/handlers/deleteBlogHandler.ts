@@ -10,7 +10,7 @@ export async function deleteBlogHandler(req: Request, res: Response) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "Blog not found" }])
+          createErrorMessages([{ field: "id", message: "Blog not found" }]),
         );
       return;
     } else {

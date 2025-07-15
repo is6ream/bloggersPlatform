@@ -13,7 +13,7 @@ export async function findBlogHandler(req: Request, res: Response) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "Blog not found" }])
+          createErrorMessages([{ field: "id", message: "Blog not found" }]),
         );
       return;
     }
