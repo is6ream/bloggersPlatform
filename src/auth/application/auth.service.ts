@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 import { CreateAuthDto } from "../types/input/login-input.model";
 import { WithId } from "mongodb";
-import { Result } from "express-validator";
 import { UserDBType } from "../../users/input/create-user-dto";
 import { usersRepository } from "../../users/repositories/users.repository";
-
+import { ResultStatus } from "../../common/result/resultCode";
+import { Result } from "../../common/result/result.type";
 export const authService = {
   async create(loginOrEmail: string, password: string): Promise<AuthResult> {
     const passwordSalt = await bcrypt.genSalt(10);
@@ -31,13 +31,17 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string
+    password: string,
   ): Promise<Result<WithId<UserDBType> | null>> {
     const user = await usersRepository.isUserExistByEmail(loginOrEmail);
-    if(!user){
+    if (!user) {
       return {
-        status: 
-      }
+        status: ResultStatus.NotFound,
+        data: null,
+        errorMessage: "Not found",
+        extensions: [{ field: "loginOrEmail", message: "Not found" }],
+      };
+      
     }
   },
 };
