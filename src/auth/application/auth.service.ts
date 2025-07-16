@@ -5,6 +5,8 @@ import { UserDBType } from "../../users/input/create-user-dto";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { ResultStatus } from "../../common/result/resultCode";
 import { Result } from "../../common/result/result.type";
+import { bcryptService } from "../adapters/bcrypt.service";
+import { HttpStatus } from "../../core/http-statuses";
 export const authService = {
   async create(loginOrEmail: string, password: string): Promise<AuthResult> {
     const passwordSalt = await bcrypt.genSalt(10);
@@ -41,7 +43,23 @@ export const authService = {
         errorMessage: "Not found",
         extensions: [{ field: "loginOrEmail", message: "Not found" }],
       };
-      
     }
+    const isPasscorrect = await bcryptService.checkPassword(
+      password,
+      user.passwordHash,
+    );
+    if (!isPasscorrect)
+      return {
+        status: ResultStatus.BadRequest,
+        data: null,
+        errorMessage: "Bad request",
+        extensions: [{ field: "password", message: "wrong password" }],
+      };
+
+    return {
+      status: ResultStatus.Success,
+      data: user,
+      extensions: [],
+    };
   },
 };
