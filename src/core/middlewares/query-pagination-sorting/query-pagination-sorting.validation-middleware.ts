@@ -1,6 +1,6 @@
 import { query } from "express-validator";
 import { PaginationAndSorting } from "../../types/pagination-and-sorting";
-import { SortDirection } from "../../types/sort-direction";
+import { SortDirection } from "../../types/paginationAndSorting/sort-direction";
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_SORT_DIRECTION = SortDirection.desc;

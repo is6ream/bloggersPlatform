@@ -1,5 +1,5 @@
 import { BlogDataOutput } from "./blog-data.output";
-import { PaginatedOutput } from "../../../core/types/paginated.output";
+import { PaginatedOutput } from "../../../core/types/paginationAndSorting/paginated.output";
 
 export type BlogListPaginatedOutput = {
   pagesCount: number;
