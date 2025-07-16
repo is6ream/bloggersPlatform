@@ -1,14 +1,14 @@
 import { WithId } from "mongodb";
 import { UserDBType } from "../../users/input/create-user-dto";
 import { usersRepository } from "../../users/repositories/users.repository";
-import { ResultStatus } from "../../common/result/resultCode";
-import { Result } from "../../common/result/result.type";
+import { ResultStatus } from "../../core/result/resultCode";
+import { Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
 
 export const authService = {
   async loginUser(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<UserDBType | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
     if (result.status !== ResultStatus.Success)

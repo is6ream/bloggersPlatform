@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authValidators } from "../middlewares/auth.validation";
-import { loginUserHandler } from "../handler/auth.userHandler";
+import { loginUserHandler } from "../controller/auth.userController";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
 export const authRouter = Router();
 

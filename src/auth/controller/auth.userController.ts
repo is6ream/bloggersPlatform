@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { authService } from "../application/auth.service";
 import { HttpStatus } from "../../core/http-statuses";
 
-export async function loginUserHandler(req: Request, res: Response) {
+export async function loginUserController(req: Request, res: Response) {
   const { loginOrEmail, password } = req.body;
   try {
     const result = await authService.create(loginOrEmail, password);
