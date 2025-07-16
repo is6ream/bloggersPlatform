@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
 import { CreateAuthDto } from "../types/input/login-input.model";
 import { WithId } from "mongodb";
+import { Result } from "express-validator";
+import { UserDBType } from "../../users/input/create-user-dto";
+import { usersRepository } from "../../users/repositories/users.repository";
 
 export const authService = {
   async create(loginOrEmail: string, password: string): Promise<AuthResult> {
@@ -29,5 +32,7 @@ export const authService = {
   async checkUserCredentials(
     loginOrEmail: string,
     password: string,
-  ): Promise<Result<WithId<>>>
+  ): Promise<Result<WithId<UserDBType> | null >> {
+    const user = await usersRepository.isUserExistByEmail
+  }
 };
