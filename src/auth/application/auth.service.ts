@@ -1,10 +1,6 @@
 import bcrypt from "bcrypt";
 import { CreateAuthDto } from "../types/input/login-input.model";
-import { authRepository } from "../repositories/auth.repository";
-import {
-  authQueryRepository,
-  AuthResult,
-} from "../repositories/auth.query.repository";
+import { WithId } from "mongodb";
 
 export const authService = {
   async create(loginOrEmail: string, password: string): Promise<AuthResult> {
@@ -29,4 +25,9 @@ export const authService = {
     const hash = await bcrypt.hash(password, salt);
     return hash;
   },
+
+  async checkUserCredentials(
+    loginOrEmail: string,
+    password: string,
+  ): Promise<Result<WithId<>>>
 };
