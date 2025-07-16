@@ -31,8 +31,13 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string,
-  ): Promise<Result<WithId<UserDBType> | null >> {
-    const user = await usersRepository.isUserExistByEmail
-  }
+    password: string
+  ): Promise<Result<WithId<UserDBType> | null>> {
+    const user = await usersRepository.isUserExistByEmail(loginOrEmail);
+    if(!user){
+      return {
+        status: 
+      }
+    }
+  },
 };
