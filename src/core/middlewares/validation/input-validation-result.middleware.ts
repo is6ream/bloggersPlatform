@@ -9,7 +9,7 @@ import { ValidationErrorDto } from "../../types/validation/validationError.dto";
 import { ValidationErrorType } from "../../types/validation/validationError";
 
 export const createErrorMessages = (
-  errors: ValidationErrorType[]
+  errors: ValidationErrorType[],
 ): ValidationErrorDto => {
   return { errorMessages: errors };
 };
@@ -26,7 +26,7 @@ export const formatErrors = (error: ValidationError): ValidationErrorType => {
 export const inputValidationResultMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const errors = validationResult(req)
     .formatWith(formatErrors)
