@@ -1,5 +1,5 @@
-import { PaginationAndSorting } from "../../core/types/pagination-and-sorting";
 import { UserSortField } from "./user-sort-field";
+import { PaginationAndSorting } from "../../core/types/paginationAndSorting/pagination-and-sorting";
 
 export type UserQueryInput = PaginationAndSorting<UserSortField> &
   Partial<{

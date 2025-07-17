@@ -1,6 +1,7 @@
 import { query } from "express-validator";
-import { PaginationAndSorting } from "../../types/pagination-and-sorting";
 import { SortDirection } from "../../types/paginationAndSorting/sort-direction";
+import { PaginationAndSorting } from "../../types/paginationAndSorting/pagination-and-sorting";
+
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_SORT_DIRECTION = SortDirection.desc;
@@ -14,7 +15,7 @@ export const paginationAndSortingDefault: PaginationAndSorting<string> = {
 };
 
 export function paginationAndSortingValidation<T extends string>(
-  sortFieldsEnum: Record<string, T>,
+  sortFieldsEnum: Record<string, T>
 ) {
   return [
     query("pageNumber")
@@ -36,7 +37,7 @@ export function paginationAndSortingValidation<T extends string>(
       .default(Object.values(sortFieldsEnum)[0])
       .isIn(Object.values(sortFieldsEnum))
       .withMessage(
-        `Allowed sort fields: ${Object.values(sortFieldsEnum).join(", ")}`,
+        `Allowed sort fields: ${Object.values(sortFieldsEnum).join(", ")}`
       ),
 
     query("sortDirection")
@@ -44,7 +45,7 @@ export function paginationAndSortingValidation<T extends string>(
       .default(DEFAULT_SORT_DIRECTION)
       .isIn(Object.values(SortDirection))
       .withMessage(
-        `Sort direction must be one of: ${Object.values(SortDirection).join(", ")}`,
+        `Sort direction must be one of: ${Object.values(SortDirection).join(", ")}`
       ),
   ];
 }

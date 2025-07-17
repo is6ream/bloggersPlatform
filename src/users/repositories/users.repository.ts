@@ -19,7 +19,7 @@ export const usersRepository = {
   async isUserExistByEmail(
     loginOrEmail: string,
   ): Promise<WithId<UserDBType> | null> {
-    return authCollection.findOne({
+    return userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
     });
   },

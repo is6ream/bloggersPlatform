@@ -1,7 +1,7 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { BlogType } from "../blogs/types/blogs-types";
 import { PostType } from "../posts/types/posts-types";
-import { AuthDBType } from "../auth/types/auth.types";
+import { AuthDBType } from "../auth/types/db/auth-db.type";
 import { SETTINGS } from "../core/settings/settings";
 import { UserDBType } from "../users/input/create-user-dto";
 
