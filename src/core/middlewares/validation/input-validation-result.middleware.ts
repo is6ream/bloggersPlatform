@@ -18,8 +18,8 @@ export const formatErrors = (error: ValidationError): ValidationErrorType => {
   const expressError = error as unknown as FieldValidationError;
 
   return {
-    field: expressError.path,
     message: expressError.msg,
+    field: expressError.path,
   };
 };
 

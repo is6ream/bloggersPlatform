@@ -14,6 +14,5 @@ export async function loginUserController(req: Request, res: Response) {
       .status(resultCodeToHttpException(result.status))
       .send(result.extensions);
   }
-
   res.sendStatus(HttpStatus.NoContent);
 }

@@ -15,7 +15,7 @@ export const authService = {
       return {
         status: ResultStatus.Unauthorized,
         errorMessage: "Unauthorized",
-        extensions: [{ field: "loginOrEmail", message: "Wrong credentials" }],
+        extensions: [{ message: "Wrong credentials", field: "loginOrEmail" }],
         data: null,
       };
 
@@ -27,7 +27,7 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<WithId<UserDBType> | null>> {
     const user = await usersRepository.isUserExistByEmail(loginOrEmail);
     if (!user) {
@@ -40,7 +40,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash,
+      user.passwordHash
     );
     if (!isPasscorrect)
       return {
