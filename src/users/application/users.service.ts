@@ -46,8 +46,11 @@ export const usersService = {
     return hash;
   },
 
-  async delete(id: string): Promise<void | undefined> {
-    await usersRepository.delete(id);
-    return;
+  async delete(id: string): Promise<any> {
+    const result = await usersRepository.delete(id);
+    if (!result) {
+      return false;
+    }
+    return true;
   },
 };

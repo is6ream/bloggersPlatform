@@ -8,11 +8,11 @@ export async function deleteUserHandler(req: Request, res: Response) {
     const id: string = req.params.id;
     const result = await usersService.delete(id);
     console.log(result);
-    if (result === undefined) {
+    if (result === false) {
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "User not found" }]),
+          createErrorMessages([{ field: "id", message: "User not found" }])
         );
       return;
     } else {

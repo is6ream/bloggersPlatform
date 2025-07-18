@@ -1,4 +1,4 @@
-import { body, param, check } from "express-validator";
+import { param } from "express-validator";
 
 const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
 
