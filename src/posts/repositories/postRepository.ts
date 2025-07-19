@@ -43,7 +43,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {
@@ -56,6 +56,8 @@ export const postRepository = {
     const deleteResult = await postCollection.deleteOne({
       _id: new ObjectId(id),
     });
+    console.log(deleteResult.deletedCount);
+
     return deleteResult.deletedCount > 0;
   },
 };

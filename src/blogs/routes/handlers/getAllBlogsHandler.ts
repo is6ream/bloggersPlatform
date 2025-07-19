@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { HttpStatus } from "../../../core/http-statuses";
 import { BlogQueryInput } from "../input/blog-query.input";
 import { setDefaultPaginationIfNotExist } from "../../../core/helpers/set-default-sort-and-pagination";
-import { blogsService } from "../../application/blogs.service";
 import { mapToBlogListPaginatedOutput } from "../mappers/map-to-blog-list-paginated-output.util";
 import { blogQueryRepository } from "../../repositories/blogs.query.repository";
 
@@ -23,7 +22,6 @@ export async function getAllBlogsHandler(
 
     res.status(200).send(blogsListOutput);
   } catch (error: unknown) {
-    // console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }

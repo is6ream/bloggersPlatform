@@ -9,8 +9,14 @@ export async function deletePostHandler(
   try {
     const id = req.params.id;
 
-    await usersService.delete(id);
+    const deleteResult = await usersService.delete(id);
+    console.log(deleteResult);
+    if (!deleteResult) {
+      res.sendStatus(HttpStatus.NotFound);
+      return;
+    }
     res.sendStatus(HttpStatus.NoContent);
+    return;
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
