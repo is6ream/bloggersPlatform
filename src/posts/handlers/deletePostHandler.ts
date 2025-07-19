@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-import { usersService } from "../../users/application/users.service";
+import { postsService } from "../application/post.service";
 
 export async function deletePostHandler(
   req: Request<{ id: string }>,
-  res: Response,
+  res: Response
 ) {
   try {
     const id = req.params.id;
 
-    const isDeleted = await usersService.delete(id);
-    console.log(isDeleted);
+    const isDeleted = await postsService.delete(id);
+    console.log("тут логаю", isDeleted);
     if (!isDeleted) {
       res.sendStatus(HttpStatus.NotFound);
     }
