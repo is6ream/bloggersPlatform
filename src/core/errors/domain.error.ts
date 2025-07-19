@@ -1,9 +1,8 @@
 export class DomainError extends Error {
   constructor(
-    detail: string,
-    public readonly code: string,
-    public readonly source?: string,
+    message: string,
+    public readonly field: string,
   ) {
-    super(detail);
+    super(message);
   }
 }
