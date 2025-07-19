@@ -53,12 +53,9 @@ export const postRepository = {
     return;
   },
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<boolean> {
     const deleteResult = await postCollection.deleteOne({
-      _id: new ObjectId(id),
-    });
-    if (deleteResult.deletedCount < 1) {
-      throw new RepositoryNotFoundError("Post not exist");
-    }
-  },
-};
+      _id: new ObjectId(id)
+    })
+    return deleteResult.deletedCount === 1
+}
