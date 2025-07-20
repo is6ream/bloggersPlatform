@@ -28,7 +28,7 @@ describe("Auth API body validation check", () => {
     await stopDb();
   });
 
-  it("should not create auth when incorrect body passed; POST /api/auth/login", async () => {
+  it("should not auth when incorrect body passed; POST /api/auth/login", async () => {
     const incorrectTestAuthData: AuthCreateInput = {
       loginOrEmail: " ",
       passwordHash: "6857b81064ad31565ab05de0",
@@ -44,5 +44,13 @@ describe("Auth API body validation check", () => {
       .set("Authorization", adminToken)
       .send(incorrectTestAuthData)
       .expect(HttpStatus.BadRequest);
+  });
+
+  it("should auth user when correct body passed; POST /api/auth/login", async () => {
+    await request(app)
+      .post(AUTH_PATH)
+      .set("Authorization", adminToken)
+      .send(correctTestAuthAttributes)
+      .expect(HttpStatus.NoContent);
   });
 });

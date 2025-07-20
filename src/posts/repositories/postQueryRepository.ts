@@ -25,7 +25,7 @@ export const postQueryRepository = {
 
     const totalCount = await postCollection.countDocuments(filter);
 
-    return { items, totalCount };
+    return { items, totalCount }; //репо возвращает items и totalCount
   },
 
   async findPostsByBlogId(
