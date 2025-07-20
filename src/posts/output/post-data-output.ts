@@ -1,4 +1,3 @@
-import { ResourceType } from "../../core/types/paginationAndSorting/resource-type";
 export type PostDataOutput = {
   id: string;
   title: string;
