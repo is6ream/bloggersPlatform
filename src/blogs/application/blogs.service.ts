@@ -19,8 +19,7 @@ export const blogsService = {
     return;
   },
 
-  async delete(id: string): Promise<void> {
-    blogsRepository.delete(id);
-    return;
+  async delete(id: string): Promise<boolean> {
+    return blogsRepository.delete(id);
   },
 };

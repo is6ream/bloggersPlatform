@@ -36,12 +36,10 @@ export const blogsRepository = {
     return;
   },
 
-  async delete(id: string): Promise<void | null> {
+  async delete(id: string): Promise<boolean> {
     const deleteResult = await blogCollection.deleteOne({
       _id: new ObjectId(id),
     });
-    if (deleteResult.deletedCount < 1) {
-      return null;
-    }
+    return deleteResult.deletedCount === 1;
   },
 };

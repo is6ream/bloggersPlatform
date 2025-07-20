@@ -47,10 +47,6 @@ export const usersService = {
   },
 
   async delete(id: string): Promise<any> {
-    const result = await usersRepository.delete(id);
-    if (!result) {
-      return false;
-    }
-    return true;
+    return usersRepository.delete(id);
   },
 };

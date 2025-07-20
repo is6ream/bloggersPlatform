@@ -17,7 +17,7 @@ export const usersRepository = {
   },
 
   async isUserExistByEmail(
-    loginOrEmail: string
+    loginOrEmail: string,
   ): Promise<WithId<UserDBType> | null> {
     return userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
@@ -28,9 +28,6 @@ export const usersRepository = {
     const deleteResult = await userCollection.deleteOne({
       _id: new ObjectId(id),
     });
-    if (deleteResult.deletedCount < 1) {
-      return !!deleteResult;
-    }
-    return !!deleteResult;
+    return deleteResult.deletedCount === 1;
   },
 };
