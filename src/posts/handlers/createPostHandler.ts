@@ -3,6 +3,7 @@ import { postRepository } from "../repositories/postRepository";
 import { PostType } from "../types/posts-types";
 import { HttpStatus } from "../../core/http-statuses";
 import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
+import { PostListPaginatedOutput } from "../output/post-list-paginated.output";
 
 export async function createPostHandler(req: Request, res: Response) {
   const foundBlog = await blogQueryRepository.findById(req.body.blogId);
