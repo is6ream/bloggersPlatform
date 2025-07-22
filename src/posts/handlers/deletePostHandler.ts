@@ -4,7 +4,7 @@ import { postsService } from "../application/post.service";
 
 export async function deletePostHandler(
   req: Request<{ id: string }>,
-  res: Response
+  res: Response,
 ) {
   try {
     const id = req.params.id;
