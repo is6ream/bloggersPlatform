@@ -10,7 +10,6 @@ export async function deletePostHandler(
     const id = req.params.id;
 
     const isDeleted = await postsService.delete(id);
-    console.log("тут логаю", isDeleted);
     if (!isDeleted) {
       res.sendStatus(HttpStatus.NotFound);
     }

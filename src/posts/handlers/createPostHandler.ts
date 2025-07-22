@@ -3,7 +3,7 @@ import { postRepository } from "../repositories/postRepository";
 import { PostType } from "../types/posts-types";
 import { HttpStatus } from "../../core/http-statuses";
 import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
-import { PostListPaginatedOutput } from "../output/post-list-paginated.output";
+import { postQueryRepository } from "../repositories/postQueryRepository";
 
 export async function createPostHandler(req: Request, res: Response) {
   const foundBlog = await blogQueryRepository.findById(req.body.blogId);
@@ -21,6 +21,9 @@ export async function createPostHandler(req: Request, res: Response) {
     createdAt: new Date().toISOString(),
   };
 
-  const dataForResponse = await postRepository.create(newPost);
-  res.status(HttpStatus.Created).send(dataForResponse);
+  const createdPostId = await postRepository.create(newPost);
+
+  const postForResponse = await postQueryRepository.findById(createdPostId);
+
+  res.status(HttpStatus.Created).send(postForResponse);
 }

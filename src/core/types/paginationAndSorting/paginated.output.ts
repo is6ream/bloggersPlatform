@@ -6,4 +6,4 @@ export type PaginatedOutput = {
   totalCount: number;
 };
 
-export type PostListPaginatedOutput
+// export type PostListPaginatedOutput

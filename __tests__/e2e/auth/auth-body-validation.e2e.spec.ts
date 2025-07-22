@@ -18,13 +18,15 @@ describe("Auth API body validation check", () => {
   const adminToken = generateBasicAuthToken();
 
   beforeAll(async () => {
-    await runDB(
-      "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    );
-    await clearDb(app);
+    await runDB("mongodb://localhost:27017/ed-back-lessons-platform-test");
+    await request(app)
+      .post("/api/users")
+      .set("Authorization", adminToken)
+      .send(correctTestAuthAttributes);
   });
 
   afterAll(async () => {
+    await clearDb(app);
     await stopDb();
   });
 
@@ -46,11 +48,13 @@ describe("Auth API body validation check", () => {
       .expect(HttpStatus.BadRequest);
   });
 
-  it("should auth user when correct body passed; POST /api/auth/login", async () => {
+  it("should auth successfully with correct credentials; POST /api/auth/login", async () => {
     await request(app)
       .post(AUTH_PATH)
-      .set("Authorization", adminToken)
-      .send(correctTestAuthAttributes)
+      .send({
+        loginOeEmail: correctTestAuthAttributes.loginOrEmail,
+        passwordHash: correctTestAuthAttributes.passwordHash,
+      })
       .expect(HttpStatus.NoContent);
   });
 });

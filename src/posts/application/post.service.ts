@@ -4,7 +4,7 @@ import { PostByIdInputDto } from "../types/posts-types";
 import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
 
 export const postsService = {
-  async create(dto: PostInputDto): Promise<PostViewModel> {
+  async create(dto: PostInputDto): Promise<string> {
     const foundBlog = await blogQueryRepository.findById(dto.blogId);
 
     if (!foundBlog) {
