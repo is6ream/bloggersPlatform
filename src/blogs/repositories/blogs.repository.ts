@@ -1,10 +1,10 @@
-import { BlogInputDto } from "../types/blogs-types";
-import { BlogType, BlogViewModel } from "../types/blogs-types";
+import { Blog, BlogInputDto } from "../types/blogs-types";
+import { BlogType } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 
 export const blogsRepository = {
-  async create(newBlog: BlogType): Promise<BlogViewModel> {
+  async create(newBlog: BlogType): Promise<Blog> {
     const insertResult = await blogCollection.insertOne(newBlog);
     const insertedId = insertResult.insertedId;
     return {
@@ -28,7 +28,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       return null;
