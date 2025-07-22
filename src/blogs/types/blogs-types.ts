@@ -1,4 +1,4 @@
-export interface BlogType {
+export interface CreateBlogDto {
   name: string;
   description: string;
   websiteUrl: string;
@@ -6,29 +6,31 @@ export interface BlogType {
   isMembership: boolean;
 }
 
-export interface BlogViewModel {
+export type BlogViewModel = {
   id: string;
   name: string;
   description: string;
   websiteUrl: string;
   createdAt: string;
   isMembership: boolean;
-}
+};
 
-export interface Blog {
+export type Blog = {
   id: string;
   name: string;
   description: string;
   websiteUrl: string;
   createdAt: string;
   isMembership: boolean;
-}
+};
 
-export interface BlogInputDto {
+export type BlogType = CreateBlogDto;
+
+export type BlogInputDto = {
   id?: string;
   name: string;
   description: string;
   websiteUrl: string;
   createdAt: string;
   isMembership: boolean;
-}
+};

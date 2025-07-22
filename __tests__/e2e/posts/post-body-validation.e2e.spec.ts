@@ -21,13 +21,28 @@ describe("Post API body validation check", () => {
 
   beforeAll(async () => {
     await runDB(
-      "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     await clearDb(app);
   });
 
   afterAll(async () => {
     await stopDb();
+  });
+
+  it("should create post when correct body passed; POST api/post", async () => {
+    const correctTestPostData: PostCreateInput = {
+      title: "dan",
+      shortDescription: "dan",
+      content: "dan",
+      blogId: "6857b81064ad31565ab05de0",
+    };
+
+    await request(app)
+      .post(POSTS_PATH)
+      .set("Authorization", generateBasicAuthToken())
+      .send(correctTestPostData)
+      .expect(HttpStatus.Created);
   });
 
   it("should not create post when incorrect body passed; POST /api/post", async () => {
