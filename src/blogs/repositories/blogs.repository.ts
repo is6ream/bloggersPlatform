@@ -3,7 +3,7 @@ import { CreateBlogDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 
-export const blogsRepository = {
+export const blogsRepository = {  
   async create(newBlog: CreateBlogDto): Promise<string> {
     const insertResult = await blogCollection.insertOne(newBlog);
     const insertedId = insertResult.insertedId;
