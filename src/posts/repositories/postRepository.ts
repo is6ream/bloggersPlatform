@@ -2,6 +2,7 @@ import { PostType, PostViewModel } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
+
 export const postRepository = {
   async create(newPost: PostType): Promise<string> {
     const insertResult = await postCollection.insertOne(newPost);
@@ -35,7 +36,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {

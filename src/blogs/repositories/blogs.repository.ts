@@ -1,17 +1,13 @@
-import { Blog, BlogInputDto } from "../types/blogs-types";
+import { BlogInputDto } from "../types/blogs-types";
 import { CreateBlogDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 
 export const blogsRepository = {
-  async create(blogData: CreateBlogDto): Promise<Blog> {
-    const insertResult = await blogCollection.insertOne(blogData);
+  async create(newBlog: CreateBlogDto): Promise<string> {
+    const insertResult = await blogCollection.insertOne(newBlog);
     const insertedId = insertResult.insertedId;
-    const newBlog = {
-      ...blogData,
-      id: insertedId.toString(),
-    };
-    return newBlog;
+    return insertedId.toString();
   },
 
   async update(id: string, dto: BlogInputDto): Promise<void | null> {
