@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { setDefaultPaginationIfNotExist } from "../../../core/helpers/set-default-sort-and-pagination";
 import { HttpStatus } from "../../../core/http-statuses";
-import { postsService } from "../../../posts/application/post.service";
 import { mapToPostListPaginatedOutput } from "../../../posts/mappers/map-to-post-list-paginated-output.util";
 import { PostQueryInput } from "../../../posts/input/post-query.input";
-import { blogsRepository } from "../../repositories/blogs.repository";
 import { blogQueryRepository } from "../../repositories/blogs.query.repository";
 import { postQueryRepository } from "../../../posts/repositories/postQueryRepository";
 

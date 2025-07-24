@@ -5,8 +5,8 @@ import { createErrorMessages } from "../../../core/errors/create-error-message";
 export async function updateBlogHandler(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const result = await blogsRepository.update(id, req.body);
-    if (result === null) {
+    const updateResult = await blogsRepository.update(id, req.body);
+    if (updateResult === null) {
       res
         .status(HttpStatus.NotFound)
         .send(
@@ -17,7 +17,7 @@ export async function updateBlogHandler(req: Request, res: Response) {
     res.status(HttpStatus.NoContent).send();
     return;
   } catch (error: unknown) {
-    // console.log(error);
+    console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
     return;
   }

@@ -8,8 +8,6 @@ export interface PostType {
   createdAt: Date;
 }
 
-
-
 export interface PostViewModel {
   id: string;
   title: string;

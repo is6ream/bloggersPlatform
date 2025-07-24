@@ -1,4 +1,4 @@
-export type BlogInput = {
+export type BlogInputModel = {
   name: string;
   description: string;
   websiteUrl: string;
@@ -10,16 +10,16 @@ export type BlogViewModel = {
   name: string;
   description: string;
   websiteUrl: string;
-  createdAt: string;
+  createdAt: Date;
   isMembership: boolean;
 };
 
 export type Blog = {
-  id: string;
+  id?: string;
   name: string;
   description: string;
   websiteUrl: string;
-  createdAt: string;
+  createdAt: Date;
   isMembership: boolean;
 };
 export type BlogInputDto = {
@@ -29,5 +29,3 @@ export type BlogInputDto = {
   createdAt: Date;
   isMembership: boolean;
 };
-
-

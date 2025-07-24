@@ -1,16 +1,21 @@
+import { Result } from "./../../core/result/result.type";
 import { PostByIdInputDto } from "./../types/posts-types";
 import { PostInputDto, PostType, PostViewModel } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
 import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
-import { NotFoundExeption } from "../handlers/createPostHandler";
-import { blogsRepository } from "../../blogs/repositories/blogs.repository";
+import { ResultStatus } from "../../core/result/resultCode";
 
 export const postsService = {
-  async create(dto: PostInputDto): Promise<string> {
-    const foundBlog = await .findById(dto.blogId);
+  async create(dto: PostInputDto): Promise<Result | string> {
+    const foundBlog = await blogQueryRepository.findById(dto.blogId);
 
     if (!foundBlog) {
-      throw new NotFoundExeption("blog not found");
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Not found",
+        data: null,
+        extensions: [{ field: null, message: "Blog not found" }],
+      };
     }
     const newPost: PostType = {
       title: dto.title,

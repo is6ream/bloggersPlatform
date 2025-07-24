@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { blogsService } from "../../application/blogs.service";
 import { blogQueryRepository } from "../../repositories/blogs.query.repository";
+import { HttpStatus } from "../../../core/http-statuses";
 
 export async function createBlogHandler(req: Request, res: Response) {
   const createdBlogId = await blogsService.create({
@@ -10,7 +11,5 @@ export async function createBlogHandler(req: Request, res: Response) {
   });
 
   const blogForResponse = await blogQueryRepository.findByBlogId(createdBlogId);
-  res.status(201).send(blogForResponse);
-
-  
+  res.status(HttpStatus.Created).send(blogForResponse);
 }
