@@ -14,9 +14,9 @@ export async function createPostHandler(req: Request, res: Response) {
   });
   if (result.status !== ResultStatus.Success) {
     return res
-      .status(resultCodeToHttpException(ResultStatus))
+      .status(resultCodeToHttpException(result.status))
       .send(result.extensions);
   }
-  const postForResponse = await postQueryRepository.findById(createdPostId);
+  const postForResponse = await postQueryRepository.findById(result.id);
   res.status(HttpStatus.Created).send(postForResponse);
 }

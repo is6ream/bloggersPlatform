@@ -6,7 +6,7 @@ import { blogQueryRepository } from "../../blogs/repositories/blogs.query.reposi
 import { ResultStatus } from "../../core/result/resultCode";
 
 export const postsService = {
-  async create(dto: PostInputDto): Promise<Result | string> {
+  async create(dto: PostInputDto): Promise<Result> {
     const foundBlog = await blogQueryRepository.findById(dto.blogId);
 
     if (!foundBlog) {
