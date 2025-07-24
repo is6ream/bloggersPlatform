@@ -1,10 +1,9 @@
-export interface CreateBlogDto {
+export type BlogInput = {
   name: string;
   description: string;
   websiteUrl: string;
   createdAt?: string;
-  isMembership: boolean;
-}
+};
 
 export type BlogViewModel = {
   id: string;
@@ -23,15 +22,12 @@ export type Blog = {
   createdAt: string;
   isMembership: boolean;
 };
-
-export type BlogType = CreateBlogDto;
-
 export type BlogInputDto = {
-  id?: string;
   name: string;
   description: string;
   websiteUrl: string;
-  createdAt: string;
+  createdAt: Date;
   isMembership: boolean;
 };
+
 

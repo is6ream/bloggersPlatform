@@ -1,13 +1,16 @@
 import { Request, Response } from "express";
-import { CreateBlogDto } from "../../types/blogs-types";
 import { blogsService } from "../../application/blogs.service";
+import { blogQueryRepository } from "../../repositories/blogs.query.repository";
 
 export async function createBlogHandler(req: Request, res: Response) {
-  const dataForResponse = await blogsService.create({
+  const createdBlogId = await blogsService.create({
     name: req.body.name,
     description: req.body.description,
     websiteUrl: req.body.websiteUrl,
-    isMembership: false,
   });
-  res.status(201).send(dataForResponse);
+
+  const blogForResponse = await blogQueryRepository.findByBlogId(createdBlogId);
+  res.status(201).send(blogForResponse);
+
+  
 }

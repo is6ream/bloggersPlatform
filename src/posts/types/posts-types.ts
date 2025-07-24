@@ -5,8 +5,10 @@ export interface PostType {
   content: string;
   blogId: string;
   blogName: string;
-  createdAt: string;
+  createdAt: Date;
 }
+
+
 
 export interface PostViewModel {
   id: string;

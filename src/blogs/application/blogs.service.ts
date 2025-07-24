@@ -1,18 +1,13 @@
-import {
-  BlogInputDto,
-  BlogType,
-  BlogViewModel,
-  CreateBlogDto,
-} from "../types/blogs-types";
+import { BlogInput, BlogInputDto } from "../types/blogs-types";
 import { blogsRepository } from "../repositories/blogs.repository";
 
 export const blogsService = {
-  async create(dto: CreateBlogDto): Promise<BlogViewModel> {
-    const newBlog: BlogType = {
+  async create(dto: BlogInput): Promise<string> {
+    const newBlog: BlogInputDto = {
       name: dto.name,
       description: dto.description,
       websiteUrl: dto.websiteUrl,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(),
       isMembership: false,
     };
 

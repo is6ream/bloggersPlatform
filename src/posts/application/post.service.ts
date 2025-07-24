@@ -1,14 +1,16 @@
+import { PostByIdInputDto } from "./../types/posts-types";
 import { PostInputDto, PostType, PostViewModel } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
-import { PostByIdInputDto } from "../types/posts-types";
 import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
+import { NotFoundExeption } from "../handlers/createPostHandler";
+import { blogsRepository } from "../../blogs/repositories/blogs.repository";
 
 export const postsService = {
   async create(dto: PostInputDto): Promise<string> {
-    const foundBlog = await blogQueryRepository.findById(dto.blogId);
+    const foundBlog = await .findById(dto.blogId);
 
     if (!foundBlog) {
-      throw new Error("blog not found");
+      throw new NotFoundExeption("blog not found");
     }
     const newPost: PostType = {
       title: dto.title,
@@ -16,14 +18,14 @@ export const postsService = {
       content: dto.content,
       blogId: dto.blogId,
       blogName: foundBlog.name,
-      createdAt: new Date().toISOString(),
-    }; 
+      createdAt: new Date(),
+    };
     return postRepository.create(newPost);
   },
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto,
+    dto: PostByIdInputDto
   ): Promise<PostViewModel | null> {
     const blog = await blogQueryRepository.findByBlogId(blogId);
     if (!blog) {
