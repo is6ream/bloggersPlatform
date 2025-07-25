@@ -17,6 +17,7 @@ export async function createPostHandler(req: Request, res: Response) {
       .status(resultCodeToHttpException(result.status))
       .send(result.extensions);
   }
-  const postForResponse = await postQueryRepository.findById(result.id);
+  const resultId = result.data;  //намудрил конечно, но попробуем
+  const postForResponse = await postQueryRepository.findById(resultId!);
   res.status(HttpStatus.Created).send(postForResponse);
 }
