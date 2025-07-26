@@ -13,11 +13,13 @@ export async function createPostHandler(req: Request, res: Response) {
     blogId: req.body.blogId,
   });
   if (result.status !== ResultStatus.Success) {
-    return res
+    res
       .status(resultCodeToHttpException(result.status))
       .send(result.extensions);
+    return;
   }
-  const resultId = result.data;  //намудрил конечно, но попробуем
+  const resultId = result.data; //намудрил конечно, но попробуем
   const postForResponse = await postQueryRepository.findById(resultId!);
   res.status(HttpStatus.Created).send(postForResponse);
+  return;
 }

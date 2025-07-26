@@ -8,6 +8,11 @@ export const blogsRepository = {
     return insertResult.insertedId.toString();
   },
 
+  async finById(id: string): Promise<boolean> {
+    const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
+    return !!blog;
+  },
+
   async update(id: string, dto: BlogInputDto): Promise<void | null> {
     const updateResult = await blogCollection.updateOne(
       {
@@ -19,7 +24,7 @@ export const blogsRepository = {
           description: dto.description,
           websiteUrl: dto.websiteUrl,
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       return null;

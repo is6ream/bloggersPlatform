@@ -1,11 +1,11 @@
 import { WithId } from "mongodb";
-import { BlogType } from "../../types/blogs-types";
+import { Blog } from "../../types/blogs-types";
 import { BlogListPaginatedOutput } from "../output/blog-list-paginated.output";
 import { BlogDataOutput } from "../output/blog-data.output";
 
 export function mapToBlogListPaginatedOutput(
-  blogs: WithId<BlogType>[],
-  meta: { pageNumber: number; pageSize: number; totalCount: number },
+  blogs: WithId<Blog>[],
+  meta: { pageNumber: number; pageSize: number; totalCount: number }
 ): BlogListPaginatedOutput {
   return {
     pagesCount: Math.ceil(meta.totalCount / meta.pageSize),
@@ -21,7 +21,7 @@ export function mapToBlogListPaginatedOutput(
         websiteUrl: blog.websiteUrl,
         createdAt: blog.createdAt,
         isMembership: blog.isMembership,
-      }),
+      })
     ),
   };
 }
