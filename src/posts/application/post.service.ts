@@ -1,13 +1,13 @@
 import { Result } from "./../../core/result/result.type";
 import { PostByIdInputDto } from "./../types/posts-types";
-import { PostInputDto, PostViewModel } from "../types/posts-types";
+import { PostInputDto  } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
-import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
 import { ResultStatus } from "../../core/result/resultCode";
+import { blogsRepository } from "../../blogs/repositories/blogs.repository";
 
 export const postsService = {
   async create(dto: PostInputDto): Promise<Result<string>> {
-    const foundBlog = await blogQueryRepository.findById(dto.blogId);
+    const foundBlog = await blogsRepository.findById(dto.blogId);
 
     if (!foundBlog) {
       return {
@@ -34,21 +34,29 @@ export const postsService = {
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto
-  ): Promise<PostViewModel | null> {
-    const blog = await blogQueryRepository.findByBlogId(blogId);
+    dto: PostByIdInputDto,
+  ): Promise<Result<string>> {
+    const blog = await blogsRepository.findById(blogId);
     if (!blog) {
-      return null;
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Not found",
+        extensions: [{ field: null, message: "Blog not found" }],
+      };
     }
-    const newPost = {
+    const postId = await postRepository.create({
       title: dto.title,
       shortDescription: dto.shortDescription,
       content: dto.content,
-      blogId: blog.id,
+      blogId: blogId,
       blogName: blog.name,
       createdAt: new Date(),
+    });
+    return {
+      status: ResultStatus.Success,
+      data: postId,
+      extensions: [],
     };
-    return postRepository.createPostByBlogId(newPost);
   },
 
   async update(id: string, dto: PostInputDto): Promise<void> {
