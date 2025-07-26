@@ -1,6 +1,6 @@
 import { Result } from "./../../core/result/result.type";
 import { PostByIdInputDto } from "./../types/posts-types";
-import { PostInputDto  } from "../types/posts-types";
+import { PostInputDto } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";

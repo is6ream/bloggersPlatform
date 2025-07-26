@@ -6,20 +6,25 @@ import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
 
 export async function createPostHandler(req: Request, res: Response) {
-  const result = await postsService.create({
-    title: req.body.title,
-    shortDescription: req.body.shortDescription,
-    content: req.body.content,
-    blogId: req.body.blogId,
-  });
-  if (result.status !== ResultStatus.Success) {
-    res
-      .status(resultCodeToHttpException(result.status))
-      .send(result.extensions);
+  try {
+    const result = await postsService.create({
+      title: req.body.title,
+      shortDescription: req.body.shortDescription,
+      content: req.body.content,
+      blogId: req.body.blogId,
+    });
+    if (result.status !== ResultStatus.Success) {
+      res
+        .status(resultCodeToHttpException(result.status))
+        .send(result.extensions);
+      return;
+    }
+    const resultId = result.data; //намудрил конечно, но попробуем
+    const postForResponse = await postQueryRepository.findById(resultId!);
+    res.status(HttpStatus.Created).send(postForResponse);
     return;
+  } catch (error: unknown) {
+    console.log(error);
+    res.sendStatus(HttpStatus.InternalServerError);
   }
-  const resultId = result.data; //намудрил конечно, но попробуем
-  const postForResponse = await postQueryRepository.findById(resultId!);
-  res.status(HttpStatus.Created).send(postForResponse);
-  return;
 }
