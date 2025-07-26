@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { postsService } from "../../../posts/application/post.service";
 import { HttpStatus } from "../../../core/http-statuses";
-import { createErrorMessages } from "../../../core/errors/create-error-message";
+import { ResultStatus } from "../../../core/result/resultCode";
+import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
+import { postQueryRepository } from "../../../posts/repositories/postQueryRepository";
 
 export async function createPostByBlogId(
   req: Request,
@@ -9,24 +11,18 @@ export async function createPostByBlogId(
 ): Promise<void> {
   try {
     const { id: id } = req.params;
-    const { title, shortDescription, content } = req.body;
-
-    const newPost = await postsService.createPostByBlogId(id, {
-      title,
-      shortDescription,
-      content,
-    });
-    if (newPost === null) {
+    const result = await postsService.createPostByBlogId(id, req.body);
+    if (result.status !== ResultStatus.Success) {
       res
-        .status(HttpStatus.NotFound)
-        .send(
-          createErrorMessages([{ field: "id", message: "blog not found!" }]),
-        );
+        .status(resultCodeToHttpException(result.status))
+        .send(result.extensions);
       return;
     }
-    res.status(201).json(newPost);
+    const resultId = result.data;
+    const postForResponse = await postQueryRepository.findById(resultId!);
+    res.status(HttpStatus.Created).send(postForResponse);
   } catch (error: unknown) {
-    // console.log(error);
+    console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }
