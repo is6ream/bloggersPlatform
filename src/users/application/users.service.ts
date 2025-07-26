@@ -2,6 +2,8 @@ import bcrypt from "bcrypt";
 import { UserInputModel } from "../types/user-types";
 import { CreateUserDto } from "../input/create-user-dto";
 import { usersRepository } from "../repositories/users.repository";
+import { Result } from "../../core/result/result.type";
+import { ResultStatus } from "../../core/result/resultCode";
 
 interface IEmailError {
   field: string;
@@ -18,10 +20,14 @@ class EmailError extends Error implements IEmailError {
 } //правила жесткие
 
 export const usersService = {
-  async create(dto: UserInputModel): Promise<string> {
+  async create(dto: UserInputModel): Promise<Result<string>> {
     const isEmailExist = await usersRepository.isUserExistByEmail(dto.email);
     if (isEmailExist) {
-      throw new EmailError("Email is already exist", "email");
+      return {
+        status: ResultStatus.BadRequest,
+        errorMessage: "email is already exist",
+        extensions: [{ field: null, message: "Email is already exist" }],
+      };
     }
     const { login, password, email } = dto;
     const passwordSalt = await bcrypt.genSalt(10);
@@ -38,7 +44,11 @@ export const usersService = {
     const newUser = await usersRepository.create(user);
     const newUserId = newUser.id;
 
-    return newUserId;
+    return {
+      status: ResultStatus.Success,
+      data: newUserId,
+      extensions: [],
+    };
   },
 
   async _generateHash(password: string, salt: string) {
