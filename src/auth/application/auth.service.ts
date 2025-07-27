@@ -10,7 +10,7 @@ export const authService = {
   async loginUser(
     loginOrEmail: string,
     password: string
-  ): Promise<Result<{ accessToken: string | null }>> {
+  ): Promise<Result<{ accessToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
     if (result.status !== ResultStatus.Success)
       return {
@@ -20,7 +20,7 @@ export const authService = {
         data: null,
       };
     const accessToken = await jwtService.createToken(
-      result.data!._id.toString()
+      result.data!._id.toString(),
     );
     return {
       status: ResultStatus.Success,
