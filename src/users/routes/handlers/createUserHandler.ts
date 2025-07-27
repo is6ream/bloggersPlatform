@@ -23,4 +23,3 @@ export async function createUserHandler(req: Request, res: Response) {
 }
 
 //globalErrorHandler принцип работы изучить
-
