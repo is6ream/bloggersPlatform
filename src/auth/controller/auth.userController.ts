@@ -14,11 +14,8 @@ export async function loginUserController(req: Request, res: Response) {
       res
         .status(resultCodeToHttpException(result.status))
         .send(result.extensions);
-      return;
     }
-    res
-      .sendStatus(HttpStatus.NoContent)
-      .send({ accessToken: result.data!.accessToken });
+    res.status(HttpStatus.Ok).send({ accessToken: result.data!.accessToken });
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
