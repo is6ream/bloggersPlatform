@@ -21,7 +21,9 @@ class EmailError extends Error implements IEmailError {
 
 export const usersService = {
   async create(dto: UserInputModel): Promise<Result<string>> {
-    const isEmailExist = await usersRepository.isUserExistByEmail(dto.email);
+    const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
+      dto.email,
+    );
     if (isEmailExist) {
       return {
         status: ResultStatus.BadRequest,

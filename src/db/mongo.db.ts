@@ -1,7 +1,7 @@
 import { Collection, Db, MongoClient } from "mongodb";
 import { Blog } from "../blogs/types/blogs-types";
 import { PostType } from "../posts/types/posts-types";
-import { SETTINGS } from "../core/config/config";
+import { appConfig } from "../core/config/config";
 import { UserDBType } from "../users/input/create-user-dto";
 
 const BLOG_COLLECTION_NAME = "blogs";
@@ -18,7 +18,7 @@ export async function runDB(url: string): Promise<void> {
     connectTimeoutMS: 5000,
     serverSelectionTimeoutMS: 5000,
   });
-  const db: Db = client.db(SETTINGS.DB_NAME);
+  const db: Db = client.db(appConfig.DB_NAME);
 
   //инициализация коллекция
   blogCollection = db.collection<Blog>(BLOG_COLLECTION_NAME);

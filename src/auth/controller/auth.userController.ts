@@ -10,17 +10,15 @@ export async function loginUserController(req: Request, res: Response) {
       req.body.loginOrEmail,
       req.body.password,
     );
-    if (result.status === ResultStatus.Unauthorized) {
-      res.sendStatus(HttpStatus.Unauthorized);
-      return;
-    }
     if (result.status !== ResultStatus.Success) {
       res
         .status(resultCodeToHttpException(result.status))
         .send(result.extensions);
       return;
     }
-    res.sendStatus(HttpStatus.NoContent);
+    res
+      .sendStatus(HttpStatus.NoContent)
+      .send({ accessToken: result.data!.accessToken });
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
