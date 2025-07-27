@@ -1,4 +1,3 @@
-
 export type BlogDataOutput = {
   id: string;
   name: string;

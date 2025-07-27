@@ -6,9 +6,10 @@ import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpExc
 
 export async function loginUserController(req: Request, res: Response) {
   try {
-    const { loginOrEmail, password } = req.body;
-
-    const result = await authService.loginUser(loginOrEmail, password);
+    const result = await authService.loginUser(
+      req.body.loginOrEmail,
+      req.body.password,
+    );
     if (result.status === ResultStatus.Unauthorized) {
       res.sendStatus(HttpStatus.Unauthorized);
       return;
