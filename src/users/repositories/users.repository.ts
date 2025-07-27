@@ -16,7 +16,7 @@ export const usersRepository = {
     };
   },
 
-  async isUserExistByEmail(
+  async isUserExistByEmailOrLogin(
     loginOrEmail: string,
   ): Promise<WithId<UserDBType> | null> {
     return userCollection.findOne({
