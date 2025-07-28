@@ -2,28 +2,36 @@ import { NextFunction, Request, Response } from "express";
 import { jwtService } from "../../adapters/jwt.service";
 import { IdType } from "../../../core/types/authorization/id";
 import { HttpStatus } from "../../../core/http-statuses";
+import { pathToFileURL } from "url";
 
 export const accessTokenGuard = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.headers.authorization)
-    return res.sendStatus(HttpStatus.Unauthorized);
+  if (!req.headers.authorization) {
+    res.sendStatus(HttpStatus.Unauthorized);
+    return;
+  }
+  console.log(req.headers.authorization);
 
-  const [authType, token] = req.headers.authorization.split(" ")[1];
+  const [authType, token] = req.headers.authorization.split(" ");
+  console.log(authType, authType !== "Bearer");
 
-  if (authType !== "Bearer") return res.sendStatus(HttpStatus.Unauthorized);
+  if (authType !== "Bearer") {
+    console.log("Hi!");
+    res.sendStatus(HttpStatus.Unauthorized);
+    return;
+  }
 
   const payload = await jwtService.verifyToken(token);
+  console.log(payload);
   if (payload) {
     const { userId } = payload;
 
     req.user = { id: userId } as IdType;
-    //вот здесь нужно посмотреть
     next();
+    return;
   }
   res.sendStatus(HttpStatus.Unauthorized);
-
-  return;
 };

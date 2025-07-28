@@ -12,5 +12,5 @@
   },
   "include": ["src/**/*"],
   "exclude": ["__tests__", "dist", "node_modules"],
-  "files": ["index.d.ts"]
+  "files": ["src/core/types/authorization/index.d.ts"]
 }
