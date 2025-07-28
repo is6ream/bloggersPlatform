@@ -36,7 +36,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {
@@ -44,7 +44,6 @@ export const postRepository = {
     }
     return;
   },
-
   async delete(id: string): Promise<boolean> {
     const deleteResult = await postCollection.deleteOne({
       _id: new ObjectId(id),

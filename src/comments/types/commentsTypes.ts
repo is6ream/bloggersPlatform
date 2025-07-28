@@ -15,3 +15,7 @@ export type CommentInputType = {
   };
   createdAt: Date;
 };
+
+export type ContentDto = {
+  content: string;
+};

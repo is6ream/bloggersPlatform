@@ -17,7 +17,7 @@ export const commentsRepository = {
         $set: {
           content: dto.content,
         },
-      }
+      },
     );
     if (updateResult.matchedCount < 1) {
       return null;
