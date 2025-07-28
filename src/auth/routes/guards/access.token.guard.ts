@@ -6,7 +6,7 @@ import { HttpStatus } from "../../../core/http-statuses";
 export const accessTokenGuard = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   if (!req.headers.authorization)
     return res.sendStatus(HttpStatus.Unauthorized);
@@ -22,8 +22,6 @@ export const accessTokenGuard = async (
     req.user = { id: userId } as IdType;
     //вот здесь нужно посмотреть
     next();
-
-    return;
   }
   res.sendStatus(HttpStatus.Unauthorized);
 
