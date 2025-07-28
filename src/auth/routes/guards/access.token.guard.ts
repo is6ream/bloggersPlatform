@@ -2,12 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import { jwtService } from "../../adapters/jwt.service";
 import { IdType } from "../../../core/types/authorization/id";
 import { HttpStatus } from "../../../core/http-statuses";
-import { pathToFileURL } from "url";
 
 export const accessTokenGuard = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (!req.headers.authorization) {
     res.sendStatus(HttpStatus.Unauthorized);

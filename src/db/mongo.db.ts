@@ -3,15 +3,18 @@ import { Blog } from "../blogs/types/blogs-types";
 import { PostType } from "../posts/types/posts-types";
 import { appConfig } from "../core/config/config";
 import { UserDBType } from "../users/input/create-user-dto";
+import { CommentDBType } from "../comments/types/commentsTypes";
 
 const BLOG_COLLECTION_NAME = "blogs";
 const POST_COLLECTION_NAME = "posts";
 const USER_COLLECTION_NAME = "user";
+const COMMENTS_COLLECTION_NAME = "comments";
 
 export let client: MongoClient;
 export let blogCollection: Collection<Blog>;
 export let postCollection: Collection<PostType>;
 export let userCollection: Collection<UserDBType>;
+export let commentsCollection: Collection<CommentDBType>;
 
 export async function runDB(url: string): Promise<void> {
   client = new MongoClient(url, {
@@ -24,6 +27,7 @@ export async function runDB(url: string): Promise<void> {
   blogCollection = db.collection<Blog>(BLOG_COLLECTION_NAME);
   postCollection = db.collection<PostType>(POST_COLLECTION_NAME);
   userCollection = db.collection<UserDBType>(USER_COLLECTION_NAME);
+  commentsCollection = db.collection<CommentDBType>(COMMENTS_COLLECTION_NAME);
   try {
     await client.connect();
     await db.command({ ping: 1 });
