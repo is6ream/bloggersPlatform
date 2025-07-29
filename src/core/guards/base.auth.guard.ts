@@ -1,4 +1,4 @@
-import { HttpStatus } from "./../../../core/http-statuses";
+import { HttpStatus } from "../http-statuses";
 import { NextFunction, Request, Response } from "express";
 
 export const ADMIN_LOGIN = "admin";
