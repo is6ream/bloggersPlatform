@@ -10,7 +10,7 @@ export async function getInfoAboutUserController(
 ) {
   const userId = req.user?.id as string;
 
-  if (!userId) res.status(HttpStatus.Unauthorized);
+  if (!userId) res.sendStatus(HttpStatus.Unauthorized);
   const me = await usersQueryRepository.findById(userId);
 
   res.status(HttpStatus.Ok).send(me);

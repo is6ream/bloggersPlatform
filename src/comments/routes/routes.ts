@@ -9,5 +9,6 @@ commentsRouter.post(
   "/posts/:id/comments",
   accessTokenGuard,
   contentValidator,
-  inputValidationResultMiddleware
+  inputValidationResultMiddleware,
+  createCommentHandler,
 );
