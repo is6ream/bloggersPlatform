@@ -1,6 +1,7 @@
 import { Result } from "../../core/result/result.type";
 import { ResultStatus } from "../../core/result/resultCode";
 import { usersQueryRepository } from "../../users/repositories/user.query.repository";
+import { usersRepository } from "../../users/repositories/users.repository";
 import { commentsRepository } from "../repositories/comment.repository";
 import { CommentInputType, ContentDto } from "../types/commentsTypes";
 
@@ -9,8 +10,8 @@ export const commentsService = {
     userId: string,
     dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
-    const checkUser = await usersQueryRepository.findById(userId);
-    if (!checkUser) {
+    const user = await usersRepository.findUserForCreateComment(userId);
+    if (!user) {
       return {
         status: ResultStatus.NotFound,
         errorMessage: "Not found",
@@ -19,10 +20,11 @@ export const commentsService = {
       };
     }
     const newComment: CommentInputType = {
+      postId: post
       content: dto.content,
       commentatorInfo: {
-        userId: checkUser!.id,
-        userLogin: checkUser!.login,
+        userId: user!.id,
+        userLogin: user!.login,
       },
       createdAt: new Date(),
     };

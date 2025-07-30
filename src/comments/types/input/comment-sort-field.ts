@@ -1,3 +1,5 @@
 export enum CommentsSortField {
   content = "content",
-} //сортировать только по контенту?
+  //date,
+  //нужно проверить по postId
+}

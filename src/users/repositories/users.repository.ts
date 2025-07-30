@@ -16,6 +16,11 @@ export const usersRepository = {
     };
   },
 
+  async findUserForCreateComment(id: string): Promise<any> {
+    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+    return user;
+  },
+
   async isUserExistByEmailOrLogin(
     loginOrEmail: string,
   ): Promise<WithId<UserDBType> | null> {
