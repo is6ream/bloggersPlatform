@@ -1,10 +1,11 @@
 import { CommentViewModel } from "./../types/commentsTypes";
 import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { commentsCollection } from "../../db/mongo.db";
+import { ObjectId } from "mongodb";
 
 export const commentsQueryRepository = {
   async findAll(
-    queryDto: CommentsQueryInput,
+    queryDto: CommentsQueryInput
   ): Promise<{ items: CommentViewModel[]; totalCount: number }> {
     const {
       pageNumber,
@@ -53,5 +54,21 @@ export const commentsQueryRepository = {
       };
     });
     return { items, totalCount };
+  },
+
+  async findById(id: string): Promise<CommentViewModel | null> {
+    const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
+    if (!comment) {
+      return null;
+    }
+    return {
+      id: comment._id.toString(),
+      content: comment.content,
+      commentatorInfo: {
+        userId: comment.commentatorInfo.userId,
+        userLogin: comment.commentatorInfo.userLogin,
+      },
+      createdAt: comment.createdAt,
+    };
   },
 };
