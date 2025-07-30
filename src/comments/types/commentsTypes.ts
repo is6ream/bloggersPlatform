@@ -1,3 +1,5 @@
+import { IdType } from "../../core/types/authorization/id";
+
 export type CommentDBType = {
   content: string;
   commentatorInfo: {
@@ -17,5 +19,9 @@ export type CommentInputType = {
 };
 
 export type ContentDto = {
-  content: string;
+  comment: string;
+  userId: string;
+  postId: string;
 };
+
+export type ContentType = string;

@@ -18,7 +18,6 @@ export const accessTokenGuard = async (
   console.log(authType, authType !== "Bearer");
 
   if (authType !== "Bearer") {
-    console.log("Hi!");
     res.sendStatus(HttpStatus.Unauthorized);
     return;
   }

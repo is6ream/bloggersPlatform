@@ -24,6 +24,11 @@ export const postRepository = {
     };
   },
 
+  async findPostForCreateComment(id: string): Promise<any> {
+    const post = await postCollection.findOne({ _id: new ObjectId(id) });
+    return post;
+  },
+
   async update(id: string, dto: PostInputDto): Promise<void | null> {
     const updateResult = await postCollection.updateOne(
       {
@@ -36,7 +41,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      },
+      }
     );
 
     if (updateResult.matchedCount < 1) {

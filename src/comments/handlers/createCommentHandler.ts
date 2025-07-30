@@ -1,20 +1,22 @@
 import { HttpStatus } from "../../core/http-statuses";
 import { IdType } from "../../core/types/authorization/id";
-import { RequestWithBodyAndUserId } from "../../core/types/requests/requests";
+import { RequestWithParamsAndBodyAndUserId } from "../../core/types/requests/requests";
 import { Response } from "express";
 import { commentsService } from "../application/comments.service";
+import { ContentType } from "../types/commentsTypes";
 
-export type ContentType = {
-  content: string;
-};
 export async function createCommentHandler(
-  req: RequestWithBodyAndUserId<ContentType, IdType>,
+  req: RequestWithParamsAndBodyAndUserId<string, ContentType, IdType>,
   res: Response,
 ) {
   const userId = req.user?.id as string;
-  const content = req.body;
+  const content = {
+    comment: req.body,
+    userId: userId,
+    postId: req.params,
+  };
   if (!userId) res.sendStatus(HttpStatus.Unauthorized);
-  const commentId = await commentsService.createComment(userId, content);
+  const commentId = await commentsService.createComment(content);
   const dataForResponse = await commentsQueryRepository.findById(commentId);
   res.status(HttpStatus.Created).send(dataForResponse);
 }
