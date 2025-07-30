@@ -3,5 +3,6 @@ import { PaginationAndSorting } from "../../../core/types/paginationAndSorting/p
 
 export type CommentsQueryInput = PaginationAndSorting<CommentsSortField> &
   Partial<{
-    searchNameTerm: string;
+    searchContentTerm: string;
+    searchDateTerm: string;
   }>;

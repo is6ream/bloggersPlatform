@@ -25,3 +25,13 @@ export type ContentDto = {
 };
 
 export type ContentType = string;
+
+export type CommentViewModel = {
+  id: string;
+  content: string;
+  commentatorInfo: {
+    userId: string;
+    userLogin: string;
+  };
+  createdAt: Date;
+};
