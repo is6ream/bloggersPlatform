@@ -20,7 +20,7 @@ export async function createCommentHandler(
     const content = {
       comment: req.body,
       userId: userId,
-      postId: req.params.id,
+      postId: req.params.id, 
     };
     const result = await commentsService.createComment(content);
     if (result.status === ResultStatus.Success) {
@@ -38,3 +38,16 @@ export async function createCommentHandler(
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }
+
+
+// {
+//     "id": "688ae607e5117e9f793eaa76",
+//     "content": {
+//         "content": "safdsfdsfdsfdasfd" тут не объект должен возвращаться, нужно решить эту проблему
+//     },
+//     "commentatorInfo": {
+//         "userId": null,
+//         "userLogin": "newDan"
+//     },
+//     "createdAt": "2025-07-31T03:41:59.543Z"
+// }
