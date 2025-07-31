@@ -4,6 +4,7 @@ import { blogsRouter } from "./blogs/blogs.routes";
 import {
   AUTH_PATH,
   BLOGS_PATH,
+  COMMENTS_PATH,
   POSTS_PATH,
   TESTING_PATH,
   USERS_PATH,
@@ -13,6 +14,7 @@ import { postRouter } from "./posts/routes/routes";
 import { testingRouter } from "./testing/deleteAllData.router";
 import { authRouter } from "./auth/routes/routes";
 import { usersRouter } from "./users/routes/usersRoutes";
+import { commentsRouter } from "./comments/routes/routes";
 export const app = express();
 
 export const setupApp = (app: Express) => {
@@ -26,6 +28,7 @@ export const setupApp = (app: Express) => {
   app.use(TESTING_PATH, testingRouter);
   app.use(AUTH_PATH, authRouter);
   app.use(USERS_PATH, usersRouter);
+  app.use(COMMENTS_PATH, commentsRouter);
 
   return app;
 };

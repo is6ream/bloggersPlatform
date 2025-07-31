@@ -10,7 +10,9 @@ import { inputValidationResultMiddleware } from "../../core/middlewares/validati
 import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
 import { paginationAndSortingValidation } from "../../core/middlewares/query-pagination-sorting/query-pagination-sorting.validation-middleware";
 import { PostSortField } from "../input/post-sort-field";
-
+import { accessTokenGuard } from "../../core/guards/access.token.guard";
+import { contentValidator } from "./../../core/middlewares/postValidation/post-input-dto.validation";
+import { createCommentHandler } from "../../comments/handlers/createCommentHandler";
 export const postRouter = Router();
 
 postRouter
@@ -38,4 +40,11 @@ postRouter
     idValidation,
     inputValidationResultMiddleware,
     deletePostHandler,
+  )
+  .post(
+    "/:id/comments",
+    accessTokenGuard,
+    contentValidator,
+    inputValidationResultMiddleware,
+    createCommentHandler,
   );

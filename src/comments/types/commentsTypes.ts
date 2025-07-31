@@ -34,3 +34,5 @@ export type CommentViewModel = {
   };
   createdAt: Date;
 };
+
+export type PostId = { id: string };
