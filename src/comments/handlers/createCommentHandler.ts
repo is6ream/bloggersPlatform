@@ -4,10 +4,11 @@ import { RequestWithParamsAndBodyAndUserId } from "../../core/types/requests/req
 import { Response } from "express";
 import { commentsService } from "../application/comments.service";
 import { ContentType } from "../types/commentsTypes";
+import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
 
 export async function createCommentHandler(
   req: RequestWithParamsAndBodyAndUserId<string, ContentType, IdType>,
-  res: Response,
+  res: Response
 ) {
   const userId = req.user?.id as string;
   const content = {
