@@ -32,7 +32,7 @@ describe("Blog API", () => {
       name: "test1",
       description: "test1",
       websiteUrl: "https://samurai.it-incubator.io/swagger?id=h04",
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(),
       isMembership: false,
     };
     await createBlog(app, blogDto);

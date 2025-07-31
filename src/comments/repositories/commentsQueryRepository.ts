@@ -41,6 +41,7 @@ export const commentsQueryRepository = {
       .toArray();
 
     const totalCount = await commentsCollection.countDocuments(filter);
+    console.log(dbItems, "логаю тут");
 
     const items = dbItems.map((item) => {
       return {
@@ -58,6 +59,7 @@ export const commentsQueryRepository = {
 
   async findById(id: string): Promise<CommentViewModel | null> {
     const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
+    console.log("here", comment, "comment here");
     if (!comment) {
       return null;
     }
