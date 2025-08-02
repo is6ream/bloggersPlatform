@@ -20,7 +20,7 @@ export async function getAllBlogsHandler(
       totalCount,
     });
 
-    res.status(200).send(blogsListOutput);
+    res.status(HttpStatus.Ok).send(blogsListOutput);
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
