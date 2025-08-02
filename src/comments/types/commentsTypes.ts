@@ -8,7 +8,7 @@ export type CommentDBType = {
 };
 
 export type CommentInputType = {
-  postId: string;
+  postId?: string;
   content: string;
   commentatorInfo: {
     userId: string;
