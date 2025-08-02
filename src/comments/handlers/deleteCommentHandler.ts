@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-import { postsService } from "../application/post.service";
-
-export async function deletePostHandler(
+import { commentsService } from "../application/comments.service";
+export async function deleteCommentHandler(
   req: Request<{ id: string }>,
-  res: Response,
+  res: Response
 ) {
   try {
     const id = req.params.id;
 
-    const isDeleted = await postsService.delete(id);
+    const isDeleted = await commentsService.delete(id);
     if (!isDeleted) {
       res.sendStatus(HttpStatus.NotFound);
     }
@@ -19,4 +18,3 @@ export async function deletePostHandler(
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }
-.

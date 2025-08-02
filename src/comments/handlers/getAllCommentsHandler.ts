@@ -4,6 +4,7 @@ import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { setDefaultPaginationIfNotExist } from "../../core/helpers/set-default-sort-and-pagination";
 import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
 import { mapToCommentListPaginatedOutput } from "../mappers/mapToCommentListPaginatedOutput";
+
 export async function getAllCommentsHandler(
   req: Request<{}, {}, {}, CommentsQueryInput>,
   res: Response,

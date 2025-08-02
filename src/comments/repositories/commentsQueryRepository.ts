@@ -42,7 +42,6 @@ export const commentsQueryRepository = {
       .toArray();
 
     const totalCount = await commentsCollection.countDocuments(filter);
-    console.log(items, "логаю тут");
     return { items, totalCount };
   },
 

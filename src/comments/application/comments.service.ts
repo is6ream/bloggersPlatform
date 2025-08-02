@@ -7,7 +7,7 @@ import { CommentInputType, ContentDto } from "../types/commentsTypes";
 
 export const commentsService = {
   async createComment(
-    dto: ContentDto,
+    dto: ContentDto
   ): Promise<Result<{ commentId: string } | null>> {
     const user = await usersRepository.findUserForCreateComment(dto.userId);
     const post = await postRepository.findPostForCreateComment(dto.postId);
@@ -36,5 +36,9 @@ export const commentsService = {
       data: { commentId },
       extensions: [],
     };
+  },
+
+  async delete(id: string): Promise<boolean> {
+    return await commentsRepository.delete(id);
   },
 };
