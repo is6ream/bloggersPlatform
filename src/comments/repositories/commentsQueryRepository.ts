@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 
 export const commentsQueryRepository = {
   async findAll(
-    queryDto: CommentsQueryInput,
+    queryDto: CommentsQueryInput
   ): Promise<{ items: CommentViewModel[]; totalCount: number }> {
     const {
       pageNumber,
@@ -59,11 +59,12 @@ export const commentsQueryRepository = {
 
   async findById(id: string): Promise<CommentViewModel | null> {
     const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
-    console.log("here", comment, "comment here");
+    console.log("DB Comment Structure:", comment); // Добавьте эту строку
+
     if (!comment) {
       return null;
     }
-    return {
+    const commentViewModel: CommentViewModel = {
       id: comment._id.toString(),
       content: comment.content,
       commentatorInfo: {
@@ -72,5 +73,7 @@ export const commentsQueryRepository = {
       },
       createdAt: comment.createdAt,
     };
+
+    return commentViewModel;
   },
 };

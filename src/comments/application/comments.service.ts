@@ -23,8 +23,8 @@ export const commentsService = {
       postId: post,
       content: dto.comment,
       commentatorInfo: {
-        userId: user!.id,
-        userLogin: user!.login,
+        userId: user.id,
+        userLogin: user.login,
       },
       createdAt: new Date(),
     };

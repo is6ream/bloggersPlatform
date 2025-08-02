@@ -3,12 +3,12 @@ import { IdType } from "../../core/types/authorization/id";
 import { RequestWithParamsAndBodyAndUserId } from "../../core/types/requests/requests";
 import { Response } from "express";
 import { commentsService } from "../application/comments.service";
-import { ContentType } from "../types/commentsTypes";
 import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { PostId } from "../types/commentsTypes";
+
 export async function createCommentHandler(
-  req: RequestWithParamsAndBodyAndUserId<PostId, ContentType, IdType>,
+  req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
   res: Response,
 ) {
   try {
@@ -18,10 +18,11 @@ export async function createCommentHandler(
       return;
     }
     const content = {
-      comment: req.body,
+      comment: req.body.content,
       userId: userId,
       postId: req.params.id,
     };
+    console.log(content);
     const result = await commentsService.createComment(content);
     if (result.status === ResultStatus.Success) {
       const dataForResponse = await commentsQueryRepository.findById(
@@ -29,10 +30,10 @@ export async function createCommentHandler(
       );
       res.status(HttpStatus.Created).send(dataForResponse);
       return;
-    } else {
-      res.sendStatus(HttpStatus.BadRequest);
-      return;
     }
+
+    res.sendStatus(HttpStatus.BadRequest);
+    return;
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
