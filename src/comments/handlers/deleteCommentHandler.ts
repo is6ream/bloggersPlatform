@@ -3,7 +3,7 @@ import { HttpStatus } from "../../core/http-statuses";
 import { commentsService } from "../application/comments.service";
 export async function deleteCommentHandler(
   req: Request<{ id: string }>,
-  res: Response
+  res: Response,
 ) {
   try {
     const id = req.params.id;

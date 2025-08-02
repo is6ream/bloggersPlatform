@@ -24,6 +24,7 @@ export type ContentDto = {
 };
 
 export type ContentType = string;
+export type CommentInputDto = ContentType;
 
 export type CommentQueryOtput = {
   content: string;

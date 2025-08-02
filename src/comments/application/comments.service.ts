@@ -3,7 +3,11 @@ import { ResultStatus } from "../../core/result/resultCode";
 import { postRepository } from "../../posts/repositories/postRepository";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { commentsRepository } from "../repositories/comment.repository";
-import { CommentInputType, ContentDto } from "../types/commentsTypes";
+import {
+  CommentInputType,
+  ContentDto,
+  CommentInputDto,
+} from "../types/commentsTypes";
 
 export const commentsService = {
   async createComment(
@@ -37,7 +41,10 @@ export const commentsService = {
       extensions: [],
     };
   },
-
+  async update(id: string, dto: CommentInputDto): Promise<void> {
+    commentsRepository.update(id, dto);
+    return;
+  },
   async delete(id: string): Promise<boolean> {
     return await commentsRepository.delete(id);
   },

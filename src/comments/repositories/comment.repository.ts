@@ -1,4 +1,4 @@
-import { CommentInputType } from "../types/commentsTypes";
+import { CommentInputDto, CommentInputType } from "../types/commentsTypes";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 
@@ -8,16 +8,16 @@ export const commentsRepository = {
     return insertResult.insertedId.toString();
   },
 
-  async update(id: string, dto: CommentInputType): Promise<void | null> {
+  async update(id: string, dto: CommentInputDto): Promise<void | null> {
     const updateResult = await commentsCollection.updateOne(
       {
         _id: new ObjectId(id),
       },
       {
         $set: {
-          content: dto.content,
+          content: dto.content, //разобраться с этой ошибкой
         },
-      },
+      }
     );
     if (updateResult.matchedCount < 1) {
       return null;
