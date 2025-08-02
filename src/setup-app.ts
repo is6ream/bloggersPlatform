@@ -14,7 +14,7 @@ import { postRouter } from "./posts/routes/routes";
 import { testingRouter } from "./testing/deleteAllData.router";
 import { authRouter } from "./auth/routes/routes";
 import { usersRouter } from "./users/routes/usersRoutes";
-import { commentsRouter } from "./comments/routes/routes";
+import { commentsRouter } from "./comments/routes/commentsRoutes";
 export const app = express();
 
 export const setupApp = (app: Express) => {
