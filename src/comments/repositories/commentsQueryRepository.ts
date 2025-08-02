@@ -1,12 +1,13 @@
-import { CommentViewModel } from "./../types/commentsTypes";
+import { CommentQueryOtput, CommentViewModel } from "./../types/commentsTypes";
 import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
+import { WithId } from "mongodb";
 
 export const commentsQueryRepository = {
   async findAll(
     queryDto: CommentsQueryInput,
-  ): Promise<{ items: CommentViewModel[]; totalCount: number }> {
+  ): Promise<{ items: WithId<CommentQueryOtput>[]; totalCount: number }> {
     const {
       pageNumber,
       pageSize,
@@ -33,7 +34,7 @@ export const commentsQueryRepository = {
       }
     }
 
-    const dbItems = await commentsCollection
+    const items = await commentsCollection
       .find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
@@ -41,19 +42,7 @@ export const commentsQueryRepository = {
       .toArray();
 
     const totalCount = await commentsCollection.countDocuments(filter);
-    console.log(dbItems, "логаю тут");
-
-    const items = dbItems.map((item) => {
-      return {
-        id: item._id.toString(),
-        content: item.content,
-        commentatorInfo: {
-          userId: item.commentatorInfo.userId,
-          userLogin: item.commentatorInfo.userLogin,
-        },
-        createdAt: item.createdAt,
-      };
-    });
+    console.log(items, "логаю тут");
     return { items, totalCount };
   },
 

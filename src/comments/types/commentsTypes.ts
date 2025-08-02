@@ -25,6 +25,15 @@ export type ContentDto = {
 
 export type ContentType = string;
 
+export type CommentQueryOtput = {
+  content: string;
+  commentatorInfo: {
+    userId: string;
+    userLogin: string;
+  };
+  createdAt: Date;
+};
+
 export type CommentViewModel = {
   id: string;
   content: string;
