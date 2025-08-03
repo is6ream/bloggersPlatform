@@ -1,4 +1,8 @@
-import { CommentQueryOtput, CommentViewModel } from "./../types/commentsTypes";
+import {
+  CommentDBType,
+  CommentQueryOtput,
+  CommentViewModel,
+} from "./../types/commentsTypes";
 import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
@@ -63,5 +67,32 @@ export const commentsQueryRepository = {
     };
 
     return commentViewModel;
+  },
+
+  async findCommentByPostId(
+    queryDto: CommentsQueryInput,
+    postId: string
+  ): Promise<{ items: WithId<CommentDBType>[]; totalCount: number }> {
+    const { pageNumber, pageSize, sortBy, sortDirection, searchContentTerm } =
+      queryDto;
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: Record<string, any> = {
+      postId,
+    };
+
+    if (searchContentTerm) {
+      filter.name = { $regex: searchContentTerm, $options: "i" };
+    }
+
+    const items = await commentsCollection
+      .find(filter)
+      .sort({ [sortBy]: sortDirection })
+      .skip(skip)
+      .limit(+pageSize)
+      .toArray();
+
+    const totalCount = await commentsCollection.countDocuments(filter);
+
+    return { items, totalCount };
   },
 };

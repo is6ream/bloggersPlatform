@@ -28,7 +28,7 @@ export async function updateCommentHandler(
       res
         .status(HttpStatus.NotFound)
         .send(
-          createErrorMessages([{ field: "id", message: "Comment not found" }])
+          createErrorMessages([{ field: "id", message: "Comment not found" }]),
         );
       return;
     }

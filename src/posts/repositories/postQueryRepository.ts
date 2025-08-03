@@ -2,7 +2,8 @@ import { PostType, PostViewModel } from "./../types/posts-types";
 import { postCollection } from "./../../db/mongo.db";
 import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
-
+import { Result } from "../../core/result/result.type";
+import { ResultStatus } from "../../core/result/resultCode";
 export const postQueryRepository = {
   async findAll(
     queryDto: PostQueryInput,
@@ -55,19 +56,27 @@ export const postQueryRepository = {
     return { items, totalCount };
   },
 
-  async findById(id: string): Promise<PostViewModel | null> {
+  async findById(id: string): Promise<Result<PostViewModel | null>> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     if (!post) {
-      return null;
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Post not found",
+        extensions: [],
+      };
     }
     return {
-      id: post._id.toString(),
-      title: post.title,
-      shortDescription: post.shortDescription,
-      content: post.content,
-      blogId: post.blogId,
-      blogName: post.blogName,
-      createdAt: post.createdAt,
+      status: ResultStatus.Success,
+      extensions: [],
+      data: {
+        id: post._id.toString(),
+        title: post.title,
+        shortDescription: post.shortDescription,
+        content: post.content,
+        blogId: post.blogId,
+        blogName: post.blogName,
+        createdAt: post.createdAt,
+      },
     };
   },
 };
