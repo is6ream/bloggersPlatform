@@ -5,6 +5,7 @@ import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { setDefaultPaginationIfNotExist } from "../../core/helpers/set-default-sort-and-pagination";
 import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
 import { ResultStatus } from "../../core/result/resultCode";
+import { mapToCommentListPaginatedOutput } from "../mappers/mapToCommentListPaginatedOutput";
 
 export async function getCommentByPostId(
   req: Request,
@@ -22,7 +23,13 @@ export async function getCommentByPostId(
     }
     const { items, totalCount } =
       await commentsQueryRepository.findCommentByPostId(queryInput, postId);
-    res.status(HttpStatus.Ok).send(foundPost);
+
+    const commentsListOutput = mapToCommentListPaginatedOutput(items, {
+      pageNumber: Number(queryInput.pageNumber),
+      pageSize: Number(queryInput.pageSize),
+      totalCount,
+    });
+    res.status(HttpStatus.Ok).send(commentsListOutput);
     return;
   } catch (error: unknown) {
     console.log(error);

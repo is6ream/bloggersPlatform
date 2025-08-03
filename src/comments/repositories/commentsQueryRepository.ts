@@ -71,7 +71,7 @@ export const commentsQueryRepository = {
 
   async findCommentByPostId(
     queryDto: CommentsQueryInput,
-    postId: string
+    postId: string,
   ): Promise<{ items: WithId<CommentDBType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchContentTerm } =
       queryDto;
