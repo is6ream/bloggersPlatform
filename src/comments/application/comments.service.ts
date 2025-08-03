@@ -11,7 +11,7 @@ import {
 
 export const commentsService = {
   async createComment(
-    dto: ContentDto
+    dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
     const user = await usersRepository.findUserForCreateComment(dto.userId);
     const post = await postRepository.findPostForCreateComment(dto.postId);

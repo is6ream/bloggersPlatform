@@ -1,15 +1,27 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { commentsService } from "../application/comments.service";
 import { HttpStatus } from "../../core/http-statuses";
 import { createErrorMessages } from "../../core/errors/create-error-message";
 
+interface UpdateCommentRequestBody {
+  content: string;
+}
+
+interface UpdateCommentRequestParams {
+  commentId: string;
+}
+
+interface UpdateCommentRequest {
+  params: UpdateCommentRequestParams;
+  body: UpdateCommentRequestBody;
+}
 export async function updateCommentHandler(
-  req: Request<{ id: string }>,
-  res: Response
+  req: UpdateCommentRequest,
+  res: Response,
 ) {
   try {
-    const id = req.params.id;
-    const dataForUpdate = req.body;
+    const id = req.params.commentId;
+    const dataForUpdate = req.body.content;
     const result = await commentsService.update(id, dataForUpdate);
 
     if (result === null) {
