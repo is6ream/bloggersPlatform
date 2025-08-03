@@ -13,6 +13,8 @@ import { PostSortField } from "../input/post-sort-field";
 import { accessTokenGuard } from "../../core/guards/access.token.guard";
 import { contentValidator } from "./../../core/middlewares/postValidation/post-input-dto.validation";
 import { createCommentHandler } from "../../comments/handlers/createCommentHandler";
+import { CommentsSortField } from "../../comments/types/input/comment-sort-field";
+import { getCommentByPostId } from "../../comments/handlers/getCommentByPostId";
 export const postRouter = Router();
 
 postRouter
@@ -47,4 +49,10 @@ postRouter
     contentValidator,
     inputValidationResultMiddleware,
     createCommentHandler,
+  )
+  .get(
+    "/:id/comments",
+    paginationAndSortingValidation(CommentsSortField),
+    idValidation,
+    getCommentByPostId,
   );
