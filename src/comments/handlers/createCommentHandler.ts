@@ -1,6 +1,6 @@
 import { HttpStatus } from "../../core/http-statuses";
 import { IdType } from "../../core/types/authorization/id";
-import { RequestWithParamsAndBodyAndUserId } from "../../core/types/requests/requests";
+import { RequestWithParamsAndBodyAndUserId } from "../../core/types/common/requests";
 import { Response } from "express";
 import { commentsService } from "../application/comments.service";
 import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
@@ -9,7 +9,7 @@ import { PostId } from "../types/commentsTypes";
 
 export async function createCommentHandler(
   req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
-  res: Response,
+  res: Response
 ) {
   try {
     const userId = req.user?.id as string;
@@ -26,7 +26,7 @@ export async function createCommentHandler(
     const result = await commentsService.createComment(content);
     if (result.status === ResultStatus.Success) {
       const dataForResponse = await commentsQueryRepository.findById(
-        result.data!.commentId,
+        result.data!.commentId
       );
       res.status(HttpStatus.Created).send(dataForResponse);
       return;

@@ -6,7 +6,7 @@ import { Result } from "../../core/result/result.type";
 import { ResultStatus } from "../../core/result/resultCode";
 export const postQueryRepository = {
   async findAll(
-    queryDto: PostQueryInput,
+    queryDto: PostQueryInput
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -31,7 +31,7 @@ export const postQueryRepository = {
 
   async findPostsByBlogId(
     queryDto: PostQueryInput,
-    blogId: string,
+    blogId: string
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -56,7 +56,7 @@ export const postQueryRepository = {
     return { items, totalCount };
   },
 
-  async findById(id: string): Promise<Result<PostViewModel | null>> {
+  async findById(id: string): Promise<Result<null> | PostViewModel> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     if (!post) {
       return {
@@ -66,17 +66,13 @@ export const postQueryRepository = {
       };
     }
     return {
-      status: ResultStatus.Success,
-      extensions: [],
-      data: {
-        id: post._id.toString(),
-        title: post.title,
-        shortDescription: post.shortDescription,
-        content: post.content,
-        blogId: post.blogId,
-        blogName: post.blogName,
-        createdAt: post.createdAt,
-      },
+      id: post._id.toString(),
+      title: post.title,
+      shortDescription: post.shortDescription,
+      content: post.content,
+      blogId: post.blogId,
+      blogName: post.blogName,
+      createdAt: post.createdAt,
     };
   },
 };
