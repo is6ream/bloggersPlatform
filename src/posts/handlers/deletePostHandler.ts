@@ -19,4 +19,3 @@ export async function deletePostHandler(
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }
-.
