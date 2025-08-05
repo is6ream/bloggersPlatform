@@ -24,6 +24,6 @@ export async function createPostHandler(req: Request, res: Response) {
     return;
   } catch (error: unknown) {
     console.log(error);
-    res.sendStatus(HttpStatus.InternalServerError);
+    res.sendStatus(HttpStatus.InternalServerError); //при неудачном создании поста падает 500 ошибка, такого быть не должно
   }
 }
