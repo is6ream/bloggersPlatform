@@ -9,7 +9,7 @@ export async function createPostHandler(req: Request, res: Response) {
   try {
     const result = await postsService.create({
       title: req.body.title,
-      shortDescription: req.body.shortDescription,
+      shortDescription: req.body.shortDescription,//
       content: req.body.content,
       blogId: req.body.blogId,
     });
