@@ -20,10 +20,10 @@ export async function createPostHandler(req: Request, res: Response) {
       return;
     }
     const newPost = await postQueryRepository.findById(result.data!);
-    res.status(HttpStatus.Created).send(newPost!);
+    res.status(HttpStatus.Created).send(newPost.data!);
     return;
   } catch (error: unknown) {
     console.log(error);
-    res.sendStatus(HttpStatus.InternalServerError); //при неудачном создании поста падает 500 ошибка, такого быть не должно
+    res.sendStatus(HttpStatus.InternalServerError);
   }
 }
