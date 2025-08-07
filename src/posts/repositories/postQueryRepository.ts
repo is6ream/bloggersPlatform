@@ -56,7 +56,7 @@ export const postQueryRepository = {
     return { items, totalCount };
   },
 
-  async findById(id: string): Promise<Result<null> | PostViewModel> {
+  async findById(id: string): Promise<Result<PostViewModel | null>> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     if (!post) {
       return {
@@ -66,13 +66,17 @@ export const postQueryRepository = {
       };
     }
     return {
-      id: post._id.toString(),
-      title: post.title,
-      shortDescription: post.shortDescription,
-      content: post.content,
-      blogId: post.blogId,
-      blogName: post.blogName,
-      createdAt: post.createdAt,
+      status: ResultStatus.Success,
+      extensions: [],
+      data: {
+        id: post._id.toString(),
+        title: post.title,
+        shortDescription: post.shortDescription,
+        content: post.content,
+        blogId: post.blogId,
+        blogName: post.blogName,
+        createdAt: post.createdAt,
+      },
     };
   },
 };

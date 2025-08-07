@@ -11,7 +11,7 @@ export const postsService = {
 
     if (!foundBlog) {
       return {
-        status: ResultStatus.NotFound,
+        status: ResultStatus.BadRequest,
         errorMessage: "Not found",
         extensions: [{ field: null, message: "Blog not found" }],
       };
