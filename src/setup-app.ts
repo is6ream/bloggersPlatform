@@ -10,7 +10,7 @@ import {
   USERS_PATH,
 } from "./core/paths";
 import { Express } from "express";
-import { postRouter } from "./posts/routes/routes";
+import { postRouter } from "./posts/routes/postsRoutes";
 import { testingRouter } from "./testing/deleteAllData.router";
 import { authRouter } from "./auth/routes/routes";
 import { usersRouter } from "./users/routes/usersRoutes";

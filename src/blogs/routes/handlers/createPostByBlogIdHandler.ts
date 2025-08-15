@@ -7,7 +7,7 @@ import { postQueryRepository } from "../../../posts/repositories/postQueryReposi
 
 export async function createPostByBlogId(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   try {
     const { id: id } = req.params;

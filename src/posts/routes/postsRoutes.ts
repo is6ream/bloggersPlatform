@@ -1,4 +1,4 @@
-import { postValidators } from "./../../core/middlewares/postValidation/post-input-dto.validation";
+import { postValidators } from "../../core/middlewares/postValidation/post-input-dto.validation";
 import { Router } from "express";
 import { getAllPostsHandler } from "../handlers/getAllpostsHandler";
 import { createPostHandler } from "../handlers/createPostHandler";
@@ -11,7 +11,7 @@ import { idValidation } from "../../core/middlewares/validation/params-id.valida
 import { paginationAndSortingValidation } from "../../core/middlewares/query-pagination-sorting/query-pagination-sorting.validation-middleware";
 import { PostSortField } from "../input/post-sort-field";
 import { accessTokenGuard } from "../../core/guards/access.token.guard";
-import { contentValidator } from "./../../core/middlewares/postValidation/post-input-dto.validation";
+import { contentValidator } from "../../core/middlewares/postValidation/post-input-dto.validation";
 import { createCommentHandler } from "../../comments/handlers/createCommentHandler";
 import { CommentsSortField } from "../../comments/types/input/comment-sort-field";
 import { getCommentByPostId } from "../../comments/handlers/getCommentByPostId";
