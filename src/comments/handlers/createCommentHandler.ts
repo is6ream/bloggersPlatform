@@ -9,7 +9,7 @@ import { PostId } from "../types/commentsTypes";
 
 export async function createCommentHandler(
   req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
-  res: Response
+  res: Response,
 ) {
   try {
     const userId = req.user?.id as string;
