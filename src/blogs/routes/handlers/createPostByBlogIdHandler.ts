@@ -7,7 +7,7 @@ import { postQueryRepository } from "../../../posts/repositories/postQueryReposi
 
 export async function createPostByBlogId(
   req: Request,
-  res: Response,
+  res: Response
 ): Promise<void> {
   try {
     const { id: id } = req.params;
@@ -19,8 +19,8 @@ export async function createPostByBlogId(
       return;
     }
     const resultId = result.data;
-    const postForResponse = await postQueryRepository.findById(resultId!);
-    res.status(HttpStatus.Created).send(postForResponse);
+    const post = await postQueryRepository.findById(resultId!);
+    res.status(HttpStatus.Created).send(post.data);
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
