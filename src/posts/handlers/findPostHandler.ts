@@ -10,7 +10,7 @@ export async function findPostHandler(req: Request, res: Response) {
       res.status(HttpStatus.NotFound).send("Post not found!");
       return;
     }
-    res.status(HttpStatus.Ok).send(post);
+    res.status(HttpStatus.Ok).send(post.data);
     return;
   } catch (error: unknown) {
     console.log(error);
