@@ -35,7 +35,7 @@ export const postsService = {
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto,
+    dto: PostByIdInputDto
   ): Promise<Result<string>> {
     const blog = await blogQueryRepository.findById(blogId);
     if (!blog) {
@@ -66,7 +66,7 @@ export const postsService = {
       return {
         status: ResultStatus.NotFound,
         errorMessage: "Post not found",
-        extensions: [{ field: null, message: "Blog not found " }],
+        extensions: [{ field: null, message: "Post not found " }],
       };
     }
     return {
@@ -75,7 +75,18 @@ export const postsService = {
     };
   },
 
-  async delete(id: string): Promise<boolean> {
-    return await postRepository.delete(id);
+  async delete(id: string): Promise<Result> {
+    const result = await postRepository.delete(id);
+    if (!result) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Post not found",
+        extensions: [{ field: null, message: "Post not found" }],
+      };
+    }
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+    };
   },
 };

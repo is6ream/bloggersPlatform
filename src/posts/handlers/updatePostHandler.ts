@@ -4,7 +4,6 @@ import { createErrorMessages } from "../../core/errors/create-error-message";
 import { postsService } from "../application/post.service";
 import { ResultStatus } from "../../core/result/resultCode";
 
-//не падает ошибка при неверно введенном id
 export async function updatePostHandler(req: Request, res: Response) {
   try {
     const result = await postsService.update(req.params.id, req.body);
