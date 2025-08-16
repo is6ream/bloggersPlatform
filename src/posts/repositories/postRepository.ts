@@ -1,4 +1,4 @@
-import { PostDBType, PostType, PostViewModel } from "../types/posts-types";
+import { PostType, PostViewModel } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
@@ -43,7 +43,7 @@ export const postRepository = {
         },
       },
     );
-    return updateResult.acknowledged === true;
+    return updateResult.modifiedCount === 1;
   },
 
   async delete(id: string): Promise<boolean> {

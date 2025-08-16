@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { createErrorMessages } from "../../core/errors/create-error-message";
 import { postsService } from "../application/post.service";
+import { ResultStatus } from "../../core/result/resultCode";
 
 //не падает ошибка при неверно введенном id
 export async function updatePostHandler(req: Request, res: Response) {
   try {
-    const id = req.params.id;
-    const result = await postsService.update(id, req.body);
-    if (result === null) {
+    const result = await postsService.update(req.params.id, req.body);
+    if (result.status !== ResultStatus.Success) {
       res
         .status(HttpStatus.NotFound)
         .send(

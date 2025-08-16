@@ -59,9 +59,8 @@ export const postsService = {
     };
   },
 
-  async update(id: string, dto: PostInputDto): Promise<Result<string>> {
+  async update(id: string, dto: PostInputDto): Promise<Result> {
     const result = await postRepository.update(id, dto);
-    console.log(result);
     if (!result) {
       return {
         status: ResultStatus.NotFound,
