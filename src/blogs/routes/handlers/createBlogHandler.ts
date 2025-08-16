@@ -11,9 +11,8 @@ export async function createBlogHandler(req: Request, res: Response) {
       websiteUrl: req.body.websiteUrl,
     });
 
-    const blogForResponse =
-      await blogQueryRepository.findByBlogId(createdBlogId);
-    res.status(HttpStatus.Created).send(blogForResponse);
+    const blog = await blogQueryRepository.findByBlogId(createdBlogId);
+    res.status(HttpStatus.Created).send(blog);
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
