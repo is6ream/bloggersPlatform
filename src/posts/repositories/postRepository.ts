@@ -16,7 +16,7 @@ export const postRepository = {
     return insertedId.toString();
   },
 
-  async findPostForCreateComment(id: string): Promise<any> {
+  async findPost(id: string): Promise<any> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     return post;
   },

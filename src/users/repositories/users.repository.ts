@@ -16,7 +16,7 @@ export const usersRepository = {
     };
   },
 
-  async findUserForCreateComment(id: string): Promise<any> {
+  async findUser(id: string): Promise<any> {
     const user = await userCollection.findOne({ _id: new ObjectId(id) });
     return user;
   },

@@ -13,13 +13,13 @@ export const commentsService = {
   async createComment(
     dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
-    const user = await usersRepository.findUserForCreateComment(dto.userId);
-    const post = await postRepository.findPostForCreateComment(dto.postId);
-    if (!user) {
+    const user = await usersRepository.findUser(dto.userId);
+    const post = await postRepository.findPost(dto.postId);
+    if (!post) {
       return {
         status: ResultStatus.NotFound,
         errorMessage: "Not found",
-        extensions: [{ message: "User not found", field: "user id" }],
+        extensions: [{ message: "Post not found", field: "post id" }],
         data: null,
       };
     }

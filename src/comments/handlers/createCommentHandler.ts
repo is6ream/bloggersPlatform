@@ -22,11 +22,10 @@ export async function createCommentHandler(
       userId: userId,
       postId: req.params.id,
     };
-    console.log(content);
     const result = await commentsService.createComment(content);
     if (result.status === ResultStatus.Success) {
       const dataForResponse = await commentsQueryRepository.findById(
-        result.data!.commentId
+        result.data!.commentId,
       );
       res.status(HttpStatus.Created).send(dataForResponse);
       return;

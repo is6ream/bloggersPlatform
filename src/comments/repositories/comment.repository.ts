@@ -31,4 +31,9 @@ export const commentsRepository = {
     });
     return deleteResult.deletedCount === 1;
   },
+
+  async findById(id: string): Promise<string> {
+    const content = await commentsCollection.findOne({ _id: new ObjectId(id) });
+    return content?.content!;
+  },
 };
