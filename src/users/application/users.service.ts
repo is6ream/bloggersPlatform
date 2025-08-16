@@ -5,20 +5,6 @@ import { usersRepository } from "../repositories/users.repository";
 import { Result } from "../../core/result/result.type";
 import { ResultStatus } from "../../core/result/resultCode";
 
-interface IEmailError {
-  field: string;
-  message: string;
-}
-
-class EmailError extends Error implements IEmailError {
-  public field: string; //десктриптор
-  constructor(message: string, field = "") {
-    super(message);
-    this.field = field;
-    this.message = message;
-  }
-} //правила жесткие
-
 export const usersService = {
   async create(dto: UserInputModel): Promise<Result<string>> {
     const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
@@ -58,7 +44,19 @@ export const usersService = {
     return hash;
   },
 
-  async delete(id: string): Promise<any> {
-    return usersRepository.delete(id);
+  async delete(id: string): Promise<Result> {
+    const result = await usersRepository.delete(id);
+    if (!result) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "User not found",
+        extensions: [{ field: null, message: "User not found " }],
+      };
+    } else {
+      return {
+        status: ResultStatus.Success,
+        extensions: [],
+      };
+    }
   },
 };
