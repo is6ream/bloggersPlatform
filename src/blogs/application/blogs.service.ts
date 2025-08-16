@@ -1,5 +1,7 @@
+import { Result } from "./../../core/result/result.type";
 import { BlogInputModel, BlogInputDto } from "../types/blogs-types";
 import { blogsRepository } from "../repositories/blogs.repository";
+import { ResultStatus } from "../../core/result/resultCode";
 
 export const blogsService = {
   async create(dto: BlogInputModel): Promise<string> {
@@ -19,7 +21,19 @@ export const blogsService = {
     return;
   },
 
-  async delete(id: string): Promise<boolean> {
-    return blogsRepository.delete(id);
+  async delete(id: string): Promise<Result> {
+    const result = await blogsRepository.delete(id);
+    if (!result) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Post not found",
+        extensions: [{ field: null, message: "Blog not found" }],
+      };
+    } else {
+      return {
+        status: ResultStatus.Success,
+        extensions: [],
+      };
+    }
   },
 };

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../core/http-statuses";
 import { blogsService } from "../../application/blogs.service";
+import { ResultStatus } from "../../../core/result/resultCode";
 export async function deleteBlogHandler(
   req: Request<{ id: string }>,
   res: Response,
@@ -8,8 +9,8 @@ export async function deleteBlogHandler(
   try {
     const id = req.params.id;
 
-    const isDeleted = await blogsService.delete(id);
-    if (!isDeleted) {
+    const result = await blogsService.delete(id);
+    if (result.status !== ResultStatus.Success) {
       res.sendStatus(HttpStatus.NotFound);
     }
     res.status(HttpStatus.NoContent).send();
