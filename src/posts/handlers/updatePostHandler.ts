@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { createErrorMessages } from "../../core/errors/create-error-message";
 import { postsService } from "../application/post.service";
+
+//не падает ошибка при неверно введенном id
 export async function updatePostHandler(req: Request, res: Response) {
   try {
     const id = req.params.id;

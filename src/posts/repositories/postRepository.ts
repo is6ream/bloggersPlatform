@@ -1,4 +1,4 @@
-import { PostType, PostViewModel } from "../types/posts-types";
+import { PostDBType, PostType, PostViewModel } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
@@ -29,7 +29,7 @@ export const postRepository = {
     return post;
   },
 
-  async update(id: string, dto: PostInputDto): Promise<void | null> {
+  async update(id: string, dto: PostInputDto): Promise<boolean> {
     const updateResult = await postCollection.updateOne(
       {
         _id: new ObjectId(id),
@@ -43,12 +43,9 @@ export const postRepository = {
         },
       },
     );
-
-    if (updateResult.matchedCount < 1) {
-      return null;
-    }
-    return;
+    return updateResult.acknowledged === true;
   },
+
   async delete(id: string): Promise<boolean> {
     const deleteResult = await postCollection.deleteOne({
       _id: new ObjectId(id),

@@ -34,7 +34,7 @@ export const postsService = {
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto,
+    dto: PostByIdInputDto
   ): Promise<Result<string>> {
     const blog = await blogsRepository.findById(blogId);
     if (!blog) {
@@ -59,9 +59,20 @@ export const postsService = {
     };
   },
 
-  async update(id: string, dto: PostInputDto): Promise<void> {
-    postRepository.update(id, dto);
-    return;
+  async update(id: string, dto: PostInputDto): Promise<Result<string>> {
+    const result = await postRepository.update(id, dto);
+    console.log(result);
+    if (!result) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Post not found",
+        extensions: [{ field: null, message: "Blog not found " }],
+      };
+    }
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+    };
   },
 
   async delete(id: string): Promise<boolean> {
