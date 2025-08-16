@@ -4,6 +4,7 @@ import { PostInputDto } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
+import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
 
 export const postsService = {
   async create(dto: PostInputDto): Promise<Result<string>> {
@@ -34,9 +35,9 @@ export const postsService = {
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto
+    dto: PostByIdInputDto,
   ): Promise<Result<string>> {
-    const blog = await blogsRepository.findById(blogId);
+    const blog = await blogQueryRepository.findById(blogId);
     if (!blog) {
       return {
         status: ResultStatus.NotFound,
