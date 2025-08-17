@@ -13,4 +13,4 @@ authRouter
     inputValidationResultMiddleware,
     loginUserController,
   )
-  .get("/auth/login/me", accessTokenGuard, getInfoAboutUserController);
+  .get("/auth/me", accessTokenGuard, getInfoAboutUserController);

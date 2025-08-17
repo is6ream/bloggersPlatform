@@ -24,10 +24,10 @@ export async function createCommentHandler(
     };
     const result = await commentsService.createComment(content);
     if (result.status === ResultStatus.Success) {
-      const dataForResponse = await commentsQueryRepository.findById(
+      const comment = await commentsQueryRepository.findById(
         result.data!.commentId,
       );
-      res.status(HttpStatus.Created).send(dataForResponse);
+      res.status(HttpStatus.Created).send(comment);
       return;
     }
 

@@ -51,7 +51,6 @@ export const commentsQueryRepository = {
 
   async findById(id: string): Promise<CommentViewModel | null> {
     const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
-    console.log("DB Comment Structure:", comment); // Добавьте эту строку
 
     if (!comment) {
       return null;
@@ -60,7 +59,7 @@ export const commentsQueryRepository = {
       id: comment._id.toString(),
       content: comment.content,
       commentatorInfo: {
-        userId: comment.commentatorInfo.userId,
+        userId: comment.commentatorInfo.userId, //тут возвращается null, так быть не должно
         userLogin: comment.commentatorInfo.userLogin,
       },
       createdAt: comment.createdAt,
