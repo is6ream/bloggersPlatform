@@ -6,7 +6,7 @@ import { Result } from "../../core/result/result.type";
 import { ResultStatus } from "../../core/result/resultCode";
 export const postQueryRepository = {
   async findAll(
-    queryDto: PostQueryInput
+    queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -31,7 +31,7 @@ export const postQueryRepository = {
 
   async findPostsByBlogId(
     queryDto: PostQueryInput,
-    blogId: string
+    blogId: string,
   ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;

@@ -6,7 +6,7 @@ import { Response } from "express";
 
 export async function getInfoAboutUserController(
   req: RequestWithUserId<IdType>,
-  res: Response
+  res: Response,
 ) {
   const userId = req.user?.id as string;
 

@@ -34,7 +34,7 @@ export const postRepository = {
           content: dto.content,
           blogId: dto.blogId,
         },
-      }
+      },
     );
     return updateResult.modifiedCount === 1;
   },

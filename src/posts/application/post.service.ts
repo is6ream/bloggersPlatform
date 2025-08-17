@@ -35,7 +35,7 @@ export const postsService = {
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto
+    dto: PostByIdInputDto,
   ): Promise<Result<string>> {
     const blog = await blogQueryRepository.findById(blogId);
     if (!blog) {

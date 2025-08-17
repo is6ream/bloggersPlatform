@@ -9,7 +9,7 @@ import { PostId } from "../types/commentsTypes";
 
 export async function createCommentHandler(
   req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
-  res: Response
+  res: Response,
 ) {
   try {
     const userId = req.user?.id as string;
@@ -25,7 +25,7 @@ export async function createCommentHandler(
     const result = await commentsService.createComment(content);
     if (result.status === ResultStatus.Success) {
       const comment = await commentsQueryRepository.findById(
-        result.data!.commentId
+        result.data!.commentId,
       );
       res.status(HttpStatus.Created).send(comment);
       return;

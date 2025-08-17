@@ -10,7 +10,7 @@ import { WithId } from "mongodb";
 
 export const commentsQueryRepository = {
   async findAll(
-    queryDto: CommentsQueryInput
+    queryDto: CommentsQueryInput,
   ): Promise<{ items: WithId<CommentQueryOtput>[]; totalCount: number }> {
     const {
       pageNumber,

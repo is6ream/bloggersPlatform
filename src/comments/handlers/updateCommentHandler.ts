@@ -10,7 +10,7 @@ import { RequestWithBodyAndParams } from "../../core/types/common/requests";
 
 export async function updateCommentHandler(
   req: RequestWithBodyAndParams<CommentId, CommentCreateType>,
-  res: Response
+  res: Response,
 ) {
   try {
     const id = req.params.commentId;
