@@ -1,4 +1,4 @@
-import { PostType, PostViewModel } from "./../types/posts-types";
+import { PostDB, PostViewModel } from "./../types/posts-types";
 import { postCollection } from "./../../db/mongo.db";
 import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
@@ -7,7 +7,7 @@ import { ResultStatus } from "../../core/result/resultCode";
 export const postQueryRepository = {
   async findAll(
     queryDto: PostQueryInput,
-  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
+  ): Promise<{ items: WithId<PostDB>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
 
@@ -32,7 +32,7 @@ export const postQueryRepository = {
   async findPostsByBlogId(
     queryDto: PostQueryInput,
     blogId: string,
-  ): Promise<{ items: WithId<PostType>[]; totalCount: number }> {
+  ): Promise<{ items: WithId<PostDB>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
     const skip = (pageNumber - 1) * pageSize;

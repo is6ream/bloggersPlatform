@@ -14,7 +14,7 @@ export type BlogViewModel = {
   isMembership: boolean;
 };
 
-export type Blog = {
+export type BlogDB = {
   id?: string;
   name: string;
   description: string;

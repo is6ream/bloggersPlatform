@@ -15,7 +15,7 @@ export const commentsRepository = {
       },
       {
         $set: dto,
-      }
+      },
     );
 
     const success = updateResult.matchedCount === 1;

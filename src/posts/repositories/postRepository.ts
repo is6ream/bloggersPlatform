@@ -1,23 +1,24 @@
-import { PostDBType, PostType } from "../types/posts-types";
+import { PostDB } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
+import { PostSortField } from "../input/post-sort-field";
 
 export const postRepository = {
-  async create(newPost: PostType): Promise<string> {
+  async create(newPost: PostDB): Promise<string> {
     const insertResult = await postCollection.insertOne(newPost);
     const insertedId = insertResult.insertedId;
     return insertedId.toString();
   },
 
-  async createPostByBlogId(newPost: PostType): Promise<string> {
+  async createPostByBlogId(newPost: PostDB): Promise<string> {
     const insertResult = await postCollection.insertOne(newPost);
     const insertedId = insertResult.insertedId;
     return insertedId.toString();
   },
 
-  async findPost(id: string): Promise<WithId<PostType> | null> {
+  async findPost(id: string): Promise<WithId<PostDB> | null> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     return post;
   },

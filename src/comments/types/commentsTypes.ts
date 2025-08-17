@@ -1,4 +1,4 @@
-export type CommentDBType = {
+export type CommentDB = {
   content: string;
   commentatorInfo: {
     userId: string;

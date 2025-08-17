@@ -1,5 +1,5 @@
 import {
-  CommentDBType,
+  CommentDB,
   CommentQueryOtput,
   CommentViewModel,
 } from "./../types/commentsTypes";
@@ -70,7 +70,7 @@ export const commentsQueryRepository = {
   async findCommentByPostId(
     queryDto: CommentsQueryInput,
     postId: string,
-  ): Promise<{ items: WithId<CommentDBType>[]; totalCount: number }> {
+  ): Promise<{ items: WithId<CommentDB>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchContentTerm } =
       queryDto;
     const skip = (pageNumber - 1) * pageSize;

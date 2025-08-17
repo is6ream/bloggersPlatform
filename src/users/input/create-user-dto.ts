@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export type CreateUserDto = {
   passwordSalt: string;
   passwordHash: string;
@@ -6,4 +8,11 @@ export type CreateUserDto = {
   createdAt: Date;
 };
 
-export type UserDBType = CreateUserDto;
+export type UserDB = {
+  _id: ObjectId;
+  passwordSalt: string;
+  passwordHash: string;
+  login: string;
+  email: string;
+  createdAt: Date;
+};

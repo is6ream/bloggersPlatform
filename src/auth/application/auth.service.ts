@@ -1,5 +1,5 @@
 import { WithId } from "mongodb";
-import { UserDBType } from "../../users/input/create-user-dto";
+import { UserDB } from "../../users/input/create-user-dto";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { Result } from "../../core/result/result.type";
@@ -32,7 +32,7 @@ export const authService = {
   async checkUserCredentials(
     loginOrEmail: string,
     password: string,
-  ): Promise<Result<WithId<UserDBType> | null>> {
+  ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
       return {

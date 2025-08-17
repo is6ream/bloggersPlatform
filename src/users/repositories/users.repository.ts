@@ -1,4 +1,4 @@
-import { CreateUserDto, UserDBType } from "../input/create-user-dto";
+import { CreateUserDto, UserDB } from "../input/create-user-dto";
 import { UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
@@ -23,7 +23,7 @@ export const usersRepository = {
 
   async isUserExistByEmailOrLogin(
     loginOrEmail: string,
-  ): Promise<WithId<UserDBType> | null> {
+  ): Promise<WithId<UserDB> | null> {
     return userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
     });

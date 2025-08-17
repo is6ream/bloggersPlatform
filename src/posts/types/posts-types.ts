@@ -1,4 +1,4 @@
-export interface PostType {
+export interface PostDB {
   id?: string;
   title: string;
   shortDescription: string;
@@ -32,5 +32,5 @@ export type PostByIdInputDto = {
 };
 
 export interface PostDBType {
-  posts: PostType[];
+  posts: PostDB[];
 }
