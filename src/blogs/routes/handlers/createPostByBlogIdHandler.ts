@@ -7,12 +7,11 @@ import { postQueryRepository } from "../../../posts/repositories/postQueryReposi
 
 export async function createPostByBlogId(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
   try {
     const { id: id } = req.params;
     const result = await postsService.createPostByBlogId(id, req.body);
-    console.log(result.status);
     if (result.status !== ResultStatus.Success) {
       res
         .status(resultCodeToHttpException(result.status))
