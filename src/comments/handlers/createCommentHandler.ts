@@ -9,7 +9,7 @@ import { PostId } from "../types/commentsTypes";
 
 export async function createCommentHandler(
   req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
-  res: Response,
+  res: Response
 ) {
   try {
     const userId = req.user?.id as string;
@@ -25,7 +25,7 @@ export async function createCommentHandler(
     const result = await commentsService.createComment(content);
     if (result.status === ResultStatus.Success) {
       const comment = await commentsQueryRepository.findById(
-        result.data!.commentId,
+        result.data!.commentId
       );
       res.status(HttpStatus.Created).send(comment);
       return;
@@ -38,15 +38,3 @@ export async function createCommentHandler(
     res.sendStatus(HttpStatus.InternalServerError);
   }
 }
-
-// {
-//     "id": "688ae607e5117e9f793eaa76",
-//     "content": {
-//         "content": "safdsfdsfdsfdasfd" тут не объект должен возвращаться, нужно решить эту проблему
-//     },
-//     "commentatorInfo": {
-//         "userId": null,
-//         "userLogin": "newDan"
-//     },
-//     "createdAt": "2025-07-31T03:41:59.543Z"
-// }

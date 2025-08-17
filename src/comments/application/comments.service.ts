@@ -27,12 +27,11 @@ export const commentsService = {
       postId: post._id.toString(),
       content: dto.comment,
       commentatorInfo: {
-        userId: user.id,
+        userId: dto.userId,
         userLogin: user.login,
       },
       createdAt: new Date(),
     };
-
     const commentId: string = await commentsRepository.create(newComment);
 
     return {
