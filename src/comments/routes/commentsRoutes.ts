@@ -17,14 +17,14 @@ commentsRouter
     accessTokenGuard,
     contentValidator,
     inputValidationResultMiddleware,
-    createCommentHandler
+    createCommentHandler,
   )
   .delete(
     "/:id",
     accessTokenGuard,
     idValidation,
     inputValidationResultMiddleware,
-    deleteCommentHandler
+    deleteCommentHandler,
   )
   .put(
     "/:id",
@@ -32,5 +32,5 @@ commentsRouter
     idValidation,
     contentValidator,
     inputValidationResultMiddleware,
-    updateCommentHandler
+    updateCommentHandler,
   );

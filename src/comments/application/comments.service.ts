@@ -40,10 +40,23 @@ export const commentsService = {
       extensions: [],
     };
   },
-  async update(id: string, dto: CommentInputDto): Promise<void> {
-    commentsRepository.update(id, dto);
-    return;
+
+  async update(id: string, dto: CommentInputDto): Promise<Result<void | null>> {
+    const result = await commentsRepository.update(id, dto);
+    if (!result) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Not found",
+        extensions: [{ message: "Comment not found", field: "comment id" }],
+        data: null,
+      };
+    }
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+    };
   },
+
   async delete(id: string): Promise<boolean> {
     return await commentsRepository.delete(id);
   },

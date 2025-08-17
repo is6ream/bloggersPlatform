@@ -1,5 +1,5 @@
 export type CommentId = {
-  commentId: string;
+  id: string;
 };
 
 export type CommentCreateType = {

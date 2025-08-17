@@ -7,17 +7,18 @@ import {
   CommentId,
 } from "../types/input/updateCommentTypes";
 import { RequestWithBodyAndParams } from "../../core/types/common/requests";
+import { ResultStatus } from "../../core/result/resultCode";
 
 export async function updateCommentHandler(
-  req: RequestWithBodyAndParams<CommentId, CommentCreateType>,
+  req: RequestWithBodyAndParams<CommentId, CommentCreateType>, //т.е тут он уже undefined идет
   res: Response,
 ) {
   try {
-    const id = req.params.commentId;
-    const dataForUpdate = req.body.content;
-    const result = await commentsService.update(id, dataForUpdate);
+    const id = req.params.id;
+    const content = req.body.content;
+    const result = await commentsService.update(id, { content });
 
-    if (result === null) {
+    if (result.status !== ResultStatus.Success) {
       res
         .status(HttpStatus.NotFound)
         .send(

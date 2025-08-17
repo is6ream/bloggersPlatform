@@ -8,21 +8,18 @@ export const commentsRepository = {
     return insertResult.insertedId.toString();
   },
 
-  async update(id: string, dto: CommentInputDto): Promise<void | null> {
+  async update(id: string, dto: CommentInputDto): Promise<any> {
     const updateResult = await commentsCollection.updateOne(
       {
         _id: new ObjectId(id),
       },
       {
-        $set: {
-          content: dto,
-        },
-      },
+        $set: dto,
+      }
     );
-    if (updateResult.matchedCount < 1) {
-      return null;
-    }
-    return;
+
+    const success = updateResult.matchedCount === 1;
+    return success;
   },
 
   async delete(id: string): Promise<boolean> {
