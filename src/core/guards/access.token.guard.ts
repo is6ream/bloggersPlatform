@@ -18,7 +18,7 @@ export const accessTokenGuard = async (
   console.log(authType, authType !== "Bearer");
 
   if (authType !== "Bearer") {
-    res.sendStatus(HttpStatus.Unauthorized);
+    res.sendStatus(HttpStatus.Forbidden);
     return;
   }
 
@@ -31,5 +31,5 @@ export const accessTokenGuard = async (
     next();
     return;
   }
-  res.sendStatus(HttpStatus.Unauthorized);
+  res.sendStatus(HttpStatus.Forbidden);
 };

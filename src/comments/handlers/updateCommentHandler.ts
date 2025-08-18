@@ -10,7 +10,7 @@ import { RequestWithBodyAndParams } from "../../core/types/common/requests";
 import { ResultStatus } from "../../core/result/resultCode";
 
 export async function updateCommentHandler(
-  req: RequestWithBodyAndParams<CommentId, CommentCreateType>, //т.е тут он уже undefined идет
+  req: RequestWithBodyAndParams<CommentId, CommentCreateType>,
   res: Response,
 ) {
   try {
