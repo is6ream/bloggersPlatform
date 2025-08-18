@@ -6,7 +6,7 @@ import { HttpStatus } from "../http-statuses";
 export const accessTokenGuard = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   if (!req.headers.authorization) {
     res.sendStatus(HttpStatus.Unauthorized);
@@ -18,7 +18,7 @@ export const accessTokenGuard = async (
   console.log(authType, authType !== "Bearer");
 
   if (authType !== "Bearer") {
-    res.sendStatus(HttpStatus.Forbidden);
+    res.sendStatus(HttpStatus.Unauthorized);
     return;
   }
 
@@ -31,5 +31,5 @@ export const accessTokenGuard = async (
     next();
     return;
   }
-  res.sendStatus(HttpStatus.Forbidden);
+  res.sendStatus(HttpStatus.Unauthorized);
 };

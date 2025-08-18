@@ -3,6 +3,7 @@ import { ResultStatus } from "../../core/result/resultCode";
 import { postRepository } from "../../posts/repositories/postRepository";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { commentsRepository } from "../repositories/comment.repository";
+import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
 import {
   CommentInputType,
   ContentDto,
@@ -11,7 +12,7 @@ import {
 
 export const commentsService = {
   async createComment(
-    dto: ContentDto,
+    dto: ContentDto
   ): Promise<Result<{ commentId: string } | null>> {
     const user = await usersRepository.findUser(dto.userId);
     const post = await postRepository.findPost(dto.postId);
@@ -42,6 +43,15 @@ export const commentsService = {
   },
 
   async update(id: string, dto: CommentInputDto): Promise<Result<void | null>> {
+    const checkAccess = await commentsQueryRepository.findById(id);
+    if (!checkAccess) {
+      return {
+        status: ResultStatus.Forbidden,
+        errorMessage: "Access denied",
+        extensions: [{ message: "Access denied", field: "comment id" }],
+        data: null,
+      };
+    }
     const result = await commentsRepository.update(id, dto);
     if (!result) {
       return {

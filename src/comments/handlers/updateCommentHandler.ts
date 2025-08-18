@@ -8,6 +8,7 @@ import {
 } from "../types/input/updateCommentTypes";
 import { RequestWithBodyAndParams } from "../../core/types/common/requests";
 import { ResultStatus } from "../../core/result/resultCode";
+import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
 
 export async function updateCommentHandler(
   req: RequestWithBodyAndParams<CommentId, CommentCreateType>,
@@ -20,7 +21,7 @@ export async function updateCommentHandler(
 
     if (result.status !== ResultStatus.Success) {
       res
-        .status(HttpStatus.NotFound)
+        .status(resultCodeToHttpException(result.status))
         .send(
           createErrorMessages([{ field: "id", message: "Comment not found" }]),
         );
