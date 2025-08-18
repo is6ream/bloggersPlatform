@@ -33,7 +33,7 @@ export const contentValidator = body("content")
   .bail()
   .trim()
   .isLength({ min: 1, max: 1000 })
-  .withMessage("More than 1000 or 0")
+  .withMessage("More than 1000 or 1")
   .bail();
 
 export const blogIdValidator = body("blogId")

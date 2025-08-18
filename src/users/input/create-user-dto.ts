@@ -1,4 +1,3 @@
-
 export type CreateUserDto = {
   passwordSalt: string;
   passwordHash: string;

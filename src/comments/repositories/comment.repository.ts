@@ -1,6 +1,12 @@
-import { CommentInputDto, CommentInputType } from "../types/commentsTypes";
+import {
+  CommentInputDto,
+  CommentInputType,
+  CommentViewModel,
+} from "../types/commentsTypes";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
+import { CommentCreateType } from "../types/input/updateCommentTypes";
+import { WithId } from "mongodb";
 
 export const commentsRepository = {
   async create(newComment: CommentInputType): Promise<string> {
@@ -15,7 +21,7 @@ export const commentsRepository = {
       },
       {
         $set: dto,
-      },
+      }
     );
 
     const success = updateResult.matchedCount === 1;
@@ -27,6 +33,11 @@ export const commentsRepository = {
       _id: new ObjectId(id),
     });
     return deleteResult.deletedCount === 1;
+  },
+
+  async findByCommentId(id: string): Promise<string | undefined> {
+    const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
+    return comment?.commentatorInfo.userId;
   },
 
   async findById(id: string): Promise<string> {

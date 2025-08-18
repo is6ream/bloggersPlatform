@@ -6,7 +6,7 @@ import { HttpStatus } from "../http-statuses";
 export const accessTokenGuard = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (!req.headers.authorization) {
     res.sendStatus(HttpStatus.Unauthorized);
