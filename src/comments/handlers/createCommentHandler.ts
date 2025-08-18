@@ -9,7 +9,7 @@ import { PostId } from "../types/commentsTypes";
 
 export async function createCommentHandler(
   req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
-  res: Response,
+  res: Response
 ) {
   try {
     const userId = req.user?.id as string;
@@ -23,13 +23,14 @@ export async function createCommentHandler(
       postId: req.params.id,
     };
     const result = await commentsService.createComment(content);
-    if (result.status === ResultStatus.Success) {
-      const comment = await commentsQueryRepository.findById(
-        result.data!.commentId,
-      );
-      res.status(HttpStatus.Created).send(comment);
-      return;
+    if (result.status !== ResultStatus.Success) {
+      res.sendStatus(HttpStatus.NotFound);
     }
+    const comment = await commentsQueryRepository.findById(
+      result.data!.commentId,
+    );
+    res.status(HttpStatus.Created).send(comment);
+    return;
 
     res.sendStatus(HttpStatus.BadRequest);
     return;

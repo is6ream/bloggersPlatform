@@ -1,4 +1,5 @@
 export type CommentDB = {
+  id?: string;
   content: string;
   commentatorInfo: {
     userId: string;

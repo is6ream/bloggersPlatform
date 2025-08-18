@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 
 export type CreateUserDto = {
   passwordSalt: string;
@@ -9,7 +8,7 @@ export type CreateUserDto = {
 };
 
 export type UserDB = {
-  _id: ObjectId;
+  id?: string;
   passwordSalt: string;
   passwordHash: string;
   login: string;
