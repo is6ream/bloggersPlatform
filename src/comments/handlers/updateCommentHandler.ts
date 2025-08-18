@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { commentsService } from "../application/comments.service";
 import { HttpStatus } from "../../core/http-statuses";
-import { createErrorMessages } from "../../core/errors/create-error-message";
 import {
   CommentCreateType,
   CommentId,
@@ -22,9 +21,7 @@ export async function updateCommentHandler(
     if (result.status !== ResultStatus.Success) {
       res
         .status(resultCodeToHttpException(result.status))
-        .send(
-          createErrorMessages([{ field: "id", message: "Comment not found" }]),
-        );
+        .send(result.extensions);
       return;
     }
     res.sendStatus(HttpStatus.NoContent);
