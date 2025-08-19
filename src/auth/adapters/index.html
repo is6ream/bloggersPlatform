@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Коммерческое предложение по авторизационным SMS | Unibell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @page { size: A4; margin: 0; background:#2f3b4e!important; }
+
+    body {
+      background:#2f3b4e!important;
+      font-family:'Unbounded',sans-serif;
+      color:#fff!important;
+      margin:0;
+      padding:15px;
+      -webkit-print-color-adjust:exact!important;
+      print-color-adjust:exact!important;
+      line-height:1.3;
+    }
+
+    .container{
+      width:100%;
+      max-width:800px;
+      min-height:100vh;
+      margin:0 auto;
+      background:#293343!important;
+      border-radius:16px;
+      padding:25px;
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .header{display:flex;justify-content:space-between;margin-bottom:15px;}
+    .logo{width:100px;height:auto;}
+    .company-info{text-align:right;}
+    .company-name{font-size:14px;font-weight:500;margin-bottom:3px;}
+    .company-detail{font-size:10px;color:#61728b;margin-bottom:2px;line-height:1.2;font-weight:300;}
+    h1{font-size:22px;font-weight:600;color:#50ffea;margin:5px 0 15px;text-align:center;}
+
+    .intro{
+      background:#222c3d;border-radius:10px;padding:15px;margin:0 0 20px;border:1px solid #61728b;font-size:13px;
+      transition:background .3s,transform .3s;
+    }
+    .intro:hover{background:rgba(80,255,234,.08);transform:translateY(-2px);}
+
+    .service-title{font-size:18px;font-weight:500;color:#50ffea;margin:15px 0 10px;text-align:center;}
+
+    .price-table{
+      width:100%;border-collapse:collapse;margin:15px 0 25px;background:#222c3d;border-radius:8px;overflow:hidden;font-size:13px;
+    }
+    .price-table th,.price-table td{padding:12px 15px;border:1px solid #61728b;text-align:center;transition:background .3s;}
+    .price-table tr:hover td{background:rgba(80,255,234,.08);}
+    .price-table th{color:#50ffea;font-weight:500;background:#293343;}
+
+    .benefits-section{margin:20px 0;font-size:13px;}
+    .benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .benefit-item{background:rgba(80,255,234,.1);padding:12px;border-radius:6px;display:flex;align-items:center;transition:background .3s,transform .3s;}
+    .benefit-item:hover{background:rgba(80,255,234,.2);transform:translateY(-2px);}
+    .benefit-icon{color:#50ffea;margin-right:8px;font-weight:bold;font-size:14px;}
+
+    .contacts{
+      background:#222c3d;border-radius:10px;padding:20px;margin-top:20px;border:1px solid #50ffea;text-align:center;font-size:13px;
+      transition:background .3s,transform .3s;
+    }
+    .contacts:hover{background:rgba(80,255,234,.08);transform:translateY(-2px);}
+    .contacts a{display:block;color:#50ffea;text-decoration:none;margin:8px 0;transition:color .3s;}
+    .contacts a:hover{color:#fff;}
+
+    .footer{
+      margin-top:20px;padding:15px;text-align:center;font-size:12px;color:#fff;
+      background:linear-gradient(90deg,rgba(80,255,234,.15),rgba(80,255,234,.05));
+      border-radius:8px;border:1px solid #50ffea; margin-bottom:55px; /* для экрана, как просил */
+    }
+    .footer-highlight{color:#50ffea;font-weight:600;}
+
+    /* --- ПЕЧАТЬ / PDF: ровно одна страница, ничего не режется --- */
+    @media print{
+      html,body{width:210mm;height:297mm;margin:0;padding:0;}
+      body{background:#2f3b4e!important;}
+      .container{
+        max-width:none; border-radius:0;
+        /* лёгкое масштабирование, чтобы гарантированно всё уместилось */
+        transform:scale(0.96); transform-origin:top left;
+        width:calc(210mm / 0.96); height:calc(297mm / 0.96);
+        padding:12mm; margin:0; box-sizing:border-box;
+        display:flex; flex-direction:column; justify-content:space-between;
+        page-break-inside:avoid; break-inside:avoid;
+      }
+      .header,.intro,.price-table,.benefits-section,.contacts,.footer{
+        page-break-inside:avoid; break-inside:avoid;
+      }
+      .footer{margin-bottom:0;} /* чтобы не «толкала» за пределы страницы при печати */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div>
+      <div class="header">
+        <div><img src="https://www.unibell.ru/wp-content/themes/unibell/assets/img/email-sender/craft-talk/logo.png" alt="Unibell" class="logo"></div>
+        <div class="company-info">
+          <div class="company-name">ООО «Корпоративные Коммуникации»</div>
+          <div class="company-detail">www.unibell.ru</div>
+        </div>
+      </div>
+
+      <h1>Рекламные SMS-сообщения</h1>
+
+      <div class="intro">
+        <p><strong>Unibell</strong> — российская платформа для надежной доставки рекламных SMS. Оптимальное решение для:</p>
+        <ul>
+          <li>Банков и финансовых сервисов</li>
+          <li>Интернет-магазинов и маркетплейсов</li>
+          <li>Сервисов доставки и такси</li>
+          <li>Корпоративных систем безопасности</li>
+          <li>Медицинской сферы</li>
+        </ul>
+      </div>
+
+      <div class="service-title">Тарифы на рекламные SMS</div>
+
+      <table class="price-table">
+        <tr>
+          <th style="width:35%;">Оператор</th>
+          <th style="width:30%;">Цена за SMS (руб. с НДС)</th>
+          <th style="width:35%;">Абонентская плата за первое имя отправителя (руб./мес)</th>
+        </tr>
+        <tr><td>МТС</td><td>5,02</td><td>2 000</td></tr>
+        <tr><td>Билайн</td><td>5,5</td><td>0</td></tr>
+        <tr><td>МегаФон</td><td>5,55</td><td>2 500</td></tr>
+        <tr><td>Теле2</td><td>5,13</td><td>2 400</td></tr>
+      </table>
+
+      <div class="benefits-section">
+        <div class="benefits-grid">
+          <div class="benefit-item"><span class="benefit-icon">✓</span> Полностью российское ПО</div>
+          <div class="benefit-item"><span class="benefit-icon">✓</span> Гарантированная доставка 99,9%</div>
+          <div class="benefit-item"><span class="benefit-icon">✓</span> Круглосуточная поддержка</div>
+          <div class="benefit-item"><span class="benefit-icon">✓</span> Гибкое API для интеграции</div>
+          <div class="benefit-item"><span class="benefit-icon">✓</span> Детальная аналитика и отчёты</div>
+          <div class="benefit-item"><span class="benefit-icon">✓</span> Прозрачное ценообразование</div>
+        </div>
+      </div>
+
+      <div class="contacts">
+        <div class="highlight-title">Контакты менеджера:</div>
+        <a href="https://wa.me/79608010495" target="_blank">📱 WhatsApp: +7 960 801 04 95</a>
+        <a href="https://t.me/danunibell" target="_blank">✈️ Telegram: @danunibell</a>
+        <a href="mailto:d.ilyasov@unibell.ru">✉️ Почта: d.ilyasov@unibell.ru</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      🚀 <strong>Начните пользоваться Unibell уже сегодня!</strong><br>
+      Увеличьте эффективность рекламных кампаний с помощью надежной SMS-доставки.<br>
+      <span class="footer-highlight">Первый месяц — консультация и настройка бесплатно.</span>
+    </div>
+  </div>
+</body>
+</html>
