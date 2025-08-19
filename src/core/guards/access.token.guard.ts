@@ -12,7 +12,7 @@ export const accessTokenGuard = async (
     res.sendStatus(HttpStatus.Unauthorized);
     return;
   }
-  console.log(req.headers.authorization);
+  console.log(req.headers.authorization, "Bearer check");
 
   const [authType, token] = req.headers.authorization.split(" ");
   console.log(authType, authType !== "Bearer");
@@ -23,7 +23,7 @@ export const accessTokenGuard = async (
   }
 
   const payload = await jwtService.verifyToken(token);
-  console.log(payload);
+  console.log(payload, "payload check");
   if (payload) {
     const { userId } = payload;
 

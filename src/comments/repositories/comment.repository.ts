@@ -1,13 +1,10 @@
 import {
+  CommentDB,
   CommentInputDto,
   CommentInputType,
-  CommentViewModel,
 } from "../types/commentsTypes";
 import { commentsCollection } from "../../db/mongo.db";
-import { ObjectId } from "mongodb";
-import { CommentCreateType } from "../types/input/updateCommentTypes";
-import { WithId } from "mongodb";
-
+import { ObjectId, WithId } from "mongodb";
 export const commentsRepository = {
   async create(newComment: CommentInputType): Promise<string> {
     const insertResult = await commentsCollection.insertOne(newComment);
@@ -24,8 +21,7 @@ export const commentsRepository = {
       }
     );
 
-    const success = updateResult.matchedCount === 1;
-    return success;
+    return updateResult.matchedCount === 1;
   },
 
   async delete(id: string): Promise<boolean> {
@@ -35,9 +31,9 @@ export const commentsRepository = {
     return deleteResult.deletedCount === 1;
   },
 
-  async findByCommentId(id: string): Promise<string | undefined> {
+  async findByCommentId(id: string): Promise<WithId<CommentDB> | null> {
     const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
-    return comment?.commentatorInfo.userId;
+    return comment;
   },
 
   async findById(id: string): Promise<string> {

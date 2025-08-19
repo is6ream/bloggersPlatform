@@ -46,10 +46,17 @@ export const commentsService = {
   async update(
     id: string,
     dto: CommentInputDto,
-    userId: string,
+    userId: string
   ): Promise<Result<void | null>> {
-    const commentId = await commentsRepository.findByCommentId(id);
-    if (commentId !== userId) {
+    const comment = await commentsRepository.findByCommentId(id);
+    if (!comment)
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Not found",
+        extensions: [{ message: "Comment not found", field: "comment id" }],
+        data: null,
+      };
+    if (comment!._id.toString() !== userId) {
       return {
         status: ResultStatus.Forbidden,
         errorMessage: "Access denied",
@@ -57,15 +64,7 @@ export const commentsService = {
         data: null,
       };
     }
-    const result = await commentsRepository.update(id, dto);
-    if (!result) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "Not found",
-        extensions: [{ message: "Comment not found", field: "comment id" }],
-        data: null,
-      };
-    }
+    await commentsRepository.update(id, dto);
     return {
       status: ResultStatus.Success,
       extensions: [],

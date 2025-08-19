@@ -21,6 +21,7 @@ export const jwtService = {
     try {
       return jwt.verify(token, appConfig.JWT_SECRET) as { userId: string };
     } catch (error) {
+      console.log(error);
       console.error("Token verify some error");
       return null;
     }
