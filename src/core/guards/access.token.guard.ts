@@ -12,7 +12,7 @@ export const accessTokenGuard = async (
     res.sendStatus(HttpStatus.Unauthorized);
     return;
   }
-  console.log(req.headers.authorization, "Bearer check");
+  console.log(req.headers.authorization);
 
   const [authType, token] = req.headers.authorization.split(" ");
   console.log(authType, authType !== "Bearer");

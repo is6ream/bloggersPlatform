@@ -46,7 +46,7 @@ export const commentsService = {
   async update(
     id: string,
     dto: CommentInputDto,
-    userId: string
+    userId: string,
   ): Promise<Result<void | null>> {
     const comment = await commentsRepository.findByCommentId(id);
     if (!comment)
@@ -56,7 +56,8 @@ export const commentsService = {
         extensions: [{ message: "Comment not found", field: "comment id" }],
         data: null,
       };
-    if (comment!._id.toString() !== userId) {
+    console.log(userId, ": userId ", comment._id.toString(), ": commentId");
+    if (comment.commentatorInfo.userId.toString() !== userId) {
       return {
         status: ResultStatus.Forbidden,
         errorMessage: "Access denied",

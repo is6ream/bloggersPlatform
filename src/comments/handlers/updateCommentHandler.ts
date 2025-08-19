@@ -12,13 +12,14 @@ import { IdType } from "../../core/types/authorization/id";
 
 export async function updateCommentHandler(
   req: RequestWithParamsAndBodyAndUserId<CommentId, CommentCreateType, IdType>,
-  res: Response,
+  res: Response
 ) {
   try {
     const userId = req.user!.id;
     const id = req.params.id;
     const content = req.body.content;
     const result = await commentsService.update(id, { content }, userId);
+    console.log(result.status, "status check");
 
     if (result.status !== ResultStatus.Success) {
       res.status(resultCodeToHttpException(result.status)).send();
