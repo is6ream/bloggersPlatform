@@ -12,7 +12,7 @@ export const createErrorMessages = (
   errors: ValidationErrorType[],
 ): ValidationErrorDto => {
   return {
-    errorMessages: errors.map((error) => ({
+    errorsMessages: errors.map((error) => ({
       field: error.field,
       message: error.message,
     })),
@@ -31,7 +31,7 @@ export const formatErrors = (error: ValidationError): ValidationErrorType => {
 export const inputValidationResultMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   const errors = validationResult(req)
     .formatWith(formatErrors)

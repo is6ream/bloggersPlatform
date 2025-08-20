@@ -1,8 +1,6 @@
-import { CommentQueryOtput } from "./../types/commentsTypes";
 import { Result } from "../../core/result/result.type";
 import { ResultStatus } from "../../core/result/resultCode";
 import { postRepository } from "../../posts/repositories/postRepository";
-import { usersQueryRepository } from "../../users/repositories/user.query.repository";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { commentsRepository } from "../repositories/comment.repository";
 import {
@@ -56,7 +54,6 @@ export const commentsService = {
         extensions: [{ message: "Comment not found", field: "comment id" }],
         data: null,
       };
-    console.log(userId, ": userId ", comment._id.toString(), ": commentId");
     if (comment.commentatorInfo.userId.toString() !== userId) {
       return {
         status: ResultStatus.Forbidden,
@@ -72,7 +69,27 @@ export const commentsService = {
     };
   },
 
-  async delete(id: string): Promise<boolean> {
-    return await commentsRepository.delete(id);
+  async delete(id: string, userId: string): Promise<Result<void | null>> {
+    const comment = await commentsRepository.findByCommentId(id);
+    if (!comment)
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: "Not found",
+        extensions: [{ message: "Comment not found", field: "comment id" }],
+        data: null,
+      };
+    if (comment.commentatorInfo.userId.toString() !== userId) {
+      return {
+        status: ResultStatus.Forbidden,
+        errorMessage: "Access denied",
+        extensions: [{ message: "Access denied", field: "comment id" }],
+        data: null,
+      };
+    }
+    await commentsRepository.delete(id);
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+    };
   },
 };

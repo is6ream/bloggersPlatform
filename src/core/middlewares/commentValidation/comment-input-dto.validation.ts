@@ -1,13 +1,12 @@
 import { body } from "express-validator";
 
 export const commentValidator = body("content")
-  .exists()
-  .withMessage("comment is required")
+  .exists({ checkNull: true, checkFalsy: true })
+  .withMessage("Comment is required")
   .bail()
   .isString()
-  .withMessage("comment must be a string")
+  .withMessage("Comment must be a string")
   .bail()
   .trim()
   .isLength({ min: 20, max: 300 })
-  .withMessage("More than 300 or 20")
-  .bail();
+  .withMessage("Comment must be between 20 and 300 characters");
