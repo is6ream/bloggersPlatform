@@ -26,7 +26,7 @@ export const shortDescriptionValidator = body("shortDescription")
 
 export const contentValidator = body("content")
   .exists()
-  .withMessage("content is required")
+  .withMessage("content 123 is required")
   .bail()
   .isString()
   .withMessage("content must be a string")

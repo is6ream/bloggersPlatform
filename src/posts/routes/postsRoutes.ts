@@ -11,10 +11,10 @@ import { idValidation } from "../../core/middlewares/validation/params-id.valida
 import { paginationAndSortingValidation } from "../../core/middlewares/query-pagination-sorting/query-pagination-sorting.validation-middleware";
 import { PostSortField } from "../input/post-sort-field";
 import { accessTokenGuard } from "../../core/guards/access.token.guard";
-import { contentValidator } from "../../core/middlewares/postValidation/post-input-dto.validation";
 import { createCommentHandler } from "../../comments/handlers/createCommentHandler";
 import { CommentsSortField } from "../../comments/types/input/comment-sort-field";
 import { getCommentByPostId } from "../../comments/handlers/getCommentByPostId";
+import { commentValidator } from "../../core/middlewares/commentValidation/comment-input-dto.validation";
 export const postRouter = Router();
 
 postRouter
@@ -24,7 +24,7 @@ postRouter
     superAdminGuardMiddleware,
     postValidators,
     inputValidationResultMiddleware,
-    createPostHandler,
+    createPostHandler
   )
   .get("/:id", idValidation, inputValidationResultMiddleware, findPostHandler)
 
@@ -34,25 +34,26 @@ postRouter
     idValidation,
     postValidators,
     inputValidationResultMiddleware,
-    updatePostHandler,
+    updatePostHandler
   )
   .delete(
     "/:id",
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deletePostHandler,
+    deletePostHandler
   )
   .post(
     "/:id/comments",
     accessTokenGuard,
-    contentValidator,
+    commentValidator,
     inputValidationResultMiddleware,
-    createCommentHandler,
+    createCommentHandler
   )
+
   .get(
     "/:id/comments",
     paginationAndSortingValidation(CommentsSortField),
     idValidation,
-    getCommentByPostId,
+    getCommentByPostId
   );

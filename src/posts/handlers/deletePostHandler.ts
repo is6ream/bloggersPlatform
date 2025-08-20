@@ -12,11 +12,14 @@ export async function deletePostHandler(
 
     const result = await postsService.delete(id);
     if (result.status !== ResultStatus.Success) {
-      return res.sendStatus(HttpStatus.NotFound);
+      res.sendStatus(HttpStatus.NotFound);
+      return;
     }
-    return res.sendStatus(HttpStatus.NoContent);
+    res.sendStatus(HttpStatus.NoContent);
+    return;
   } catch (error: unknown) {
     console.log(error);
-    return res.sendStatus(HttpStatus.InternalServerError);
+    res.sendStatus(HttpStatus.InternalServerError);
+    return;
   }
 }

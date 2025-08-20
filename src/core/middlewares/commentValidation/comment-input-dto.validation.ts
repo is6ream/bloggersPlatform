@@ -1,7 +1,7 @@
 import { body } from "express-validator";
 
 export const commentValidator = body("content")
-  .exists({ checkNull: true, checkFalsy: true })
+  .exists()
   .withMessage("Comment is required")
   .bail()
   .isString()

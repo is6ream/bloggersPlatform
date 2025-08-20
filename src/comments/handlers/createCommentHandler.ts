@@ -9,10 +9,11 @@ import { PostId } from "../types/commentsTypes";
 
 export async function createCommentHandler(
   req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
-  res: Response,
+  res: Response
 ) {
   try {
-    console.log(req.body.content);
+    console.log("BODY IN HANDLER:", req.body);
+
     const userId = req.user?.id as string;
     if (!userId) {
       res.sendStatus(HttpStatus.Unauthorized);
@@ -28,7 +29,7 @@ export async function createCommentHandler(
       res.sendStatus(HttpStatus.NotFound);
     }
     const comment = await commentsQueryRepository.findById(
-      result.data!.commentId,
+      result.data!.commentId
     );
     res.status(HttpStatus.Created).send(comment);
     return;
