@@ -24,7 +24,7 @@ postRouter
     superAdminGuardMiddleware,
     postValidators,
     inputValidationResultMiddleware,
-    createPostHandler
+    createPostHandler,
   )
   .get("/:id", idValidation, inputValidationResultMiddleware, findPostHandler)
 
@@ -34,26 +34,26 @@ postRouter
     idValidation,
     postValidators,
     inputValidationResultMiddleware,
-    updatePostHandler
+    updatePostHandler,
   )
   .delete(
     "/:id",
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deletePostHandler
+    deletePostHandler,
   )
   .post(
     "/:id/comments",
     accessTokenGuard,
     commentValidator,
     inputValidationResultMiddleware,
-    createCommentHandler
+    createCommentHandler,
   )
 
   .get(
     "/:id/comments",
     paginationAndSortingValidation(CommentsSortField),
     idValidation,
-    getCommentByPostId
+    getCommentByPostId,
   );

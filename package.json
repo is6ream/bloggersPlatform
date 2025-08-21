@@ -24,7 +24,8 @@
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
-    "nodemailer": "^7.0.5"
+    "nodemailer": "^7.0.5",
+    "types@nodemailer": "link:/types@nodemailer"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -33,6 +34,7 @@
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.18",
+    "@types/nodemailer": "^7.0.1",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",

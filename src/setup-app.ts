@@ -5,6 +5,7 @@ import {
   AUTH_PATH,
   BLOGS_PATH,
   COMMENTS_PATH,
+  EMAIL_PATH,
   POSTS_PATH,
   TESTING_PATH,
   USERS_PATH,
@@ -15,6 +16,7 @@ import { testingRouter } from "./testing/deleteAllData.router";
 import { authRouter } from "./auth/routes/routes";
 import { usersRouter } from "./users/routes/usersRoutes";
 import { commentsRouter } from "./comments/routes/commentsRoutes";
+import { emailRouter } from "./auth/adapters/nodemailer.service";
 export const app = express();
 
 export const setupApp = (app: Express) => {
@@ -29,6 +31,7 @@ export const setupApp = (app: Express) => {
   app.use(AUTH_PATH, authRouter);
   app.use(USERS_PATH, usersRouter);
   app.use(COMMENTS_PATH, commentsRouter);
+  app.use(EMAIL_PATH, emailRouter);
 
   return app;
 };
