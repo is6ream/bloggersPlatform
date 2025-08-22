@@ -10,16 +10,16 @@ emailRouter.post("/send", async (req: Request, res: Response) => {
       port: 465,
       secure: true, // TLS
       auth: {
-        user: "testnodemailer12@mail.ru", // твоя почта
-        pass: "KCKW7EgvI0XFc2zionaN", // пароль приложения из Mail.ru
+        user: "testnodemailer12@mail.ru",
+        pass: "KCKW7EgvI0XFc2zionaN",
       },
     });
 
     const info = await transport.sendMail({
-      from: '"Danil" <testnodemailer12@mail.ru>', // отправитель
-      to: req.body.email, // получатель
-      subject: req.body.subject, // тема
-      html: req.body.message, // HTML тело
+      from: '"Danil" <testnodemailer12@mail.ru>',
+      to: req.body.email,
+      subject: req.body.subject,
+      html: req.body.message,
     });
 
     res.send({
@@ -28,7 +28,7 @@ emailRouter.post("/send", async (req: Request, res: Response) => {
       subject: req.body.subject,
     });
 
-    console.log("Message sent:", info.messageId);
+    console.log("Message sent:", info);
   } catch (e) {
     console.error("Send mail error:", e);
     res.status(500).send({ error: "Failed to send email" });
