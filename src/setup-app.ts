@@ -1,3 +1,4 @@
+import { emailRouter } from "./email/routes/emailHandler";
 import express from "express";
 import cors from "cors";
 import { blogsRouter } from "./blogs/blogs.routes";
@@ -16,7 +17,7 @@ import { testingRouter } from "./testing/deleteAllData.router";
 import { authRouter } from "./auth/routes/routes";
 import { usersRouter } from "./users/routes/usersRoutes";
 import { commentsRouter } from "./comments/routes/commentsRoutes";
-import { emailRouter } from "./auth/adapters/nodemailer.service";
+
 export const app = express();
 
 export const setupApp = (app: Express) => {
