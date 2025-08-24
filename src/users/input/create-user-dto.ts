@@ -7,7 +7,6 @@ export type CreateUserDto = {
 
 export type UserDB = {
   id?: string;
-  passwordSalt: string;
   passwordHash: string;
   login: string;
   email: string;

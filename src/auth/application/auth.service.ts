@@ -13,7 +13,7 @@ export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string
+    email: string,
   ): Promise<Result<User | null>> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зарегитсрирован ли такой пользователь уже в системе
     if (user) {

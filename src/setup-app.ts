@@ -1,4 +1,3 @@
-import { emailRouter } from "./email/routes/emailHandler";
 import express from "express";
 import cors from "cors";
 import { blogsRouter } from "./blogs/blogs.routes";
@@ -32,7 +31,6 @@ export const setupApp = (app: Express) => {
   app.use(AUTH_PATH, authRouter);
   app.use(USERS_PATH, usersRouter);
   app.use(COMMENTS_PATH, commentsRouter);
-  app.use(EMAIL_PATH, emailRouter);
 
   return app;
 };
