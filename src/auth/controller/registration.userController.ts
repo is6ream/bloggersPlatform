@@ -7,7 +7,7 @@ import { Response } from "express";
 
 export async function registrationUserController(
   req: RequestWithBody<CreateUserDto>,
-  res: Response
+  res: Response,
 ) {
   const { login, email, password } = req.body;
 
