@@ -10,7 +10,6 @@ export async function registrationUserController(
   res: Response,
 ) {
   const { login, email, password } = req.body;
-
   const result = await authService.registerUser(login, password, email);
   if (result === undefined) {
     res.sendStatus(HttpStatus.InternalServerError);

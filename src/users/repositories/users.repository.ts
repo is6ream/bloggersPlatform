@@ -2,6 +2,7 @@ import { CreateUserDto, UserDB } from "../input/create-user-dto";
 import { UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
+import { UserRegistrationDB } from "../../auth/types/auth.types";
 
 export const usersRepository = {
   async create(newUser: CreateUserDto): Promise<UserViewModel> {
@@ -28,7 +29,7 @@ export const usersRepository = {
     return deleteResult.deletedCount === 1;
   },
   async isUserExistByEmailOrLogin(
-    loginOrEmail: string,
+    loginOrEmail: string
   ): Promise<WithId<UserDB> | null> {
     return userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
@@ -37,11 +38,16 @@ export const usersRepository = {
 
   async doesExistByLoginOrEmail(
     login: string,
-    email: string,
+    email: string
   ): Promise<boolean> {
     const user = await userCollection.findOne({
       $or: [{ email }, { login }],
     });
     return !!user;
+  },
+
+  async findUserByConfirmationCode(code: string): Promise<UserDB | null> {
+    const user: UserDB | null = await userCollection.findOne({ code: code });
+    return user;
   },
 };

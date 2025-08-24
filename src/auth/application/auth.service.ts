@@ -8,12 +8,14 @@ import { jwtService } from "../adapters/jwt.service";
 import { User } from "../../users/constructors/user.entity";
 import { emailAdapter } from "../adapters/nodemailer.service";
 import { emailExamples } from "../adapters/email.example";
+import { fileURLToPath } from "url";
+import { UserRegistrationDB } from "../types/auth.types";
 
 export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string,
+    email: string
   ): Promise<Result<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зарегитсрирован ли такой пользователь уже в системе
     if (user) {
@@ -34,7 +36,7 @@ export const authService = {
         //отправляем письмо, используя библиотеку nodemailer
         newUser.email,
         newUser.emailConfirmation.confirmationCode,
-        emailExamples.registrationEmail,
+        emailExamples.registrationEmail
       );
 
       return {
@@ -47,7 +49,20 @@ export const authService = {
     }
   },
 
-  async confirmEmail(code: string): Promise<Result<any>> {},
+  async confirmEmail(code: string): Promise<Result<any>> {
+    const user: UserDB | null =
+      await usersRepository.findUserByConfirmationCode(code);
+    if (!user) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [
+          { field: "confirmation code", message: "user does not exist" },
+        ],
+      };
+    }
+    if (user!.emailConfirmation?.expirationDate < new Date()) {
+    }
+  },
 
   async loginUser(
     loginOrEmail: string,
