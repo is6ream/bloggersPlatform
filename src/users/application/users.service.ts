@@ -4,11 +4,12 @@ import { CreateUserDto } from "../input/create-user-dto";
 import { usersRepository } from "../repositories/users.repository";
 import { Result } from "../../core/result/result.type";
 import { ResultStatus } from "../../core/result/resultCode";
+import { bcryptService } from "../../auth/adapters/bcrypt.service";
 
 export const usersService = {
   async create(dto: UserInputModel): Promise<Result<string>> {
     const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
-      dto.email,
+      dto.email
     );
     if (isEmailExist) {
       return {
@@ -18,15 +19,13 @@ export const usersService = {
       };
     }
     const { login, password, email } = dto;
-    const passwordSalt = await bcrypt.genSalt(10);
-    const passwordHash = await this._generateHash(password, passwordSalt);
+    const passwordHash = await bcryptService.generateHash(password);
 
     const user: CreateUserDto = {
       passwordHash,
       login,
       email,
       createdAt: new Date(),
-      passwordSalt,
     };
 
     const newUser = await usersRepository.create(user);
