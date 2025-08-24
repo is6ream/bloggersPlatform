@@ -1,4 +1,4 @@
-import { loginValidator } from './../../users/middlewares/user-input-dto-validator';
+import { loginValidator } from "./../../users/middlewares/user-input-dto-validator";
 import { body } from "express-validator";
 
 const combinedRegex = /^(?:[a-zA-Z0-9_-]*|[\w.-]+@([\w-]+\.)+[\w-]{2,4})$/;
@@ -23,5 +23,3 @@ export const passwordValidation = body("password")
   .withMessage("more then 20 or 6");
 
 export const authValidators = [loginOrEmailValidator, passwordValidation];
-
-

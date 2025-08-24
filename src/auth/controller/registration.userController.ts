@@ -7,12 +7,12 @@ import { Response } from "express";
 
 export async function registrationUserController(
   req: RequestWithBody<CreateUserDto>,
-  res: Response
+  res: Response,
 ) {
   const { login, email, password } = req.body;
 
   const result = await authService.registerUser(login, password, email);
-  if (result.staus === ResultStatus.Success) {
+  if (result.status === ResultStatus.Success) {
     res.status(HttpStatus.Created).send();
     return;
   }

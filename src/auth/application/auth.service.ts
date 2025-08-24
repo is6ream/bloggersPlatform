@@ -7,6 +7,22 @@ import { bcryptService } from "../adapters/bcrypt.service";
 import { jwtService } from "../adapters/jwt.service";
 
 export const authService = {
+  async registerUser(
+    login: string,
+    password: string,
+    email: string,
+  ): Promise<Result<User | null>> {
+    const user = await usersRepository.doesExistByLoginOrEmail(login, email);
+    if (user) {
+      return {
+        status: ResultStatus.BadRequest,
+        errorMessage: "Bad request",
+        extensions: [{ field: "user", message: "user already registered" }],
+        data: null,
+      };
+    }
+  },
+
   async loginUser(
     loginOrEmail: string,
     password: string,
