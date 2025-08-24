@@ -13,7 +13,7 @@ export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string,
+    email: string
   ): Promise<Result<User | null>> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зарегитсрирован ли такой пользователь уже в системе
     if (user) {
@@ -28,24 +28,29 @@ export const authService = {
 
     const newUser = new User(login, email, passwordHash); //исплользуем констурктор класса и передаем туда данные из параметров и хеш
     await usersRepository.create(newUser); //создаем пользователя
+    try {
+      emailAdapter.sendEmail(
+        //отправляем письмо, используя библиотеку nodemailer
+        newUser.email,
+        newUser.emailConfirmation.confirmationCode,
+        emailExamples.registrationEmail,
+      );
 
-    emailAdapter.sendEmail(
-      //отправляем письмо, используя библиотеку nodemailer
-      newUser.email,
-      newUser.emailConfirmation.confirmationCode,
-      emailExamples.registrationEmail,
-    );
-
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-      data: newUser,
-    };
+      return {
+        status: ResultStatus.Success,
+        extensions: [],
+        data: newUser,
+      };
+    } catch (err: unknown) {
+      console.error(err);
+    }
   },
+
+  async confirmEmail(code: string): Promise<Result<any>> {},
 
   async loginUser(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<{ accessToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
     if (result.status !== ResultStatus.Success)

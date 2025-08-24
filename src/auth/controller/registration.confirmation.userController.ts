@@ -10,7 +10,7 @@ export type EmailConfirmCode = {
 
 export async function confirmRegisterUserController(
   req: RequestWithBody<EmailConfirmCode>,
-  res: Response
+  res: Response,
 ) {
   const { code } = req.body;
   const result = await authService.confirmEmail(code);
