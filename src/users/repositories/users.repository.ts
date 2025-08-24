@@ -2,7 +2,7 @@ import { CreateUserDto, UserDB } from "../input/create-user-dto";
 import { UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
-import { UserRegistrationDB } from "../../auth/types/auth.types";
+import { User } from "../constructors/user.entity";
 
 export const usersRepository = {
   async create(newUser: CreateUserDto): Promise<UserViewModel> {
@@ -46,8 +46,12 @@ export const usersRepository = {
     return !!user;
   },
 
-  async findUserByConfirmationCode(code: string): Promise<UserDB | null> {
-    const user: UserDB | null = await userCollection.findOne({ code: code });
+  async findUserByConfirmationCode(code: string): Promise<User | null> {
+    const user: User | null = await userCollection.findOne({ code: code });
     return user;
   },
+
+  async update(): Promise<void>{
+    const updateUser = await userCollection.updateOne({})
+  }
 };

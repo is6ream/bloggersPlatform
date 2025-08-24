@@ -50,18 +50,54 @@ export const authService = {
   },
 
   async confirmEmail(code: string): Promise<Result<any>> {
-    const user: UserDB | null =
+    //как этот код сделать более читаемым?
+    const user: User | null =
       await usersRepository.findUserByConfirmationCode(code);
+
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
         extensions: [
-          { field: "confirmation code", message: "user does not exist" },
+          {
+            field: "confirmation code",
+            message: "Confirmation code is incorrect",
+          },
         ],
       };
     }
-    if (user!.emailConfirmation?.expirationDate < new Date()) {
+    if (user?.emailConfirmation.confirmationCode !== code) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [
+          {
+            field: "confirmation code",
+            message: "Confirmation code is incorrect",
+          },
+        ],
+      };
     }
+    if (user.emailConfirmation?.expirationDate < new Date()) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [
+          { field: "confirmation code", message: "Code is expired" },
+        ],
+      };
+    }
+    if (user.emailConfirmation.isConfirmed === true) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [
+          {
+            field: "confirmation code",
+            message: "Code has already been applied",
+          },
+        ],
+      };
+    }
+
+    user.emailConfirmation.isConfirmed = true;
+    await usersRepository.update(user);
   },
 
   async loginUser(
