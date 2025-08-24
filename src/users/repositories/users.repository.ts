@@ -21,6 +21,12 @@ export const usersRepository = {
     return user;
   },
 
+  async delete(id: string): Promise<boolean> {
+    const deleteResult = await userCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+    return deleteResult.deletedCount === 1;
+  },
   async isUserExistByEmailOrLogin(
     loginOrEmail: string,
   ): Promise<WithId<UserDB> | null> {
@@ -29,10 +35,13 @@ export const usersRepository = {
     });
   },
 
-  async delete(id: string): Promise<boolean> {
-    const deleteResult = await userCollection.deleteOne({
-      _id: new ObjectId(id),
+  async doesExistByLoginOrEmail(
+    login: string,
+    email: string,
+  ): Promise<boolean> {
+    const user = await userCollection.findOne({
+      $or: [{ email }, { login }],
     });
-    return deleteResult.deletedCount === 1;
+    return !!user;
   },
 };
