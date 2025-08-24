@@ -45,7 +45,7 @@ export const authService = {
 
   async loginUser(
     loginOrEmail: string,
-    password: string
+    password: string,
   ): Promise<Result<{ accessToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
     if (result.status !== ResultStatus.Success)
