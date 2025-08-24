@@ -9,7 +9,7 @@ import { bcryptService } from "../../auth/adapters/bcrypt.service";
 export const usersService = {
   async create(dto: UserInputModel): Promise<Result<string>> {
     const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
-      dto.email
+      dto.email,
     );
     if (isEmailExist) {
       return {

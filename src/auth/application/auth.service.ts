@@ -6,6 +6,8 @@ import { Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
 import { jwtService } from "../adapters/jwt.service";
 import { User } from "../../users/constructors/user.entity";
+import { emailAdapter } from "../adapters/nodemailer.service";
+import { emailExamples } from "../adapters/email.example";
 
 export const authService = {
   async registerUser(
@@ -13,20 +15,32 @@ export const authService = {
     password: string,
     email: string
   ): Promise<Result<User | null>> {
-    const user = await usersRepository.doesExistByLoginOrEmail(login, email);
+    const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зарегитсрирован ли такой пользователь уже в системе
     if (user) {
       return {
         status: ResultStatus.BadRequest,
         errorMessage: "Bad request",
         extensions: [{ field: "user", message: "user already registered" }],
         data: null,
-      };
+      }; //если да - то выкидываем вот такой resultObject
     }
-    
-    const passwordHash = await bcryptService.generateHash(password);
+    const passwordHash = await bcryptService.generateHash(password); //генерируем пароль, соль добавляется в  bcryptService
 
-    const newUser = new User(login, email, passwordHash);
-    await usersRepository.create(newUser);
+    const newUser = new User(login, email, passwordHash); //исплользуем констурктор класса и передаем туда данные из параметров и хеш
+    await usersRepository.create(newUser); //создаем пользователя
+
+    emailAdapter.sendEmail(
+      //отправляем письмо, используя библиотеку nodemailer
+      newUser.email,
+      newUser.emailConfirmation.confirmationCode,
+      emailExamples.registrationEmail,
+    );
+
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+      data: newUser,
+    };
   },
 
   async loginUser(

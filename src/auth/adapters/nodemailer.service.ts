@@ -4,7 +4,7 @@ export const emailAdapter = {
   async sendEmail(
     email: string,
     code: string,
-    template: (code: string) => string
+    template: (code: string) => string,
   ): Promise<boolean> {
     const transport = nodemailer.createTransport({
       host: "smtp.mail.ru",
