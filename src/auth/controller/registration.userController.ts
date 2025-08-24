@@ -12,9 +12,11 @@ export async function registrationUserController(
   const { login, email, password } = req.body;
 
   const result = await authService.registerUser(login, password, email);
-  if (result.status !== ResultStatus.Success) {
-    console.log("check error in handler");
-    res.status(HttpStatus.BadRequest).send(result.extensions);
+  if (result === undefined) {
+    res.sendStatus(HttpStatus.InternalServerError);
+  }
+  if (result!.status !== ResultStatus.Success) {
+    res.status(HttpStatus.BadRequest).send(result!.extensions);
     return;
   }
   res.sendStatus(HttpStatus.Created);

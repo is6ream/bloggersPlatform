@@ -13,8 +13,8 @@ export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string
-  ): Promise<Result<User | null>> {
+    email: string,
+  ): Promise<Result<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зарегитсрирован ли такой пользователь уже в системе
     if (user) {
       return {
@@ -28,6 +28,7 @@ export const authService = {
 
     const newUser = new User(login, email, passwordHash); //исплользуем констурктор класса и передаем туда данные из параметров и хеш
     await usersRepository.create(newUser); //создаем пользователя
+
     try {
       emailAdapter.sendEmail(
         //отправляем письмо, используя библиотеку nodemailer
