@@ -1,4 +1,3 @@
-import { Request } from "express";
 import { IdType } from "./id";
 
 declare global {

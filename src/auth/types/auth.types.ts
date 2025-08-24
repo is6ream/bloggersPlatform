@@ -3,3 +3,9 @@ export type AuthType = {
   loginOrEmail: string;
   passwordHash: string;
 };
+
+export type CreateUserDto = {
+  login: string;
+  password: string;
+  email: string;
+};

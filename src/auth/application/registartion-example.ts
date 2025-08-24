@@ -5,7 +5,7 @@ export const authService = {
   async registerUser(
     login: string,
     pass: string,
-    email: string
+    email: string,
   ): Promise<IUserDB | null> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email);
     if (user) return null;
@@ -37,7 +37,7 @@ export const authService = {
         //отправить сообщение на почту юзера с кодом подтверждения
         newUser.email,
         newUser.emailConfirmation.confirmationCode,
-        emailExamples.registrationEmail
+        emailExamples.registrationEmail,
       );
     } catch (e: unknown) {
       console.error("Send email error", e); //залогировать ошибку при отправке сообщения
