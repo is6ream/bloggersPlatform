@@ -7,7 +7,7 @@ import { Response } from "express";
 
 export async function registrationUserController(
   req: RequestWithBody<CreateUserDto>,
-  res: Response,
+  res: Response
 ) {
   const { login, email, password } = req.body;
 
@@ -16,4 +16,6 @@ export async function registrationUserController(
     res.status(HttpStatus.Created).send();
     return;
   }
+
+  res.status(HttpStatus.BadRequest).send(result.extensions);
 }
