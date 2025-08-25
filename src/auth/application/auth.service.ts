@@ -8,8 +8,7 @@ import { jwtService } from "../adapters/jwt.service";
 import { User } from "../../users/constructors/user.entity";
 import { emailAdapter } from "../adapters/nodemailer.service";
 import { emailExamples } from "../adapters/email.example";
-import { fileURLToPath } from "url";
-import { UserRegistrationDB } from "../types/auth.types";
+import { UserDbDto } from "../../users/types/user-types";
 
 export const authService = {
   async registerUser(
@@ -51,9 +50,8 @@ export const authService = {
 
   async confirmEmail(code: string): Promise<Result<any>> {
     //как этот код сделать более читаемым?
-    const user: User | null =
+    const user: UserDbDto | null =
       await usersRepository.findUserByConfirmationCode(code);
-
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
@@ -96,8 +94,7 @@ export const authService = {
       };
     }
 
-    user.emailConfirmation.isConfirmed = true;
-    await usersRepository.update(user);
+    await usersRepository.update(user.id);
   },
 
   async loginUser(

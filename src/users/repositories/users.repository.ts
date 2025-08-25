@@ -1,5 +1,5 @@
 import { CreateUserDto, UserDB } from "../input/create-user-dto";
-import { UserViewModel } from "../types/user-types";
+import { UserDbDto, UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
@@ -29,7 +29,7 @@ export const usersRepository = {
     return deleteResult.deletedCount === 1;
   },
   async isUserExistByEmailOrLogin(
-    loginOrEmail: string
+    loginOrEmail: string,
   ): Promise<WithId<UserDB> | null> {
     return userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
@@ -38,7 +38,7 @@ export const usersRepository = {
 
   async doesExistByLoginOrEmail(
     login: string,
-    email: string
+    email: string,
   ): Promise<boolean> {
     const user = await userCollection.findOne({
       $or: [{ email }, { login }],
@@ -46,12 +46,29 @@ export const usersRepository = {
     return !!user;
   },
 
-  async findUserByConfirmationCode(code: string): Promise<User | null> {
-    const user: User | null = await userCollection.findOne({ code: code });
-    return user;
+  async findUserByConfirmationCode(code: string): Promise<UserDbDto | null> {
+    const user: WithId<User> | null = await userCollection.findOne({
+      "emailConfirmation.confirmationCode": code,
+    });
+    if (!user) {
+      return null;
+    }
+
+    return {
+      id: user._id.toString(),
+      login: user.login,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      createdAt: user.createdAt,
+      emailConfirmation: user.emailConfirmation,
+    };
   },
 
-  async update(): Promise<void>{
-    const updateUser = await userCollection.updateOne({})
-  }
+  async update(id: string): Promise<void> {
+    await userCollection.updateOne(
+      { id: new ObjectId(id) },
+      { $set: { "emailConfirmation.isConfirmed": true } }
+    );
+    return;
+  },
 };

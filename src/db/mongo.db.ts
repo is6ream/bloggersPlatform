@@ -2,7 +2,6 @@ import { Collection, Db, MongoClient } from "mongodb";
 import { BlogDB } from "../blogs/types/blogs-types";
 import { PostDB } from "../posts/types/posts-types";
 import { appConfig } from "../core/config/config";
-import { UserDB } from "../users/input/create-user-dto";
 import { CommentDB } from "../comments/types/commentsTypes";
 import { User } from "../users/constructors/user.entity";
 
