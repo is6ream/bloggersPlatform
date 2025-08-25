@@ -1,24 +1,31 @@
 import { Router } from "express";
-import { authValidators } from "../middlewares/auth.validation";
+import { authValidators, codeValidator } from "../middlewares/auth.validation";
 import { loginUserController } from "../controller/auth.userController";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
 import { getInfoAboutUserController } from "../controller/get.info.aboutUserController";
 import { accessTokenGuard } from "../../core/guards/access.token.guard";
 import { userValidators } from "../../users/middlewares/user-input-dto-validator";
 import { registrationUserController } from "../controller/registration.userController";
+import { confirmRegisterUserController } from "../controller/registration.confirmation.userController";
 export const authRouter = Router();
 
 authRouter
   .post(
-    "/auth/login",
+    "/login",
     authValidators,
     inputValidationResultMiddleware,
     loginUserController,
   )
-  .get("/auth/me", accessTokenGuard, getInfoAboutUserController)
+  .get("/me", accessTokenGuard, getInfoAboutUserController)
   .post(
-    "/auth/registration",
+    "/registration",
     userValidators,
     inputValidationResultMiddleware,
     registrationUserController,
+  )
+  .post(
+    "/registration/confirmation",
+    codeValidator,
+    inputValidationResultMiddleware,
+    confirmRegisterUserController,
   );

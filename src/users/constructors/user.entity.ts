@@ -5,7 +5,7 @@ export class User {
   email: string;
   passwordHash: string;
   createdAt: Date;
-  emailConfirmation: {
+  emailConfirmation?: {
     confirmationCode: string;
     expirationDate: Date;
     isConfirmed: boolean;
@@ -17,7 +17,7 @@ export class User {
       (this.passwordHash = hash),
       (this.createdAt = new Date()),
       (this.emailConfirmation = {
-        expirationDate: new Date(),
+        expirationDate: new Date(Date.now() + 3 * 60 * 1000),
         confirmationCode: randomUUID(),
         isConfirmed: false,
       });

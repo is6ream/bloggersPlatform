@@ -60,14 +60,14 @@ export const usersRepository = {
       email: user.email,
       passwordHash: user.passwordHash,
       createdAt: user.createdAt,
-      emailConfirmation: user.emailConfirmation,
+      emailConfirmation: user.emailConfirmation!,
     };
   },
 
   async update(id: string): Promise<void> {
     await userCollection.updateOne(
       { id: new ObjectId(id) },
-      { $set: { "emailConfirmation.isConfirmed": true } }
+      { $set: { "emailConfirmation.isConfirmed": true } },
     );
     return;
   },

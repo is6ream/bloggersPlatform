@@ -14,7 +14,7 @@ export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string
+    email: string,
   ): Promise<Result<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зарегитсрирован ли такой пользователь уже в системе
     if (user) {
@@ -34,8 +34,8 @@ export const authService = {
       emailAdapter.sendEmail(
         //отправляем письмо, используя библиотеку nodemailer
         newUser.email,
-        newUser.emailConfirmation.confirmationCode,
-        emailExamples.registrationEmail
+        newUser.emailConfirmation!.confirmationCode,
+        emailExamples.registrationEmail,
       );
 
       return {
@@ -48,8 +48,7 @@ export const authService = {
     }
   },
 
-  async confirmEmail(code: string): Promise<Result<any>> {
-    //как этот код сделать более читаемым?
+  async confirmEmail(code: string): Promise<Result<null>> {
     const user: UserDbDto | null =
       await usersRepository.findUserByConfirmationCode(code);
     if (!user) {
@@ -83,6 +82,7 @@ export const authService = {
       };
     }
     if (user.emailConfirmation.isConfirmed === true) {
+      //возможно здесь затык, так как в постмане при повторной отправке все равно выдает код 204
       return {
         status: ResultStatus.BadRequest,
         extensions: [
@@ -95,11 +95,16 @@ export const authService = {
     }
 
     await usersRepository.update(user.id);
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+      data: null,
+    };
   },
 
   async loginUser(
     loginOrEmail: string,
-    password: string
+    password: string,
   ): Promise<Result<{ accessToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
     if (result.status !== ResultStatus.Success)
@@ -110,7 +115,7 @@ export const authService = {
         data: null,
       };
     const accessToken = await jwtService.createToken(
-      result.data!._id.toString()
+      result.data!._id.toString(),
     );
     return {
       status: ResultStatus.Success,
@@ -121,7 +126,7 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string
+    password: string,
   ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
@@ -134,7 +139,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash
+      user.passwordHash,
     );
     if (!isPasscorrect)
       return {

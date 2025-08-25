@@ -16,9 +16,10 @@ export async function confirmRegisterUserController(
   const result = await authService.confirmEmail(code);
 
   if (result.status !== ResultStatus.Success) {
-    res.status(HttpStatus.BadRequest).send(extensions);
+    res.status(HttpStatus.BadRequest).send(result.extensions);
     return;
   }
+  res.status(HttpStatus.NoContent).send();
 
   res.sendStatus(HttpStatus.NoContent);
 }
