@@ -18,9 +18,6 @@ describe("Blog API body validation check", () => {
   setupApp(app);
 
   const correctTestBlogAttributes: BlogAttributes = getBlogDto();
-
-  const adminToken = generateBasicAuthToken();
-
   beforeAll(async () => {
     await runDB(
       "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",

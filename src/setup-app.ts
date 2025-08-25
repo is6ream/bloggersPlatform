@@ -31,7 +31,7 @@ export const setupApp = (app: Express) => {
   app.use(AUTH_PATH, authRouter);
   app.use(USERS_PATH, usersRouter);
   app.use(COMMENTS_PATH, commentsRouter);
-
+  app.use(TESTING_PATH, testingRouter);
   return app;
 };
 

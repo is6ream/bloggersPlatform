@@ -11,6 +11,7 @@ import { HttpStatus } from "../../../src/core/http-statuses";
 import { getBlogById } from "../../utils/blogs/get-blog-by-id";
 import { updateBlog } from "../../utils/blogs/update-blog";
 import { BlogUpdateInput } from "./types";
+
 describe("Blog API", () => {
   const app = express();
   setupApp(app);
@@ -19,7 +20,7 @@ describe("Blog API", () => {
 
   beforeAll(async () => {
     await runDB(
-      "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     await clearDb(app);
   });
