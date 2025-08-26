@@ -5,10 +5,9 @@ type ExtensionType = {
   message: string;
 };
 
-type RegistrationExtensionType = errorMessages:[ {
-  field: string | null;
-  message: string;
-};]
+type RegistrationExtensionType = {
+  errorsMessages: [{ message: string; field: string | null }];
+};
 
 export type Result<T = null> = {
   status: ResultStatus;
@@ -19,6 +18,7 @@ export type Result<T = null> = {
 
 export type RegistrationResult<T = null> = {
   status: ResultStatus;
-  errorMessage?:string,
-  extensions: 
+  errorMessage?: string;
+  extensions?: RegistrationExtensionType;
+  data?: T;
 };

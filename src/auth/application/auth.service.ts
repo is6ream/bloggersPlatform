@@ -2,7 +2,7 @@ import { WithId } from "mongodb";
 import { UserDB } from "../../users/input/create-user-dto";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
-import { Result } from "../../core/result/result.type";
+import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
 import { jwtService } from "../adapters/jwt.service";
 import { User } from "../../users/constructors/user.entity";
@@ -14,33 +14,35 @@ export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string,
-  ): Promise<Result<User | null> | undefined> {
-    const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зареган ли такой пользователь уже в системе
+    email: string
+  ): Promise<RegistrationResult<User | null> | undefined> {
+    const user = await usersRepository.doesExistByLoginOrEmail(login, email);
     if (user) {
       return {
         status: ResultStatus.BadRequest,
         errorMessage: "Bad request",
-        extensions: { field: "user", message: "user already registered" }],
+        extensions: {
+          errorsMessages: [
+            { message: "user already registered", field: "login" },
+          ],
+        },
         data: null,
-      }; //если да - то выкидываем вот такой resultObject
+      };
     }
-    const passwordHash = await bcryptService.generateHash(password); //генерируем пароль, соль добавляется в  bcryptService
+    const passwordHash = await bcryptService.generateHash(password);
 
-    const newUser = new User(login, email, passwordHash); //исплользуем констурктор класса и передаем туда данные из параметров и хеш
-    await usersRepository.create(newUser); //создаем пользователя
+    const newUser = new User(login, email, passwordHash);
+    await usersRepository.create(newUser);
 
     try {
       emailAdapter.sendEmail(
-        //отправляем письмо, используя библиотеку nodemailer
         newUser.email,
         newUser.emailConfirmation!.confirmationCode,
-        emailExamples.registrationEmail,
+        emailExamples.registrationEmail
       );
 
       return {
         status: ResultStatus.Success,
-        extensions: [],
         data: newUser,
       };
     } catch (err: unknown) {
@@ -48,65 +50,88 @@ export const authService = {
     }
   },
 
-  async confirmEmail(code: string): Promise<Result<null>> {
+  async confirmEmail(code: string): Promise<RegistrationResult<null>> {
     const user: UserDbDto | null =
       await usersRepository.findUserByConfirmationCode(code);
+    console.log(user?.emailConfirmation.isConfirmed);
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [
-          {
-            field: "confirmation code",
-            message: "Confirmation code is incorrect",
-          },
-        ],
+        extensions: {
+          errorsMessages: [
+            {
+              message: "Confirmation code is incorrect",
+              field: "confirmation code",
+            },
+          ],
+        },
       };
     }
     if (user?.emailConfirmation.confirmationCode !== code) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [
-          {
-            field: "confirmation code",
-            message: "Confirmation code is incorrect",
-          },
-        ],
+        extensions: {
+          errorsMessages: [
+            {
+              message: "Confirmation code is incorrect",
+              field: "confirmation code",
+            },
+          ],
+        },
       };
     }
     if (user.emailConfirmation?.expirationDate < new Date()) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [
-          { field: "confirmation code", message: "Code is expired" },
-        ],
+        extensions: {
+          errorsMessages: [
+            { message: "Code is expired", field: "confirmation code" },
+          ],
+        },
       };
     }
     if (user.emailConfirmation.isConfirmed === true) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [
-          {
-            field: "confirmation code",
-            message: "Code has already been applied",
-          },
-        ],
+        extensions: {
+          errorsMessages: [
+            {
+              message: "Code has already been applied",
+              field: "code",
+            },
+          ],
+        },
       };
     }
 
     await usersRepository.update(user.id);
     return {
       status: ResultStatus.Success,
-      extensions: [],
       data: null,
     };
   },
 
-  async resendingEmail(email: string): Promise<Result<null> | undefined> {
+  async resendingEmail(
+    email: string
+  ): Promise<RegistrationResult<null> | undefined> {
     const user = await usersRepository.isUserExistByEmailOrLogin(email);
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{ field: "email", message: "incorrect email" }],
+        extensions: {
+          errorsMessages: [{ message: "incorrect email", field: "email" }],
+        },
+        data: null,
+      };
+    }
+    if (user.emailConfirmation?.isConfirmed === true) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: {
+          errorsMessages: [
+            { message: "email is already confirmed", field: "email" },
+          ],
+        },
         data: null,
       };
     }
@@ -115,12 +140,11 @@ export const authService = {
         //отправляем письмо, используя библиотеку nodemailer
         user.email,
         user.emailConfirmation!.confirmationCode,
-        emailExamples.registrationEmail,
+        emailExamples.registrationEmail
       );
 
       return {
         status: ResultStatus.Success,
-        extensions: [],
         data: null,
       };
     } catch (err: unknown) {
@@ -131,7 +155,7 @@ export const authService = {
 
   async loginUser(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<{ accessToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
     if (result.status !== ResultStatus.Success)
@@ -142,7 +166,7 @@ export const authService = {
         data: null,
       };
     const accessToken = await jwtService.createToken(
-      result.data!._id.toString(),
+      result.data!._id.toString()
     );
     return {
       status: ResultStatus.Success,
@@ -153,7 +177,7 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
@@ -166,7 +190,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash,
+      user.passwordHash
     );
     if (!isPasscorrect)
       return {

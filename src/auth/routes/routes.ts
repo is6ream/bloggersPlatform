@@ -34,7 +34,7 @@ authRouter
     emailResendingController
   )
   .post(
-    "/registration/confirmation",
+    "/registration-confirmation",
     codeValidator,
     inputValidationResultMiddleware,
     confirmRegisterUserController
