@@ -21,3 +21,7 @@ export type UserRegistrationDB = {
     isConfirmed: boolean;
   };
 };
+
+export type ResendingBodyType = {
+  email: string;
+};
