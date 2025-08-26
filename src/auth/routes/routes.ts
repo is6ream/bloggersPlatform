@@ -10,6 +10,7 @@ import {
 } from "../../users/middlewares/user-input-dto-validator";
 import { registrationUserController } from "../controller/registration.userController";
 import { confirmRegisterUserController } from "../controller/registration.confirmation.userController";
+import { emailResendingController } from "../controller/email.resending.controller";
 export const authRouter = Router();
 
 authRouter
@@ -17,24 +18,24 @@ authRouter
     "/login",
     authValidators,
     inputValidationResultMiddleware,
-    loginUserController
+    loginUserController,
   )
   .get("/me", accessTokenGuard, getInfoAboutUserController)
   .post(
     "/registration",
     userValidators,
     inputValidationResultMiddleware,
-    registrationUserController
+    registrationUserController,
   )
   .post(
     "/registration/confirmation",
     codeValidator,
     inputValidationResultMiddleware,
-    confirmRegisterUserController
+    confirmRegisterUserController,
   )
   .post(
     "registration-email-resending",
     emailValidator,
     inputValidationResultMiddleware,
-    
+    emailResendingController,
   );

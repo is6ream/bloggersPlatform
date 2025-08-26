@@ -14,9 +14,9 @@ export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string
+    email: string,
   ): Promise<Result<User | null> | undefined> {
-    const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зарегитсрирован ли такой пользователь уже в системе
+    const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, зареган ли такой пользователь уже в системе
     if (user) {
       return {
         status: ResultStatus.BadRequest,
@@ -35,7 +35,7 @@ export const authService = {
         //отправляем письмо, используя библиотеку nodemailer
         newUser.email,
         newUser.emailConfirmation!.confirmationCode,
-        emailExamples.registrationEmail
+        emailExamples.registrationEmail,
       );
 
       return {
@@ -101,9 +101,37 @@ export const authService = {
     };
   },
 
+  async resendingEmail(email: string): Promise<Result<null> | undefined> {
+    const user = await usersRepository.isUserExistByEmailOrLogin(email);
+    if (!user) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{ field: "email", message: "incorrect email" }],
+        data: null,
+      };
+    }
+    try {
+      emailAdapter.sendEmail(
+        //отправляем письмо, используя библиотеку nodemailer
+        user.email,
+        user.emailConfirmation!.confirmationCode,
+        emailExamples.registrationEmail,
+      );
+
+      return {
+        status: ResultStatus.Success,
+        extensions: [],
+        data: null,
+      };
+    } catch (err: unknown) {
+      console.error(err);
+      return;
+    }
+  },
+
   async loginUser(
     loginOrEmail: string,
-    password: string
+    password: string,
   ): Promise<Result<{ accessToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
     if (result.status !== ResultStatus.Success)
@@ -114,7 +142,7 @@ export const authService = {
         data: null,
       };
     const accessToken = await jwtService.createToken(
-      result.data!._id.toString()
+      result.data!._id.toString(),
     );
     return {
       status: ResultStatus.Success,
@@ -125,7 +153,7 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string
+    password: string,
   ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
@@ -138,7 +166,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash
+      user.passwordHash,
     );
     if (!isPasscorrect)
       return {
