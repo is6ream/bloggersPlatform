@@ -18,7 +18,7 @@ export async function registrationUserController(
     res.status(HttpStatus.BadRequest).send(result!.extensions);
     return;
   }
-  res.sendStatus(HttpStatus.Created);
+  res.sendStatus(HttpStatus.NoContent);
 
   return;
 }

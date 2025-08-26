@@ -21,7 +21,7 @@ export const authService = {
       return {
         status: ResultStatus.BadRequest,
         errorMessage: "Bad request",
-        extensions: [{ field: "user", message: "user already registered" }],
+        extensions: { field: "user", message: "user already registered" }],
         data: null,
       }; //если да - то выкидываем вот такой resultObject
     }
