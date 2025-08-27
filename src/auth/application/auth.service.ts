@@ -1,14 +1,15 @@
+import { jwtService } from "./../adapters/jwt.service";
 import { WithId } from "mongodb";
 import { UserDB } from "../../users/input/create-user-dto";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
-import { jwtService } from "../adapters/jwt.service";
 import { User } from "../../users/constructors/user.entity";
 import { emailAdapter } from "../adapters/nodemailer.service";
 import { emailExamples } from "../adapters/email.example";
 import { UserDbDto } from "../../users/types/user-types";
+import { randomUUID } from "crypto";
 
 export const authService = {
   async registerUser(
@@ -146,12 +147,13 @@ export const authService = {
         data: null,
       };
     }
+
+    const newConfimationCode = randomUUID();
     try {
       emailAdapter.sendEmail(
-        //отправляем письмо, используя библиотеку nodemailer
         user.email,
-        user.emailConfirmation!.confirmationCode,
-        emailExamples.registrationEmail
+        newConfimationCode,
+        emailExamples.registrationEmail,
       );
 
       return {
