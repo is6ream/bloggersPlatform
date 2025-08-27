@@ -17,13 +17,24 @@ export const authService = {
     email: string
   ): Promise<RegistrationResult<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email);
-    if (user) {
+    if (user?.login === login) {
       return {
         status: ResultStatus.BadRequest,
         errorMessage: "Bad request",
         extensions: {
           errorsMessages: [
             { message: "user already registered", field: "login" },
+          ],
+        },
+        data: null,
+      };
+    } else if (user?.email === email) {
+      return {
+        status: ResultStatus.BadRequest,
+        errorMessage: "Bad request",
+        extensions: {
+          errorsMessages: [
+            { message: "user already registered", field: "email" },
           ],
         },
         data: null,
@@ -119,7 +130,7 @@ export const authService = {
       return {
         status: ResultStatus.BadRequest,
         extensions: {
-          errorsMessages: [{ message: "incorrect email", field: "email" }],
+          errorsMessages: [{ message: "user does not exist", field: "email" }],
         },
         data: null,
       };

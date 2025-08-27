@@ -3,6 +3,7 @@ import { UserDbDto, UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
+import e from "express";
 
 export const usersRepository = {
   async create(newUser: CreateUserDto): Promise<UserViewModel> {
@@ -29,7 +30,7 @@ export const usersRepository = {
     return deleteResult.deletedCount === 1;
   },
   async isUserExistByEmailOrLogin(
-    loginOrEmail: string,
+    loginOrEmail: string
   ): Promise<WithId<UserDB> | null> {
     return userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
@@ -39,11 +40,16 @@ export const usersRepository = {
   async doesExistByLoginOrEmail(
     login: string,
     email: string,
-  ): Promise<boolean> {
-    const user = await userCollection.findOne({
-      $or: [{ email }, { login }],
-    });
-    return !!user;
+  ): Promise<UserDB | undefined> {
+    const existingByLogin = await userCollection.findOne({ login });
+    if (existingByLogin) {
+      return existingByLogin;
+    }
+
+    const existingByEmail = await userCollection.findOne({ email });
+    if (existingByEmail) {
+      return existingByEmail;
+    }
   },
 
   async findUserByConfirmationCode(code: string): Promise<UserDbDto | null> {
@@ -67,7 +73,7 @@ export const usersRepository = {
   async update(id: string): Promise<void> {
     const updateResult = await userCollection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: { "emailConfirmation.isConfirmed": true } },
+      { $set: { "emailConfirmation.isConfirmed": true } }
     );
     console.log(updateResult, "updateResult check");
     return;
