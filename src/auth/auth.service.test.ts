@@ -1,19 +1,17 @@
+import { Express } from "express";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { authService } from "./application/auth.service";
 import { db } from "../db/db.for.tests";
 import { ResultStatus } from "../core/result/resultCode";
-
+import { setupApp } from "../setup-app";
 // jest.setTimeout(20000); //увеличивает время ожидания выполнения теста
-
+//нужно передать апп
 describe("integration test for authservice", () => {
-  let mongoServer: MongoMemoryServer;
-
+  let app: Express;
   beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
+    app = setupApp(app);
+    const mongoServer = await MongoMemoryServer.create();
     await db.run(mongoServer.getUri());
-  });
-
-  beforeEach(async () => {
     await db.drop();
   });
 
