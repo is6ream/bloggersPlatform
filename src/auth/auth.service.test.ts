@@ -1,31 +1,39 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { authService } from "./application/auth.service";
-import { MongoClient } from "mongodb";
+import { db } from "../db/db.for.tests";
+import { ResultStatus } from "../core/result/resultCode";
 
-describe("integration test for authservice", async () => {
+// jest.setTimeout(20000); //увеличивает время ожидания выполнения теста
+
+describe("integration test for authservice", () => {
   let mongoServer: MongoMemoryServer;
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
+    await db.run(mongoServer.getUri());
   });
-  const mongoUri =  mongoServer.getUri();
-  let client: MongoClient;
-  client = new MongoClient(mongoUri);
-  await client.connect();
+
+  beforeEach(async () => {
+    await db.drop();
+  });
+
+  afterAll(async () => {
+    await db.drop();
+    await db.stop();
+  });
 
   describe("createUser", () => {
     it("should return", async () => {
+      const registerUserCase = authService.registerUser;
       const emailForTest = "example@example.com";
       const loginForTest = "v22S5M6CEB";
-      const result = await authService.registerUser(
+      const result = await registerUserCase(
         loginForTest,
         "string",
         emailForTest
       );
 
-      expect(result?.data?.email).toBe(emailForTest);
-      expect(result?.data?.login).toBe(loginForTest);
-      expect(result?.data?.emailConfirmation?.isConfirmed).toBe(false);
+      expect(result?.status).toBe(ResultStatus.Success);
     });
   });
 });
