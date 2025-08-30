@@ -2,6 +2,7 @@ import { Db, MongoClient } from "mongodb";
 
 export const db = {
   client: null as MongoClient | null,
+
   getDbName(): Db {
     if (!this.client || !(this.client instanceof MongoClient)) {
       throw new Error("MongoClient is not initialized");
@@ -16,14 +17,14 @@ export const db = {
       await this.client.connect();
       await this.getDbName().command({ ping: 1 });
       console.log("db.run: Connected successfully to MongoDB");
-    } catch (err) {
-      console.error("db.run: Failed to connect MongoDB", err);
+    } catch (e) {
+      console.error("db.run: Failed to connect MongoDB", e);
       if (this.client && typeof this.client.close === "function") {
         console.log("db.run: Closing client after failure");
-        await this.client?.close();
+        await this.client.close();
       }
       this.client = null;
-      throw err;
+      throw e; // пробрасываем для остановки теста, если нужно
     }
   },
 
@@ -33,8 +34,8 @@ export const db = {
         try {
           await this.client.close();
           console.log("db.stop: MongoClient closed successfully");
-        } catch (err) {
-          console.error("db.stop: Error closing client", err);
+        } catch (e) {
+          console.error("db.stop: Error closing client", e);
         }
       } else {
         console.warn("db.stop: client.close is not a function", this.client);
@@ -52,15 +53,17 @@ export const db = {
       const collections = await dbInstance.listCollections().toArray();
       for (const coll of collections) {
         console.log(
-          `db.drop: Deleting all documents from collections: ${coll.name}`,
+          `db.drop: Deleting all documents from collection: ${coll.name}`
         );
         await dbInstance.collection(coll.name).deleteMany({});
       }
       console.log("db.drop: All collections cleared");
-    } catch (err) {
-      console.error("db.drop: All collections cleared", err);
+    } catch (e) {
+      console.error("db.drop: Error during drop", e);
       await this.stop();
-      throw err;
+      throw e;
     }
   },
+
+  // ... другие методы по необходимости ...
 };

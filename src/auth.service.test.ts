@@ -1,16 +1,18 @@
-import { setupApp } from "./setup-app";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import express, { Express } from "express";
 import { db } from "./db/db.for.tests";
+import { setupApp } from "./setup-app";
 
-describe("integration test for auth service", () => {
+describe("integration test for authservice", () => {
   let app: Express;
   let mongoServer: any;
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    const uri = mongoServer.getUrI();
-    console.log("test beforeAll: starting db.run...");
+    const uri = mongoServer.getUri();
+    console.log(uri, "check uri");
+
+    console.log("Test beforeAll: Starting db.run 11111111111111111");
     await db.run(uri);
     await db.drop();
     const expressApp = express();
@@ -21,10 +23,10 @@ describe("integration test for auth service", () => {
     if (db.client) {
       try {
         await db.drop();
-      } catch (err) {
+      } catch (e) {
         console.warn(
           "Drop failed in afterAll, possibly because client lost",
-          err,
+          e
         );
       }
       await db.stop();
@@ -38,9 +40,10 @@ describe("integration test for auth service", () => {
   describe("createUser", () => {
     it("should create user successfully", async () => {
       const login = "testuser";
-      const email = "testUser@example.com";
+      const email = "test@example.com";
 
       const result = 1;
+
       expect(result).toEqual(1);
     });
   });
