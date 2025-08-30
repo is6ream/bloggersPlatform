@@ -1,49 +1,66 @@
 import { Db, MongoClient } from "mongodb";
-import { appConfig } from "../core/config/config";
-import { User } from "../users/constructors/user.entity";
-export const db = {
-  client: {} as MongoClient,
 
+export const db = {
+  client: null as MongoClient | null,
   getDbName(): Db {
-    return this.client.db(appConfig.DB_NAME);
+    if (!this.client || !(this.client instanceof MongoClient)) {
+      throw new Error("MongoClient is not initialized");
+    }
+    return this.client.db();
   },
-  async run(url: string) {
+
+  async run(uri: string) {
     try {
-      this.client = new MongoClient(url);
+      console.log("db.run: Starting connection to", uri);
+      this.client = new MongoClient(uri);
       await this.client.connect();
       await this.getDbName().command({ ping: 1 });
-      console.log("Connected successfully to mongo server");
-    } catch (e: unknown) {
-      console.error("Can't connect to mongo server", e);
-      await this.client.close();
+      console.log("db.run: Connected successfully to MongoDB");
+    } catch (err) {
+      console.error("db.run: Failed to connect MongoDB", err);
+      if (this.client && typeof this.client.close === "function") {
+        console.log("db.run: Closing client after failure");
+        await this.client?.close();
+      }
+      this.client = null;
+      throw err;
     }
   },
+
   async stop() {
-    await this.client.close();
-    console.log("Connection successful closed");
+    if (this.client) {
+      if (typeof this.client.close === "function") {
+        try {
+          await this.client.close();
+          console.log("db.stop: MongoClient closed successfully");
+        } catch (err) {
+          console.error("db.stop: Error closing client", err);
+        }
+      } else {
+        console.warn("db.stop: client.close is not a function", this.client);
+      }
+      this.client = null;
+    } else {
+      console.log("db.stop: No client to close");
+    }
   },
+
   async drop() {
     try {
-      //await this.getDbName().dropDatabase()
-      const collections = await this.getDbName().listCollections().toArray();
-
-      for (const collection of collections) {
-        const collectionName = collection.name;
-        await this.getDbName().collection(collectionName).deleteMany({});
+      console.log("db.drop: Dropping collections");
+      const dbInstance = this.getDbName();
+      const collections = await dbInstance.listCollections().toArray();
+      for (const coll of collections) {
+        console.log(
+          `db.drop: Deleting all documents from collections: ${coll.name}`
+        );
+        await dbInstance.collection(coll.name).deleteMany({});
       }
-    } catch (e: unknown) {
-      console.error("Error in drop db:", e);
+      console.log("db.drop: All collections cleared");
+    } catch (err) {
+      console.error("db.drop: All collections cleared", err);
       await this.stop();
+      throw err;
     }
   },
-  getCollections() {
-    return {
-      usersCollection: this.getDbName().collection<User>("users"),
-      //blogsCollection:
-
-      //...all collections
-    };
-  },
 };
-
-//export const usersCollection = db.getDbName().collection<IUserDB>("users");
