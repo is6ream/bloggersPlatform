@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "types": ["express", "jest"]
   },
-  "include": ["src/**/*", "tests", "__tests__/integration_test/auth.service.test.ts"],
+  "include": ["src/**/*", "tests", "src/auth.service.test.ts"],
   "exclude": ["__tests__", "dist", "node_modules"],
   "files": ["src/core/types/authorization/index.d.ts"]
 }

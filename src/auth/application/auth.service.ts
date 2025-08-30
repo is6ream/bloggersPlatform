@@ -149,7 +149,7 @@ export const authService = {
 
     const newConfimationCode = randomUUID();
     try {
-      emailAdapter.sendEmail(
+      await emailAdapter.sendEmail(
         user.email,
         newConfimationCode,
         emailExamples.registrationEmail

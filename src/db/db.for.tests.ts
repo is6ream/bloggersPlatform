@@ -52,7 +52,7 @@ export const db = {
       const collections = await dbInstance.listCollections().toArray();
       for (const coll of collections) {
         console.log(
-          `db.drop: Deleting all documents from collections: ${coll.name}`
+          `db.drop: Deleting all documents from collections: ${coll.name}`,
         );
         await dbInstance.collection(coll.name).deleteMany({});
       }
