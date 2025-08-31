@@ -32,7 +32,7 @@ export const emailAdapter = {
   async sendEmail(
     email: string,
     code: string,
-    template: (code: string) => string
+    template: (code: string) => string,
   ): Promise<boolean> {
     const transport = nodemailer.createTransport({
       service: "gmail",
@@ -41,7 +41,6 @@ export const emailAdapter = {
         pass: process.env.GOOGLE_APP_PASSWORD,
       },
     });
-    console.log(process.env.GOOGLE_APP_PASSWORD);
 
     const info = transport.sendMail({
       from: '"Danil" <d.ilyasovunibell@gmail.com>',

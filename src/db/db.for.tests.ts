@@ -1,5 +1,5 @@
 import { Db, MongoClient } from "mongodb";
-
+import { User } from "../users/constructors/user.entity";
 export const db = {
   client: null as MongoClient | null,
 
@@ -64,6 +64,10 @@ export const db = {
       throw e;
     }
   },
-
+  getCollections() {
+    return {
+      usersCollection: this.getDbName().collection<User>("users"),
+    };
+  },
   // ... другие методы по необходимости ...
 };

@@ -12,7 +12,7 @@ export class User {
   };
 
   constructor(login: string, email: string, hash: string) {
-    (this.login = login),
+    ((this.login = login),
       (this.email = email),
       (this.passwordHash = hash),
       (this.createdAt = new Date()),
@@ -20,6 +20,6 @@ export class User {
         expirationDate: new Date(Date.now() + 3 * 60 * 1000),
         confirmationCode: randomUUID(),
         isConfirmed: false,
-      });
+      }));
   }
 }
