@@ -12,13 +12,13 @@ describe("integration test for authservice", () => {
   let mongoServer: any;
 
   beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
+    mongoServer = await MongoMemoryServer.create(); //создаем дб и запускаем ее
     const uri = mongoServer.getUri();
     console.log(uri, "check uri");
 
     console.log("Test beforeAll: Starting db.run 11111111111111111");
-    await db.run(uri);
-    await db.drop();
+    await db.run(uri); //тут запускаем
+    await db.drop(); //зачищаем перед тестами
     const expressApp = express();
     app = setupApp(expressApp);
   }, 60000);
@@ -30,7 +30,7 @@ describe("integration test for authservice", () => {
       } catch (e) {
         console.warn(
           "Drop failed in afterAll, possibly because client lost",
-          e
+          e,
         );
       }
       await db.stop();

@@ -1,6 +1,6 @@
 import { emailAdapter } from "../../../src/auth/adapters/nodemailer.service";
 
-export const emailServiceMock: emailAdapter = {
+export const emailServiceMock: typeof emailAdapter = {
   async sendEmail(
     email: string,
     code: string,

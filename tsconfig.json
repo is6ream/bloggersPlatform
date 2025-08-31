@@ -14,7 +14,7 @@
   "include": [
     "src/**/*",
     "tests",
-    "__tests__/integration_test/auth.service.test.ts"
+    "__tests__/integration_test/auth.service.test.spec.ts"
   ],
   "exclude": ["__tests__", "dist", "node_modules"],
   "files": ["src/core/types/authorization/index.d.ts"]

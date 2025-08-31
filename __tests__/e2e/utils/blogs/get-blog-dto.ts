@@ -1,4 +1,4 @@
-import { BlogAttributes } from "../../e2e/blogs/types";
+import { BlogAttributes } from "../../blogs/types";
 
 export function getBlogDto(): BlogAttributes {
   return {
