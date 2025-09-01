@@ -40,7 +40,6 @@ export const usersRepository = {
     login: string,
     email: string,
   ): Promise<UserDB | undefined> {
-    console.log("login check", login);
     const existingByLogin = await userCollection.findOne({ login });
     if (existingByLogin) {
       return existingByLogin;

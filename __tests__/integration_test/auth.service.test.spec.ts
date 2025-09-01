@@ -20,7 +20,7 @@ describe("integration test for authservice", () => {
     await db.drop(); //зачищаем перед тестами
     const expressApp = express();
     app = setupApp(expressApp);
-  }, 60000);
+  });
 
   afterAll(async () => {
     if (db.client) {
@@ -71,34 +71,39 @@ describe("integration test for authservice", () => {
       expect(result.status).toBe(ResultStatus.BadRequest);
     });
 
-    // it("should not confirm email which is confirmed", async () => {
-    //   const code = "test";
+    it("should not confirm email which is confirmed", async () => {
+      const code = "test";
 
-    //   const { login, pass, email } = testSeeder.createUserDto();
+      const { login, pass, email } = testSeeder.createUserDto();
 
-    //   await testSeeder.insertUser({
-    //     /**здесь мы кладем в базу сущность с кодом, который будем тестить далее,
-    //      * сущность с поднятым флагом true */ login,
-    //     pass,
-    //     email,
-    //     code,
-    //     isConfirmed: true,
-    //   });
+      await testSeeder.insertUser({
+        /**здесь мы кладем в базу сущность с кодом, который будем тестить далее,
+         * сущность с поднятым флагом true */ login,
+        pass,
+        email,
+        code,
+        isConfirmed: true,
+      });
 
-    //   const result = await confirmEmailCase(code);
+      const result = await confirmEmailCase(code);
 
-    //   expect(result.status).toBe(ResultStatus.BadRequest);
-    // });
+      expect(result.status).toBe(ResultStatus.BadRequest);
+    });
 
-    //   it("confirm user", async () => {
-    //     const code = "123e4567-e89b-12d3-a456-426614174000";
+    it("confirm user", async () => {
+      const code = "123e4567-e89b-12d3-a456-426614174000";
 
-    //     const { login, pass, email } = testSeeder.createUserDto();
-    //     await testSeeder.insertUser({ login, pass, email, code });
+      const { login, pass, email } = testSeeder.createUserDto();
+      const user = await testSeeder.insertUser({
+        login,
+        pass,
+        email,
+        code,
+      });
+      console.log(user);
+      const result = await confirmEmailCase(code);
 
-    //     const result = await confirmEmailCase(code);
-
-    //     expect(result.status).toBe(ResultStatus.Success);
-    //   });
+      expect(result.status).toBe(ResultStatus.Success);
+    });
   });
 });
