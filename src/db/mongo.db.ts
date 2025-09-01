@@ -39,19 +39,57 @@ export const db = {
     commentsCollection = db.collection<CommentDB>(COMMENTS_COLLECTION_NAME);
     try {
       await client.connect();
-      await db.command({ ping: 1 });
+      await this.getDbName().command({ ping: 1 });
       console.log("✅ Connected to the database");
     } catch (e) {
-      console.log(e);
-      await client.close();
+      if (this.client && typeof this.client.close === "function") {
+        console.log("db.run: Closing client after failure");
+        await this.client.close();
+      }
+      console.log(this.client);
+      this.client = null;
       throw new Error(`❌ Database not connected: ${e}`);
     }
   },
   //для тестов
-  async stopDb() {
-    if (!client) {
-      throw new Error(`❌ No active client`);
+  async stop() {
+    if (this.client) {
+      if (typeof this.client.close === "function") {
+        try {
+          await this.client.close();
+          console.log("db.stop: MongoClient closed successfully");
+        } catch (e) {
+          console.error("db.stop: Error closing client", e);
+        }
+      } else {
+        console.warn("db.stop: client.close is not a function", this.client);
+      }
+      this.client = null;
+    } else {
+      console.log("db.stop: No client to close");
     }
-    await client.close();
+  },
+  async drop() {
+    try {
+      console.log("db.drop: Dropping collections");
+      const dbInstance = this.getDbName();
+      const collections = await dbInstance.listCollections().toArray();
+      for (const coll of collections) {
+        console.log(
+          `db.drop: Deleting all documents from collection: ${coll.name}`
+        );
+        await dbInstance.collection(coll.name).deleteMany({});
+      }
+      console.log("db.drop: All collections cleared");
+    } catch (e) {
+      console.error("db.drop: Error during drop", e);
+      await this.stop();
+      throw e;
+    }
+  },
+  async getCollections() {
+    return {
+      usersCollection: this.getDbName().collection<User>("users"),
+    };
   },
 };

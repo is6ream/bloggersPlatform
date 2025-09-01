@@ -1,6 +1,7 @@
+import { userCollection } from "./../../src/db/mongo.db";
 import { randomUUID } from "crypto";
 import { add } from "date-fns";
-import { db } from "../../src/db/db.for.tests";
+import { db } from "../../src/db/mongo.db";
 type RegisterUserPayloadType = {
   login: string;
   pass: string;
@@ -45,37 +46,37 @@ export const testSeeder = {
     return users;
   },
 
-  async insertUser({
-    login,
-    pass,
-    email,
-    code,
-    expirationDate,
-    isConfirmed,
-  }: RegisterUserPayloadType): Promise<RegisterUserResultType> {
-    const newUser = {
-      login,
-      email,
-      passwordHash: pass,
-      createdAt: new Date(),
-      emailConfirmation: {
-        confirmationCode: code ?? randomUUID(),
-        expirationDate:
-          expirationDate ??
-          add(new Date(), {
-            minutes: 30,
-          }),
-        isConfirmed: isConfirmed ?? false,
-      },
-    };
+  // async insertUser({
+  //   login,
+  //   pass,
+  //   email,
+  //   code,
+  //   expirationDate,
+  //   isConfirmed,
+  // }: RegisterUserPayloadType): Promise<RegisterUserResultType> {
+  //   const newUser = {
+  //     login,
+  //     email,
+  //     passwordHash: pass,
+  //     createdAt: new Date(),
+  //     emailConfirmation: {
+  //       confirmationCode: code ?? randomUUID(),
+  //       expirationDate:
+  //         expirationDate ??
+  //         add(new Date(), {
+  //           minutes: 30,
+  //         }),
+  //       isConfirmed: isConfirmed ?? false,
+  //     },
+  //   };
 
-    const res = await db
-      .getCollections()
-      .usersCollection.insertOne({ ...newUser });
+  //   const res = await db
+  //     .getCollections()
+  //     .userCollection.insertOne({ ...newUser });
 
-    return {
-      id: res.insertedId.toString(),
-      ...newUser,
-    };
-  },
+  //   return {
+  //     id: res.insertedId.toString(),
+  //     ...newUser,
+  //   };
+  // },
 };
