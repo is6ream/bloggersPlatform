@@ -38,15 +38,16 @@ export const db = {
     userCollection = db.collection<User>(USER_COLLECTION_NAME);
     commentsCollection = db.collection<CommentDB>(COMMENTS_COLLECTION_NAME);
     try {
+      this.client = client;
       await client.connect();
-      await this.getDbName().command({ ping: 1 });
+      console.log("check client connect promise");
+      await this.getDbName().command({ ping: 1 }); //либо здесь
       console.log("✅ Connected to the database");
     } catch (e) {
       if (this.client && typeof this.client.close === "function") {
         console.log("db.run: Closing client after failure");
         await this.client.close();
       }
-      console.log(this.client);
       this.client = null;
       throw new Error(`❌ Database not connected: ${e}`);
     }

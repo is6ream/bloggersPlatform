@@ -14,7 +14,7 @@ describe("integration test for authservice", () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create(); //создаем дб и запускаем ее
     const uri = mongoServer.getUri();
-    //пойти на саппорт и разобраться с подлкючением к бд
+    console.log(uri);
     console.log("Test beforeAll: Starting db.run 11111111111111111");
     await db.runDB(uri); //тут падает ошибка
     await db.drop(); //зачищаем перед тестами
@@ -29,7 +29,7 @@ describe("integration test for authservice", () => {
       } catch (e) {
         console.warn(
           "Drop failed in afterAll, possibly because client lost",
-          e,
+          e
         );
       }
       await db.stop();
