@@ -3,7 +3,6 @@ import { UserDbDto, UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
-import e from "express";
 
 export const usersRepository = {
   async create(newUser: CreateUserDto): Promise<UserViewModel> {

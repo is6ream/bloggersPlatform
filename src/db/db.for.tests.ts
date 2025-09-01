@@ -1,14 +1,8 @@
 import { Db, MongoClient } from "mongodb";
 import { User } from "../users/constructors/user.entity";
 export const db = {
-  client: null as MongoClient | null,
 
-  getDbName(): Db {
-    if (!this.client || !(this.client instanceof MongoClient)) {
-      throw new Error("MongoClient is not initialized");
-    }
-    return this.client.db();
-  },
+
 
   async run(uri: string) {
     try {
