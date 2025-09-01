@@ -45,7 +45,6 @@ export const db = {
       console.log("db.stop: No client to close");
     }
   },
-
   async drop() {
     try {
       console.log("db.drop: Dropping collections");
@@ -64,7 +63,7 @@ export const db = {
       throw e;
     }
   },
-  getCollections() {
+  async getCollections() {
     return {
       usersCollection: this.getDbName().collection<User>("users"),
     };
