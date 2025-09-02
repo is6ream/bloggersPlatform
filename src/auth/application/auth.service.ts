@@ -66,7 +66,7 @@ export const authService = {
     console.log("code check", code);
     const user: UserDbDto | null =
       await usersRepository.findUserByConfirmationCode(code);
-    console.log(user?.emailConfirmation.isConfirmed); //тут код равен undefinedm разобраться
+    console.log(user?.emailConfirmation.isConfirmed); //тут код равен undefinedm разобраться, а при работе с реальной бд значение - false
     if (!user) {
       console.log("no user check");
       return {
