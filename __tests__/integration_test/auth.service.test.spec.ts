@@ -1,3 +1,4 @@
+import { accessTokenGuard } from "./../../src/core/guards/access.token.guard";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import express, { Express } from "express";
 import { db } from "../../src/db/mongo.db";
@@ -6,6 +7,9 @@ import { authService } from "../../src/auth/application/auth.service";
 import { ResultStatus } from "../../src/core/result/resultCode";
 import { emailAdapter } from "../../src/auth/adapters/nodemailer.service";
 import { testSeeder } from "./testSeeder";
+import request from "supertest";
+import { HttpStatus } from "../../src/core/http-statuses";
+import { arrayBuffer } from "stream/consumers";
 
 describe("integration test for authservice", () => {
   let app: Express;
@@ -14,7 +18,6 @@ describe("integration test for authservice", () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create(); //создаем дб и запускаем ее
     const uri = mongoServer.getUri();
-    console.log(uri);
     console.log("Test beforeAll: Starting db.run 11111111111111111");
     await db.runDB(uri); //тут падает ошибка
     await db.drop(); //зачищаем перед тестами
@@ -104,6 +107,18 @@ describe("integration test for authservice", () => {
       const result = await confirmEmailCase(code);
 
       expect(result.status).toBe(ResultStatus.Success);
+    });
+
+    it("should login user and return acessToken and refreshToken", async () => {
+      const res = await request(app)
+        .post("/login")
+        .send({ email: "test@mail.ru", password: "1232456" })
+        .expect(HttpStatus.Ok);
+
+      expect(res.body.acessToken).toBeDefined();
+      expect(res.headers["set cookie"]).toEqual(
+        expect.arrayContaining([expect.stringContaining("refreshToken=")]),
+      );
     });
   });
 });

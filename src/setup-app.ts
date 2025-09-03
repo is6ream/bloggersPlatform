@@ -5,7 +5,6 @@ import {
   AUTH_PATH,
   BLOGS_PATH,
   COMMENTS_PATH,
-  EMAIL_PATH,
   POSTS_PATH,
   TESTING_PATH,
   USERS_PATH,
@@ -16,12 +15,14 @@ import { testingRouter } from "./testing/deleteAllData.router";
 import { authRouter } from "./auth/routes/routes";
 import { usersRouter } from "./users/routes/usersRoutes";
 import { commentsRouter } from "./comments/routes/commentsRoutes";
+import cookieParser from "cookie-parser";
 
 export const app = express();
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
   app.use(cors());
+  app.use(cookieParser());
   app.get("/", (req, res) => {
     res.status(200).send("Hello world!!!");
   });
