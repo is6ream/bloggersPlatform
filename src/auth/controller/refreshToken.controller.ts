@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { ResultStatus } from "../../core/result/resultCode";
 
 export interface RequestWithCookies extends Request {
   cookies: {
@@ -10,6 +11,9 @@ export async function refreshTokenController(
   res: Response
 ) {
   const refreshToken = req.cookies.refreshToken;
-
-
+  const result = await genNewTokensService(refreshToken);
+  if (result.status !== ResultStatus.Success) {
+    //где должна осуществляться проверка валдиности токена?
+    res.send;
+  }
 }
