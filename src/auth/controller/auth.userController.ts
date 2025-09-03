@@ -3,9 +3,11 @@ import { authService } from "../application/auth.service";
 import { HttpStatus } from "../../core/http-statuses";
 import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
+import cookieParser from "cookie-parser";
 
 export async function loginUserController(req: Request, res: Response) {
   try {
+    //возвращать рефреш, проверить
     const result = await authService.loginUser(
       req.body.loginOrEmail,
       req.body.password,
