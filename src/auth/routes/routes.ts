@@ -38,6 +38,6 @@ authRouter
     codeValidator,
     inputValidationResultMiddleware,
     confirmRegisterUserController
-  )
-  .post("/refresh-token")
-  .post("/logout");
+  );
+// .post("/refresh-token")
+// .post("/logout");

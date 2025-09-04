@@ -63,12 +63,9 @@ export const authService = {
   },
 
   async confirmEmail(code: string): Promise<RegistrationResult<null>> {
-    console.log("code check", code);
     const user: UserDbDto | null =
       await usersRepository.findUserByConfirmationCode(code);
-    console.log(user?.emailConfirmation.isConfirmed); //тут код равен undefinedm разобраться, а при работе с реальной бд значение - false
     if (!user) {
-      console.log("no user check");
       return {
         status: ResultStatus.BadRequest,
         extensions: {
@@ -175,6 +172,7 @@ export const authService = {
     password: string
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
+    console.log(result, "check user data in BBL");
     if (result.status !== ResultStatus.Success)
       return {
         status: ResultStatus.Unauthorized,
@@ -200,6 +198,7 @@ export const authService = {
     password: string
   ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
+    console.log(user, "check user in checkCredentials");
     if (!user) {
       return {
         status: ResultStatus.NotFound,
@@ -210,7 +209,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash
+      user.passwordHash,
     );
     if (!isPasscorrect)
       return {

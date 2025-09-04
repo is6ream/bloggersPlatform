@@ -3,7 +3,7 @@ import { add } from "date-fns";
 import { db } from "../../src/db/mongo.db";
 type RegisterUserPayloadType = {
   login: string;
-  pass: string;
+  password: string;
   email: string;
   code?: string;
   expirationDate?: Date;
@@ -28,7 +28,7 @@ export const testSeeder = {
     return {
       login: "testing",
       email: "test@mail.ru",
-      pass: "12345678",
+      password: "12345678",
     };
   },
 
@@ -47,7 +47,7 @@ export const testSeeder = {
 
   async insertUser({
     login,
-    pass,
+    password,
     email,
     code,
     expirationDate,
@@ -56,7 +56,7 @@ export const testSeeder = {
     const newUser = {
       login,
       email,
-      passwordHash: pass,
+      passwordHash: password,
       createdAt: new Date(),
       emailConfirmation: {
         confirmationCode: code ?? randomUUID(),

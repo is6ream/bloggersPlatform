@@ -29,16 +29,19 @@ export const usersRepository = {
     return deleteResult.deletedCount === 1;
   },
   async isUserExistByEmailOrLogin(
-    loginOrEmail: string
+    loginOrEmail: string,
   ): Promise<WithId<UserDB> | null> {
-    return userCollection.findOne({
+    const user = await userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
     });
+    console.log("CHECK USER IN DAL", user);
+
+    return user;
   },
 
   async doesExistByLoginOrEmail(
     login: string,
-    email: string
+    email: string,
   ): Promise<UserDB | undefined> {
     const existingByLogin = await userCollection.findOne({ login });
     if (existingByLogin) {
@@ -52,12 +55,9 @@ export const usersRepository = {
   },
 
   async findUserByConfirmationCode(code: string): Promise<UserDbDto | null> {
-    console.log("check code in repo", code);
     const user: WithId<User> | null = await userCollection.findOne({
-      //здесь может быть он ищет не в той коллекции
       "emailConfirmation.confirmationCode": code,
     });
-    console.log("user check in repo", user);
     if (!user) {
       return null;
     }

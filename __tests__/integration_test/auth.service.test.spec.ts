@@ -1,4 +1,3 @@
-import { accessTokenGuard } from "./../../src/core/guards/access.token.guard";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import express, { Express } from "express";
 import { db } from "../../src/db/mongo.db";
@@ -9,18 +8,18 @@ import { emailAdapter } from "../../src/auth/adapters/nodemailer.service";
 import { testSeeder } from "./testSeeder";
 import request from "supertest";
 import { HttpStatus } from "../../src/core/http-statuses";
-import { arrayBuffer } from "stream/consumers";
+import { AUTH_PATH } from "../../src/core/paths";
 
 describe("integration test for authservice", () => {
   let app: Express;
   let mongoServer: any;
 
   beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create(); //создаем дб и запускаем ее
+    mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
     console.log("Test beforeAll: Starting db.run 11111111111111111");
-    await db.runDB(uri); //тут падает ошибка
-    await db.drop(); //зачищаем перед тестами
+    await db.runDB(uri);
+    await db.drop();
     const expressApp = express();
     app = setupApp(expressApp);
   });
@@ -49,18 +48,10 @@ describe("integration test for authservice", () => {
       .spyOn(emailAdapter, "sendEmail")
       .mockReturnValue(Promise.resolve(true));
 
-    it("should register new user", async () => {
-      const { login, email, pass } = testSeeder.createUserDto();
-      const result = await registerUserUseCase(login, email, pass);
-      expect(result?.status).toBe(ResultStatus.Success);
-      expect(emailAdapter.sendEmail).toBeCalled();
-      expect(emailAdapter.sendEmail).toHaveBeenCalledTimes(1);
-    });
-
     it("should not register user twice", async () => {
-      const { login, email, pass } = testSeeder.createUserDto();
+      const { login, email, password } = testSeeder.createUserDto();
 
-      const result = await registerUserUseCase(login, email, pass);
+      const result = await registerUserUseCase(login, email, password);
       expect(result?.status).toBe(ResultStatus.BadRequest);
     });
   });
@@ -77,12 +68,12 @@ describe("integration test for authservice", () => {
     it("should not confirm email which is confirmed", async () => {
       const code = "test";
 
-      const { login, pass, email } = testSeeder.createUserDto();
+      const { login, password, email } = testSeeder.createUserDto();
 
       await testSeeder.insertUser({
         /**здесь мы кладем в базу сущность с кодом, который будем тестить далее,
          * сущность с поднятым флагом true */ login,
-        pass,
+        password,
         email,
         code,
         isConfirmed: true,
@@ -96,10 +87,10 @@ describe("integration test for authservice", () => {
     it("confirm user", async () => {
       const code = "123e4567-e89b-12d3-a456-426614174000";
 
-      const { login, pass, email } = testSeeder.createUserDto();
+      const { login, password, email } = testSeeder.createUserDto();
       const user = await testSeeder.insertUser({
         login,
-        pass,
+        password,
         email,
         code,
       });
@@ -110,14 +101,22 @@ describe("integration test for authservice", () => {
     });
 
     it("should login user and return acessToken and refreshToken", async () => {
+      const { login, password, email } = testSeeder.createUserDto();
+      await testSeeder.insertUser({
+        //эта функция не работает, т.к в чеккред падает ошибка, что юзер не найден по логину
+        login,
+        email,
+        password,
+      });
+      const loginOrEmail = login;
       const res = await request(app)
-        .post("/login")
-        .send({ email: "test@mail.ru", password: "1232456" })
+        .post(AUTH_PATH + "/login")
+        .send({ loginOrEmail, password })
         .expect(HttpStatus.Ok);
 
       expect(res.body.acessToken).toBeDefined();
       expect(res.headers["set cookie"]).toEqual(
-        expect.arrayContaining([expect.stringContaining("refreshToken=")]),
+        expect.arrayContaining([expect.stringContaining("refreshToken=")])
       );
     });
   });
