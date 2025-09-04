@@ -9,7 +9,7 @@ describe("Auth API authorization flow check", () => {
   setupApp(app);
   beforeAll(async () => {
     await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     await db.drop();
   });
@@ -20,8 +20,17 @@ describe("Auth API authorization flow check", () => {
 
   it("should register user", async () => {
     const user = testSeeder.createUserDto();
-    await request(app).post("/api/auth/registration").send(user);
+    await request(app).post("/auth/registration").send(user);
 
     expect(HttpStatus.NoContent);
+  });
+
+  it("should  auth user and get acess and refresh token", async () => {
+    const { login, email, password } = testSeeder.createUserDto();
+    const credentials = { loginOrEmail: login, password: password };
+    const res = await request(app)
+      .post("/auth/login") //когда здесь в постман меняю на hmwrk_06 все работает
+      .send(credentials)
+      .expect(HttpStatus.Ok);
   });
 });
