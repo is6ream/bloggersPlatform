@@ -34,7 +34,6 @@ export const usersRepository = {
     const user = await userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
     });
-    console.log("CHECK USER IN DAL", user);
 
     return user;
   },
