@@ -10,6 +10,7 @@ import { emailAdapter } from "../adapters/nodemailer.service";
 import { emailExamples } from "../adapters/email.example";
 import { UserDbDto } from "../../users/types/user-types";
 import { randomUUID } from "crypto";
+import { log } from "console";
 
 export const authService = {
   async registerUser(
@@ -171,6 +172,7 @@ export const authService = {
     loginOrEmail: string,
     password: string
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
+    console.log(loginOrEmail, password, "проверяю логин в сервисе");
     const result = await this.checkUserCredentials(loginOrEmail, password);
     console.log(result, "check user data in BBL");
     if (result.status !== ResultStatus.Success)
@@ -209,7 +211,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash,
+      user.passwordHash
     );
     if (!isPasscorrect)
       return {
