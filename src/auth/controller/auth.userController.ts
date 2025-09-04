@@ -14,16 +14,23 @@ export async function loginUserController(req: Request, res: Response) {
       res
         .status(resultCodeToHttpException(result.status))
         .send(result.extensions);
+      return;
     }
-    res.status(HttpStatus.Ok).send({ accessToken: result.data!.accessToken });
-    const refreshToken = result.data!.refreshToken;
+    const refreshToken = result.data?.refreshToken;
+    const accessToken = result.data?.accessToken;
+    console.log(refreshToken, "RT", accessToken, "AT");
+
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+
+    res.status(HttpStatus.Ok).send({ accessToken: accessToken });
+    return;
   } catch (error: unknown) {
     console.log(error);
     res.sendStatus(HttpStatus.InternalServerError);
+    return;
   }
 }
