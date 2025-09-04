@@ -31,7 +31,7 @@ describe("integration test for authservice", () => {
       } catch (e) {
         console.warn(
           "Drop failed in afterAll, possibly because client lost",
-          e
+          e,
         );
       }
       await db.stop();
@@ -116,7 +116,7 @@ describe("integration test for authservice", () => {
 
       expect(res.body.acessToken).toBeDefined();
       expect(res.headers["set cookie"]).toEqual(
-        expect.arrayContaining([expect.stringContaining("refreshToken=")])
+        expect.arrayContaining([expect.stringContaining("refreshToken=")]),
       );
     });
   });

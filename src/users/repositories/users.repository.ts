@@ -74,7 +74,7 @@ export const usersRepository = {
   async update(id: string): Promise<void> {
     const updateResult = await userCollection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: { "emailConfirmation.isConfirmed": true } }
+      { $set: { "emailConfirmation.isConfirmed": true } },
     );
     console.log(updateResult, "updateResult check");
     return;

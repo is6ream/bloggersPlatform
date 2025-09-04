@@ -8,7 +8,7 @@ export interface RequestWithCookies extends Request {
 }
 export async function refreshTokenController(
   req: RequestWithCookies,
-  res: Response
+  res: Response,
 ) {
   const refreshToken = req.cookies.refreshToken; //здесь мы получаем рефрешТокен, который изначально должен выдать эндпоинт логинизации
   const result = await genNewTokensService(refreshToken);
