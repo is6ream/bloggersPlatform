@@ -1,5 +1,5 @@
 import { appConfig } from "./../../core/config/config";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const jwtService = {
   async createAcessToken(userId: string): Promise<string> {
@@ -30,5 +30,15 @@ export const jwtService = {
       console.error("Token verify some error");
       return null;
     }
+  },
+
+  async parseRefreshToken(token: string) {
+    const decoded = jwt.decode(token) as JwtPayload | null;
+    if (!decoded) return null;
+
+    return {
+      userId: decoded.userId as string,
+      expiresAt: new Date((decoded.exp ?? 0) * 1000),
+    };
   },
 };
