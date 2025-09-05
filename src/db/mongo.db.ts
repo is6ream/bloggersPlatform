@@ -4,18 +4,20 @@ import { PostDB } from "../posts/types/posts-types";
 import { appConfig } from "../core/config/config";
 import { CommentDB } from "../comments/types/commentsTypes";
 import { User } from "../users/constructors/user.entity";
+import { blackListedTokensDB } from "../core/types/common/blackListedTokens.collection.types";
 
 const BLOG_COLLECTION_NAME = "blogs";
 const POST_COLLECTION_NAME = "posts";
 const USER_COLLECTION_NAME = "user";
 const COMMENTS_COLLECTION_NAME = "comments";
+const BLACK_LISTED_TOKENS_NAME = "blackListedTokens";
 
 export let client: MongoClient;
 export let blogCollection: Collection<BlogDB>;
 export let postCollection: Collection<PostDB>;
 export let userCollection: Collection<User>; //здесь типом выступает класс
 export let commentsCollection: Collection<CommentDB>;
-
+export let blackListTokensCollection: Collection<blackListedTokensDB>;
 export const db = {
   client: null as MongoClient | null,
 
@@ -37,6 +39,9 @@ export const db = {
     postCollection = db.collection<PostDB>(POST_COLLECTION_NAME);
     userCollection = db.collection<User>(USER_COLLECTION_NAME);
     commentsCollection = db.collection<CommentDB>(COMMENTS_COLLECTION_NAME);
+    blackListTokensCollection = db.collection<blackListedTokensDB>(
+      BLACK_LISTED_TOKENS_NAME,
+    );
     try {
       this.client = client;
       await client.connect();
@@ -77,7 +82,7 @@ export const db = {
       const collections = await dbInstance.listCollections().toArray();
       for (const coll of collections) {
         console.log(
-          `db.drop: Deleting all documents from collection: ${coll.name}`,
+          `db.drop: Deleting all documents from collection: ${coll.name}`
         );
         await dbInstance.collection(coll.name).deleteMany({});
       }

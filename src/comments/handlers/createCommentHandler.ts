@@ -12,8 +12,6 @@ export async function createCommentHandler(
   res: Response,
 ) {
   try {
-    console.log("BODY IN HANDLER:", req.body);
-
     const userId = req.user?.id as string;
     if (!userId) {
       res.sendStatus(HttpStatus.Unauthorized);
@@ -32,9 +30,6 @@ export async function createCommentHandler(
       result.data!.commentId,
     );
     res.status(HttpStatus.Created).send(comment);
-    return;
-
-    res.sendStatus(HttpStatus.BadRequest);
     return;
   } catch (error: unknown) {
     console.log(error);

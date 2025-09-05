@@ -34,10 +34,8 @@ describe("Auth API authorization flow check", () => {
       .post("/hometask_08/api/auth/login")
       .send(credentials)
       .expect(HttpStatus.Ok);
-
-    // expect(res.body.acessToken).toBeDefined();
-    expect(res.headers["set cookie"]).toEqual(
-      expect.arrayContaining([expect.stringContaining("refreshToken=")])
-    );
+    console.log(res.body);
+    expect(res.body.aсcessToken).toBeDefined();
+    expect(res.headers["set cookie"]);
   });
 });

@@ -26,7 +26,7 @@ export async function loginUserController(req: Request, res: Response) {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(HttpStatus.Ok).send({ accessToken: accessToken });
+    res.status(HttpStatus.Ok).send({ aсcessToken: accessToken });
     return;
   } catch (error: unknown) {
     console.log(error);
