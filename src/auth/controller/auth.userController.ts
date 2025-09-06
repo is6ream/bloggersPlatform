@@ -8,7 +8,7 @@ export async function loginUserController(req: Request, res: Response) {
   try {
     const result = await authService.loginUser(
       req.body.loginOrEmail,
-      req.body.password,
+      req.body.password
     );
     if (result.status !== ResultStatus.Success) {
       res
@@ -26,7 +26,7 @@ export async function loginUserController(req: Request, res: Response) {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(HttpStatus.Ok).send({ aсcessToken: accessToken });
+    res.status(HttpStatus.Ok).send({ accessToken: accessToken });
     return;
   } catch (error: unknown) {
     console.log(error);

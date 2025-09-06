@@ -9,7 +9,7 @@ import { ValidationErrorDto } from "../../types/validation/validationError.dto";
 import { ValidationErrorType } from "../../types/validation/validationError";
 
 export const createErrorMessages = (
-  errors: ValidationErrorType[],
+  errors: ValidationErrorType[]
 ): ValidationErrorDto => {
   return {
     errorsMessages: errors.map((error) => ({

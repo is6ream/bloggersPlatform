@@ -9,7 +9,7 @@ export const jwtService = {
   },
   async createRefreshToken(userId: string): Promise<string> {
     return jwt.sign({ userId }, appConfig.JWT_SECRET, {
-      expiresIn: "20 s", //на 10-20 сек больше чем у accessToken
+      expiresIn: "2 m", //на 10-20 сек больше чем у accessToken
     });
   },
 

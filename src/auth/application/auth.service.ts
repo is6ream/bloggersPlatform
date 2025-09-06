@@ -10,12 +10,13 @@ import { emailAdapter } from "../adapters/nodemailer.service";
 import { emailExamples } from "../adapters/email.example";
 import { UserDbDto } from "../../users/types/user-types";
 import { randomUUID } from "crypto";
+import { tokenBlackListedRepository } from "../infrastructure/tokenBlackListedRepository";
 
 export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string,
+    email: string
   ): Promise<RegistrationResult<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email);
     if (user?.login === login) {
@@ -50,7 +51,7 @@ export const authService = {
       emailAdapter.sendEmail(
         newUser.email,
         newUser.emailConfirmation!.confirmationCode,
-        emailExamples.registrationEmail,
+        emailExamples.registrationEmail
       );
 
       return {
@@ -125,7 +126,7 @@ export const authService = {
     };
   },
   async resendingEmail(
-    email: string,
+    email: string
   ): Promise<RegistrationResult<null> | undefined> {
     const user = await usersRepository.isUserExistByEmailOrLogin(email);
     if (!user) {
@@ -154,7 +155,7 @@ export const authService = {
       await emailAdapter.sendEmail(
         user.email,
         newConfimationCode,
-        emailExamples.registrationEmail,
+        emailExamples.registrationEmail
       );
 
       return {
@@ -169,7 +170,9 @@ export const authService = {
 
   async updateTokens(
     userId: string,
+    oldToken: string
   ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
+    await tokenBlackListedRepository.addToBlackList(oldToken);
     const accessToken = await jwtService.createAcessToken(userId);
     const refreshToken = await jwtService.createRefreshToken(userId);
     return {
@@ -205,7 +208,7 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     console.log(user, "check user in checkCredentials");
@@ -219,7 +222,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash,
+      user.passwordHash
     );
     if (!isPasscorrect)
       return {

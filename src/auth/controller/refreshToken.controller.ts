@@ -1,15 +1,17 @@
-import { RequestWithUserId } from "./../../core/types/common/requests";
 import { IdType } from "../../core/types/authorization/id";
+import { RequestWithUserIdAndCookies } from "../../core/types/common/requests";
 import { Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { authService } from "../application/auth.service";
 export async function refreshTokenController(
-  req: RequestWithUserId<IdType>,
+  req: RequestWithUserIdAndCookies<IdType>,
   res: Response,
 ) {
   try {
-    const tokens = await authService.updateTokens(req.user!.id);
-
+    const tokens = await authService.updateTokens(
+      req.user!.id,
+      req.cookies.refreshToken!,
+    );
     res.cookie("refreshToken", tokens.data!.refreshToken, {
       httpOnly: true,
       secure: true,
