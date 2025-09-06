@@ -1,12 +1,12 @@
+import { RequestWithUserIdAndCookies } from "./../../core/types/common/requests";
 import { NextFunction, Response } from "express";
-import { RequestWithRefreshToken } from "../controller/refreshToken.controller";
 import { HttpStatus } from "../../core/http-statuses";
 import { tokenBlackListedRepository } from "../infrastructure/tokenBlackListedRepository";
 import { jwtService } from "../adapters/jwt.service";
 import { IdType } from "../../core/types/authorization/id";
 
 export const refreshTokenGuard = async (
-  req: RequestWithRefreshToken,
+  req: RequestWithUserIdAndCookies<IdType>,
   res: Response,
   next: NextFunction,
 ) => {

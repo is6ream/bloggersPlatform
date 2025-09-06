@@ -1,22 +1,26 @@
-import { ResultStatus } from "../../core/result/resultCode";
+import { RequestWithUserId } from "./../../core/types/common/requests";
+import { IdType } from "../../core/types/authorization/id";
+import { Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-
-export interface RequestWithRefreshTokenAndUserId extends Request {
-  cookies: {
-    refreshToken?: string;
-  };
-}
+import { authService } from "../application/auth.service";
 export async function refreshTokenController(
-  req: RequestWithRefreshToken,
-  res: Response
+  req: RequestWithUserId<IdType>,
+  res: Response,
 ) {
-  const refreshToken = req.cookies.refreshToken; //здесь мы получаем рефрешТокен, который изначально должен выдать эндпоинт логинизации
-  const result = await genNewTokensService(refreshToken);
-  if (result.status !== ResultStatus.Success) {
-    //где должна осуществляться проверка валдиности токена? Реализовать middleware для проверки refresh, если в куках undefined или null
-    //сходить в блек лист либо в вайт лист и проверить, есть ли там рефреш
-    //в сервисе я только обновляю
-    res.status(HttpStatus.Unauthorized).send(result.extensions);
+  try {
+    const tokens = await authService.updateTokens(req.user!.id);
+
+    res.cookie("refreshToken", tokens.data!.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    res.status(HttpStatus.Ok).send({
+      accessToken: tokens.data!.accessToken,
+    });
+    return;
+  } catch (err: unknown) {
+    (console.log(err), res.sendStatus(HttpStatus.InternalServerError));
+    return;
   }
 }
-//сохраняю как userId

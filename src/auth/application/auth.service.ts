@@ -10,7 +10,6 @@ import { emailAdapter } from "../adapters/nodemailer.service";
 import { emailExamples } from "../adapters/email.example";
 import { UserDbDto } from "../../users/types/user-types";
 import { randomUUID } from "crypto";
-import { log } from "console";
 
 export const authService = {
   async registerUser(
@@ -168,6 +167,17 @@ export const authService = {
     }
   },
 
+  async updateTokens(
+    userId: string,
+  ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
+    const accessToken = await jwtService.createAcessToken(userId);
+    const refreshToken = await jwtService.createRefreshToken(userId);
+    return {
+      status: ResultStatus.Success,
+      data: { accessToken, refreshToken },
+      extensions: [],
+    };
+  },
   async loginUser(
     loginOrEmail: string,
     password: string,
