@@ -1,5 +1,6 @@
 import { blackListTokensCollection } from "../../db/mongo.db";
 import { jwtService } from "../adapters/jwt.service";
+
 export const tokenBlackListedRepository = {
   async isBlackListed(refreshToken: string): Promise<boolean> {
     const result = await blackListTokensCollection.findOne({ refreshToken });
@@ -7,13 +8,13 @@ export const tokenBlackListedRepository = {
     return !!result;
   },
 
-  async addToBlackList(refreshToken: string, expiresAt: Date): Promise<void> {
+  async addToBlackList(refreshToken: string): Promise<void> {
     const dataForInsert = await jwtService.parseRefreshToken(refreshToken);
-
-    const result = await blackListTokensCollection.insertOne({
+    await blackListTokensCollection.insertOne({
       refreshToken: refreshToken,
-      expiresAt: dataForInsert?.expiresAt,
-      userId: dataForInsert?.userId,
+      expiresAt: dataForInsert!.expiresAt,
+      userId: dataForInsert!.userId,
     });
+    return;
   },
 };

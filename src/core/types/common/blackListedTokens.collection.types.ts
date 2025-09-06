@@ -1,5 +1,5 @@
-export type blackListedTokensDB = { //откуда мы должны взять эти данные? userId и expiresAt
-  token: string;
+export type blackListedTokensDB = {
+  refreshToken: string;
   userId: string;
   expiresAt: Date;
 };

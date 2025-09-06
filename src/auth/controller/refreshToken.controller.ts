@@ -1,9 +1,7 @@
 import { ResultStatus } from "../../core/result/resultCode";
 import { HttpStatus } from "../../core/http-statuses";
 
-
-
-export interface RequestWithRefreshToken extends Request {
+export interface RequestWithRefreshTokenAndUserId extends Request {
   cookies: {
     refreshToken?: string;
   };
