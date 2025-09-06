@@ -8,21 +8,20 @@ import { IdType } from "../../core/types/authorization/id";
 export const refreshTokenGuard = async (
   req: RequestWithUserIdAndCookies<IdType>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const refreshToken = req.cookies?.refreshToken;
-  console.log(refreshToken, "cookie check");
   if (!refreshToken) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const isBlackListed =
     await tokenBlackListedRepository.isBlackListed(refreshToken);
-
   if (isBlackListed) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
 
-  const payload = await jwtService.verifyToken(refreshToken);
+  const payload = await jwtService.verifyToken(refreshToken); //почему тут null?
+  console.log(payload, "payload check ");
   if (!payload) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
