@@ -11,6 +11,8 @@ import {
 import { registrationUserController } from "../controller/registration.userController";
 import { confirmRegisterUserController } from "../controller/registration.confirmation.userController";
 import { emailResendingController } from "../controller/email.resending.controller";
+import { refreshTokenGuard } from "../middlewares/refreshTokenGuard";
+import { refreshTokenController } from "../controller/refreshToken.controller";
 export const authRouter = Router();
 
 authRouter
@@ -39,5 +41,5 @@ authRouter
     inputValidationResultMiddleware,
     confirmRegisterUserController,
   )
-  .post("/refresh-token");
+  .post("/refresh-token", refreshTokenGuard, refreshTokenController);
 // .post("/logout");

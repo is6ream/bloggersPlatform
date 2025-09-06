@@ -8,10 +8,10 @@ import { IdType } from "../../core/types/authorization/id";
 export const refreshTokenGuard = async (
   req: RequestWithUserIdAndCookies<IdType>,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   const refreshToken = req.cookies?.refreshToken;
-
+  console.log(refreshToken, "cookie check");
   if (!refreshToken) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
