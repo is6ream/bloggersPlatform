@@ -8,7 +8,7 @@ export async function loginUserController(req: Request, res: Response) {
   try {
     const result = await authService.loginUser(
       req.body.loginOrEmail,
-      req.body.password
+      req.body.password,
     );
     if (result.status !== ResultStatus.Success) {
       res

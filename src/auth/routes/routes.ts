@@ -13,6 +13,7 @@ import { confirmRegisterUserController } from "../controller/registration.confir
 import { emailResendingController } from "../controller/email.resending.controller";
 import { refreshTokenGuard } from "../middlewares/refreshTokenGuard";
 import { refreshTokenController } from "../controller/refreshToken.controller";
+import { logoutController } from "../controller/logoutController";
 export const authRouter = Router();
 
 authRouter
@@ -20,26 +21,26 @@ authRouter
     "/login",
     authValidators,
     inputValidationResultMiddleware,
-    loginUserController
+    loginUserController,
   )
   .get("/me", accessTokenGuard, getInfoAboutUserController)
   .post(
     "/registration",
     userValidators,
     inputValidationResultMiddleware,
-    registrationUserController
+    registrationUserController,
   )
   .post(
     "/registration-email-resending",
     emailValidator,
     inputValidationResultMiddleware,
-    emailResendingController
+    emailResendingController,
   )
   .post(
     "/registration-confirmation",
     codeValidator,
     inputValidationResultMiddleware,
-    confirmRegisterUserController
+    confirmRegisterUserController,
   )
   .post("/refresh-token", refreshTokenGuard, refreshTokenController)
-  .post("/logout");
+  .post("/logout", refreshTokenGuard, logoutController);

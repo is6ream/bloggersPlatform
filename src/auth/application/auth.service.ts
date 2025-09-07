@@ -16,7 +16,7 @@ export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string
+    email: string,
   ): Promise<RegistrationResult<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email);
     if (user?.login === login) {
@@ -51,7 +51,7 @@ export const authService = {
       emailAdapter.sendEmail(
         newUser.email,
         newUser.emailConfirmation!.confirmationCode,
-        emailExamples.registrationEmail
+        emailExamples.registrationEmail,
       );
 
       return {
@@ -126,7 +126,7 @@ export const authService = {
     };
   },
   async resendingEmail(
-    email: string
+    email: string,
   ): Promise<RegistrationResult<null> | undefined> {
     const user = await usersRepository.isUserExistByEmailOrLogin(email);
     if (!user) {
@@ -155,7 +155,7 @@ export const authService = {
       await emailAdapter.sendEmail(
         user.email,
         newConfimationCode,
-        emailExamples.registrationEmail
+        emailExamples.registrationEmail,
       );
 
       return {
@@ -166,6 +166,15 @@ export const authService = {
       console.error(err);
       return;
     }
+  },
+
+  async logout(oldToken: string): Promise<Result<null>> {
+    await tokenBlackListedRepository.addToBlackList(oldToken);
+    return {
+      status: ResultStatus.Success,
+      data: null,
+      extensions: [],
+    };
   },
 
   async updateTokens(

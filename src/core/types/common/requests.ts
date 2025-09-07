@@ -27,6 +27,11 @@ export type RequestWithBodyAndUserId<B, U extends IdType> = Request<
   U
 >;
 export type RequestWithUserId<U extends IdType> = Request<{}, {}, {}, {}, U>;
+export type RequestWithCookies = Request & {
+  cookies: {
+    refreshToken?: string;
+  };
+};
 export type RequestWithUserIdAndCookies<U extends IdType> = Request<
   {},
   {},

@@ -20,7 +20,7 @@ export const refreshTokenGuard = async (
     return res.sendStatus(HttpStatus.Unauthorized);
   }
 
-  const payload = await jwtService.verifyToken(refreshToken); 
+  const payload = await jwtService.verifyToken(refreshToken);
   console.log(payload, "payload check ");
   if (!payload) {
     return res.sendStatus(HttpStatus.Unauthorized);
