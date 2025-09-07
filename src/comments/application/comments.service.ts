@@ -13,7 +13,7 @@ export const commentsService = {
   async createComment(
     dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
-    const user = await usersRepository.findUser(dto.userId);
+    const user = await usersRepository.findUser(dto.userId); //здесь пофиксить
     const post = await postRepository.findPost(dto.postId);
     if (!post) {
       return {

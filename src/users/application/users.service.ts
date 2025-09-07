@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { UserInputModel } from "../types/user-types";
+import { UserInputModel, UserViewModel } from "../types/user-types";
 import { CreateUserDto } from "../input/create-user-dto";
 import { usersRepository } from "../repositories/users.repository";
 import { Result } from "../../core/result/result.type";
@@ -9,7 +9,7 @@ import { bcryptService } from "../../auth/adapters/bcrypt.service";
 export const usersService = {
   async create(dto: UserInputModel): Promise<Result<string>> {
     const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
-      dto.email,
+      dto.email
     );
     if (isEmailExist) {
       return {
@@ -57,5 +57,15 @@ export const usersService = {
         extensions: [],
       };
     }
+  },
+
+  async findUser(id: string): Promise<Result<UserViewModel>> {
+    const user: UserViewModel = await usersRepository.find(id);
+    
+    return {
+      status: ResultStatus.Success,
+      data: user,
+      extensions: [],
+    };
   },
 };

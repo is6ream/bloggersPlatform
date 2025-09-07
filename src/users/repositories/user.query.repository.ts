@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 
 export const usersQueryRepository = {
   async findAll(
-    queryDto: UserQueryInput,
+    queryDto: UserQueryInput
   ): Promise<{ items: UserViewModel[]; totalCount: number }> {
     const {
       pageNumber,
@@ -57,9 +57,9 @@ export const usersQueryRepository = {
       return null;
     }
     return {
-      userId: user._id.toString(),
-      login: user.login,
       email: user.email,
+      login: user.login,
+      userId: user._id.toString(),
     };
   },
 };

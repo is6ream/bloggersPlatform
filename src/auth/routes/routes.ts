@@ -23,7 +23,7 @@ authRouter
     inputValidationResultMiddleware,
     loginUserController,
   )
-  .get("/me", accessTokenGuard, getInfoAboutUserController)
+  .get("/me", accessTokenGuard, getInfoAboutUserController) //этот гард не работает 
   .post(
     "/registration",
     userValidators,
