@@ -1,6 +1,6 @@
 import { userCollection } from "../../db/mongo.db";
 import { UserQueryInput } from "../input/user-query.input";
-import { UserViewModel } from "../types/user-types";
+import { CurrentUser, UserViewModel } from "../types/user-types";
 import { ObjectId } from "mongodb";
 
 export const usersQueryRepository = {
@@ -51,16 +51,15 @@ export const usersQueryRepository = {
     return { items, totalCount };
   },
 
-  async findById(id: string): Promise<UserViewModel | null> {
+  async findById(id: string): Promise<CurrentUser | null> {
     const user = await userCollection.findOne({ _id: new ObjectId(id) });
     if (!user) {
       return null;
     }
     return {
-      id: user._id.toString(),
+      userId: user._id.toString(),
       login: user.login,
       email: user.email,
-      createdAt: user.createdAt,
     };
   },
 };

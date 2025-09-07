@@ -17,6 +17,12 @@ export type UserViewModel = {
   createdAt: Date;
 };
 
+export type CurrentUser = {
+  userId: string;
+  login: string;
+  email: string;
+};
+
 export type UserDbDto = {
   id: string;
   login: string;

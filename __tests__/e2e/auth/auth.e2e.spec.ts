@@ -55,5 +55,17 @@ describe("Auth API authorization flow check", () => {
       .expect(HttpStatus.Ok);
 
     expect(resRefresh.body.accessToken).toBeDefined();
+
+    const cookiesAfterRefresh = resRefresh.headers["set-cookie"];
+    const newCookiesArr = Array.isArray(cookiesAfterRefresh)
+      ? cookiesAfterRefresh
+      : [cookiesAfterRefresh];
+    const newRefreshToken = newCookiesArr.find((c: string) =>
+      c.startsWith("refreshToken"),
+    );
+    await request(app)
+      .post(AUTH_PATH + "/logout")
+      .set("Cookie", newRefreshToken)
+      .expect(HttpStatus.NoContent);
   });
 });
