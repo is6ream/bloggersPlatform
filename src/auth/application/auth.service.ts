@@ -170,7 +170,7 @@ export const authService = {
 
   async updateTokens(
     userId: string,
-    oldToken: string
+    oldToken: string,
   ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
     await tokenBlackListedRepository.addToBlackList(oldToken);
     const accessToken = await jwtService.createAcessToken(userId);
@@ -208,10 +208,9 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string
+    password: string,
   ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
-    console.log(user, "check user in checkCredentials");
     if (!user) {
       return {
         status: ResultStatus.NotFound,
@@ -222,7 +221,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash
+      user.passwordHash,
     );
     if (!isPasscorrect)
       return {
