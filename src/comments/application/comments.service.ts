@@ -13,7 +13,7 @@ export const commentsService = {
   async createComment(
     dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
-    const user = await usersRepository.findUser(dto.userId); //здесь пофиксить
+    const user = await usersRepository.find(dto.userId); //здесь пофиксить
     const post = await postRepository.findPost(dto.postId);
     if (!post) {
       return {
@@ -44,7 +44,7 @@ export const commentsService = {
   async update(
     id: string,
     dto: CommentInputDto,
-    userId: string,
+    userId: string
   ): Promise<Result<void | null>> {
     const comment = await commentsRepository.findByCommentId(id);
     if (!comment)

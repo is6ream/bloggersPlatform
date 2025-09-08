@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 export const jwtService = {
   async createAcessToken(userId: string): Promise<string> {
     return jwt.sign({ userId }, appConfig.JWT_SECRET, {
-      expiresIn: "1 m",
+      expiresIn: "10 s",
     });
   },
   async createRefreshToken(userId: string): Promise<string> {
