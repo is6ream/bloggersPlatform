@@ -21,26 +21,26 @@ authRouter
     "/login",
     authValidators,
     inputValidationResultMiddleware,
-    loginUserController
+    loginUserController,
   )
   .get("/me", accessTokenGuard, getInfoAboutUserController) //этот гард не работает
   .post(
     "/registration",
     userValidators,
     inputValidationResultMiddleware,
-    registrationUserController
+    registrationUserController,
   )
   .post(
     "/registration-email-resending",
     emailValidator,
     inputValidationResultMiddleware,
-    emailResendingController
+    emailResendingController,
   )
   .post(
     "/registration-confirmation",
     codeValidator,
     inputValidationResultMiddleware,
-    confirmRegisterUserController
+    confirmRegisterUserController,
   )
   .post("/refresh-token", refreshTokenGuard, refreshTokenController)
   .post("/logout", refreshTokenGuard, logoutController);

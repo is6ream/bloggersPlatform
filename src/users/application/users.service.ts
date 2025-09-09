@@ -9,7 +9,7 @@ import { bcryptService } from "../../auth/adapters/bcrypt.service";
 export const usersService = {
   async create(dto: UserInputModel): Promise<Result<string>> {
     const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
-      dto.email
+      dto.email,
     );
     if (isEmailExist) {
       return {
@@ -61,7 +61,7 @@ export const usersService = {
 
   async findUser(id: string): Promise<Result<UserViewModel>> {
     const user: UserViewModel = await usersRepository.find(id);
-    
+
     return {
       status: ResultStatus.Success,
       data: user,

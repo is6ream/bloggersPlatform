@@ -19,7 +19,8 @@ export const authService = {
     email: string,
   ): Promise<RegistrationResult<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, существует ли пользователь уже в системе
-    if (user?.login === login) {//если логин юзера равен логину, который поступил, 404
+    if (user?.login === login) {
+      //если логин юзера равен логину, который поступил, 404
       return {
         status: ResultStatus.BadRequest,
         errorMessage: "Bad request",

@@ -34,7 +34,7 @@ export const usersRepository = {
     return deleteResult.deletedCount === 1;
   },
   async isUserExistByEmailOrLogin(
-    loginOrEmail: string
+    loginOrEmail: string,
   ): Promise<WithId<UserDB> | null> {
     const user = await userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
@@ -45,7 +45,7 @@ export const usersRepository = {
 
   async doesExistByLoginOrEmail(
     login: string,
-    email: string
+    email: string,
   ): Promise<UserDB | undefined> {
     const existingByLogin = await userCollection.findOne({ login });
     if (existingByLogin) {
@@ -79,7 +79,7 @@ export const usersRepository = {
   async update(id: string): Promise<void> {
     const updateResult = await userCollection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: { "emailConfirmation.isConfirmed": true } }
+      { $set: { "emailConfirmation.isConfirmed": true } },
     );
     console.log(updateResult, "updateResult check");
     return;

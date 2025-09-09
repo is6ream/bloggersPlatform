@@ -44,7 +44,7 @@ export const commentsService = {
   async update(
     id: string,
     dto: CommentInputDto,
-    userId: string
+    userId: string,
   ): Promise<Result<void | null>> {
     const comment = await commentsRepository.findByCommentId(id);
     if (!comment)
