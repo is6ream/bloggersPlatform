@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { authService } from "../application/auth.service";
-import { HttpStatus } from "../../core/http-statuses";
-import { ResultStatus } from "../../core/result/resultCode";
-import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
-
+import { authService } from "../../application/auth.service";
+import { HttpStatus } from "../../../core/http-statuses";
+import { ResultStatus } from "../../../core/result/resultCode";
+import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
 export async function loginUserController(req: Request, res: Response) {
   try {
     const result = await authService.loginUser(

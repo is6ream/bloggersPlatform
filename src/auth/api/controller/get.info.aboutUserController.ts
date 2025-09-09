@@ -1,9 +1,9 @@
-import { HttpStatus } from "../../core/http-statuses";
-import { IdType } from "../../core/types/authorization/id";
-import { RequestWithUserId } from "../../core/types/common/requests";
-import { usersQueryRepository } from "../../users/repositories/user.query.repository";
+import { HttpStatus } from "../../../core/http-statuses";
+import { IdType } from "../../../core/types/authorization/id";
+import { RequestWithUserId } from "../../../core/types/common/requests";
+import { usersQueryRepository } from "../../../users/repositories/user.query.repository";
 import { Response } from "express";
-import { CurrentUser } from "../../users/types/user-types";
+import { CurrentUser } from "../../../users/types/user-types";
 
 export async function getInfoAboutUserController(
   req: RequestWithUserId<IdType>,

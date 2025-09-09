@@ -1,8 +1,8 @@
-import { IdType } from "../../core/types/authorization/id";
-import { RequestWithUserIdAndCookies } from "../../core/types/common/requests";
+import { IdType } from "../../../core/types/authorization/id";
+import { RequestWithUserIdAndCookies } from "../../../core/types/common/requests";
 import { Response } from "express";
-import { HttpStatus } from "../../core/http-statuses";
-import { authService } from "../application/auth.service";
+import { HttpStatus } from "../../../core/http-statuses";
+import { authService } from "../../application/auth.service";
 export async function refreshTokenController(
   req: RequestWithUserIdAndCookies<IdType>,
   res: Response,

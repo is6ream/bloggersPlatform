@@ -1,9 +1,8 @@
 import { Response } from "express";
-import { RequestWithBody } from "../../core/types/common/requests";
-import { authService } from "../application/auth.service";
-import { ResultStatus } from "../../core/result/resultCode";
-import { HttpStatus } from "../../core/http-statuses";
-
+import { RequestWithBody } from "../../../core/types/common/requests";
+import { authService } from "../../application/auth.service";
+import { ResultStatus } from "../../../core/result/resultCode";
+import { HttpStatus } from "../../../core/http-statuses";
 export type EmailConfirmCode = {
   code: string;
 };

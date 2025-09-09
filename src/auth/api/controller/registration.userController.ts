@@ -1,8 +1,8 @@
-import { RequestWithBody } from "../../core/types/common/requests";
-import { authService } from "../application/auth.service";
-import { CreateUserDto } from "../types/auth.types";
-import { ResultStatus } from "../../core/result/resultCode";
-import { HttpStatus } from "../../core/http-statuses";
+import { RequestWithBody } from "../../../core/types/common/requests";
+import { authService } from "../../application/auth.service";
+import { CreateUserDto } from "../../types/auth.types";
+import { ResultStatus } from "../../../core/result/resultCode";
+import { HttpStatus } from "../../../core/http-statuses";
 import { Response } from "express";
 
 export async function registrationUserController(
