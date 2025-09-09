@@ -1,19 +1,19 @@
 import { Router } from "express";
 import { authValidators, codeValidator } from "../middlewares/auth.validation";
-import { loginUserController } from "../controller/auth.userController";
+import { loginUserController } from "./controller/auth.userController";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
-import { getInfoAboutUserController } from "../controller/get.info.aboutUserController";
+import { getInfoAboutUserController } from "./controller/get.info.aboutUserController";
 import { accessTokenGuard } from "../../core/guards/access.token.guard";
 import {
   emailValidator,
   userValidators,
 } from "../../users/middlewares/user-input-dto-validator";
-import { registrationUserController } from "../controller/registration.userController";
-import { confirmRegisterUserController } from "../controller/registration.confirmation.userController";
-import { emailResendingController } from "../controller/email.resending.controller";
+import { registrationUserController } from "./controller/registration.userController";
+import { confirmRegisterUserController } from "./controller/registration.confirmation.userController";
+import { emailResendingController } from "./controller/email.resending.controller";
 import { refreshTokenGuard } from "../middlewares/refreshTokenGuard";
-import { refreshTokenController } from "../controller/refreshToken.controller";
-import { logoutController } from "../controller/logoutController";
+import { refreshTokenController } from "./controller/refreshToken.controller";
+import { logoutController } from "./controller/logoutController";
 export const authRouter = Router();
 
 authRouter
@@ -21,26 +21,26 @@ authRouter
     "/login",
     authValidators,
     inputValidationResultMiddleware,
-    loginUserController,
+    loginUserController
   )
-  .get("/me", accessTokenGuard, getInfoAboutUserController) //этот гард не работает 
+  .get("/me", accessTokenGuard, getInfoAboutUserController) //этот гард не работает
   .post(
     "/registration",
     userValidators,
     inputValidationResultMiddleware,
-    registrationUserController,
+    registrationUserController
   )
   .post(
     "/registration-email-resending",
     emailValidator,
     inputValidationResultMiddleware,
-    emailResendingController,
+    emailResendingController
   )
   .post(
     "/registration-confirmation",
     codeValidator,
     inputValidationResultMiddleware,
-    confirmRegisterUserController,
+    confirmRegisterUserController
   )
   .post("/refresh-token", refreshTokenGuard, refreshTokenController)
   .post("/logout", refreshTokenGuard, logoutController);
