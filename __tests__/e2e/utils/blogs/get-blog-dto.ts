@@ -1,4 +1,4 @@
-import { BlogAttributes } from "../../blogs/types";
+import { BlogAttributes } from "../../blogs/blogsTestTypes.ts";
 
 export function getBlogDto(): BlogAttributes {
   return {
