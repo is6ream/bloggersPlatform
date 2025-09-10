@@ -10,7 +10,7 @@ import { BlogAttributes } from "../../blogs/blogsTestTypes";
 
 export async function createBlog(
   app: Express,
-  blogDto?: BlogInputDto,
+  blogDto?: BlogInputDto
 ): Promise<BlogViewModel> {
   const defaultBlogData: BlogAttributes = getBlogDto();
 
@@ -25,4 +25,8 @@ export async function createBlog(
   return createdBlogResponse.body;
 }
 
-export function generateBasicA
+export function generateBasicAuthToken() {
+  const credentials = "admin:admin";
+  const encodedCredentials = Buffer.from(credentials).toString("base64");
+  return encodedCredentials;
+}
