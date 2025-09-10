@@ -3,8 +3,13 @@ import { setupApp } from "../../../src/setup-app";
 import { db } from "../../../src/db/mongo.db";
 import request from "supertest";
 import { BLOGS_PATH } from "../../../src/core/paths";
-import { createBlog, createPostForBlog } from "../utils/blogs/create-blog";
+import { createPostForBlog } from "../utils/blogs/createPostForBlog";
 import { HttpStatus } from "../../../src/core/http-statuses";
+import { getBlogDto } from "../utils/blogs/get-blog-dto";
+import { generateBasicAuthToken } from "../utils/secure/genBasicAuthToken";
+import { PostByIdInputDto } from "../../../src/posts/types/posts-types";
+import { createBlog } from "../utils/blogs/create-blog";
+
 describe("Testing the blog branch", () => {
   let app: Express;
   beforeAll(async () => {
@@ -46,5 +51,36 @@ describe("Testing the blog branch", () => {
 
       expect(res.body).toBeDefined();
     });
+  });
+  describe("test for command requests", () => {
+    it("should create new blog", async () => {
+      const blogDto = getBlogDto();
+      const res = await request(app)
+        .post(BLOGS_PATH)
+        .set("Authorization", generateBasicAuthToken())
+        .send(blogDto)
+        .expect(HttpStatus.Created);
+
+      expect(res.body).toBeDefined();
+    });
+
+    it("should create post for specified blog", async () => {
+      const blog = await createBlog(app);
+      const postDto: PostByIdInputDto = {
+        title: "post for blog",
+        shortDescription: "test",
+        content: "c1",
+      };
+
+      const res = await request(app)
+        .post(`${BLOGS_PATH}/${blog.id}/posts`)
+        .set("Authorization", generateBasicAuthToken())
+        .send(postDto)
+        .expect(HttpStatus.Created);
+
+      expect(res.body).toBeDefined;
+    });
+
+    
   });
 });
