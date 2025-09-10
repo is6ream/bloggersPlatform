@@ -2,7 +2,7 @@ import { BLOGS_PATH } from "../../../../src/core/paths";
 import { BlogInputDto } from "../../../../src/blogs/types/blogs-types";
 import request from "supertest";
 import { Express } from "express";
-import { generateBasicAuthToken } from "../posts/generate-admin-auth-token";
+import { generateBasicAuthToken } from "../secure/genBasicAuthToken";
 import { getBlogDto } from "./get-blog-dto";
 import { BlogViewModel } from "../../../../src/blogs/types/blogs-types";
 import { HttpStatus } from "../../../../src/core/http-statuses";
@@ -10,7 +10,7 @@ import { BlogAttributes } from "../../blogs/blogsTestTypes";
 
 export async function createBlog(
   app: Express,
-  blogDto?: BlogInputDto
+  blogDto?: BlogInputDto,
 ): Promise<BlogViewModel> {
   const defaultBlogData: BlogAttributes = getBlogDto();
 
@@ -23,10 +23,4 @@ export async function createBlog(
     .expect(HttpStatus.Created);
 
   return createdBlogResponse.body;
-}
-
-export function generateBasicAuthToken() {
-  const credentials = "admin:admin";
-  const encodedCredentials = Buffer.from(credentials).toString("base64");
-  return encodedCredentials;
 }
