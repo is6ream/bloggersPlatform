@@ -1,3 +1,4 @@
+import { BlogUpdateInput } from "./../../../src/blogs/routes/input/blog-update-input";
 import express, { Express } from "express";
 import { setupApp } from "../../../src/setup-app";
 import { db } from "../../../src/db/mongo.db";
@@ -16,9 +17,11 @@ describe("Testing the blog branch", () => {
     await db.runDB(
       "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
-    await db.drop();
     const expressApp = express();
     app = setupApp(expressApp);
+  });
+  beforeEach(async () => {
+    await db.drop();
   });
 
   afterAll(async () => {
@@ -81,6 +84,27 @@ describe("Testing the blog branch", () => {
       expect(res.body).toBeDefined;
     });
 
-    
+    it("should update blog by id", async () => {
+      const blog = await createBlog(app);
+      const blogUpdateDto: BlogUpdateInput = {
+        name: "new Name",
+        description: "new Description",
+        websiteUrl: "https://www.google.com/",
+      };
+
+      await request(app)
+        .put(`${BLOGS_PATH}/${blog.id}`)
+        .set("Authorization", generateBasicAuthToken())
+        .send(blogUpdateDto)
+        .expect(HttpStatus.NoContent);
+    });
+
+    it("should delete blog by id", async () => {
+      const blog = await createBlog(app);
+      await request(app)
+        .delete(`${BLOGS_PATH}/${blog.id}`)
+        .set("Authorization", generateBasicAuthToken())
+        .expect(HttpStatus.NoContent);
+    });
   });
 });
