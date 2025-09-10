@@ -1,5 +1,5 @@
 export function generateBasicAuthToken() {
-  const credentials = "admin:admin";
+  const credentials = "admin:qwerty";
   const encodedCredentials = Buffer.from(credentials).toString("base64");
-  return encodedCredentials;
+  return `Basic ${encodedCredentials}`;
 }

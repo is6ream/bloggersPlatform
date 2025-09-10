@@ -1,4 +1,4 @@
-import { BlogAttributes } from "../../blogs/blogsTestTypes.ts";
+import { BlogAttributes } from "../../blogs/blogsTestTypes";
 
 export function getBlogDto(): BlogAttributes {
   return {
@@ -6,7 +6,7 @@ export function getBlogDto(): BlogAttributes {
     name: "jamick",
     description: "from Ufa",
     websiteUrl: "https://samurai.it-incubator.io/swagger?id=h03",
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(),
     isMembership: true,
   };
 }
