@@ -11,11 +11,13 @@ import { getTestPostData } from "../utils/posts/getPostDto";
 import { BlogViewModel } from "../../../src/blogs/types/blogs-types";
 import { createBlog } from "../utils/blogs/create-blog";
 import { generateBasicAuthToken } from "../utils/secure/genBasicAuthToken";
+import { createUserAndAuth } from "../users/createAndAuthUser";
+
 describe("Testing post branch", () => {
   let app: Express;
   beforeAll(async () => {
     await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     const expressApp = express();
     app = setupApp(expressApp);
@@ -62,4 +64,17 @@ describe("Testing post branch", () => {
 
       expect(res.body).toBeDefined();
     }));
+
+  it("should create new comment", async () => {
+    const post = await returnPostByBlogId(app);
+    const token = await createUserAndAuth(app);
+
+    const res = await request(app)
+      .post(`${POSTS_PATH}/${post.id}/comments`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({ content: "stringstringstringstring" })
+      .expect(HttpStatus.Created);
+
+    expect(res.body).toBeDefined();
+  });
 });
