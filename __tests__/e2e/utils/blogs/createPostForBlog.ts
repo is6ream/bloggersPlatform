@@ -8,7 +8,7 @@ import { generateBasicAuthToken } from "../secure/genBasicAuthToken";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { PostInputDto } from "../../../../src/posts/types/posts-types";
 import { POSTS_PATH } from "../../../../src/core/paths";
-
+import { getTestPostData } from "../posts/getPostDto";
 
 export async function createPostForBlog(app: Express): Promise<BlogViewModel> {
   const defaultBlogData: BlogInputDto = getBlogDto();
@@ -20,12 +20,9 @@ export async function createPostForBlog(app: Express): Promise<BlogViewModel> {
     .send(testBlogData)
     .expect(HttpStatus.Created);
 
-  const testPostData: PostInputDto = {
-    title: "string",
-    shortDescription: "string",
-    content: "string",
-    blogId: createdBlogResponse.body.id,
-  };
+  const testPostData: PostInputDto = getTestPostData(
+    createdBlogResponse.body.id,
+  );
 
   await request(app)
     .post(POSTS_PATH)

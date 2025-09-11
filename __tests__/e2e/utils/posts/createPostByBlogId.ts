@@ -8,8 +8,9 @@ import { HttpStatus } from "../../../../src/core/http-statuses";
 import { PostInputDto } from "../../../../src/posts/types/posts-types";
 import { POSTS_PATH } from "../../../../src/core/paths";
 import { getBlogDto } from "../blogs/get-blog-dto";
+import { getTestPostData } from "./getPostDto";
 
-export async function createPostByBlogId(app: Express): Promise<BlogViewModel> {
+export async function returnPostByBlogId(app: Express): Promise<BlogViewModel> {
   const defaultBlogData: BlogInputDto = getBlogDto();
 
   const testBlogData = { ...defaultBlogData };
@@ -19,12 +20,9 @@ export async function createPostByBlogId(app: Express): Promise<BlogViewModel> {
     .send(testBlogData)
     .expect(HttpStatus.Created);
 
-  const testPostData: PostInputDto = {
-    title: "string",
-    shortDescription: "string",
-    content: "string",
-    blogId: createdBlogResponse.body.id,
-  };
+  const testPostData: PostInputDto = getTestPostData(
+    createdBlogResponse.body.id,
+  );
 
   const createPostResponse = await request(app)
     .post(POSTS_PATH)

@@ -1,17 +1,21 @@
 import express, { Express } from "express";
 import { db } from "../../../src/db/mongo.db";
 import { setupApp } from "../../../src/setup-app";
-import { createPost } from "../utils/posts/create-post";
 import { POSTS_PATH } from "../../../src/core/paths";
 import request from "supertest";
 import { HttpStatus } from "../../../src/core/http-statuses";
-import { createPostByBlogId } from "../../../src/blogs/routes/handlers/createPostByBlogIdHandler";
 import { createPostForBlog } from "../utils/blogs/createPostForBlog";
+import { returnPostByBlogId } from "../utils/posts/createPostByBlogId";
+import { PostInputDto } from "../../../src/posts/types/posts-types";
+import { getTestPostData } from "../utils/posts/getPostDto";
+import { BlogViewModel } from "../../../src/blogs/types/blogs-types";
+import { createBlog } from "../utils/blogs/create-blog";
+import { generateBasicAuthToken } from "../utils/secure/genBasicAuthToken";
 describe("Testing post branch", () => {
   let app: Express;
   beforeAll(async () => {
     await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     );
     const expressApp = express();
     app = setupApp(expressApp);
@@ -36,7 +40,7 @@ describe("Testing post branch", () => {
     });
 
     it("should return post by id", async () => {
-      const post = await createPostForBlog(app);
+      const post = await returnPostByBlogId(app);
       const res = await request(app)
         .get(`${POSTS_PATH}/${post.id}`)
         .expect(HttpStatus.Ok);
@@ -44,4 +48,18 @@ describe("Testing post branch", () => {
       expect(res.body).toBeDefined();
     });
   });
+
+  describe("Test for command requests on post branch", () =>
+    it("should create new post", async () => {
+      const blog: BlogViewModel = await createBlog(app);
+      const postDto: PostInputDto = getTestPostData(blog.id);
+
+      const res = await request(app)
+        .post(POSTS_PATH)
+        .set("Authorization", generateBasicAuthToken())
+        .send(postDto)
+        .expect(HttpStatus.Created);
+
+      expect(res.body).toBeDefined();
+    }));
 });
