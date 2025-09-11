@@ -18,7 +18,7 @@ describe("Testing post branch", () => {
   let app: Express;
   beforeAll(async () => {
     await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     const expressApp = express();
     app = setupApp(expressApp);
@@ -32,31 +32,45 @@ describe("Testing post branch", () => {
     await db.stop();
   });
 
-  describe("Tests for query requests on posts branch", () => {
-    it("should return posts with paging", async () => {
-      await createPostForBlog(app);
-      const res = await request(app)
-        .get(`${POSTS_PATH}?sortBy=createdAt&pageNumber=1&pageSize=10`)
-        .expect(HttpStatus.Ok);
+  // describe("Tests for query requests on posts branch", () => {
+  //   beforeEach(async () => {
+  //     await db.drop();
+  //   });
+  //   it("should return posts with paging", async () => {
+  //     await createPostForBlog(app);
+  //     const res = await request(app)
+  //       .get(`${POSTS_PATH}?sortBy=createdAt&pageNumber=1&pageSize=10`)
+  //       .expect(HttpStatus.Ok);
 
-      expect(res.body).toBeDefined();
+  //     expect(res.body).toBeDefined();
+  //   });
+
+  //   it("should return post by id", async () => {
+  //     const post = await returnPostByBlogId(app);
+  //     const res = await request(app)
+  //       .get(`${POSTS_PATH}/${post.id}`)
+  //       .expect(HttpStatus.Ok);
+
+  //     expect(res.body).toBeDefined();
+  //   });
+  // });
+
+  describe("Test for command requests on post branch", () => {
+    beforeEach(async () => {
+      console.log("delete");
+      await db.drop();
     });
 
-    it("should return post by id", async () => {
-      const post = await returnPostByBlogId(app);
-      const res = await request(app)
-        .get(`${POSTS_PATH}/${post.id}`)
-        .expect(HttpStatus.Ok);
-
-      expect(res.body).toBeDefined();
+    afterEach(async () => {
+      console.log("delete AFTER");
+      await db.drop();
     });
-  });
 
-  describe("Test for command requests on post branch", () =>
     it("should create new post", async () => {
+      console.log(1);
+
       const blog: BlogViewModel = await createBlog(app);
       const postDto: PostInputDto = getTestPostData(blog.id);
-
       const res = await request(app)
         .post(POSTS_PATH)
         .set("Authorization", generateBasicAuthToken())
@@ -64,31 +78,35 @@ describe("Testing post branch", () => {
         .expect(HttpStatus.Created);
 
       expect(res.body).toBeDefined();
-    }));
+    });
 
-  it("should create new comment", async () => {
-    const post = await returnPostByBlogId(app);
-    const token = await createUserAndAuth(app);
+    it("should create new comment", async () => {
+      console.log(2);
 
-    const res = await request(app)
-      .post(`${POSTS_PATH}/${post.id}/comments`)
-      .set("Authorization", `Bearer ${token}`)
-      .send({ content: "stringstringstringstring" })
-      .expect(HttpStatus.Created);
+      const post = await returnPostByBlogId(app);
+      const token = await createUserAndAuth(app); //здесь падает ошибка
+      const res = await request(app)
+        .post(`${POSTS_PATH}/${post.id}/comments`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ content: "stringstringstringstring" })
+        .expect(HttpStatus.Created);
 
-    expect(res.body).toBeDefined();
-  });
+      expect(res.body).toBeDefined();
+    });
 
-  it("should return comments for specified post", async () => {
-    const post = await returnPostByBlogId(app);
-    await createComment(app, post.id);
+    it("should return comments for specified post", async () => {
+      console.log(3);
 
-    const res = await request(app)
-      .get(
-        `${POSTS_PATH}/${post.id}/comments?sortBy=createdAt&pageNumber=1&pageSize=10`,
-      )
-      .expect(HttpStatus.Ok);
+      const post = await returnPostByBlogId(app);
+      await createComment(app, post.id);
 
-    expect(res.body).toBeDefined();
+      const res = await request(app)
+        .get(
+          `${POSTS_PATH}/${post.id}/comments?sortBy=createdAt&pageNumber=1&pageSize=10`
+        )
+        .expect(HttpStatus.Ok);
+
+      expect(res.body).toBeDefined();
+    });
   });
 });

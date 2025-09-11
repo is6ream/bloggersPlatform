@@ -9,7 +9,6 @@ import { blogQueryRepository } from "../../blogs/repositories/blogs.query.reposi
 export const postsService = {
   async create(dto: PostInputDto): Promise<Result<string>> {
     const foundBlog = await blogsRepository.findById(dto.blogId);
-    console.log(foundBlog, "check blog  in post BLL");
     if (!foundBlog) {
       return {
         status: ResultStatus.BadRequest,
