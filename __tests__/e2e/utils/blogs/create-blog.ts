@@ -24,4 +24,3 @@ export async function createBlog(
 
   return createdBlogResponse.body;
 }
-

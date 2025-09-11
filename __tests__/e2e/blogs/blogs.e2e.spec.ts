@@ -15,7 +15,7 @@ describe("Testing the blog branch", () => {
   let app: Express;
   beforeAll(async () => {
     await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     );
     const expressApp = express();
     app = setupApp(expressApp);
@@ -28,13 +28,14 @@ describe("Testing the blog branch", () => {
     await db.drop();
     await db.stop();
   });
-  describe("Tests for query requests", () => {
+  describe("Tests for query requests on blogs branch", () => {
     it("should return blogs with paging", async () => {
+      await createBlog(app);
       const res = await request(app)
         .get(BLOGS_PATH + "?sortBy=createdAt&pageNumber=1&pageSize=10")
         .expect(200);
 
-      expect(res.body).toBeDefined;
+      expect(res.body).toBeDefined();
     });
 
     it("should return all posts for specified blog", async () => {
@@ -46,7 +47,7 @@ describe("Testing the blog branch", () => {
       expect(res.body).toBeDefined();
     });
 
-    it("should retun blog by id", async () => {
+    it("should return blog by id", async () => {
       const blog = await createBlog(app);
       const res = await request(app)
         .get(BLOGS_PATH + `/${blog.id}`)
@@ -55,7 +56,7 @@ describe("Testing the blog branch", () => {
       expect(res.body).toBeDefined();
     });
   });
-  describe("test for command requests", () => {
+  describe("test for command blogs requests", () => {
     it("should create new blog", async () => {
       const blogDto = getBlogDto();
       const res = await request(app)

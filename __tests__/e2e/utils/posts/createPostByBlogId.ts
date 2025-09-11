@@ -1,5 +1,4 @@
 import { BlogInputDto } from "../../../../src/blogs/types/blogs-types";
-import { getBlogDto } from "./get-blog-dto";
 import { BlogViewModel } from "../../../../src/blogs/types/blogs-types";
 import { Express } from "express";
 import request from "supertest";
@@ -8,9 +7,9 @@ import { generateBasicAuthToken } from "../secure/genBasicAuthToken";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { PostInputDto } from "../../../../src/posts/types/posts-types";
 import { POSTS_PATH } from "../../../../src/core/paths";
+import { getBlogDto } from "../blogs/get-blog-dto";
 
-
-export async function createPostForBlog(app: Express): Promise<BlogViewModel> {
+export async function createPostByBlogId(app: Express): Promise<BlogViewModel> {
   const defaultBlogData: BlogInputDto = getBlogDto();
 
   const testBlogData = { ...defaultBlogData };
@@ -27,11 +26,11 @@ export async function createPostForBlog(app: Express): Promise<BlogViewModel> {
     blogId: createdBlogResponse.body.id,
   };
 
-  await request(app)
+  const createPostResponse = await request(app)
     .post(POSTS_PATH)
     .set("Authorization", generateBasicAuthToken())
     .send(testPostData)
     .expect(HttpStatus.Created);
 
-  return createdBlogResponse.body;
+  return createPostResponse.body;
 }
