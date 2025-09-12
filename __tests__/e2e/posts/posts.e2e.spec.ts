@@ -18,7 +18,7 @@ describe("Testing post branch", () => {
   let app: Express;
   beforeAll(async () => {
     await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     );
     const expressApp = express();
     app = setupApp(expressApp);
@@ -102,7 +102,7 @@ describe("Testing post branch", () => {
 
       const res = await request(app)
         .get(
-          `${POSTS_PATH}/${post.id}/comments?sortBy=createdAt&pageNumber=1&pageSize=10`
+          `${POSTS_PATH}/${post.id}/comments?sortBy=createdAt&pageNumber=1&pageSize=10`,
         )
         .expect(HttpStatus.Ok);
 

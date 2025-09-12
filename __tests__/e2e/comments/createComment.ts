@@ -7,7 +7,11 @@ import { HttpStatus } from "../../../src/core/http-statuses";
 
 export const createComment = async (app: Express, postId?: string) => {
   let id: string;
-  const token = await createUserAndAuth(app);
+  const token = await createUserAndAuth(app, {
+    login: "newLog",
+    email: "testEmail@mail.com",
+    password: "123456",
+  });
 
   if (postId) {
     id = postId;

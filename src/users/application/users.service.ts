@@ -11,7 +11,7 @@ export const usersService = {
     const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
       dto.email,
     );
-    console.log(isEmailExist, "check in BLL")
+    console.log(isEmailExist, "check in BLL");
     if (isEmailExist) {
       return {
         status: ResultStatus.BadRequest,
