@@ -2,6 +2,7 @@ import express from "express";
 import { setupApp } from "./setup-app";
 import { appConfig } from "./core/config/config";
 import { db } from "./db/mongo.db";
+
 const bootStrap = async () => {
   const app = express();
   setupApp(app);
@@ -13,5 +14,4 @@ const bootStrap = async () => {
   });
   return app;
 };
-
 bootStrap();
