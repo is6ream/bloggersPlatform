@@ -3,6 +3,7 @@ import { authService } from "../../application/auth.service";
 import { HttpStatus } from "../../../core/http-statuses";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
+
 export async function loginUserController(req: Request, res: Response) {
   try {
     const result = await authService.loginUser(
@@ -17,8 +18,6 @@ export async function loginUserController(req: Request, res: Response) {
     }
     const refreshToken = result.data?.refreshToken;
     const accessToken = result.data?.accessToken;
-    console.log(refreshToken, "RT", accessToken, "AT");
-
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,

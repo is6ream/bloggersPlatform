@@ -11,6 +11,12 @@ import { emailExamples } from "../adapters/email.example";
 import { UserDbDto } from "../../users/types/user-types";
 import { randomUUID } from "crypto";
 import { tokenBlackListedRepository } from "../infrastructure/tokenBlackListedRepository";
+import {
+  handleBadRequestResult,
+  handleNotFoundResult,
+  handleSuccessResult,
+  handleUnauthorizedFResult,
+} from "../../core/result/handleResult";
 
 export const authService = {
   async registerUser(
@@ -21,27 +27,9 @@ export const authService = {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, существует ли пользователь уже в системе
     if (user?.login === login) {
       //если логин юзера равен логину, который поступил, 404
-      return {
-        status: ResultStatus.BadRequest,
-        errorMessage: "Bad request",
-        extensions: {
-          errorsMessages: [
-            { message: "user already registered", field: "login" },
-          ],
-        },
-        data: null,
-      };
+      return handleBadRequestResult("user already registered", "login");
     } else if (user?.email === email) {
-      return {
-        status: ResultStatus.BadRequest,
-        errorMessage: "Bad request",
-        extensions: {
-          errorsMessages: [
-            { message: "user already registered", field: "email" },
-          ],
-        },
-        data: null,
-      };
+      return handleBadRequestResult("user already registered", "email");
     }
     const passwordHash = await bcryptService.generateHash(password);
 
@@ -49,106 +37,51 @@ export const authService = {
     await usersRepository.create(newUser);
 
     try {
-      emailAdapter.sendEmail(
+      await emailAdapter.sendEmail(
         newUser.email,
         newUser.emailConfirmation!.confirmationCode,
         emailExamples.registrationEmail,
       );
 
-      return {
-        status: ResultStatus.Success,
-        data: newUser,
-      };
+      return handleSuccessResult(newUser);
     } catch (err: unknown) {
       console.error(err);
     }
   },
-
   async confirmEmail(code: string): Promise<RegistrationResult<null>> {
     const user: UserDbDto | null =
       await usersRepository.findUserByConfirmationCode(code);
     if (!user) {
-      return {
-        status: ResultStatus.BadRequest,
-        extensions: {
-          errorsMessages: [
-            {
-              message: "Confirmation code is incorrect",
-              field: "confirmation code",
-            },
-          ],
-        },
-      };
+      return handleBadRequestResult(
+        "confirmation code is incorrect",
+        "confirmation code",
+      );
     }
     if (user?.emailConfirmation.confirmationCode !== code) {
-      console.log("no confirmation code match");
-      return {
-        status: ResultStatus.BadRequest,
-        extensions: {
-          errorsMessages: [
-            {
-              message: "Confirmation code is incorrect",
-              field: "confirmation code",
-            },
-          ],
-        },
-      };
+      return handleBadRequestResult(
+        "confirmation code is incorrect",
+        "confirmation code",
+      );
     }
     if (user.emailConfirmation?.expirationDate < new Date()) {
-      console.log("code is expired");
-      return {
-        status: ResultStatus.BadRequest,
-        extensions: {
-          errorsMessages: [
-            { message: "Code is expired", field: "confirmation code" },
-          ],
-        },
-      };
+      return handleBadRequestResult("code is expired", "confirmation code");
     }
-    if (user.emailConfirmation.isConfirmed === true) {
-      console.log("code has already been applied  ");
-      return {
-        status: ResultStatus.BadRequest,
-        extensions: {
-          errorsMessages: [
-            {
-              message: "Code has already been applied",
-              field: "code",
-            },
-          ],
-        },
-      };
+    if (user.emailConfirmation.isConfirmed) {
+      return handleBadRequestResult("code has already been applied", "code");
     }
 
     await usersRepository.update(user.id);
-    return {
-      status: ResultStatus.Success,
-      data: null,
-    };
+    return handleSuccessResult();
   },
   async resendingEmail(
     email: string,
   ): Promise<RegistrationResult<null> | undefined> {
     const user = await usersRepository.isUserExistByEmailOrLogin(email);
     if (!user) {
-      return {
-        status: ResultStatus.BadRequest,
-        extensions: {
-          errorsMessages: [{ message: "user does not exist", field: "email" }],
-        },
-        data: null,
-      };
+      return handleBadRequestResult("user does not exist", "email");
     }
     if (user.emailConfirmation?.isConfirmed === true) {
-      return {
-        status: ResultStatus.BadRequest,
-        extensions: {
-          errorsMessages: [
-            { message: "email is already confirmed", field: "email" },
-          ],
-        },
-        data: null,
-      };
+      return handleBadRequestResult("email already confirmed", "email");
     }
 
     const newConfimationCode = randomUUID();
@@ -159,10 +92,7 @@ export const authService = {
         emailExamples.registrationEmail,
       );
 
-      return {
-        status: ResultStatus.Success,
-        data: null,
-      };
+      return handleSuccessResult();
     } catch (err: unknown) {
       console.error(err);
       return;
@@ -171,11 +101,7 @@ export const authService = {
 
   async logout(oldToken: string): Promise<Result<null>> {
     await tokenBlackListedRepository.addToBlackList(oldToken);
-    return {
-      status: ResultStatus.Success,
-      data: null,
-      extensions: [],
-    };
+    return handleSuccessResult();
   },
 
   async updateTokens(
@@ -185,11 +111,7 @@ export const authService = {
     await tokenBlackListedRepository.addToBlackList(oldToken);
     const accessToken = await jwtService.createAcessToken(userId);
     const refreshToken = await jwtService.createRefreshToken(userId);
-    return {
-      status: ResultStatus.Success,
-      data: { accessToken, refreshToken },
-      extensions: [],
-    };
+    return handleSuccessResult({ accessToken, refreshToken });
   },
   async loginUser(
     loginOrEmail: string,
@@ -197,23 +119,14 @@ export const authService = {
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
     if (result.status !== ResultStatus.Success)
-      return {
-        status: ResultStatus.Unauthorized,
-        errorMessage: "Unauthorized",
-        extensions: [{ message: "Wrong credentials", field: "loginOrEmail" }],
-        data: null,
-      };
+      return handleUnauthorizedFResult("wrong credentials", "loginOrEmail");
     const accessToken = await jwtService.createAcessToken(
       result.data!._id.toString(),
     );
     const refreshToken = await jwtService.createRefreshToken(
       result.data!._id.toString(),
     );
-    return {
-      status: ResultStatus.Success,
-      data: { accessToken, refreshToken },
-      extensions: [],
-    };
+    return handleSuccessResult({ accessToken, refreshToken }); //
   },
 
   async checkUserCredentials(
@@ -222,29 +135,14 @@ export const authService = {
   ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
-      return {
-        status: ResultStatus.NotFound,
-        data: null,
-        errorMessage: "Not found",
-        extensions: [{ field: "loginOrEmail", message: "Not found" }],
-      };
+      return handleNotFoundResult("not found", "loginOrEmail");
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
       user.passwordHash,
     );
     if (!isPasscorrect)
-      return {
-        status: ResultStatus.BadRequest,
-        data: null,
-        errorMessage: "Bad request",
-        extensions: [{ field: "password", message: "wrong password" }],
-      };
-
-    return {
-      status: ResultStatus.Success,
-      data: user,
-      extensions: [],
-    };
+      return handleBadRequestResult("password", "wrong password");
+    return handleSuccessResult(user);
   },
 };

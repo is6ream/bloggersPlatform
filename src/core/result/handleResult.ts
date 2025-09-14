@@ -1,11 +1,10 @@
 import { ResultStatus } from "./resultCode";
 import { Result } from "./result.type";
 
-export const handleSuccessResult = <T>(data: T): Result<T> => {
+export const handleSuccessResult = <T>(data?: T): Result<T> => {
   return {
     data,
     status: ResultStatus.Success,
-    extensions: [],
   };
 };
 
@@ -15,6 +14,19 @@ export const handleForbiddenResult = (
 ): Result<null> => {
   return {
     status: ResultStatus.Forbidden,
+    extensions: {
+      errorsMessages: [{ message: message, field: field }],
+    },
+    data: null,
+  };
+};
+
+export const handleUnauthorizedFResult = (
+  message: string,
+  field: string,
+): Result<null> => {
+  return {
+    status: ResultStatus.Unauthorized,
     extensions: {
       errorsMessages: [{ message: message, field: field }],
     },
@@ -34,15 +46,15 @@ export const handleNotFoundResult = (
     data: null,
   };
 };
-export const handleBadRequestResult = (
+export const handleBadRequestResult = <T>(
   message: string,
   field: string,
-): Result<null> => {
+): Result<T> => {
   return {
     status: ResultStatus.BadRequest,
     extensions: {
-      errorsMessages: [{ message: message, field: field }],
+      errorsMessages: [{ message, field }],
     },
-    data: null,
+    data: null as unknown as T, // Правильное приведение типа
   };
 };

@@ -4,6 +4,11 @@ import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
 import { Result } from "../../core/result/result.type";
 import { ResultStatus } from "../../core/result/resultCode";
+import {
+  handleNotFoundResult,
+  handleSuccessResult,
+} from "../../core/result/handleResult";
+
 export const postQueryRepository = {
   async findAll(
     queryDto: PostQueryInput,
@@ -58,25 +63,19 @@ export const postQueryRepository = {
 
   async findById(id: string): Promise<Result<PostViewModel | null>> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
+
     if (!post) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "Post not found",
-        extensions: [],
-      };
+      return handleNotFoundResult("post not found", "postId");
     }
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-      data: {
-        id: post._id.toString(),
-        title: post.title,
-        shortDescription: post.shortDescription,
-        content: post.content,
-        blogId: post.blogId,
-        blogName: post.blogName,
-        createdAt: post.createdAt,
-      },
+    const data = {
+      id: post._id.toString(),
+      title: post.title,
+      shortDescription: post.shortDescription,
+      content: post.content,
+      blogId: post.blogId,
+      blogName: post.blogName,
+      createdAt: post.createdAt,
     };
+    return handleSuccessResult(data);
   },
 };

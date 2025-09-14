@@ -8,6 +8,11 @@ import {
   ContentDto,
   CommentInputDto,
 } from "../types/commentsTypes";
+import {
+  handleForbiddenResult,
+  handleNotFoundResult,
+  handleSuccessResult,
+} from "../../core/result/handleResult";
 
 export const commentsService = {
   async createComment(
@@ -16,12 +21,7 @@ export const commentsService = {
     const user = await usersRepository.find(dto.userId); //здесь пофиксить
     const post = await postRepository.findPost(dto.postId);
     if (!post) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "Not found",
-        extensions: [{ message: "Post not found", field: "post id" }],
-        data: null,
-      };
+      return handleNotFoundResult("Post not found", "postId");
     }
     const newComment: CommentInputType = {
       postId: post._id.toString(),
@@ -34,11 +34,7 @@ export const commentsService = {
     };
     const commentId: string = await commentsRepository.create(newComment);
 
-    return {
-      status: ResultStatus.Success,
-      data: { commentId },
-      extensions: [],
-    };
+    return handleSuccessResult();
   },
 
   async update(
@@ -47,49 +43,21 @@ export const commentsService = {
     userId: string,
   ): Promise<Result<void | null>> {
     const comment = await commentsRepository.findByCommentId(id);
-    if (!comment)
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "Not found",
-        extensions: [{ message: "Comment not found", field: "comment id" }],
-        data: null,
-      };
+    if (!comment) return handleNotFoundResult("comment not found", "commentId");
     if (comment.commentatorInfo.userId.toString() !== userId) {
-      return {
-        status: ResultStatus.Forbidden,
-        errorMessage: "Access denied",
-        extensions: [{ message: "Access denied", field: "comment id" }],
-        data: null,
-      };
+      return handleForbiddenResult("access denied", "commentId");
     }
     await commentsRepository.update(id, dto);
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-    };
+    return handleSuccessResult();
   },
 
   async delete(id: string, userId: string): Promise<Result<void | null>> {
     const comment = await commentsRepository.findByCommentId(id);
-    if (!comment)
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "Not found",
-        extensions: [{ message: "Comment not found", field: "comment id" }],
-        data: null,
-      };
+    if (!comment) return handleNotFoundResult("comment not found", "commentId");
     if (comment.commentatorInfo.userId.toString() !== userId) {
-      return {
-        status: ResultStatus.Forbidden,
-        errorMessage: "Access denied",
-        extensions: [{ message: "Access denied", field: "comment id" }],
-        data: null,
-      };
+      return handleForbiddenResult("access denied", "commentId");
     }
     await commentsRepository.delete(id);
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-    };
+    return handleSuccessResult();
   },
 };

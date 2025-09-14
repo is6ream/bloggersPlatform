@@ -16,7 +16,7 @@ type RegistrationExtensionType = {
 export type Result<T = null> = {
   status: ResultStatus;
   errorMessage?: string;
-  extensions: ExtensionType;
+  extensions?: ExtensionType;
   data?: T;
 };
 

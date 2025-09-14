@@ -5,6 +5,11 @@ import { usersRepository } from "../repositories/users.repository";
 import { Result } from "../../core/result/result.type";
 import { ResultStatus } from "../../core/result/resultCode";
 import { bcryptService } from "../../auth/adapters/bcrypt.service";
+import {
+  handleBadRequestResult,
+  handleNotFoundResult,
+  handleSuccessResult,
+} from "../../core/result/handleResult";
 
 export const usersService = {
   async create(dto: UserInputModel): Promise<Result<string>> {
@@ -13,11 +18,7 @@ export const usersService = {
     );
     console.log(isEmailExist, "check in BLL");
     if (isEmailExist) {
-      return {
-        status: ResultStatus.BadRequest,
-        errorMessage: "email is already exist",
-        extensions: [{ field: null, message: "Email is already exist" }],
-      };
+      return handleBadRequestResult("Email already exists", "email");
     }
     const { login, password, email } = dto;
     const passwordHash = await bcryptService.generateHash(password);
@@ -32,11 +33,7 @@ export const usersService = {
     const newUser = await usersRepository.create(user);
     const newUserId = newUser.id;
 
-    return {
-      status: ResultStatus.Success,
-      data: newUserId,
-      extensions: [],
-    };
+    return handleSuccessResult(newUserId);
   },
 
   async _generateHash(password: string, salt: string) {
@@ -47,26 +44,15 @@ export const usersService = {
   async delete(id: string): Promise<Result> {
     const result = await usersRepository.delete(id);
     if (!result) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "User not found",
-        extensions: [{ field: null, message: "User not found " }],
-      };
+      return handleNotFoundResult("user not found", "userId");
     } else {
-      return {
-        status: ResultStatus.Success,
-        extensions: [],
-      };
+      return handleSuccessResult();
     }
   },
 
   async findUser(id: string): Promise<Result<UserViewModel>> {
     const user: UserViewModel = await usersRepository.find(id);
 
-    return {
-      status: ResultStatus.Success,
-      data: user,
-      extensions: [],
-    };
+    return handleSuccessResult(user);
   },
 };

@@ -5,16 +5,17 @@ import { postRepository } from "../repositories/postRepository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { blogsRepository } from "../../blogs/repositories/blogs.repository";
 import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
+import {
+  handleBadRequestResult,
+  handleNotFoundResult,
+  handleSuccessResult,
+} from "../../core/result/handleResult";
 
 export const postsService = {
   async create(dto: PostInputDto): Promise<Result<string>> {
     const foundBlog = await blogsRepository.findById(dto.blogId);
     if (!foundBlog) {
-      return {
-        status: ResultStatus.BadRequest,
-        errorMessage: "Not found",
-        extensions: [{ field: null, message: "Blog not found" }],
-      };
+      return handleBadRequestResult("blog not found", "blogId");
     }
     const postId = await postRepository.create({
       title: dto.title,
@@ -25,11 +26,7 @@ export const postsService = {
       createdAt: new Date(),
     });
 
-    return {
-      status: ResultStatus.Success,
-      data: postId,
-      extensions: [],
-    };
+    return handleSuccessResult();
   },
 
   async createPostByBlogId(
@@ -38,11 +35,7 @@ export const postsService = {
   ): Promise<Result<string>> {
     const blog = await blogQueryRepository.findById(blogId);
     if (!blog) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "Not found",
-        extensions: [{ field: null, message: "Blog not found" }],
-      };
+      return handleBadRequestResult("blog not found", "blogId");
     }
     const postId = await postRepository.create({
       title: dto.title,
@@ -52,40 +45,22 @@ export const postsService = {
       blogName: blog.name,
       createdAt: new Date(),
     });
-    return {
-      status: ResultStatus.Success,
-      data: postId,
-      extensions: [],
-    };
+    return handleSuccessResult();
   },
 
   async update(id: string, dto: PostInputDto): Promise<Result> {
     const result = await postRepository.update(id, dto);
     if (!result) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "Post not found",
-        extensions: [{ field: null, message: "Post not found " }],
-      };
+      return handleNotFoundResult("Post not found", "postId");
     }
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-    };
+    return handleSuccessResult();
   },
 
   async delete(id: string): Promise<Result> {
     const result = await postRepository.delete(id);
     if (!result) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: "Post not found",
-        extensions: [{ field: null, message: "Post not found" }],
-      };
+      return handleNotFoundResult("Post not found", "postId");
     }
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-    };
+    return handleSuccessResult();
   },
 };
