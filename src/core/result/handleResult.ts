@@ -1,30 +1,48 @@
 import { ResultStatus } from "./resultCode";
-
-export type Result<T> = {
-  data: T;
-  resultCode: ResultStatus;
-  errorMessages?: string;
-};
+import { Result } from "./result.type";
 
 export const handleSuccessResult = <T>(data: T): Result<T> => {
   return {
     data,
-    resultCode: ResultStatus.Success,
+    status: ResultStatus.Success,
+    extensions: [],
   };
 };
 
-export const handleForbiddenResult = (message: string): Result<null> => {
+export const handleForbiddenResult = (
+  message: string,
+  field: string,
+): Result<null> => {
   return {
+    status: ResultStatus.Forbidden,
+    extensions: {
+      errorsMessages: [{ message: message, field: field }],
+    },
     data: null,
-    resultCode: ResultStatus.Forbidden,
-    errorMessages: message,
   };
 };
 
-export const handleNotFoundResult = (message: string): Result<null> => {
+export const handleNotFoundResult = (
+  message: string,
+  field: string,
+): Result<null> => {
   return {
+    status: ResultStatus.NotFound,
+    extensions: {
+      errorsMessages: [{ message: message, field: field }],
+    },
     data: null,
-    resultCode: ResultStatus.NotFound,
-    errorMessages: message,
+  };
+};
+export const handleBadRequestResult = (
+  message: string,
+  field: string,
+): Result<null> => {
+  return {
+    status: ResultStatus.BadRequest,
+    extensions: {
+      errorsMessages: [{ message: message, field: field }],
+    },
+    data: null,
   };
 };

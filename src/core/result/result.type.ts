@@ -1,8 +1,12 @@
 import { ResultStatus } from "./resultCode";
 
 type ExtensionType = {
-  field: string | null;
-  message: string;
+  errorsMessages: [
+    {
+      message: string;
+      field: string | null;
+    },
+  ];
 };
 
 type RegistrationExtensionType = {
@@ -12,7 +16,7 @@ type RegistrationExtensionType = {
 export type Result<T = null> = {
   status: ResultStatus;
   errorMessage?: string;
-  extensions: ExtensionType[];
+  extensions: ExtensionType;
   data?: T;
 };
 
