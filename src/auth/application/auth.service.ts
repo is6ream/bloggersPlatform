@@ -17,6 +17,7 @@ import {
   handleSuccessResult,
   handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
+import { sessionDto } from "../api/controller/auth.userController";
 
 export const authService = {
   async registerUser(
@@ -114,10 +115,12 @@ export const authService = {
     return handleSuccessResult({ accessToken, refreshToken });
   },
   async loginUser(
-    loginOrEmail: string,
-    password: string,
+    sessionDto: sessionDto,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
-    const result = await this.checkUserCredentials(loginOrEmail, password);
+    const result = await this.checkUserCredentials(
+      sessionDto.email,
+      sessionDto.password,
+    );
     if (result.status !== ResultStatus.Success)
       return handleUnauthorizedFResult("wrong credentials", "loginOrEmail");
     const accessToken = await jwtService.createAcessToken(
