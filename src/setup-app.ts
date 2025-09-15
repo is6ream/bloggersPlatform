@@ -16,12 +16,27 @@ import { authRouter } from "./auth/api/routes";
 import { usersRouter } from "./users/routes/usersRoutes";
 import { commentsRouter } from "./comments/routes/commentsRoutes";
 import cookieParser from "cookie-parser";
+import session from "express-session";
+import dotenv from "dotenv";
 
+dotenv.config();
 export const app = express();
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
   app.use(cors());
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET as string,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60,
+        secure: false,
+      },
+    }),
+  );
   app.use(cookieParser());
   app.get("/", (req, res) => {
     res.status(200).send("Hello world!!!");
