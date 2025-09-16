@@ -1,0 +1,9 @@
+import { SessionDataType } from "../../types/input/login-input.models";
+
+export type SessionDto = {
+  deviceName: string;
+  ip: string;
+  loginOrEmail: string;
+  password: string;
+};
+export type SessionDB = SessionDataType;

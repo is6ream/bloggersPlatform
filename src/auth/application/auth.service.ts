@@ -111,7 +111,8 @@ export const authService = {
       return handleUnauthorizedFResult("wrong credentials", "loginOrEmail");
     }
 
-    const sessionData: SessionDataType = { //формируем объект с данными о сесссии
+    const sessionData: SessionDataType = {
+      //формируем объект с данными о сесссии
       userId: result.data!.id!,
       deviceId: randomUUID(),
       iat: new Date(),
@@ -120,7 +121,7 @@ export const authService = {
       exp: new Date(),
     };
 
-    // const inputSessionData тут мы отдельно создаем репозиторий для работы с сессиями
+    const inputSessionData await
     const accessToken = await jwtService.createAcessToken(
       result.data!._id.toString(),
     );
