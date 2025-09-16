@@ -114,7 +114,7 @@ export const authService = {
     }
 
     const sessionData: SessionDataType = {
-      //формируем объект с данными о сесссии
+      //формируем объект с данными о сессии
       userId: result.data!.id!,
       deviceId: randomUUID(),
       iat: Math.floor(Date.now() / 1000),

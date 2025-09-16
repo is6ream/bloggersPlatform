@@ -29,11 +29,12 @@ describe("Auth API authorization flow check", () => {
       password: password,
       email: email,
     };
+    //Registration
     await request(app)
       .post(AUTH_PATH + "/registration")
       .send(registerCredentials);
     expect(HttpStatus.NoContent);
-
+    //Login
     const loginCredentials = { loginOrEmail: login, password: password };
     const resLogin = await request(app)
       .post(AUTH_PATH + "/login")
@@ -48,7 +49,7 @@ describe("Auth API authorization flow check", () => {
     const refreshToken = cookiesArr.find((c: string) =>
       c.startsWith("refreshToken="),
     );
-
+    //Refresh
     const resRefresh = await request(app)
       .post(AUTH_PATH + "/refresh-token")
       .set("Cookie", refreshToken)
