@@ -17,9 +17,10 @@ import {
   handleSuccessResult,
   handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
-import { SessionDto } from "../api/controller/auth.userController";
+import { SessionDto } from "../sessions/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
 import { sessionCollection } from "../../db/mongo.db";
+import { sessionsRepository } from "../sessions/infrastructure/sessionsRepository";
 
 export const authService = {
   async registerUser(
@@ -121,8 +122,8 @@ export const authService = {
       ip: sessionDto.ip, //нужно ли здесь сохранять exp? Или это дата нужна только для refresh token?
     };
 
-    const inputSessionData = await sessionCollection.insertOne(sessionData); //кладем в бд данные о сессии
-    const accessToken = await jwtService.createAcessToken(
+    await sessionsRepository.createSession(sessionData); //кладем в бд данные о сессии
+    const accessToken = await jwtService.createAccessToken(
       result.data!._id.toString(),
     );
     const refreshToken = await jwtService.createRefreshToken(
@@ -141,7 +142,7 @@ export const authService = {
     oldToken: string,
   ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
     await tokenBlackListedRepository.addToBlackList(oldToken);
-    const accessToken = await jwtService.createAcessToken(userId);
+    const accessToken = await jwtService.createAccessToken(userId);
     const refreshToken = await jwtService.createRefreshToken(userId);
     return handleSuccessResult({ accessToken, refreshToken });
   },

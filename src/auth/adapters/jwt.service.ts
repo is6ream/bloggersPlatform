@@ -2,12 +2,13 @@ import { appConfig } from "./../../core/config/config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const jwtService = {
-  async createAcessToken(userId: string): Promise<string> {
+  async createAccessToken(userId: string): Promise<string> {
     return jwt.sign({ userId }, appConfig.JWT_SECRET, {
       expiresIn: "10 s",
     });
   },
-  async createRefreshToken(userId: string, deviceId: string): Promise<string> { //в payload также передаем deviceId. В таком случае, нам нужен userId payload?
+  async createRefreshToken(userId: string, deviceId?: string): Promise<string> {
+    //в payload также передаем deviceId. В таком случае, нам нужен userId payload?
     return jwt.sign({ userId, deviceId }, appConfig.JWT_SECRET, {
       expiresIn: "20 s",
     });
