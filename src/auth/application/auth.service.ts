@@ -19,6 +19,7 @@ import {
 } from "../../core/result/handleResult";
 import { SessionDto } from "../api/controller/auth.userController";
 import { SessionDataType } from "../types/input/login-input.models";
+import { sessionCollection } from "../../db/mongo.db";
 
 export const authService = {
   async registerUser(
@@ -115,17 +116,17 @@ export const authService = {
       //формируем объект с данными о сесссии
       userId: result.data!.id!,
       deviceId: randomUUID(),
-      iat: new Date(),
+      iat: Math.floor(Date.now() / 1000),
       deviceName: sessionDto.deviceName,
-      ip: sessionDto.ip,
-      exp: new Date(),
+      ip: sessionDto.ip, //нужно ли здесь сохранять exp? Или это дата нужна только для refresh token?
     };
 
-    const inputSessionData await
+    const inputSessionData = await sessionCollection.insertOne(sessionData); //кладем в бд данные о сессии
     const accessToken = await jwtService.createAcessToken(
       result.data!._id.toString(),
     );
     const refreshToken = await jwtService.createRefreshToken(
+      sessionData.deviceId,
       result.data!._id.toString(),
     );
     return handleSuccessResult({ accessToken, refreshToken }); //

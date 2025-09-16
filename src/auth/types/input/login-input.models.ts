@@ -12,8 +12,7 @@ export type AuthCredentials = {
 export type SessionDataType = {
   userId: string;
   deviceId: string;
-  iat: Date;
+  iat: number;
   deviceName: string;
   ip: string;
-  exp: Date;
 };

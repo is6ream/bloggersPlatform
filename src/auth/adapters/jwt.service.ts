@@ -7,8 +7,8 @@ export const jwtService = {
       expiresIn: "10 s",
     });
   },
-  async createRefreshToken(userId: string): Promise<string> {
-    return jwt.sign({ userId }, appConfig.JWT_SECRET, {
+  async createRefreshToken(userId: string, deviceId: string): Promise<string> { //в payload также передаем deviceId. В таком случае, нам нужен userId payload?
+    return jwt.sign({ userId, deviceId }, appConfig.JWT_SECRET, {
       expiresIn: "20 s",
     });
   },
