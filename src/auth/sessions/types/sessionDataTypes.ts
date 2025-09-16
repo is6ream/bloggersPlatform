@@ -6,4 +6,10 @@ export type SessionDto = {
   loginOrEmail: string;
   password: string;
 };
-export type SessionDB = SessionDataType;
+export type SessionDB = {
+  userId: string;
+  deviceId: string;
+  iat: string;
+  deviceName: string;
+  ip: string;
+};
