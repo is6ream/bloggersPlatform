@@ -17,10 +17,10 @@ import {
   handleSuccessResult,
   handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
-import { SessionDto } from "../sessions/types/sessionDataTypes";
+import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
 import { sessionCollection } from "../../db/mongo.db";
-import { sessionsRepository } from "../sessions/infrastructure/sessionsRepository";
+import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 
 export const authService = {
   async registerUser(
@@ -141,9 +141,11 @@ export const authService = {
     userId: string,
     oldToken: string,
   ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
-    await tokenBlackListedRepository.addToBlackList(oldToken);
+    const { iat, deviceId } = await jwtService.decodeToken(oldToken);
+    await sessionsRepository.updateSessions(iat, deviceId);
+    // await tokenBlackListedRepository.addToBlackList(oldToken); //мы должны заменить эту строку обновлением сессии
     const accessToken = await jwtService.createAccessToken(userId);
-    const refreshToken = await jwtService.createRefreshToken(userId);
+    const refreshToken = await jwtService.createRefreshToken(userId, deviceId);
     return handleSuccessResult({ accessToken, refreshToken });
   },
   async checkUserCredentials(

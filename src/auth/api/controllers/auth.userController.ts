@@ -5,7 +5,7 @@ import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
 import { RequestWithBody } from "../../../core/types/common/requests";
 import { AuthCredentials } from "../../types/input/login-input.models";
-import { SessionDto } from "../../sessions/types/sessionDataTypes";
+import { SessionDto } from "../../../securityDevices/types/sessionDataTypes";
 
 export async function loginUserController(
   req: RequestWithBody<AuthCredentials>,

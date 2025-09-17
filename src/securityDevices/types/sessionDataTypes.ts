@@ -1,4 +1,4 @@
-import { SessionDataType } from "../../types/input/login-input.models";
+import { SessionDataType } from "../../auth/types/input/login-input.models";
 
 export type SessionDto = {
   deviceName: string;

@@ -5,7 +5,7 @@ import { appConfig } from "../core/config/config";
 import { CommentDB } from "../comments/types/commentsTypes";
 import { User } from "../users/constructors/user.entity";
 import { BlackListedTokensDB } from "../core/types/common/blackListedTokens.collection.types";
-import { SessionDB } from "../auth/sessions/types/sessionDataTypes";
+import { SessionDB } from "../securityDevices/types/sessionDataTypes";
 
 const BLOG_COLLECTION_NAME = "blogs";
 const POST_COLLECTION_NAME = "posts";

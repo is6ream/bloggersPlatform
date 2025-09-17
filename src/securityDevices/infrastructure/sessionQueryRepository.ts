@@ -1,6 +1,6 @@
 import { sessionCollection } from "../../db/mongo.db";
-import { SessionDB } from "../../auth/sessions/types/sessionDataTypes";
-import {DeviceViewModel} from "../types/securityDevicesTypes";
+import { SessionDB } from "../types/sessionDataTypes";
+import { DeviceViewModel } from "../types/securityDevicesTypes";
 
 export const sessionQueryRepository = {
   async getAllSessions(): Promise<DeviceViewModel[]> {
