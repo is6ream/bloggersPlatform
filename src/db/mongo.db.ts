@@ -12,7 +12,7 @@ const POST_COLLECTION_NAME = "posts";
 const USER_COLLECTION_NAME = "user";
 const COMMENTS_COLLECTION_NAME = "comments";
 const BLACK_LISTED_TOKENS_NAME = "blackListedTokens";
-const SESSION_COLLECTION_NAME = "session";
+const SESSION_COLLECTION_NAME = "sessions";
 
 export let client: MongoClient;
 export let blogCollection: Collection<BlogDB>;
