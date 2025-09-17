@@ -26,7 +26,7 @@ export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string,
+    email: string
   ): Promise<RegistrationResult<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, существует ли пользователь уже в системе
     if (user?.login === login) {
@@ -44,7 +44,7 @@ export const authService = {
       await emailAdapter.sendEmail(
         newUser.email,
         newUser.emailConfirmation!.confirmationCode,
-        emailExamples.registrationEmail,
+        emailExamples.registrationEmail
       );
 
       return handleSuccessResult(newUser);
@@ -58,13 +58,13 @@ export const authService = {
     if (!user) {
       return handleBadRequestResult(
         "confirmation code is incorrect",
-        "confirmation code",
+        "confirmation code"
       );
     }
     if (user?.emailConfirmation.confirmationCode !== code) {
       return handleBadRequestResult(
         "confirmation code is incorrect",
-        "confirmation code",
+        "confirmation code"
       );
     }
     if (user.emailConfirmation?.expirationDate < new Date()) {
@@ -78,7 +78,7 @@ export const authService = {
     return handleSuccessResult();
   },
   async resendingEmail(
-    email: string,
+    email: string
   ): Promise<RegistrationResult<null> | undefined> {
     const user = await usersRepository.isUserExistByEmailOrLogin(email);
     if (!user) {
@@ -93,7 +93,7 @@ export const authService = {
       await emailAdapter.sendEmail(
         user.email,
         newConfimationCode,
-        emailExamples.registrationEmail,
+        emailExamples.registrationEmail
       );
 
       return handleSuccessResult();
@@ -103,14 +103,14 @@ export const authService = {
     }
   },
   async loginUser(
-    sessionDto: SessionDto,
+    sessionDto: SessionDto
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
     const result = await this.checkUserCredentials(
       sessionDto.loginOrEmail,
-      sessionDto.password,
+      sessionDto.password
     );
     if (result.status !== ResultStatus.Success) {
-      return handleUnauthorizedFResult("wrong credentials", "loginOrEmail");
+      return handleUnauthorizedFResult("wrong credentials", "loginOrEmail"); //нужно учитывать что пароль тоже может быть неверный
     }
 
     const sessionData: SessionDataType = {
@@ -119,16 +119,18 @@ export const authService = {
       deviceId: randomUUID(),
       iat: new Date().toString(),
       deviceName: sessionDto.deviceName,
-      ip: sessionDto.ip, //нужно ли здесь сохранять exp? Или это дата нужна только для refresh token?
+      ip: sessionDto.ip,
     };
 
-    await sessionsRepository.createSession(sessionData); //кладем в бд данные о сессии
+    const createSession: string =
+      await sessionsRepository.createSession(sessionData);
+    console.log(createSession, "check session id in BLL"); //кладем в бд данные о сессии
     const accessToken = await jwtService.createAccessToken(
-      result.data!._id.toString(),
+      result.data!._id.toString()
     );
     const refreshToken = await jwtService.createRefreshToken(
       sessionData.deviceId,
-      result.data!._id.toString(),
+      result.data!._id.toString()
     );
     return handleSuccessResult({ accessToken, refreshToken }); //
   },
@@ -139,7 +141,7 @@ export const authService = {
 
   async updateTokens(
     userId: string,
-    oldToken: string,
+    oldToken: string
   ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
     const { iat, deviceId } = await jwtService.decodeToken(oldToken);
     await sessionsRepository.updateSessions(iat, deviceId);
@@ -150,7 +152,7 @@ export const authService = {
   },
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<WithId<UserDB> | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
@@ -158,7 +160,7 @@ export const authService = {
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash,
+      user.passwordHash
     );
     if (!isPasscorrect)
       return handleBadRequestResult("password", "wrong password");
