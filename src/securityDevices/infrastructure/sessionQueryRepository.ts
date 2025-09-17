@@ -9,9 +9,9 @@ export type DeviceViewModel = {
 };
 
 export const sessionQueryRepository = {
-  async getAllSessions(): Promise<DeviceViewModel> {
+  async getAllSessions(): Promise<DeviceViewModel[]> {
     const sessions: SessionDB[] = await sessionCollection.find({}).toArray();
-    const devices: DeviceViewModel[] = sessions.map((session) => {
+    return sessions.map((session) => {
       return {
         ip: session.ip,
         title: session.deviceName,
@@ -19,6 +19,5 @@ export const sessionQueryRepository = {
         deviceId: session.deviceId,
       };
     });
-    return devices;
   },
 };

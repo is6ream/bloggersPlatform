@@ -117,7 +117,7 @@ export const authService = {
       //формируем объект с данными о сессии
       userId: result.data!.id!,
       deviceId: randomUUID(),
-      iat: new Date()
+      iat: new Date().toString(),
       deviceName: sessionDto.deviceName,
       ip: sessionDto.ip, //нужно ли здесь сохранять exp? Или это дата нужна только для refresh token?
     };
