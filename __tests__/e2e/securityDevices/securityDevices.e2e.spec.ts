@@ -47,7 +47,6 @@ describe("testing work with devices in sessions", () => {
 
     const cookies = resLogin.headers["set-cookie"];
     expect(cookies).toBeDefined();
-    const cookiesArr = Array.isArray(cookies) ? cookies : [cookies];
     const resAllSessions = await request(app)
       .get(SECURITY_DEVICES_PATH)
       .set("Authorization", `Bearer ${accessToken}`)
