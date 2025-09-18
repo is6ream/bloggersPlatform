@@ -8,8 +8,12 @@ export const sessionsRepository = {
     await sessionCollection.insertOne(sessionData);
     return;
   },
-  async updateSessions(iat: string, deviceId: string): Promise<void> {
-    await sessionCollection.updateOne({ iat: iat }, { $set: { deviceId } });
+  async updateSessions(newIat: string, deviceId: string): Promise<void> {
+    await sessionCollection.findOneAndUpdate(
+      { deviceId: deviceId },
+      { $set: { iat: newIat } },
+      { returnDocument: "after" },
+    );
     return;
   },
   async isUserExistByIat(iat: string): Promise<boolean> {
