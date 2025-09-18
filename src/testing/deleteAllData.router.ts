@@ -5,8 +5,10 @@ import {
   blogCollection,
   commentsCollection,
   postCollection,
+  sessionCollection,
   userCollection,
 } from "../db/mongo.db";
+
 export const testingRouter = Router();
 
 testingRouter.delete("/all-data", async (req: Request, res: Response) => {
@@ -15,6 +17,7 @@ testingRouter.delete("/all-data", async (req: Request, res: Response) => {
     postCollection.deleteMany(),
     userCollection.deleteMany(),
     commentsCollection.deleteMany(),
+    sessionCollection.deleteMany(),
   ]);
   res.sendStatus(HttpStatus.NoContent);
 });

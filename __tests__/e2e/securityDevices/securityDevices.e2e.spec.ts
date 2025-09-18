@@ -23,6 +23,10 @@ describe("testing work with devices in sessions", () => {
     await db.drop();
     await db.stop();
   });
+  //дескрай - "should register, login and get all devices in session
+  // -  регистр
+  // - логин
+  // -девайсв получить
   it("should register, login and get all devices in session", async () => {
     const { login, password, email } = testSeeder.createUserDto();
     const registerCredentials = {

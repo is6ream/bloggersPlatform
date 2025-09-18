@@ -55,6 +55,6 @@ export const handleBadRequestResult = <T>(
     extensions: {
       errorsMessages: [{ message, field }],
     },
-    data: null as unknown as T, // Правильное приведение типа
+    data: null as unknown as T,
   };
 };

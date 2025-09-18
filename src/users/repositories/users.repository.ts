@@ -35,12 +35,22 @@ export const usersRepository = {
   },
   async isUserExistByEmailOrLogin(
     loginOrEmail: string,
-  ): Promise<WithId<UserDB> | null> {
+  ): Promise<UserDB | null> {
     const user = await userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
     });
-
-    return user;
+    return {
+      id: user?._id.toString(),
+      passwordHash: user!.passwordHash,
+      login: user!.login,
+      email: user!.email,
+      createdAt: user!.createdAt,
+      emailConfirmation: {
+        confirmationCode: user!.emailConfirmation!.confirmationCode,
+        expirationDate: user!.emailConfirmation!.expirationDate,
+        isConfirmed: user!.emailConfirmation!.isConfirmed,
+      },
+    };
   },
 
   async doesExistByLoginOrEmail(

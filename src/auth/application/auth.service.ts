@@ -15,18 +15,18 @@ import {
   handleBadRequestResult,
   handleNotFoundResult,
   handleSuccessResult,
-  handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
 import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
-import { sessionCollection } from "../../db/mongo.db";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
+import jwt from "jsonwebtoken";
+import { appConfig } from "../../core/config/config";
 
 export const authService = {
   async registerUser(
     login: string,
     password: string,
-    email: string
+    email: string,
   ): Promise<RegistrationResult<User | null> | undefined> {
     const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, существует ли пользователь уже в системе
     if (user?.login === login) {
@@ -44,7 +44,7 @@ export const authService = {
       await emailAdapter.sendEmail(
         newUser.email,
         newUser.emailConfirmation!.confirmationCode,
-        emailExamples.registrationEmail
+        emailExamples.registrationEmail,
       );
 
       return handleSuccessResult(newUser);
@@ -58,13 +58,13 @@ export const authService = {
     if (!user) {
       return handleBadRequestResult(
         "confirmation code is incorrect",
-        "confirmation code"
+        "confirmation code",
       );
     }
     if (user?.emailConfirmation.confirmationCode !== code) {
       return handleBadRequestResult(
         "confirmation code is incorrect",
-        "confirmation code"
+        "confirmation code",
       );
     }
     if (user.emailConfirmation?.expirationDate < new Date()) {
@@ -78,7 +78,7 @@ export const authService = {
     return handleSuccessResult();
   },
   async resendingEmail(
-    email: string
+    email: string,
   ): Promise<RegistrationResult<null> | undefined> {
     const user = await usersRepository.isUserExistByEmailOrLogin(email);
     if (!user) {
@@ -93,7 +93,7 @@ export const authService = {
       await emailAdapter.sendEmail(
         user.email,
         newConfimationCode,
-        emailExamples.registrationEmail
+        emailExamples.registrationEmail,
       );
 
       return handleSuccessResult();
@@ -103,45 +103,75 @@ export const authService = {
     }
   },
   async loginUser(
-    sessionDto: SessionDto
+    sessionDto: SessionDto,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
     const result = await this.checkUserCredentials(
       sessionDto.loginOrEmail,
-      sessionDto.password
+      sessionDto.password,
     );
+    console.log("user id check in BLL", result.data?.id);
     if (result.status !== ResultStatus.Success) {
-      return handleUnauthorizedFResult("wrong credentials", "loginOrEmail"); //нужно учитывать что пароль тоже может быть неверный
-    }
+      //результат проверки credentials
+      const loginOrEmailError:
+        | {
+            message: string;
+            field: string | null;
+          }
+        | undefined = result.extensions!.errorsMessages.find(
+        (error) => error.field === "loginOrEmail", //ищем ошибку по полю loginOrEmail
+      );
+      const passwordError:
+        | {
+            message: string;
+            field: string | null;
+          }
+        | undefined = result.extensions!.errorsMessages.find(
+        (error) => error.field === "password", //ищем ошибку по полю password
+      );
 
+      if (loginOrEmailError) {
+        return handleBadRequestResult("wrong credentials", "loginOrEmail");
+      } else {
+        return handleBadRequestResult("wrong credentials", "password");
+      }
+    }
+    const accessToken = await jwtService.createAccessToken(
+      result.data!.id!,
+    );
+    const deviceId = randomUUID(); //формируем deviceId
+    const refreshToken = await jwtService.createRefreshToken(
+      deviceId,
+      result.data?.id,
+    );
+    const payloadOfRefreshToken = jwt.verify(
+      //декодируем payload rt, эот нужно для того, чтобы получить доступ к полю iat
+      refreshToken,
+      appConfig.JWT_SECRET,
+    ) as unknown as {
+      //согласно правилу приводим сначала к типу unknown, потом к нужному нам типу
+      userId: string;
+      deviceId: string;
+      iat: string;
+      exp: string;
+    };
     const sessionData: SessionDataType = {
       //формируем объект с данными о сессии
       userId: result.data!.id!,
       deviceId: randomUUID(),
-      iat: new Date().toString(),
+      iat: payloadOfRefreshToken.iat.toString(),
       deviceName: sessionDto.deviceName,
       ip: sessionDto.ip,
     };
-
-    const createSession: string =
-      await sessionsRepository.createSession(sessionData);
-    console.log(createSession, "check session id in BLL"); //кладем в бд данные о сессии
-    const accessToken = await jwtService.createAccessToken(
-      result.data!._id.toString()
-    );
-    const refreshToken = await jwtService.createRefreshToken(
-      sessionData.deviceId,
-      result.data!._id.toString()
-    );
+    await sessionsRepository.createSession(sessionData); //передаем в DAL данные о сессии и сохраняем их в бд
     return handleSuccessResult({ accessToken, refreshToken }); //
   },
   async logout(oldToken: string): Promise<Result<null>> {
     await tokenBlackListedRepository.addToBlackList(oldToken);
     return handleSuccessResult();
   },
-
   async updateTokens(
     userId: string,
-    oldToken: string
+    oldToken: string,
   ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
     const { iat, deviceId } = await jwtService.decodeToken(oldToken);
     await sessionsRepository.updateSessions(iat, deviceId);
@@ -152,18 +182,19 @@ export const authService = {
   },
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string
-  ): Promise<Result<WithId<UserDB> | null>> {
+    password: string,
+  ): Promise<Result<UserDB | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
       return handleNotFoundResult("not found", "loginOrEmail");
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash
+      user.passwordHash,
     );
-    if (!isPasscorrect)
+    if (!isPasscorrect) {
       return handleBadRequestResult("password", "wrong password");
+    }
     return handleSuccessResult(user);
   },
 };
