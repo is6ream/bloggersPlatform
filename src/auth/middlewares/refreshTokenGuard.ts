@@ -1,10 +1,9 @@
 import { RequestWithUserIdAndCookies } from "./../../core/types/common/requests";
 import { NextFunction, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-import { tokenBlackListedRepository } from "../infrastructure/tokenBlackListedRepository";
 import { jwtService } from "../adapters/jwt.service";
 import { IdType } from "../../core/types/authorization/id";
-import {appConfig} from "../../core/config/config";
+import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 
 export const refreshTokenGuard = async (
   req: RequestWithUserIdAndCookies<IdType>,
@@ -16,14 +15,21 @@ export const refreshTokenGuard = async (
   if (!refreshToken) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
-  // const isBlackListed =
-  //   await tokenBlackListedRepository.isBlackListed(refreshToken);
-  // if (isBlackListed) {
-  //   return res.sendStatus(HttpStatus.Unauthorized);
-  // }
-  const payload = await jwtService.verifyToken(refreshToken);
-  console.log(payload, "payload check ");
+  const payload = (await jwtService.verifyToken(refreshToken)) as unknown as {
+    //приводим payload к явному типу для доступа к полям
+    userId: string;
+    deviceId: string;
+    iat: string;
+    exp: string;
+  };
   if (!payload) {
+    return res.sendStatus(HttpStatus.Unauthorized);
+  }
+  const activeSessionCheck = await sessionsRepository.isUserExistByIat(
+    //проверяем - есть ли активный пользователь на данный момент
+    payload.iat,
+  );
+  if (!activeSessionCheck) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   req.user = { id: payload.userId } as IdType;

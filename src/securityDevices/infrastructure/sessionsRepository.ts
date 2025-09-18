@@ -12,10 +12,10 @@ export const sessionsRepository = {
     await sessionCollection.updateOne({ iat: iat }, { $set: { deviceId } });
     return;
   },
-  async isUserExistByDeviceId(deviceId: string): Promise<string> {
+  async isUserExistByIat(iat: string): Promise<boolean> {
     const session: WithId<SessionDB> | null = await sessionCollection.findOne({
-      deviceId,
+      iat,
     });
-    return session!.iat;
+    return !!session;
   },
 };
