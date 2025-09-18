@@ -23,39 +23,45 @@ describe("testing work with devices in sessions", () => {
     await db.drop();
     await db.stop();
   });
-  //дескрай - "should register, login and get all devices in session
-  // -  регистр
-  // - логин
-  // -девайсв получить
-  it("should register, login and get all devices in session", async () => {
+  describe("should register, login and get all devices in sessions", () => {
     const { login, password, email } = testSeeder.createUserDto();
-    const registerCredentials = {
-      login: login,
-      password: password,
-      email: email,
-    };
-    //Registration
-    await request(app)
-      .post(AUTH_PATH + "/registration")
-      .send(registerCredentials);
-    expect(HttpStatus.NoContent);
-    //Login
     const loginCredentials = { loginOrEmail: login, password: password };
-    const resLogin = await request(app)
-      .post(AUTH_PATH + "/login")
-      .send(loginCredentials)
-      .expect(HttpStatus.Ok);
-    expect(resLogin.body.accessToken).toBeDefined();
-    expect(resLogin.headers["set cookie"]);
-    const accessToken = await resLogin.body.accessToken;
 
-    const cookies = resLogin.headers["set-cookie"];
-    expect(cookies).toBeDefined();
-    const resAllSessions = await request(app)
-      .get(SECURITY_DEVICES_PATH)
-      .set("Authorization", `Bearer ${accessToken}`)
-      .expect(HttpStatus.Ok);
+    (it("should register user", async () => {
+      const registerCredentials = {
+        login: login,
+        password: password,
+        email: email,
+      };
+      //Registration
+      await request(app)
+        .post(AUTH_PATH + "/registration")
+        .send(registerCredentials);
+      expect(HttpStatus.NoContent);
+    }),
+      it("should login user", async () => {
+        const resLogin = await request(app)
+          .post(AUTH_PATH + "/login")
+          .send(loginCredentials)
+          .expect(HttpStatus.Ok);
+        expect(resLogin.body.accessToken).toBeDefined();
+        expect(resLogin.headers["set cookie"]);
+      }),
+      it("should return all sessions", async () => {
+        const resLogin = await request(app)
+          .post(AUTH_PATH + "/login")
+          .send(loginCredentials)
+          .expect(HttpStatus.Ok);
+        const accessToken = await resLogin.body.accessToken;
 
-    expect(resAllSessions.body).toBeDefined();
+        const cookies = resLogin.headers["set-cookie"];
+        expect(cookies).toBeDefined();
+        const resAllSessions = await request(app)
+          .get(SECURITY_DEVICES_PATH)
+          .set("Authorization", `Bearer ${accessToken}`)
+          .expect(HttpStatus.Ok);
+
+        expect(resAllSessions.body).toBeDefined();
+      }));
   });
 });
