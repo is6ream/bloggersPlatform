@@ -11,7 +11,7 @@ export const refreshTokenGuard = async (
   next: NextFunction,
 ) => {
   const refreshToken = req.cookies?.refreshToken;
-  console.log(refreshToken);
+  console.log(refreshToken, "Rt check in guard");
   if (!refreshToken) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
@@ -19,17 +19,19 @@ export const refreshTokenGuard = async (
     //приводим payload к явному типу для доступа к полям
     userId: string;
     deviceId: string;
-    iat: string;
+    iat: number;
     exp: string;
   };
   if (!payload) {
+    console.log("verify error check");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
-  const activeSessionCheck = await sessionsRepository.isUserExistByIat(
+  const activeSessionCheck = await sessionsRepository.isSessionExistByIat(
     //проверяем - есть ли активный пользователь на данный момент
     payload.iat,
   );
   if (!activeSessionCheck) {
+    console.log("active session error check");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   req.user = { id: payload.userId } as IdType;

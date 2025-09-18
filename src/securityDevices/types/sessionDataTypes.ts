@@ -9,7 +9,7 @@ export type SessionDto = {
 export type SessionDB = {
   userId: string;
   deviceId: string;
-  iat: string;
+  iat: number;
   deviceName: string;
   ip: string;
 };

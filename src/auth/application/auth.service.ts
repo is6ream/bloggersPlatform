@@ -148,14 +148,14 @@ export const authService = {
       //согласно правилу приводим сначала к типу unknown, потом к нужному нам типу
       userId: string;
       deviceId: string;
-      iat: string;
+      iat: number;
       exp: string;
     };
     const sessionData: SessionDataType = {
       //формируем объект с данными о сессии
       userId: result.data!.id!,
       deviceId: randomUUID(),
-      iat: payloadOfRefreshToken.iat.toString(),
+      iat: payloadOfRefreshToken.iat,
       deviceName: sessionDto.deviceName,
       ip: sessionDto.ip,
     };
