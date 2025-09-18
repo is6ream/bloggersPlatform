@@ -109,7 +109,6 @@ export const authService = {
       sessionDto.loginOrEmail,
       sessionDto.password,
     );
-    console.log("user id check in BLL", result.data?.id);
     if (result.status !== ResultStatus.Success) {
       //результат проверки credentials
       const loginOrEmailError:
@@ -141,9 +140,10 @@ export const authService = {
     const deviceId = randomUUID(); //формируем deviceId
     const refreshToken = await jwtService.createRefreshToken(
       deviceId,
-      result.data?.id,
+      result.data!.id,
     );
-    const payloadOfRefreshToken = jwt.verify(
+      console.log("user id check in BLL", result.data?.id);
+      const payloadOfRefreshToken = jwt.verify(
       //декодируем payload rt, эот нужно для того, чтобы получить доступ к полю iat
       refreshToken,
       appConfig.JWT_SECRET,
