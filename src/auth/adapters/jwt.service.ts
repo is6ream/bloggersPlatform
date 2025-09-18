@@ -22,9 +22,19 @@ export const jwtService = {
     }
   },
 
-  async verifyToken(token: string): Promise<{ userId: string } | null> {
+  async verifyToken(token: string): Promise<{
+    deviceId: string;
+    userId: string;
+    iat: number;
+    exp: string;
+  } | null> {
     try {
-      return jwt.verify(token, appConfig.JWT_SECRET) as { userId: string };
+      return jwt.verify(token, appConfig.JWT_SECRET) as unknown as {
+        deviceId: string;
+        userId: string;
+        iat: number;
+        exp: string;
+      };
     } catch (error) {
       console.log(error);
       console.error("Token verify some error");

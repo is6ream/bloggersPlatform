@@ -15,13 +15,8 @@ export const refreshTokenGuard = async (
   if (!refreshToken) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
-  const payload = (await jwtService.verifyToken(refreshToken)) as unknown as {
-    //приводим payload к явному типу для доступа к полям
-    userId: string;
-    deviceId: string;
-    iat: number;
-    exp: string;
-  };
+  const payload = await jwtService.verifyToken(refreshToken);
+  console.log(payload, "paylaod check");
   if (!payload) {
     console.log("verify error check");
     return res.sendStatus(HttpStatus.Unauthorized);

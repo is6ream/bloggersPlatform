@@ -8,13 +8,22 @@ export const sessionsRepository = {
     await sessionCollection.insertOne(sessionData);
     return;
   },
-  async updateSessions(newIat: number, deviceId: string): Promise<void> {
-    await sessionCollection.findOneAndUpdate(
+  async updateSessions(newIat: number, deviceId: string): Promise<boolean> {
+    console.log("Input:", { deviceId, newIat, newIatType: typeof newIat });
+
+    const currentSession = await sessionCollection.findOne({ deviceId });
+    console.log("curentSession", currentSession);
+    const updateResult = await sessionCollection.updateOne(
       { deviceId: deviceId },
       { $set: { iat: newIat } },
-      { returnDocument: "after" },
     );
-    return;
+
+    console.log("Update result:", {
+      matchedCount: updateResult.matchedCount,
+      modifiedCount: updateResult.modifiedCount,
+      acknowledged: updateResult.acknowledged,
+    });
+    return updateResult.modifiedCount === 1; //нужно всегда проверять количество изменных документов
   },
   async isSessionExistByIat(iat: number): Promise<boolean> {
     console.log(typeof iat);

@@ -15,6 +15,7 @@ import {
   handleBadRequestResult,
   handleNotFoundResult,
   handleSuccessResult,
+  handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
 import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
@@ -137,8 +138,8 @@ export const authService = {
     const accessToken = await jwtService.createAccessToken(result.data!.id!);
     const deviceId = randomUUID(); //формируем deviceId
     const refreshToken = await jwtService.createRefreshToken(
-      deviceId,
       result.data!.id,
+      deviceId,
     );
     const payloadOfRefreshToken = jwt.verify(
       //декодируем payload rt, эот нужно для того, чтобы получить доступ к полю iat
@@ -167,14 +168,22 @@ export const authService = {
     return handleSuccessResult();
   },
   async updateTokens(
-    userId: string,
     oldToken: string,
-  ): Promise<Result<{ accessToken: string; refreshToken: string }>> {
-    const { iat, deviceId } = await jwtService.decodeToken(oldToken);
-    await sessionsRepository.updateSessions(iat, deviceId);
+  ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
+    const payload = await jwtService.decodeToken(oldToken);
+    const result = await sessionsRepository.updateSessions(
+      payload.iat,
+      payload.deviceId,
+    );
+    if (!result) {
+      throw Error("token is not updated");
+    }
     // await tokenBlackListedRepository.addToBlackList(oldToken); //мы должны заменить эту строку обновлением сессии
-    const accessToken = await jwtService.createAccessToken(userId);
-    const refreshToken = await jwtService.createRefreshToken(userId, deviceId);
+    const accessToken = await jwtService.createAccessToken(payload.userId);
+    const refreshToken = await jwtService.createRefreshToken(
+      payload.userId,
+      payload.deviceId,
+    );
     return handleSuccessResult({ accessToken, refreshToken });
   },
   async checkUserCredentials(
