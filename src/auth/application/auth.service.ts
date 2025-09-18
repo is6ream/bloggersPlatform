@@ -134,16 +134,13 @@ export const authService = {
         return handleBadRequestResult("wrong credentials", "password");
       }
     }
-    const accessToken = await jwtService.createAccessToken(
-      result.data!.id!,
-    );
+    const accessToken = await jwtService.createAccessToken(result.data!.id!);
     const deviceId = randomUUID(); //формируем deviceId
     const refreshToken = await jwtService.createRefreshToken(
       deviceId,
       result.data!.id,
     );
-      console.log("user id check in BLL", result.data?.id);
-      const payloadOfRefreshToken = jwt.verify(
+    const payloadOfRefreshToken = jwt.verify(
       //декодируем payload rt, эот нужно для того, чтобы получить доступ к полю iat
       refreshToken,
       appConfig.JWT_SECRET,

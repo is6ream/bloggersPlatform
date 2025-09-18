@@ -4,6 +4,7 @@ import { HttpStatus } from "../../core/http-statuses";
 import { tokenBlackListedRepository } from "../infrastructure/tokenBlackListedRepository";
 import { jwtService } from "../adapters/jwt.service";
 import { IdType } from "../../core/types/authorization/id";
+import {appConfig} from "../../core/config/config";
 
 export const refreshTokenGuard = async (
   req: RequestWithUserIdAndCookies<IdType>,
@@ -15,12 +16,11 @@ export const refreshTokenGuard = async (
   if (!refreshToken) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
-  const isBlackListed =
-    await tokenBlackListedRepository.isBlackListed(refreshToken);
-  if (isBlackListed) {
-    return res.sendStatus(HttpStatus.Unauthorized);
-  }
-
+  // const isBlackListed =
+  //   await tokenBlackListedRepository.isBlackListed(refreshToken);
+  // if (isBlackListed) {
+  //   return res.sendStatus(HttpStatus.Unauthorized);
+  // }
   const payload = await jwtService.verifyToken(refreshToken);
   console.log(payload, "payload check ");
   if (!payload) {
