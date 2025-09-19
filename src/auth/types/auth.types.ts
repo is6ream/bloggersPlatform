@@ -25,3 +25,10 @@ export type UserRegistrationDB = {
 export type ResendingBodyType = {
   email: string;
 };
+
+export type RefreshTokenPayload = {
+  deviceId: string;
+  userId: string;
+  iat: number;
+  exp: string;
+};

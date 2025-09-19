@@ -11,14 +11,12 @@ export const refreshTokenGuard = async (
   next: NextFunction,
 ) => {
   const refreshToken = req.cookies?.refreshToken;
-  console.log(refreshToken, "Rt check in guard");
   if (!refreshToken) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const payload = await jwtService.verifyToken(refreshToken);
-  console.log(payload, "paylaod check");
+  console.log(payload, "payload in GUARD check");
   if (!payload) {
-    console.log("verify error check");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const activeSessionCheck = await sessionsRepository.isSessionExistByIat(
@@ -26,7 +24,6 @@ export const refreshTokenGuard = async (
     payload.iat,
   );
   if (!activeSessionCheck) {
-    console.log("active session error check");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   req.user = { id: payload.userId } as IdType;

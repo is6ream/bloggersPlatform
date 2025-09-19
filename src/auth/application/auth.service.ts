@@ -22,6 +22,7 @@ import { SessionDataType } from "../types/input/login-input.models";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import jwt from "jsonwebtoken";
 import { appConfig } from "../../core/config/config";
+import {RefreshTokenPayload} from "../types/auth.types";
 
 export const authService = {
   async registerUser(
@@ -113,10 +114,7 @@ export const authService = {
     if (result.status !== ResultStatus.Success) {
       //результат проверки credentials
       const loginOrEmailError:
-        | {
-            message: string;
-            field: string | null;
-          }
+        | { message: string; field: string | null }
         | undefined = result.extensions!.errorsMessages.find(
         (error) => error.field === "loginOrEmail", //ищем ошибку по полю loginOrEmail
       );
@@ -137,25 +135,20 @@ export const authService = {
     }
     const accessToken = await jwtService.createAccessToken(result.data!.id!);
     const deviceId = randomUUID(); //формируем deviceId
+      console.log(deviceId, "вот такой device id формируется в BLL");
     const refreshToken = await jwtService.createRefreshToken(
-      result.data!.id,
+      result.data!.id!,
       deviceId,
     );
     const payloadOfRefreshToken = jwt.verify(
       //декодируем payload rt, эот нужно для того, чтобы получить доступ к полю iat
       refreshToken,
       appConfig.JWT_SECRET,
-    ) as unknown as {
-      //согласно правилу приводим сначала к типу unknown, потом к нужному нам типу
-      userId: string;
-      deviceId: string;
-      iat: number;
-      exp: string;
-    };
+    ) as unknown as RefreshTokenPayload;
     const sessionData: SessionDataType = {
       //формируем объект с данными о сессии
       userId: result.data!.id!,
-      deviceId: randomUUID(),
+      deviceId: deviceId,
       iat: payloadOfRefreshToken.iat,
       deviceName: sessionDto.deviceName,
       ip: sessionDto.ip,

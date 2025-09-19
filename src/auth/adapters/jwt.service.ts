@@ -1,5 +1,6 @@
 import { appConfig } from "./../../core/config/config";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { RefreshTokenPayload } from "../types/auth.types";
 
 export const jwtService = {
   async createAccessToken(userId: string): Promise<string> {
@@ -22,19 +23,12 @@ export const jwtService = {
     }
   },
 
-  async verifyToken(token: string): Promise<{
-    deviceId: string;
-    userId: string;
-    iat: number;
-    exp: string;
-  } | null> {
+  async verifyToken(token: string): Promise<RefreshTokenPayload | null> {
     try {
-      return jwt.verify(token, appConfig.JWT_SECRET) as unknown as {
-        deviceId: string;
-        userId: string;
-        iat: number;
-        exp: string;
-      };
+      return jwt.verify(
+        token,
+        appConfig.JWT_SECRET,
+      ) as unknown as RefreshTokenPayload;
     } catch (error) {
       console.log(error);
       console.error("Token verify some error");

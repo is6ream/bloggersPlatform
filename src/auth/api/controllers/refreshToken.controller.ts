@@ -9,13 +9,8 @@ export async function refreshTokenController(
   res: Response,
 ) {
   try {
-    const payload = await jwtService.decodeToken(req.cookies.refreshToken); /*{
-  userId: '0344152f-1fd5-445a-a65c-bcd0231149d6', эта два поля передаются неверно
-  deviceId: '68cc38f9ff1258ffe582d74a',
-  iat: 1758215129,
-  exp: 1758215249
-} */
-    console.log(payload, "RT CHECK");
+    const payload = await jwtService.decodeToken(req.cookies.refreshToken!);
+    console.log(payload, "payload in API check");
     const tokens = await authService.updateTokens(req.cookies.refreshToken!);
 
     if (!tokens) {
