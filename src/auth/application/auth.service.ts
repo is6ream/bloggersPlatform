@@ -135,7 +135,6 @@ export const authService = {
     }
     const accessToken = await jwtService.createAccessToken(result.data!.id!);
     const deviceId = randomUUID(); //формируем deviceId
-      console.log(deviceId, "вот такой device id формируется в BLL");
     const refreshToken = await jwtService.createRefreshToken(
       result.data!.id!,
       deviceId,
@@ -149,7 +148,7 @@ export const authService = {
       //формируем объект с данными о сессии
       userId: result.data!.id!,
       deviceId: deviceId,
-      iat: payloadOfRefreshToken.iat,
+      iat: payloadOfRefreshToken.iat as unknown as string, //потому что iat в rt формируется в формате number unix
       deviceName: sessionDto.deviceName,
       ip: sessionDto.ip,
     };
