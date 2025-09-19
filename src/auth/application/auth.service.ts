@@ -1,5 +1,4 @@
 import { jwtService } from "./../adapters/jwt.service";
-import { WithId } from "mongodb";
 import { UserDB } from "../../users/input/create-user-dto";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
@@ -15,14 +14,13 @@ import {
   handleBadRequestResult,
   handleNotFoundResult,
   handleSuccessResult,
-  handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
 import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import jwt from "jsonwebtoken";
 import { appConfig } from "../../core/config/config";
-import {RefreshTokenPayload} from "../types/auth.types";
+import { RefreshTokenPayload } from "../types/auth.types";
 
 export const authService = {
   async registerUser(
@@ -139,16 +137,12 @@ export const authService = {
       result.data!.id!,
       deviceId,
     );
-    const payloadOfRefreshToken = jwt.verify(
-      //декодируем payload rt, эот нужно для того, чтобы получить доступ к полю iat
-      refreshToken,
-      appConfig.JWT_SECRET,
-    ) as unknown as RefreshTokenPayload;
+
+    const payloadOfRefreshToken = await jwtService.verifyToken(refreshToken);
     const sessionData: SessionDataType = {
-      //формируем объект с данными о сессии
-      userId: result.data!.id!,
+      userId: result.data!.id!, //c рейт лимит создать отдельную коллекцию и реализовать через middleware
       deviceId: deviceId,
-      iat: payloadOfRefreshToken.iat as unknown as string, //потому что iat в rt формируется в формате number unix
+      iat: new Date(payloadOfRefreshToken!.iat * 1000).toString(), //приводим к читаемой дате,
       deviceName: sessionDto.deviceName,
       ip: sessionDto.ip,
     };
@@ -163,8 +157,9 @@ export const authService = {
     oldToken: string,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
     const payload = await jwtService.decodeToken(oldToken);
+    const payloadIat = new Date(payload.iat * 1000).toString();
     const result = await sessionsRepository.updateSessions(
-      payload.iat,
+      payloadIat,
       payload.deviceId,
     );
     if (!result) {
