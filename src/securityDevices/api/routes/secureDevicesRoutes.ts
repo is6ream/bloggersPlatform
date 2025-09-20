@@ -1,13 +1,21 @@
 import { Router } from "express";
-import { accessTokenGuard } from "../../core/guards/access.token.guard";
-import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
-import { getAllDevicesHandler } from "./getAllDevicesHandler";
+import { accessTokenGuard } from "../../../core/guards/access.token.guard";
+import { inputValidationResultMiddleware } from "../../../core/middlewares/validation/input-validation-result.middleware";
+import { deleteAllDeviceSessionsHandler } from "../handlers/deleteAllDevicesHandler";
+import { getAllDevicesHandler } from "../handlers/getAllDevicesHandler";
 
-export const securityDevicesRoutes = Router();
+export const securityDevicesRouter = Router();
 
-securityDevicesRoutes.get(
-  "/",
-  accessTokenGuard,
-  inputValidationResultMiddleware,
-  getAllDevicesHandler,
-);
+securityDevicesRouter
+  .get(
+    "/",
+    accessTokenGuard,
+    inputValidationResultMiddleware,
+    getAllDevicesHandler,
+  )
+  .delete(
+    "/",
+    accessTokenGuard,
+    inputValidationResultMiddleware,
+    deleteAllDeviceSessionsHandler,
+  );

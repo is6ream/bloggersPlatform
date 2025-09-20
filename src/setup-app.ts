@@ -19,7 +19,7 @@ import { commentsRouter } from "./comments/routes/commentsRoutes";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import dotenv from "dotenv";
-import { securityDevicesRoutes } from "./securityDevices/api/secureDevicesRoutes";
+import { securityDevicesRouter } from "./securityDevices/api/routes/secureDevicesRoutes";
 
 dotenv.config();
 
@@ -55,7 +55,7 @@ export const setupApp = (app: Express) => {
   app.use(USERS_PATH, usersRouter);
   app.use(COMMENTS_PATH, commentsRouter);
   app.use(TESTING_PATH, testingRouter);
-  app.use(SECURITY_DEVICES_PATH, securityDevicesRoutes);
+  app.use(SECURITY_DEVICES_PATH, securityDevicesRouter);
   return app;
 };
 
