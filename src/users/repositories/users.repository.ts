@@ -3,6 +3,7 @@ import { UserDbDto, UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
+import { UserOutPut } from "../types/user.output";
 
 export const usersRepository = {
   async create(newUser: CreateUserDto): Promise<UserViewModel> {
@@ -35,22 +36,16 @@ export const usersRepository = {
   },
   async isUserExistByEmailOrLogin(
     loginOrEmail: string,
-  ): Promise<UserDB | null> {
+  ): Promise<UserOutPut | null> {
     const user = await userCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
     });
-    return {
-      id: user?._id.toString(),
-      passwordHash: user!.passwordHash,
-      login: user!.login,
-      email: user!.email,
-      createdAt: user!.createdAt,
-      emailConfirmation: {
-        confirmationCode: user!.emailConfirmation!.confirmationCode,
-        expirationDate: user!.emailConfirmation!.expirationDate,
-        isConfirmed: user!.emailConfirmation!.isConfirmed,
-      },
-    };
+    if (!user) {
+      return null;
+    } else
+      return {
+        passwordHash: user?.passwordHash,
+      };
   },
 
   async doesExistByLoginOrEmail(

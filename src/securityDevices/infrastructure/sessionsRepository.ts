@@ -9,7 +9,7 @@ export const sessionsRepository = {
     return;
   },
   async updateSessions(newIat: string, deviceId: string): Promise<boolean> {
-      console.log(newIat);
+    console.log(newIat);
     const updateResult = await sessionCollection.updateOne(
       { deviceId: deviceId },
       { $set: { iat: newIat } },
@@ -31,4 +31,5 @@ export const sessionsRepository = {
     console.log(session, "active session check");
     return !!session;
   },
-};``
+};
+``;
