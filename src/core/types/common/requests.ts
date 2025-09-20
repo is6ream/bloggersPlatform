@@ -1,9 +1,18 @@
 import { Request } from "express";
 import { IdType } from "../authorization/id";
+import { DeviceIdType } from "../authorization/id";
+
 export type RequestWithParams<P> = Request<P, {}, {}, {}>;
 export type RequestWithBody<B> = Request<{}, {}, B, {}>;
 export type RequestWithQuery<Q> = Request<{}, {}, {}, Q>;
 export type RequestWithParamsAndUserId<P, U extends IdType> = Request<
+  P,
+  {},
+  {},
+  {},
+  U
+>;
+export type RequestWithParamsAndDeviceId<P, U extends DeviceIdType> = Request<
   P,
   {},
   {},
@@ -42,4 +51,16 @@ export type RequestWithUserIdAndCookies<U extends IdType> = Request<
   cookies: {
     refreshToken?: string;
   };
+};
+export type RequestWithDeviceIdAndCookies<U extends DeviceIdType> = Request<
+  {},
+  {},
+  {},
+  {},
+  U
+> & {
+  cookies: {
+    refreshToken?: string;
+  };
+  deviceId: string;
 };

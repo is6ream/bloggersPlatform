@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { RequestWithParams } from "../../../core/types/common/requests";
+import { RequestWithParamsAndCookies } from "../../../core/types/common/requests";
 import { sessionService } from "../../domain/sessionService";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
@@ -7,12 +7,16 @@ import { HttpStatus } from "../../../core/http-statuses";
 import { DeviceIdType } from "../../types/deviceIdType";
 
 export const deleteSessionByDeviceIdHandler = async (
-  req: RequestWithParams<DeviceIdType>,
+  req: RequestWithParamsAndCookies<DeviceIdType>,
   res: Response,
 ) => {
   try {
     const deviceId = req.params.deviceId;
-    const result = await sessionService.deleteById(deviceId);
+    const sessionDeviceId = req.deviceId;
+    const result = await sessionService.deleteByDeviceId(
+      deviceId,
+      sessionDeviceId,
+    );
     if (result.status !== ResultStatus.Success) {
       return res.sendStatus(resultCodeToHttpException(result.status));
     }

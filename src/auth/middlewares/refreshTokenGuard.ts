@@ -1,12 +1,13 @@
-import { RequestWithUserIdAndCookies } from "./../../core/types/common/requests";
+import { RequestWithDeviceIdAndCookies } from "./../../core/types/common/requests";
 import { NextFunction, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { jwtService } from "../adapters/jwt.service";
-import { IdType } from "../../core/types/authorization/id";
+import { DeviceIdType } from "../../core/types/authorization/id";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
+import { RefreshTokenPayload } from "../types/auth.types";
 
 export const refreshTokenGuard = async (
-  req: RequestWithUserIdAndCookies<IdType>,
+  req: RequestWithDeviceIdAndCookies<DeviceIdType>,
   res: Response,
   next: NextFunction,
 ) => {
@@ -14,8 +15,8 @@ export const refreshTokenGuard = async (
   if (!refreshToken) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
-  const payload = await jwtService.verifyToken(refreshToken);
-  console.log(payload, "payload in GUARD check");
+  const payload: RefreshTokenPayload | null =
+    await jwtService.verifyToken(refreshToken);
   if (!payload) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
@@ -26,6 +27,7 @@ export const refreshTokenGuard = async (
   if (!activeSessionCheck) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }
-  req.user = { id: payload.userId } as IdType;
+  const { deviceId } = payload;
+  req.deviceId = deviceId;
   next();
 };
