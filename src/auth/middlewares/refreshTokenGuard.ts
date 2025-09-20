@@ -21,7 +21,7 @@ export const refreshTokenGuard = async (
   }
   const activeSessionCheck = await sessionsRepository.isSessionExistByIat(
     //проверяем - есть ли активный пользователь на данный момент
-    new Date(payload.iat * 1000).toString(),
+    new Date(payload.iat * 1000).toISOString(),
   );
   if (!activeSessionCheck) {
     return res.sendStatus(HttpStatus.Unauthorized);

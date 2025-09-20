@@ -21,6 +21,7 @@ import { sessionsRepository } from "../../securityDevices/infrastructure/session
 import jwt from "jsonwebtoken";
 import { appConfig } from "../../core/config/config";
 import { RefreshTokenPayload } from "../types/auth.types";
+import { UserOutput } from "../../users/types/user.output";
 
 export const authService = {
   async registerUser(
@@ -134,7 +135,7 @@ export const authService = {
     const accessToken = await jwtService.createAccessToken(result.data!.id!);
     const deviceId = randomUUID(); //формируем deviceId
     const refreshToken = await jwtService.createRefreshToken(
-      result.data!.id!,
+      result.data!.id!, //используем id user и кладем в payload refreshToken
       deviceId,
     );
 
@@ -142,7 +143,7 @@ export const authService = {
     const sessionData: SessionDataType = {
       userId: result.data!.id!, //c рейт лимит создать отдельную коллекцию и реализовать через middleware
       deviceId: deviceId,
-      iat: new Date(payloadOfRefreshToken!.iat * 1000).toString(), //приводим к читаемой дате,
+      iat: new Date(payloadOfRefreshToken!.iat * 1000).toISOString(), //приводим к читаемой дате,
       deviceName: sessionDto.deviceName,
       ip: sessionDto.ip,
     };
@@ -156,34 +157,31 @@ export const authService = {
   async updateTokens(
     oldToken: string,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
-    const payload = await jwtService.decodeToken(oldToken);
-    const payloadIat = new Date(payload.iat * 1000).toString();
-    const result = await sessionsRepository.updateSessions(
-      payloadIat,
-      payload.deviceId,
-    );
-    if (!result) {
-      throw Error("token is not updated");
-    }
-    // await tokenBlackListedRepository.addToBlackList(oldToken); //мы должны заменить эту строку обновлением сессии
-    const accessToken = await jwtService.createAccessToken(payload.userId);
+    const payload = await jwtService.decodeToken(oldToken); //декодируем старый токен для доступа к полям deviceId и userId
+    const accessToken = await jwtService.createAccessToken(payload.userId); //создаем пару новых токенов
     const refreshToken = await jwtService.createRefreshToken(
       payload.userId,
       payload.deviceId,
+    );
+    const newPayload = await jwtService.verifyToken(refreshToken); //декодируем новый payload для доступа к newIat
+    const newIat = new Date(newPayload!.iat * 1000).toISOString(); //приводим к человекочитаемому формату
+    await sessionsRepository.updateSessions(
+      newIat, //обновляем сессию, передаем новый iat
+      newPayload!.deviceId,
     );
     return handleSuccessResult({ accessToken, refreshToken });
   },
   async checkUserCredentials(
     loginOrEmail: string,
     password: string,
-  ): Promise<Result<UserDB | null>> {
+  ): Promise<Result<UserOutput | null>> {
     const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
       return handleNotFoundResult("not found", "loginOrEmail");
     }
     const isPasscorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash,
+      user.passwordHash!,
     );
     if (!isPasscorrect) {
       return handleBadRequestResult("password", "wrong password");

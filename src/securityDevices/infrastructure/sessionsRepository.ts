@@ -9,12 +9,16 @@ export const sessionsRepository = {
     return;
   },
   async updateSessions(newIat: string, deviceId: string): Promise<boolean> {
-    console.log(newIat);
+    console.log(newIat, "newIat check");
+    const existingSession = await sessionCollection.findOne({
+      deviceId: deviceId,
+    });
+    console.log("Current iat in DB:", existingSession?.iat);
+    console.log("Are they equal?", existingSession?.iat === newIat);
     const updateResult = await sessionCollection.updateOne(
       { deviceId: deviceId },
       { $set: { iat: newIat } },
     );
-
     console.log("Update result:", {
       matchedCount: updateResult.matchedCount,
       modifiedCount: updateResult.modifiedCount,
@@ -23,8 +27,6 @@ export const sessionsRepository = {
     return updateResult.modifiedCount === 1; //нужно всегда проверять количество изменных документов
   },
   async isSessionExistByIat(iat: string): Promise<boolean> {
-    console.log(iat, "iat in DAL");
-    console.log(typeof iat, "iat in DAL");
     const session: WithId<SessionDB> | null = await sessionCollection.findOne({
       iat: iat,
     });
