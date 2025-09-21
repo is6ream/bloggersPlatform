@@ -26,10 +26,9 @@ export const sessionsRepository = {
     return;
   },
   async deleteSessionByDeviceId(deviceId: string): Promise<boolean> {
-    console.log(deviceId, "deviceId checl in DAL");
     const deleteResult = await sessionCollection.deleteOne({
-      deviceId: deviceId,
+      deviceId,
     });
-    return !!deleteResult;
+    return !!deleteResult.deletedCount;
   },
 };

@@ -16,8 +16,6 @@ export const sessionService = {
     deviceId: string,
     sessionDeviceId: string,
   ): Promise<Result<null>> {
-      console.log("deviceId BLL", deviceId);
-      console.log("sessionDeviceId BLL", sessionDeviceId);
     if (deviceId !== sessionDeviceId) {
       return handleForbiddenResult("forbidden", "deviceId");
     }

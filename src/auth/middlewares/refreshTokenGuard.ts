@@ -28,7 +28,7 @@ export const refreshTokenGuard = async (
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const { deviceId } = payload;
-  req.deviceId = { deviceId: deviceId } as DeviceIdType;
+  req.deviceId = { id: deviceId } as DeviceIdType;
   next();
   return;
 };
