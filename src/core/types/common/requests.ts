@@ -12,9 +12,9 @@ export type RequestWithParamsAndUserId<P, U extends IdType> = Request<
   {},
   U
 >;
-export type RequestWithDeviceId<P = {}> = Request<P> & {
-  deviceId?: string;
-};
+export type RequestWithParamsAndDeviceId<
+  P, U extends DeviceIdType
+> = Request<P, {}, {}, {}, U>;
 export type RequestWithBodyAndParams<P, B> = Request<P, {}, B, {}>;
 export type RequestWithQueryAndParams<P, Q> = Request<P, {}, {}, Q>;
 export type RequestWithParamsAndBodyAndUserId<P, B, U extends IdType> = Request<

@@ -3,16 +3,17 @@ import { sessionService } from "../../domain/sessionService";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
 import { HttpStatus } from "../../../core/http-statuses";
-import { RequestWithDeviceId } from "../../../core/types/common/requests";
+import { RequestWithParamsAndDeviceId } from "../../../core/types/common/requests";
 import { DeviceIdType } from "../../../core/types/authorization/id";
 
 export const deleteSessionByDeviceIdHandler = async (
-  req: RequestWithDeviceId<DeviceIdType>,
+  req: Request,
   res: Response,
 ) => {
   try {
-    const deviceIdFromParams = req.params.deviceId;
-    const deviceIdFromGuard = req.deviceId;
+    const deviceIdFromParams = req.params["deviceId"];
+    console.log("deviceId in API check", deviceIdFromParams)
+    const deviceIdFromGuard = req.; //тут конкретный костыль, провести рефакторинг
     const result = await sessionService.deleteByDeviceId(
       deviceIdFromParams,
       deviceIdFromGuard!,
