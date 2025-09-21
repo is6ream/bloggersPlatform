@@ -1,6 +1,8 @@
 import { sessionsRepository } from "../infrastructure/sessionsRepository";
 import {
+  handleForbiddenResult,
   handleNotFoundResult,
+  handleSuccessResult,
   handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
 import { Result } from "../../core/result/result.type";
@@ -13,13 +15,14 @@ export const sessionService = {
   async deleteByDeviceId(
     deviceId: string,
     sessionDeviceId: string,
-  ): Promise<Result<string | null>> {
+  ): Promise<Result<null>> {
     if (deviceId !== sessionDeviceId) {
-      return handleUnauthorizedFResult("unauthorized", "deviceId");
+      return handleForbiddenResult("forbidden", "deviceId");
     }
-    const deleteResult = await sessionsRepository.deleteById(deviceId);
-    if (!deleteResult) {
-      return handleNotFoundResult("session not found", "device id");
+    const result = await sessionsRepository.deleteSessionByDeviceId(deviceId);
+    if (!result) {
+      return handleNotFoundResult("session not found", "deviceId");
     }
+    return handleSuccessResult();
   },
 };

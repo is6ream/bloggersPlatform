@@ -1,24 +1,26 @@
 import { Response } from "express";
-import { RequestWithParamsAndCookies } from "../../../core/types/common/requests";
 import { sessionService } from "../../domain/sessionService";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
 import { HttpStatus } from "../../../core/http-statuses";
-import { DeviceIdType } from "../../types/deviceIdType";
+import { RequestWithDeviceId } from "../../../core/types/common/requests";
+import { DeviceIdType } from "../../../core/types/authorization/id";
 
 export const deleteSessionByDeviceIdHandler = async (
-  req: RequestWithParamsAndCookies<DeviceIdType>,
+  req: RequestWithDeviceId<DeviceIdType>,
   res: Response,
 ) => {
   try {
-    const deviceId = req.params.deviceId;
-    const sessionDeviceId = req.deviceId;
+    const deviceIdFromParams = req.params.deviceId;
+    const deviceIdFromGuard = req.deviceId;
     const result = await sessionService.deleteByDeviceId(
-      deviceId,
-      sessionDeviceId,
+      deviceIdFromParams,
+      deviceIdFromGuard!,
     );
     if (result.status !== ResultStatus.Success) {
-      return res.sendStatus(resultCodeToHttpException(result.status));
+      return res
+        .status(resultCodeToHttpException(result.status))
+        .send(result.extensions);
     }
     return res.sendStatus(HttpStatus.NoContent);
   } catch (err: unknown) {

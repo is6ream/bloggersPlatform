@@ -1,13 +1,13 @@
-import { RequestWithDeviceIdAndCookies } from "./../../core/types/common/requests";
+import { RequestWithCookies } from "./../../core/types/common/requests";
 import { NextFunction, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { jwtService } from "../adapters/jwt.service";
-import { DeviceIdType } from "../../core/types/authorization/id";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { RefreshTokenPayload } from "../types/auth.types";
+import { DeviceIdType } from "../../core/types/authorization/id";
 
 export const refreshTokenGuard = async (
-  req: RequestWithDeviceIdAndCookies<DeviceIdType>,
+  req: RequestWithCookies,
   res: Response,
   next: NextFunction,
 ) => {
@@ -28,6 +28,7 @@ export const refreshTokenGuard = async (
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const { deviceId } = payload;
-  req.deviceId = deviceId;
+  req.deviceId = { deviceId: deviceId } as DeviceIdType;
   next();
+  return;
 };

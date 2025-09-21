@@ -25,4 +25,8 @@ export const sessionsRepository = {
     await sessionCollection.deleteMany();
     return;
   },
+  async deleteSessionByDeviceId(deviceId: string): Promise<boolean> {
+    const deleteResult = await sessionCollection.deleteOne({ deviceId });
+    return !!deleteResult;
+  },
 };
