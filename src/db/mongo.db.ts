@@ -6,7 +6,7 @@ import { CommentDB } from "../comments/types/commentsTypes";
 import { User } from "../users/constructors/user.entity";
 import { BlackListedTokensDB } from "../core/types/common/blackListedTokens.collection.types";
 import { SessionDB } from "../securityDevices/types/sessionDataTypes";
-import { ApiRequestLogDb } from "../core/customRateLimit/customRateLimitType";
+import { ApiRequestLogDb } from "../securityDevices/customRateLimit/customRateLimitType";
 
 const BLOG_COLLECTION_NAME = "blogs";
 const POST_COLLECTION_NAME = "posts";
