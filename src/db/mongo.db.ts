@@ -23,7 +23,7 @@ export let userCollection: Collection<User>; //здесь типом высту�
 export let commentsCollection: Collection<CommentDB>;
 export let blackListTokensCollection: Collection<BlackListedTokensDB>;
 export let sessionCollection: Collection<SessionDB>; //создал новую коллекцию
-export let customRateLimitCollection: Collection<ApiRequestLogDb>;
+export let rateLimitCollection: Collection<ApiRequestLogDb>;
 export const db = {
   client: null as MongoClient | null,
 
@@ -49,7 +49,7 @@ export const db = {
       BLACK_LISTED_TOKENS_NAME,
     );
     sessionCollection = db.collection<SessionDB>(SESSION_COLLECTION_NAME); //инициализировал
-    customRateLimitCollection = db.collection<ApiRequestLogDb>(
+    rateLimitCollection = db.collection<ApiRequestLogDb>(
       CUSTOM_RATE_LIMIT_COLLECTION_NAME,
     );
     try {

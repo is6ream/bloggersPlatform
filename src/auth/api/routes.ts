@@ -14,11 +14,13 @@ import { emailResendingController } from "./controllers/email.resending.controll
 import { refreshTokenGuard } from "../middlewares/refreshTokenGuard";
 import { refreshTokenController } from "./controllers/refreshToken.controller";
 import { logoutController } from "./controllers/logoutController";
+import { customRateLimitMiddleware } from "../../core/customRateLimit/customRateLimitMiddleware";
 export const authRouter = Router();
 
 authRouter
   .post(
     "/login",
+    customRateLimitMiddleware,
     authValidators,
     inputValidationResultMiddleware,
     loginUserController,
