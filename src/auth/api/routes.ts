@@ -28,18 +28,21 @@ authRouter
   .get("/me", accessTokenGuard, getInfoAboutUserController)
   .post(
     "/registration",
+    customRateLimitMiddleware,
     userValidators,
     inputValidationResultMiddleware,
     registrationUserController,
   )
   .post(
     "/registration-email-resending",
+    customRateLimitMiddleware(),
     emailValidator,
     inputValidationResultMiddleware,
     emailResendingController,
   )
   .post(
     "/registration-confirmation",
+    customRateLimitMiddleware(),
     codeValidator,
     inputValidationResultMiddleware,
     confirmRegisterUserController,
