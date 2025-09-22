@@ -6,6 +6,7 @@ import { CommentDB } from "../comments/types/commentsTypes";
 import { User } from "../users/constructors/user.entity";
 import { BlackListedTokensDB } from "../core/types/common/blackListedTokens.collection.types";
 import { SessionDB } from "../securityDevices/types/sessionDataTypes";
+import { ApiRequestLogDb } from "../core/customRateLimit/customRateLimitType";
 
 const BLOG_COLLECTION_NAME = "blogs";
 const POST_COLLECTION_NAME = "posts";
@@ -13,6 +14,7 @@ const USER_COLLECTION_NAME = "user";
 const COMMENTS_COLLECTION_NAME = "comments";
 const BLACK_LISTED_TOKENS_NAME = "blackListedTokens";
 const SESSION_COLLECTION_NAME = "sessions";
+const CUSTOM_RATE_LIMIT_COLLECTION_NAME = "customRateLimits";
 
 export let client: MongoClient;
 export let blogCollection: Collection<BlogDB>;
@@ -21,6 +23,7 @@ export let userCollection: Collection<User>; //здесь типом высту�
 export let commentsCollection: Collection<CommentDB>;
 export let blackListTokensCollection: Collection<BlackListedTokensDB>;
 export let sessionCollection: Collection<SessionDB>; //создал новую коллекцию
+export let customRateLimitCollection: Collection<ApiRequestLogDb>;
 export const db = {
   client: null as MongoClient | null,
 
@@ -46,6 +49,9 @@ export const db = {
       BLACK_LISTED_TOKENS_NAME,
     );
     sessionCollection = db.collection<SessionDB>(SESSION_COLLECTION_NAME); //инициализировал
+    customRateLimitCollection = db.collection<ApiRequestLogDb>(
+      CUSTOM_RATE_LIMIT_COLLECTION_NAME,
+    );
     try {
       this.client = client;
       await client.connect();
