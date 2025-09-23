@@ -10,7 +10,7 @@ import request from "supertest";
 import { HttpStatus } from "../../src/core/http-statuses";
 import { AUTH_PATH } from "../../src/core/paths";
 
-describe("integration test for authservice", () => {
+describe("integration tests for authservice", () => {
   let app: Express;
   let mongoServer: any;
 

@@ -56,7 +56,7 @@ describe("Testing the blog branch", () => {
       expect(res.body).toBeDefined();
     });
   });
-  describe("test for command blogs requests", () => {
+  describe("tests for command blogs requests", () => {
     it("should create new blog", async () => {
       const blogDto = getBlogDto();
       const res = await request(app)

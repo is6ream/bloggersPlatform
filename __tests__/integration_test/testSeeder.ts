@@ -27,7 +27,7 @@ export const testSeeder = {
   createUserDto() {
     return {
       login: "testing",
-      email: "test@mail.ru",
+      email: "tests@mail.ru",
       password: "12345678",
     };
   },

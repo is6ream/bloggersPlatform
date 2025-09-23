@@ -1,11 +1,11 @@
-import { testSeeder } from "./../../integration_test/testSeeder";
+import { testSeeder } from "../../../integration_test/testSeeder";
 import express from "express";
-import { setupApp } from "../../../src/setup-app";
-import { db } from "../../../src/db/mongo.db";
+import { setupApp } from "../../../../src/setup-app";
+import { db } from "../../../../src/db/mongo.db";
 import request from "supertest";
-import { HttpStatus } from "../../../src/core/http-statuses";
+import { HttpStatus } from "../../../../src/core/http-statuses";
 import { Express } from "express";
-import { AUTH_PATH } from "../../../src/core/paths";
+import { AUTH_PATH } from "../../../../src/core/paths";
 
 describe("Auth API authorization flow check", () => {
   let app: Express;

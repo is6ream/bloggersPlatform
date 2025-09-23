@@ -4,3 +4,8 @@ export type AuthAttributes = {
 };
 
 export type AuthCreateInput = AuthAttributes;
+
+export type AuthDto = {
+  loginOrEmail: string;
+  password: string;
+};

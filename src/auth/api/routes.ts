@@ -35,14 +35,14 @@ authRouter
   )
   .post(
     "/registration-email-resending",
-    customRateLimitMiddleware(),
+    customRateLimitMiddleware,
     emailValidator,
     inputValidationResultMiddleware,
     emailResendingController,
   )
   .post(
     "/registration-confirmation",
-    customRateLimitMiddleware(),
+    customRateLimitMiddleware,
     codeValidator,
     inputValidationResultMiddleware,
     confirmRegisterUserController,

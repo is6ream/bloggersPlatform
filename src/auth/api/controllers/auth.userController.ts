@@ -17,6 +17,7 @@ export async function loginUserController(
     loginOrEmail: req.body.loginOrEmail,
     password: req.body.password,
   };
+  console.log(sessionDto, "sessionDto check");
   try {
     const result = await authService.loginUser(sessionDto);
 
