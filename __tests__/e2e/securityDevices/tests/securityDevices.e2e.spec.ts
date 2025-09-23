@@ -8,13 +8,14 @@ import { AUTH_PATH, SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { registerUser } from "../../auth/helpers/registerUser";
 import { loginUser } from "../../auth/helpers/authUser";
+import { getFourSessions } from "../helpers/getFourSessions";
 
 describe("testing work with devices in sessions", () => {
   let app: Express;
 
   beforeAll(async () => {
     await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     await db.drop();
     const expressApp = express();
@@ -26,19 +27,14 @@ describe("testing work with devices in sessions", () => {
     await db.stop();
   });
   describe("delete errors check", () => {
-    const registeruser = await registerUser(app, {
-      login: "test",
-      email: "test@mail.com",
-      password: "123456",
-    });
+    it("should create for session and check delete errors", async () => {
+      const authForDevices = await getFourSessions(app, {
+        login: "test",
+        email: "test@mail.ru",
+        password: "test",
+      });
 
-    const user1 = await loginUser(
-      app,
-      {
-        loginOrEmail: "test",
-        password: "123456",
-      },
-      { userName: "iphone" },
-    );
+      const firsUser = authForDevices.firstUser;
+    });
   });
 });
