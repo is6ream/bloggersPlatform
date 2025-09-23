@@ -1,27 +1,25 @@
 import { Express } from "Express";
-import { registerUser } from "../../auth/helpers/registerUser";
 import { loginUser } from "../../auth/helpers/authUser";
-import { getUserData } from "./getUserData";
-import { UserAuthType } from "../types/userAuthType";
-import { UserInputModel } from "../../../../src/users/types/user-types";
+import { AuthCredentials } from "../../../../src/auth/types/input/login-input.models";
+//ключевые моменты для понимания тестового flow
+//Каждый логин с новым userAgent - новый deviceId в базе
+//У каждого устройства свой refreshToken
+//AccessToken обновляется, но deviceId остается таким же
 
-export async function getFourSessions(app: Express, userData: UserInputModel) {
-  await registerUser(app, {
-    //регистрируем пользователя
-    login: userData.login,
-    email: userData.email,
-    password: userData.password,
-  });
-
-  const iphoneSessionData: UserAuthType = getUserData("iphone"); //создаем данные для авторизации и создания сессий для разных устройств
-  const macSessionData: UserAuthType = getUserData("Macbook");
-  const redmiSessionData: UserAuthType = getUserData("redmi 8");
-  const huaweiSessionData: UserAuthType = getUserData("huawei D16");
-
-  return {
-    firstUser: await loginUser(app, iphoneSessionData), //авторизовываем разные устройства
-    secondUser: await loginUser(app, macSessionData),
-    thirdUser: await loginUser(app, redmiSessionData),
-    fourthUser: await loginUser(app, huaweiSessionData),
-  };
+//Будем тестировать изоляцию сессий - действия с одного устройства не должны влиять на другие
+//Безопасность - можно управлять только своими сессиями
+//lastActiveDate должен обновляется корректно
+export async function getFourSessions(
+  app: Express,
+  authCredentials: AuthCredentials,
+  deviceNames: string[],
+) {
+  const sessions = [];
+  for (let i = 0; i < 4; i++) {
+    const session = await loginUser(app, authCredentials, deviceNames[i]);
+    sessions.push(session);
+  }
+  return sessions;
 }
+
+
