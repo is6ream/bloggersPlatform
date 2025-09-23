@@ -4,13 +4,18 @@ import request from "supertest";
 import { AUTH_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 
-export async function loginUser(app: Express, authDto: AuthDto) {
+export async function loginUser(
+  app: Express,
+  authDto: AuthDto,
+  userName: string,
+) {
   const authCredentials: AuthDto = {
     loginOrEmail: authDto.loginOrEmail,
     password: authDto.password,
   };
   const response = await request(app)
     .post(`${AUTH_PATH}/login`)
+    .set("userName", userName)
     .send(authCredentials)
     .expect(HttpStatus.Ok);
 
