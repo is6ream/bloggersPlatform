@@ -5,7 +5,7 @@ import { AUTH_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { AuthCredentials } from "../../../../src/auth/types/input/login-input.models";
 
-export async function loginUser(
+export async function loginUserWithDeviceName(
   app: Express,
   authDto: AuthCredentials,
   deviceName: string,
