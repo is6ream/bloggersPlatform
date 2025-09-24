@@ -28,7 +28,7 @@ export const db = {
   client: null as MongoClient | null,
 
   getDbName(): Db {
-    if (!this.client || !(this.client instanceof MongoClient)) {
+    if (!this.client) {
       throw new Error("MongoClient is not initialized");
     }
     return this.client.db();
@@ -89,12 +89,13 @@ export const db = {
       console.log("db.drop: Dropping collections");
       const dbInstance = this.getDbName();
       const collections = await dbInstance.listCollections().toArray();
-      for (const coll of collections) {
-        console.log(
-          `db.drop: Deleting all documents from collection: ${coll.name}`,
-        );
-        await dbInstance.collection(coll.name).deleteMany({});
-      }
+      await dbInstance.dropDatabase();
+      // for (const coll of collections) {
+      //   console.log(
+      //     `db.drop: Deleting all documents from collection: ${coll.name}`,
+      //   );
+      //   await dbInstance.collection(coll.name).deleteMany({});
+      // }
       console.log("db.drop: All collections cleared");
     } catch (e) {
       console.error("db.drop: Error during drop", e);
@@ -102,6 +103,7 @@ export const db = {
       throw e;
     }
   },
+
   async getCollections(): Promise<{ userCollection: Collection<User> }> {
     return {
       userCollection: this.getDbName().collection<User>("users"),

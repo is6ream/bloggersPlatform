@@ -6,9 +6,8 @@ import { registerUser } from "../../auth/helpers/registerUser";
 import { TestUserCredentials } from "../../users/createAndAuthUser";
 import { AuthReturnType } from "../types/authReturnTypes";
 import request from "supertest";
-import { AUTH_PATH } from "../../../../src/core/paths";
+import { AUTH_PATH, SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
-import { beforeEach } from "node:test";
 
 describe("sessions flow check", () => {
   let app: Express;
@@ -26,18 +25,19 @@ describe("sessions flow check", () => {
     await db.stop();
   });
   describe("tests with creating and updating sessions", () => {
-    beforeEach(async () => {
-      await db.drop();
-    });
     const userCredentials: TestUserCredentials = {
       login: "test",
       email: "test@mail.ru",
       password: "test123456",
     };
+    beforeEach(async () => {
+      await db.drop();
+    });
     const deviceNames: string[] = ["iphone", "xiaomi", "huawei", "macBook"];
 
     it("should create four sessions", async () => {
-      await registerUser(app, userCredentials); //регистрирую пользователя
+      await registerUser(app, userCredentials); //почему-то падает 400 ошибка, которая говорит о том, что пользователь
+      //есть в бд, но я чищу бд перед тестами ДВА РАЗА
       const fourSessions: AuthReturnType = await getFourSessions(
         app,
         {
@@ -46,15 +46,12 @@ describe("sessions flow check", () => {
         },
         deviceNames,
       );
-
       expect(fourSessions.length).toBe(4);
     });
 
     it("should checking the last user activity", async () => {
-      //хочу сравнить время создания сессии, и iat в возвращаемом объекте сессии
       await registerUser(app, userCredentials);
       const authDate = new Date(); //время авторизации пользователя
-
       const loginUserResponse = await request(app) //авторизуем пользователя и создаем сессию
         .post(`${AUTH_PATH}/login`)
         .send({
@@ -66,14 +63,15 @@ describe("sessions flow check", () => {
       const accessToken = loginUserResponse.body.access_token;
 
       const response = await request(app) //делаем запрос за получением всех сессий
-        .get(`${AUTH_PATH}/security/devices`)
+        .get(SECURITY_DEVICES_PATH)
         .set("Authorization", `Bearer ${accessToken}`)
         .expect(HttpStatus.Ok);
       const difference = Math.abs(
         response.body.lastActiveDate * 1000 - authDate.getTime(),
       );
 
-      expect(difference).toBeLessThan(3000);
+      expect(difference).toBeLessThan(3000); //сравниваем время при авторизации пользователя
+      // и время iat с погрешностью в 3 сек
     });
   });
 });
