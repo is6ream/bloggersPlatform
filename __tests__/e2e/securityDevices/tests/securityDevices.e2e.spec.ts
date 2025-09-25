@@ -34,19 +34,20 @@ describe("sessions flow tests", () => {
     done();
   });
   describe("tests with creating and updating sessions", () => {
-    const userCredentials: TestUserCredentials = {
-      login: "test",
-      email: "test@mail.ru",
-      password: "test123456",
-    };
+      const userCredentials: TestUserCredentials = {
+          login: "test",
+          email: "test@mail.ru",
+          password: "test123456",
+      };
+    beforeAll(async () => {
+      await registerUser(app, userCredentials);
+    });
+
     beforeEach(async () => {
       await db.drop();
     });
     const deviceNames: string[] = ["iphone", "xiaomi", "huawei", "macBook"];
-
     it("should create four sessions", async () => {
-      await registerUser(app, userCredentials); //почему-то падает 400 ошибка, которая говорит о том, что пользователь
-      //есть в бд, но я чищу бд перед тестами ДВА РАЗА
       const fourSessions: AuthReturnType = await getFourSessions(
         app,
         {
@@ -59,7 +60,6 @@ describe("sessions flow tests", () => {
     });
 
     it("should checking the last user activity", async () => {
-      await registerUser(app, userCredentials);
       const authDate = new Date(); //время авторизации пользователя
       const loginUserResponse = await request(app) //авторизуем пользователя и создаем сессию
         .post(`${AUTH_PATH}/login`)
