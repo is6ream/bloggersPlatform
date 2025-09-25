@@ -38,14 +38,13 @@ export const db = {
       connectTimeoutMS: 5000,
       serverSelectionTimeoutMS: 5000,
     });
-      console.log("🔍 URL analysis:");
-      console.log("Full URL:", url);
-      console.log("Database from appConfig:", appConfig.DB_NAME);
+    console.log("🔍 URL analysis:");
+    console.log("Full URL:", url);
+    console.log("Database from appConfig:", appConfig.DB_NAME);
     const db: Db = client.db(appConfig.DB_NAME);
-      console.log("🎯 Final database name:", db.databaseName);
+    console.log("🎯 Final database name:", db.databaseName);
 
-
-      //инициализация коллекция
+    //инициализация коллекция
     blogCollection = db.collection<BlogDB>(BLOG_COLLECTION_NAME);
     postCollection = db.collection<PostDB>(POST_COLLECTION_NAME);
     userCollection = db.collection<User>(USER_COLLECTION_NAME);

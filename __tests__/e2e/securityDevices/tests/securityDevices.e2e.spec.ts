@@ -8,21 +8,30 @@ import { AuthReturnType } from "../types/authReturnTypes";
 import request from "supertest";
 import { AUTH_PATH, SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
+import { MongoMemoryServer } from "mongodb-memory-server";
+import { beforeEach } from "node:test";
 
-describe("sessions flow check", () => {
-  let app: Express;
-//проблема была в том, что я создавал тестовое окружение для e2e как для интеграционных)
+describe("sessions flow tests", () => {
+  const expressApp: Express = express();
+  const app = setupApp(expressApp);
+
   beforeAll(async () => {
-    await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    ); //в app.config имя бд - bloggers platphorm, а мы подключаемся к forTests, к Cluster0
-    await db.drop(); //посмотреть как пишется e2e тест
-    const expressApp = express();
-    app = setupApp(expressApp);
+    //изначально создаем монго сервер
+    const mongoServer = await MongoMemoryServer.create();
+    await db.runDB(mongoServer.getUri()); //передаем урл сервера для запуска
   });
-  afterAll(async () => {
+
+  beforeEach(async () => {
+    //перед каждым хуком удаляем данные
     await db.drop();
+  });
+
+  afterAll(async () => {
     await db.stop();
+  });
+
+  afterAll((done: any) => {
+    done();
   });
   describe("tests with creating and updating sessions", () => {
     const userCredentials: TestUserCredentials = {
