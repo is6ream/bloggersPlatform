@@ -28,7 +28,7 @@ export const db = {
   client: null as MongoClient | null,
 
   getDbName(): Db {
-    if (!this.client) {
+    if (!this.client || !(this.client instanceof MongoClient)) {
       throw new Error("MongoClient is not initialized");
     }
     return this.client.db();
@@ -38,9 +38,14 @@ export const db = {
       connectTimeoutMS: 5000,
       serverSelectionTimeoutMS: 5000,
     });
+      console.log("🔍 URL analysis:");
+      console.log("Full URL:", url);
+      console.log("Database from appConfig:", appConfig.DB_NAME);
     const db: Db = client.db(appConfig.DB_NAME);
+      console.log("🎯 Final database name:", db.databaseName);
 
-    //инициализация коллекция
+
+      //инициализация коллекция
     blogCollection = db.collection<BlogDB>(BLOG_COLLECTION_NAME);
     postCollection = db.collection<PostDB>(POST_COLLECTION_NAME);
     userCollection = db.collection<User>(USER_COLLECTION_NAME);
@@ -55,11 +60,13 @@ export const db = {
     try {
       this.client = client;
       await client.connect();
-      await this.getDbName().command({ ping: 1 }); //либо здесь
+      await this.getDbName().command({ ping: 1 });
       console.log("✅ Connected to the database");
     } catch (e) {
       if (this.client && typeof this.client.close === "function") {
-        console.log("db.run: Closing client after failure");
+        //функция close нужна для закрытия соединения
+        //проверяем, если в рантайме она есть, но подключения нет - закрываем соединение
+        console.log("db.run: Closing client after failure", { e });
         await this.client.close();
       }
       this.client = null;
@@ -88,14 +95,15 @@ export const db = {
     try {
       console.log("db.drop: Dropping collections");
       const dbInstance = this.getDbName();
-      const collections = await dbInstance.listCollections().toArray();
-      await dbInstance.dropDatabase();
-      // for (const coll of collections) {
-      //   console.log(
-      //     `db.drop: Deleting all documents from collection: ${coll.name}`,
-      //   );
-      //   await dbInstance.collection(coll.name).deleteMany({});
-      // }
+      const collections = await dbInstance.listCollections().toArray(); //список коллекций в этой бд пустой
+
+      for (const coll of collections) {
+        console.log("CHECK");
+        console.log(
+          `db.drop: Deleting all documents from collection: ${coll.name}`, //функция не попадает в этот блок
+        );
+        await dbInstance.collection(coll.name).deleteMany({});
+      }
       console.log("db.drop: All collections cleared");
     } catch (e) {
       console.error("db.drop: Error during drop", e);

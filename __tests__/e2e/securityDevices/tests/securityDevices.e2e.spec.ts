@@ -11,12 +11,12 @@ import { HttpStatus } from "../../../../src/core/http-statuses";
 
 describe("sessions flow check", () => {
   let app: Express;
-
+//проблема была в том, что я создавал тестовое окружение для e2e как для интеграционных)
   beforeAll(async () => {
     await db.runDB(
       "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    );
-    await db.drop();
+    ); //в app.config имя бд - bloggers platphorm, а мы подключаемся к forTests, к Cluster0
+    await db.drop(); //посмотреть как пишется e2e тест
     const expressApp = express();
     app = setupApp(expressApp);
   });
