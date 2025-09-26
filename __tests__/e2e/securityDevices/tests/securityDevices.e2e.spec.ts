@@ -10,6 +10,8 @@ import { SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
+import { getRegisterCredentials } from "../helpers/getUserData";
+import { getDeviceNames } from "../helpers/getDeviceNames";
 
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
@@ -34,20 +36,15 @@ describe("sessions flow tests", () => {
     done();
   });
   describe("testing the creation and retrieval of all sessions", () => {
-    const userCredentials: TestUserCredentials = {
-      login: "test",
-      email: "test@mail.ru",
-      password: "test123456",
-    };
-
+    const userCredentials: TestUserCredentials = getRegisterCredentials();
     beforeEach(async () => {
       await db.drop();
       await registerUser(app, userCredentials); //регистрируемся тут один раз
     });
     it("should create four sessions", async () => {
-      const deviceNames: string[] = ["iphone", "xiaomi", "huawei", "macBook"];
+      const deviceNames: string[] = getDeviceNames();
       const fourSessions: AuthReturnType = await getFourSessions(
-        //авторизовываемя тут
+        //авторизовываемся тут
         app,
         {
           loginOrEmail: userCredentials.login,
@@ -84,6 +81,31 @@ describe("sessions flow tests", () => {
       const difference = Math.abs(lastActiveDate - authDate); //получаем разницу между временем авторизации пользователя и iat
       expect(difference).toBeLessThan(3000); //сравниваем время при авторизации пользователя
       // и время iat с погрешностью в 3 сек
+    });
+  });
+
+  describe("testing delete all sessions and delete session by id", () => {
+    const userCredentials: TestUserCredentials = getRegisterCredentials();
+    beforeEach(async () => {
+      await db.drop();
+      await registerUser(app, userCredentials); //регистрируемся перед тестами
+    });
+    it("should delete all sessions", async () => {
+      const deviceNames: string[] = getDeviceNames();
+      const fourSessions: AuthReturnType = await getFourSessions(
+        //создаем четыре сессии для последующего удаления
+        //авторизовываемся тут
+        app,
+        {
+          loginOrEmail: userCredentials.login,
+          password: userCredentials.password,
+        },
+        deviceNames,
+      );
+      expect(fourSessions.length).toBe(4);//тест проходит
+      // const response = await request(app)
+      //     .delete(SECURITY_DEVICES_PATH)
+      //     .set("Authorization", `Bearer `) //как из токенов передать?
     });
   });
 });
