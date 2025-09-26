@@ -10,7 +10,9 @@ import { SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
-//нуж
+
+
+
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
   const app = setupApp(expressApp);
@@ -69,15 +71,17 @@ describe("sessions flow tests", () => {
         },
         "Chrome",
       );
-
       const accessToken = authUser.accessToken;
       const response = await request(app) //делаем запрос для получения всех сессий
         .get(SECURITY_DEVICES_PATH)
         .set("Authorization", `Bearer ${accessToken}`)
         .expect(HttpStatus.Ok);
-      console.log(response.body, "lastActiveDate");
+
+      const currentSession = response.body.find(
+        session:  => session.title === "Chrome",
+      );
       const difference = Math.abs(
-        response.body.lastActiveDate * 1000 - authDate.getTime(),
+        currentSession.lastActiveDate * 1000 - authDate.getTime(),
       );
 
       expect(difference).toBeLessThan(3000); //сравниваем время при авторизации пользователя
