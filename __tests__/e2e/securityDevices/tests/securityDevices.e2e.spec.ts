@@ -10,8 +10,8 @@ import { SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
-
-
+import { SessionType } from "../types/sessionType";
+import { resolveAny } from "dns";
 
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
@@ -78,11 +78,16 @@ describe("sessions flow tests", () => {
         .expect(HttpStatus.Ok);
 
       const currentSession = response.body.find(
-        session:  => session.title === "Chrome",
+        (session: any) => session.title === "Chrome",
       );
+
+      const unixDate = +new Date(currentSession.lastActiveDate).getTime();
+      console.log(unixDate);
+      console.log(authDate.getTime());
       const difference = Math.abs(
-        currentSession.lastActiveDate * 1000 - authDate.getTime(),
+        unixDate - authDate.getTime(),
       );
+      console.log(difference, "difference");
 
       expect(difference).toBeLessThan(3000); //сравниваем время при авторизации пользователя
       // и время iat с погрешностью в 3 сек
