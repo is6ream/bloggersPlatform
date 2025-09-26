@@ -26,12 +26,11 @@ export let sessionCollection: Collection<SessionDB>; //создал новую �
 export let rateLimitCollection: Collection<ApiRequestLogDb>;
 export const db = {
   client: null as MongoClient | null,
-
   getDbName(): Db {
     if (!this.client || !(this.client instanceof MongoClient)) {
       throw new Error("MongoClient is not initialized");
     }
-    return this.client.db();
+    return this.client.db(appConfig.DB_NAME);
   },
   async runDB(url: string): Promise<void> {
     client = new MongoClient(url, {
@@ -87,14 +86,15 @@ export const db = {
   },
   async drop() {
     try {
-      const dbInstance = this.getDbName();
-      const collections = await dbInstance.listCollections().toArray();
-
+      console.log("...dropping database");
+      const collections = await this.getDbName().listCollections().toArray();
+      console.log(collections, "collections check in db");
       for (const coll of collections) {
         console.log(
           `db.drop: Deleting all documents from collection: ${coll.name}`,
         );
-        await dbInstance.collection(coll.name).deleteMany({});
+        const collectionName = coll.name;
+        await this.getDbName().collection(collectionName).deleteMany({});
       }
     } catch (e) {
       console.error("db.drop: Error during drop", e);
@@ -102,7 +102,6 @@ export const db = {
       throw e;
     }
   },
-
   async getCollections(): Promise<{ userCollection: Collection<User> }> {
     return {
       userCollection: this.getDbName().collection<User>("users"),

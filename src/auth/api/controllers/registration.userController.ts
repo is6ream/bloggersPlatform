@@ -10,12 +10,12 @@ export async function registrationUserController(
   res: Response,
 ) {
   const { login, email, password } = req.body;
-
   const result = await authService.registerUser(login, password, email);
   if (result === undefined) {
     res.sendStatus(HttpStatus.InternalServerError);
   }
   if (result!.status !== ResultStatus.Success) {
+    console.log(result?.extensions, "extensions check in register API");
     res.status(HttpStatus.BadRequest).send(result!.extensions);
     return;
   }

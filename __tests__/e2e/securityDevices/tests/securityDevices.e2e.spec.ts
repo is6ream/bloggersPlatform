@@ -6,11 +6,11 @@ import { registerUser } from "../../auth/helpers/registerUser";
 import { TestUserCredentials } from "../../users/createAndAuthUser";
 import { AuthReturnType } from "../types/authReturnTypes";
 import request from "supertest";
-import { AUTH_PATH, SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
+import { SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
-
+//нуж
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
   const app = setupApp(expressApp);
@@ -39,16 +39,15 @@ describe("sessions flow tests", () => {
       email: "test@mail.ru",
       password: "test123456",
     };
-    beforeAll(async () => {
-      await registerUser(app, userCredentials);
-    });
 
     beforeEach(async () => {
       await db.drop();
+      await registerUser(app, userCredentials); //регистрируемся тут один раз
     });
     it("should create four sessions", async () => {
       const deviceNames: string[] = ["iphone", "xiaomi", "huawei", "macBook"];
       const fourSessions: AuthReturnType = await getFourSessions(
+        //авторизовываемя тут
         app,
         {
           loginOrEmail: userCredentials.login,
@@ -62,6 +61,7 @@ describe("sessions flow tests", () => {
     it("should checking the last user activity", async () => {
       const authDate = new Date(); //время авторизации пользователя
       const authUser = await loginUserWithDeviceName(
+        //авторизовываемся тут
         app,
         {
           loginOrEmail: userCredentials.login,

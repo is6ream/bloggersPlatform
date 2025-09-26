@@ -17,8 +17,6 @@ export async function registerUser(
   await request(app)
     .post(`${AUTH_PATH}/registration`)
     .send(userDto)
-    .expect(HttpStatus.NoContent); //здесь получили 400, //возможно, ошибка возникает из-за того,
-  // что user каким-то образом добавляется до регистрации
-
+    .expect(HttpStatus.NoContent);
   return;
 }
