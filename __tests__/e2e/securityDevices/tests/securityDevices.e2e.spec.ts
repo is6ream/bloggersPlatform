@@ -10,8 +10,6 @@ import { SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
-import { SessionType } from "../types/sessionType";
-import { resolveAny } from "dns";
 
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
@@ -35,7 +33,7 @@ describe("sessions flow tests", () => {
   afterAll((done: any) => {
     done();
   });
-  describe("tests with creating and updating sessions", () => {
+  describe("testing the creation and retrieval of all sessions", () => {
     const userCredentials: TestUserCredentials = {
       login: "test",
       email: "test@mail.ru",
@@ -61,14 +59,15 @@ describe("sessions flow tests", () => {
     });
 
     it("should checking the last user activity", async () => {
-      const authDate = new Date(); //время авторизации пользователя
+      const authDate = new Date().getTime(); //записываем время авторизации пользователя
+      const credentials = {
+        loginOrEmail: userCredentials.login,
+        password: userCredentials.password,
+      };
       const authUser = await loginUserWithDeviceName(
-        //авторизовываемся тут
+        //авторизовываемся
         app,
-        {
-          loginOrEmail: userCredentials.login,
-          password: userCredentials.password,
-        },
+        credentials,
         "Chrome",
       );
       const accessToken = authUser.accessToken;
@@ -78,17 +77,11 @@ describe("sessions flow tests", () => {
         .expect(HttpStatus.Ok);
 
       const currentSession = response.body.find(
+        //ищем текущую сессию по deviceId
         (session: any) => session.title === "Chrome",
       );
-
-      const unixDate = +new Date(currentSession.lastActiveDate).getTime();
-      console.log(unixDate);
-      console.log(authDate.getTime());
-      const difference = Math.abs(
-        unixDate - authDate.getTime(),
-      );
-      console.log(difference, "difference");
-
+      const lastActiveDate = +new Date(currentSession.lastActiveDate).getTime();
+      const difference = Math.abs(lastActiveDate - authDate); //получаем разницу между временем авторизации пользователя и iat
       expect(difference).toBeLessThan(3000); //сравниваем время при авторизации пользователя
       // и время iat с погрешностью в 3 сек
     });
