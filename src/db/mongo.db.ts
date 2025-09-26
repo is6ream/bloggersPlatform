@@ -87,18 +87,15 @@ export const db = {
   },
   async drop() {
     try {
-      console.log("db.drop: Dropping collections");
       const dbInstance = this.getDbName();
-      const collections = await dbInstance.listCollections().toArray(); //список коллекций в этой бд пустой
+      const collections = await dbInstance.listCollections().toArray();
 
       for (const coll of collections) {
-        console.log("CHECK");
         console.log(
-          `db.drop: Deleting all documents from collection: ${coll.name}`, //функция не попадает в этот блок
+          `db.drop: Deleting all documents from collection: ${coll.name}`,
         );
         await dbInstance.collection(coll.name).deleteMany({});
       }
-      console.log("db.drop: All collections cleared");
     } catch (e) {
       console.error("db.drop: Error during drop", e);
       await this.stop();

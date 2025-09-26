@@ -12,7 +12,6 @@ export async function registrationUserController(
   const { login, email, password } = req.body;
 
   const result = await authService.registerUser(login, password, email);
-  console.log(result?.extensions, "EXTENSIONS CHECK IN API");
   if (result === undefined) {
     res.sendStatus(HttpStatus.InternalServerError);
   }

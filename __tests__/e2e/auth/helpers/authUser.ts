@@ -16,10 +16,9 @@ export async function loginUserWithDeviceName(
   };
   const response = await request(app)
     .post(`${AUTH_PATH}/login`)
-    .set("userAgent", deviceName)
+    .set("User-Agent", deviceName)
     .send(authCredentials)
     .expect(HttpStatus.Ok);
-
   return {
     accessToken: response.body.accessToken,
     refreshToken: response.headers["set-cookie"]?.[0],

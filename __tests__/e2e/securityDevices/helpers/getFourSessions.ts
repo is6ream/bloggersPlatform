@@ -14,14 +14,14 @@ export async function getFourSessions(
   authCredentials: AuthCredentials,
   deviceNames: string[],
 ) {
-  const sessions = [];
+  const sessionsTokens = [];
   for (let i = 0; i < 4; i++) {
     const session = await loginUserWithDeviceName(
       app,
       authCredentials,
       deviceNames[i],
     );
-    sessions.push(session);
+    sessionsTokens.push(session);
   }
-  return sessions;
+  return sessionsTokens; //здесь возвращаются токены
 }

@@ -9,14 +9,14 @@ import request from "supertest";
 import { AUTH_PATH, SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { beforeEach } from "node:test";
+import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
 
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
   const app = setupApp(expressApp);
 
   beforeAll(async () => {
-    //изначально создаем монго сервер
+    //создаем монго сервер
     const mongoServer = await MongoMemoryServer.create();
     await db.runDB(mongoServer.getUri()); //передаем урл сервера для запуска
   });
@@ -34,11 +34,11 @@ describe("sessions flow tests", () => {
     done();
   });
   describe("tests with creating and updating sessions", () => {
-      const userCredentials: TestUserCredentials = {
-          login: "test",
-          email: "test@mail.ru",
-          password: "test123456",
-      };
+    const userCredentials: TestUserCredentials = {
+      login: "test",
+      email: "test@mail.ru",
+      password: "test123456",
+    };
     beforeAll(async () => {
       await registerUser(app, userCredentials);
     });
@@ -46,8 +46,8 @@ describe("sessions flow tests", () => {
     beforeEach(async () => {
       await db.drop();
     });
-    const deviceNames: string[] = ["iphone", "xiaomi", "huawei", "macBook"];
     it("should create four sessions", async () => {
+      const deviceNames: string[] = ["iphone", "xiaomi", "huawei", "macBook"];
       const fourSessions: AuthReturnType = await getFourSessions(
         app,
         {
@@ -61,20 +61,21 @@ describe("sessions flow tests", () => {
 
     it("should checking the last user activity", async () => {
       const authDate = new Date(); //время авторизации пользователя
-      const loginUserResponse = await request(app) //авторизуем пользователя и создаем сессию
-        .post(`${AUTH_PATH}/login`)
-        .send({
+      const authUser = await loginUserWithDeviceName(
+        app,
+        {
           loginOrEmail: userCredentials.login,
           password: userCredentials.password,
-        })
-        .expect(HttpStatus.Ok);
+        },
+        "Chrome",
+      );
 
-      const accessToken = loginUserResponse.body.access_token;
-
-      const response = await request(app) //делаем запрос за получением всех сессий
+      const accessToken = authUser.accessToken;
+      const response = await request(app) //делаем запрос для получения всех сессий
         .get(SECURITY_DEVICES_PATH)
         .set("Authorization", `Bearer ${accessToken}`)
         .expect(HttpStatus.Ok);
+      console.log(response.body, "lastActiveDate");
       const difference = Math.abs(
         response.body.lastActiveDate * 1000 - authDate.getTime(),
       );
