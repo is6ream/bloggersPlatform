@@ -41,6 +41,7 @@ describe("sessions flow tests", () => {
       await db.drop();
       await registerUser(app, userCredentials); //регистрируемся тут один раз
     });
+
     it("should create four sessions", async () => {
       const deviceNames: string[] = getDeviceNames();
       const fourSessions: AuthReturnType = await getFourSessions(
@@ -92,7 +93,7 @@ describe("sessions flow tests", () => {
     });
     it("should delete all sessions", async () => {
       const deviceNames: string[] = getDeviceNames();
-      const fourSessions: AuthReturnType = await getFourSessions(
+      const sessionTokens: AuthReturnType = await getFourSessions(
         //создаем четыре сессии для последующего удаления
         //авторизовываемся тут
         app,
@@ -102,10 +103,20 @@ describe("sessions flow tests", () => {
         },
         deviceNames,
       );
-      expect(fourSessions.length).toBe(4);//тест проходит
-      // const response = await request(app)
-      //     .delete(SECURITY_DEVICES_PATH)
-      //     .set("Authorization", `Bearer `) //как из токенов передать?
+      expect(sessionTokens.length).toBe(4); //тест проходит
+
+      const accessToken = sessionTokens[0].accessToken; //берем любой токен из массива наших токенов
+      await request(app)
+        .delete(SECURITY_DEVICES_PATH) //делаем запрос на удаление всех сессий
+        .set("Authorization", `Bearer ${accessToken}`)
+        .expect(HttpStatus.NoContent);
+
+      const resAllSessions = await request(app) //делаем запрос на получение всех сессий для текущего пользователя
+        .get(SECURITY_DEVICES_PATH)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .expect(HttpStatus.Ok);
+
+      expect(resAllSessions.body).toEqual([]); //после удаления данных должен вернуться пустой массив, проверяем это
     });
   });
 });
