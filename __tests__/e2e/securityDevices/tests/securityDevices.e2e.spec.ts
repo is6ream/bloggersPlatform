@@ -12,6 +12,9 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
 import { getRegisterCredentials } from "../helpers/getUserData";
 import { getDeviceNames } from "../helpers/getDeviceNames";
+import { SessionType } from "../types/sessionType";
+
+
 
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
@@ -54,6 +57,14 @@ describe("sessions flow tests", () => {
         deviceNames,
       );
       expect(fourSessions.length).toBe(4);
+
+      const accessToken = fourSessions[0].accessToken; //получаем токен после авторизации пользователя
+      const getAllSessionsRes = await request(app) //делаем запрос для получения всех сессий
+        .get(SECURITY_DEVICES_PATH)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .expect(200);
+      console.log(getAllSessionsRes.body);
+      expect(getAllSessionsRes.body.length).toBe(4); //проверяем что возвращаются созданные ранее 4 сессии для одного пользователя
     });
 
     it("should checking the last user activity", async () => {
@@ -106,9 +117,10 @@ describe("sessions flow tests", () => {
       expect(sessionTokens.length).toBe(4); //тест проходит
 
       const accessToken = sessionTokens[0].accessToken; //берем любой токен из массива наших токенов
-      await request(app)
+      const refreshToken = sessionTokens[0].refreshToken;
+      await request(app) //ЭТОТ ТЕСТ НЕ ДОЛЖЕН ПРОХОДИТЬ т.к мы удаляем по RefreshToken
         .delete(SECURITY_DEVICES_PATH) //делаем запрос на удаление всех сессий
-        .set("Authorization", `Bearer ${accessToken}`)
+        .set("Cookie", refreshToken) //с refreshToken не проходит, с accessToken удаление проходило
         .expect(HttpStatus.NoContent);
 
       const resAllSessions = await request(app) //делаем запрос на получение всех сессий для текущего пользователя
@@ -117,6 +129,36 @@ describe("sessions flow tests", () => {
         .expect(HttpStatus.Ok);
 
       expect(resAllSessions.body).toEqual([]); //после удаления данных должен вернуться пустой массив, проверяем это
+    });
+
+    it("should delete session by deviceId", async () => {
+      const deviceNames: string[] = getDeviceNames();
+      const sessionTokens: AuthReturnType = await getFourSessions(
+        //создаем 4 сессии
+        app,
+        {
+          loginOrEmail: userCredentials.login,
+          password: userCredentials.password,
+        },
+        deviceNames,
+      );
+      const accessToken = sessionTokens[0].accessToken;
+      const resAllSessions = await request(app) //делаем запрос для получения этих сессий, мне нужно получить доступ к полю deviceId
+        .get(SECURITY_DEVICES_PATH)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .expect(HttpStatus.Ok);
+
+      const devices: SessionType[] = resAllSessions.body; //4 активные сессии для разных девайсов
+      const iphoneSession: SessionType | undefined = devices.find(
+        //находим сессию с устройства iphone для дальнейшего удаления
+        (session) => (session.title as string) === "iphone",
+      );
+      const iphoneSessionDeviceId = iphoneSession?.deviceId;
+      const refreshToken = sessionTokens[0].refreshToken; //получаем refreshToken из одной из созданных нами сессий ранее
+      const res = await request(app) //удаляем сессию
+        .delete(`${SECURITY_DEVICES_PATH}/${iphoneSessionDeviceId}`)
+        .set("Cookie", refreshToken)
+        .expect(HttpStatus.NoContent);
     });
   });
 });
