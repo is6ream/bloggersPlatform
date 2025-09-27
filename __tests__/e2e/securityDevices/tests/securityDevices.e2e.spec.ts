@@ -47,7 +47,6 @@ describe("sessions flow tests", () => {
     it("should create four sessions", async () => {
       const deviceNames: string[] = getDeviceNames();
       const fourSessions: AuthReturnType = await getFourSessions(
-        //авторизовываемся тут
         app,
         {
           loginOrEmail: userCredentials.login,

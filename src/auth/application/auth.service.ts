@@ -6,7 +6,6 @@ import { bcryptService } from "../adapters/bcrypt.service";
 import { User } from "../../users/constructors/user.entity";
 import { emailAdapter } from "../adapters/nodemailer.service";
 import { emailExamples } from "../adapters/email.example";
-import { UserDbDto } from "../../users/types/user-types";
 import { randomUUID } from "crypto";
 import { tokenBlackListedRepository } from "../infrastructure/tokenBlackListedRepository";
 import {
@@ -18,6 +17,7 @@ import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { UserOutput } from "../../users/types/user.output";
+import {UserDB} from "../../users/input/create-user-dto";
 
 export const authService = {
   async registerUser(
@@ -34,13 +34,13 @@ export const authService = {
     }
     const passwordHash = await bcryptService.generateHash(password);
 
-    const newUser = new User(login, email, passwordHash);
+    const newUser: User = new User(login, email, passwordHash);
     await usersRepository.create(newUser);
 
     try {
       await emailAdapter.sendEmail(
         newUser.email,
-        newUser.emailConfirmation!.confirmationCode,
+        newUser.emailConfirmation!.confirmationCode!,
         emailExamples.registrationEmail,
       );
 
@@ -50,7 +50,7 @@ export const authService = {
     }
   },
   async confirmEmail(code: string): Promise<RegistrationResult<null>> {
-    const user: UserDbDto | null =
+    const user: UserDB | null =
       await usersRepository.findUserByConfirmationCode(code);
     if (!user) {
       return handleBadRequestResult(
@@ -64,14 +64,14 @@ export const authService = {
         "confirmation code",
       );
     }
-    if (user.emailConfirmation?.expirationDate < new Date()) {
+    if (user.emailConfirmation!.expirationDate! < new Date()) {
       return handleBadRequestResult("code is expired", "confirmation code");
     }
     if (user.emailConfirmation.isConfirmed) {
       return handleBadRequestResult("code has already been applied", "code");
     }
 
-    await usersRepository.update(user.id);
+    await usersRepository.update(user.id!);
     return handleSuccessResult();
   },
   async resendingEmail(

@@ -1,4 +1,4 @@
-import { CreateUserDto, UserDB } from "../input/create-user-dto";
+import { UserDB } from "../input/create-user-dto";
 import { UserDbDto, UserViewModel } from "../types/user-types";
 import { userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
@@ -6,7 +6,7 @@ import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 
 export const usersRepository = {
-  async create(newUser: CreateUserDto): Promise<UserViewModel> {
+  async create(newUser: UserDB): Promise<UserViewModel> {
     const insertResult = await userCollection.insertOne(newUser);
     const insertId = insertResult.insertedId;
 
@@ -52,8 +52,8 @@ export const usersRepository = {
       passwordHash: user!.passwordHash,
       createdAt: user.createdAt,
       emailConfirmation: {
-        confirmationCode: user.emailConfirmation.confirmationCode,
-        expirationDate: user.emailConfirmation.expirationDate,
+        confirmationCode: user.emailConfirmation.confirmationCode!,
+        expirationDate: user.emailConfirmation.expirationDate!,
         isConfirmed: user.emailConfirmation.isConfirmed,
       },
     };
@@ -81,13 +81,23 @@ export const usersRepository = {
       return null;
     }
 
+    if (
+      !user.emailConfirmation?.confirmationCode || //если у объекта user нет confirmationCode или expirationDate
+      !user.emailConfirmation?.expirationDate
+    ) {
+      return null;
+    }
     return {
       id: user._id.toString(),
       login: user.login,
       email: user.email,
       passwordHash: user.passwordHash,
       createdAt: user.createdAt,
-      emailConfirmation: user.emailConfirmation!,
+      emailConfirmation: {
+        confirmationCode: user.emailConfirmation.confirmationCode,
+        expirationDate: user.emailConfirmation.expirationDate,
+        isConfirmed: user.emailConfirmation.isConfirmed,
+      }, //сделал валидацию на уровне метода
     };
   },
 

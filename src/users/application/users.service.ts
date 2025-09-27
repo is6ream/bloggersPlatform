@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { UserInputModel, UserViewModel } from "../types/user-types";
-import { CreateUserDto, UserDB } from "../input/create-user-dto";
+import {  UserDB } from "../input/create-user-dto";
 import { usersRepository } from "../repositories/users.repository";
 import { Result } from "../../core/result/result.type";
 import { bcryptService } from "../../auth/adapters/bcrypt.service";
@@ -23,15 +23,7 @@ export const usersService = {
     }
     const { login, password, email } = dto;
     const passwordHash = await bcryptService.generateHash(password);
-
-    // const user: CreateUserDto = {
-    //   passwordHash,
-    //   login,
-    //   email,
-    //   createdAt: new Date(),
-    // };
-
-    const user: UserDB = { //ра
+    const user: UserDB = {
       login: login,
       email: email,
       passwordHash: passwordHash,
