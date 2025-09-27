@@ -17,7 +17,7 @@ securityDevicesRouter
   )
   .delete(
     "/",
-    accessTokenGuard,
+    refreshTokenGuard,
     inputValidationResultMiddleware,
     deleteAllDeviceSessionsHandler,
   )
