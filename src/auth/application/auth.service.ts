@@ -1,5 +1,4 @@
-import { jwtService } from "./../adapters/jwt.service";
-import { UserDB } from "../../users/input/create-user-dto";
+import { jwtService } from "../adapters/jwt.service";
 import { usersRepository } from "../../users/repositories/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
@@ -18,9 +17,6 @@ import {
 import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
-import jwt from "jsonwebtoken";
-import { appConfig } from "../../core/config/config";
-import { RefreshTokenPayload } from "../types/auth.types";
 import { UserOutput } from "../../users/types/user.output";
 
 export const authService = {

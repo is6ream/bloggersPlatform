@@ -5,9 +5,9 @@ export class User {
   email: string;
   passwordHash: string;
   createdAt: Date;
-  emailConfirmation?: {
-    confirmationCode: string;
-    expirationDate: Date;
+  emailConfirmation: {
+    confirmationCode: string | null; //поправить типы
+    expirationDate: Date | null;
     isConfirmed: boolean;
   };
 

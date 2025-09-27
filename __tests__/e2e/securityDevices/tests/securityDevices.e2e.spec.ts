@@ -13,8 +13,7 @@ import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
 import { getRegisterCredentials } from "../helpers/getUserData";
 import { getDeviceNames } from "../helpers/getDeviceNames";
 import { SessionType } from "../types/sessionType";
-
-
+import { SessionDB } from "../../../../src/securityDevices/types/sessionDataTypes";
 
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
@@ -118,9 +117,9 @@ describe("sessions flow tests", () => {
 
       const accessToken = sessionTokens[0].accessToken; //берем любой токен из массива наших токенов
       const refreshToken = sessionTokens[0].refreshToken;
-      await request(app) //ЭТОТ ТЕСТ НЕ ДОЛЖЕН ПРОХОДИТЬ т.к мы удаляем по RefreshToken
+      await request(app)
         .delete(SECURITY_DEVICES_PATH) //делаем запрос на удаление всех сессий
-        .set("Cookie", refreshToken) //с refreshToken не проходит, с accessToken удаление проходило
+        .set("Cookie", refreshToken)
         .expect(HttpStatus.NoContent);
 
       const resAllSessions = await request(app) //делаем запрос на получение всех сессий для текущего пользователя
@@ -155,10 +154,21 @@ describe("sessions flow tests", () => {
       );
       const iphoneSessionDeviceId = iphoneSession?.deviceId;
       const refreshToken = sessionTokens[0].refreshToken; //получаем refreshToken из одной из созданных нами сессий ранее
-      const res = await request(app) //удаляем сессию
+      await request(app) //удаляем сессию
         .delete(`${SECURITY_DEVICES_PATH}/${iphoneSessionDeviceId}`)
         .set("Cookie", refreshToken)
         .expect(HttpStatus.NoContent);
+
+      const resAfterDeletingSession = await request(app) //делаем снова запрос на получение всех сессий
+        .get(SECURITY_DEVICES_PATH)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .expect(HttpStatus.Ok);
+
+      const findIphoneSession: SessionType | undefined =
+        resAfterDeletingSession.body.find(
+          (session: SessionType) => (session.title as string) === "iphone",
+        ); //ищем сессию с title iphone
+      expect(findIphoneSession).toBe(undefined);
     });
   });
 });

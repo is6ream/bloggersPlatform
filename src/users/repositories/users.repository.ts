@@ -38,7 +38,8 @@ export const usersRepository = {
   async isUserExistByEmailOrLogin(
     loginOrEmail: string,
   ): Promise<UserOutput | null> {
-    const user = await userCollection.findOne({
+    const user: WithId<User> | null = await userCollection.findOne({
+      //
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
     });
     if (!user) {
@@ -51,9 +52,9 @@ export const usersRepository = {
       passwordHash: user!.passwordHash,
       createdAt: user.createdAt,
       emailConfirmation: {
-        confirmationCode: user.emailConfirmation!.confirmationCode,
-        expirationDate: user.emailConfirmation!.expirationDate,
-        isConfirmed: user.emailConfirmation!.isConfirmed,
+        confirmationCode: user.emailConfirmation.confirmationCode,
+        expirationDate: user.emailConfirmation.expirationDate,
+        isConfirmed: user.emailConfirmation.isConfirmed,
       },
     };
   },
