@@ -1,10 +1,10 @@
-import { RequestWithCookies } from "../../core/types/common/requests";
+import { RequestWithCookies } from "../types/common/requests";
 import { NextFunction, Response } from "express";
-import { HttpStatus } from "../../core/http-statuses";
-import { jwtService } from "../adapters/jwt.service";
+import { HttpStatus } from "../http-statuses";
+import { jwtService } from "../../auth/adapters/jwt.service";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
-import { RefreshTokenPayload } from "../types/auth.types";
-import { DeviceIdType } from "../../core/types/authorization/id";
+import { RefreshTokenPayload } from "../../auth/types/auth.types";
+import { DeviceIdType } from "../types/authorization/id";
 
 export const refreshTokenGuard = async (
   req: RequestWithCookies,
@@ -13,13 +13,13 @@ export const refreshTokenGuard = async (
 ) => {
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
-    console.log("проверка сущ токена");
+    console.log("is token exist in cookies?");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const payload: RefreshTokenPayload | null =
     await jwtService.verifyToken(refreshToken);
   if (!payload) {
-    console.log("Проверка верификации токена");
+    console.log("is token verify");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const activeSessionCheck = await sessionsRepository.isSessionExistByIat(
@@ -27,6 +27,7 @@ export const refreshTokenGuard = async (
     new Date(payload.iat * 1000).toISOString(),
   );
   if (!activeSessionCheck) {
+      console.log("session is not exits by iat");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const { deviceId } = payload;
