@@ -13,7 +13,7 @@ import {
 import { Express } from "express";
 import { postRouter } from "./posts/routes/postsRoutes";
 import { testingRouter } from "./testing/deleteAllData.router";
-import { authRouter } from "./auth/api/routes";
+import { authRouter } from "./auth/api/routes/routes";
 import { usersRouter } from "./users/routes/usersRoutes";
 import { commentsRouter } from "./comments/routes/commentsRoutes";
 import cookieParser from "cookie-parser";

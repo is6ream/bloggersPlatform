@@ -1,4 +1,4 @@
-import { RequestWithCookies } from "./../../core/types/common/requests";
+import { RequestWithCookies } from "../../core/types/common/requests";
 import { NextFunction, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { jwtService } from "../adapters/jwt.service";
@@ -13,11 +13,13 @@ export const refreshTokenGuard = async (
 ) => {
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
+    console.log("проверка сущ токена");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const payload: RefreshTokenPayload | null =
     await jwtService.verifyToken(refreshToken);
   if (!payload) {
+    console.log("Проверка верификации токена");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const activeSessionCheck = await sessionsRepository.isSessionExistByIat(

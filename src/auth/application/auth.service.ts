@@ -7,7 +7,6 @@ import { User } from "../../users/constructors/user.entity";
 import { emailAdapter } from "../adapters/nodemailer.service";
 import { emailExamples } from "../adapters/email.example";
 import { randomUUID } from "crypto";
-import { tokenBlackListedRepository } from "../infrastructure/tokenBlackListedRepository";
 import {
   handleBadRequestResult,
   handleNotFoundResult,
@@ -147,10 +146,12 @@ export const authService = {
     return handleSuccessResult({ accessToken, refreshToken }); //
   },
   async logout(oldToken: string): Promise<Result<null>> {
-    await tokenBlackListedRepository.addToBlackList(oldToken);
+    const payload = await jwtService.verifyToken(oldToken);
+    await sessionsRepository.deleteSessionByDeviceId(payload!.deviceId); // await tokenBlackListedRepository.addToBlackList(oldToken); //нужно изменить логику эндпоинта log out
     return handleSuccessResult();
   },
   async updateTokens(
+    //нужно проверить где создается еще одна сессия?
     oldToken: string,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
     const payload = await jwtService.decodeToken(oldToken); //декодируем старый токен для доступа к полям deviceId и userId
@@ -159,11 +160,11 @@ export const authService = {
       payload.userId,
       payload.deviceId,
     );
-    const newPayload = await jwtService.verifyToken(refreshToken); //декодируем новый payload для доступа к newIat
-    const newIat = new Date(newPayload!.iat * 1000).toISOString(); //приводим к человекочитаемому формату
+    const newRefreshTokenPayload = await jwtService.verifyToken(refreshToken); //декодируем новый payload для доступа к newIat
+    const newIat = new Date(newRefreshTokenPayload!.iat * 1000).toISOString(); //приводим дату к человеко читаемому формату
     await sessionsRepository.updateSessions(
       newIat, //обновляем сессию, передаем новый iat
-      newPayload!.deviceId,
+      newRefreshTokenPayload!.deviceId,
     );
     return handleSuccessResult({ accessToken, refreshToken });
   },
