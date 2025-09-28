@@ -1,4 +1,4 @@
-import { appConfig } from "./../../core/config/config";
+import { appConfig } from "../../core/config/config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { RefreshTokenPayload } from "../types/auth.types";
 

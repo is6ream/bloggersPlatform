@@ -46,7 +46,7 @@ export const usersRepository = {
       return null;
     }
     return {
-      id: user?._id.toString(),
+      id: user._id.toString(),
       login: user.login,
       email: user.email,
       passwordHash: user!.passwordHash,

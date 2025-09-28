@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { UserInputModel, UserViewModel } from "../types/user-types";
-import {  UserDB } from "../input/create-user-dto";
+import { UserDB } from "../input/create-user-dto";
 import { usersRepository } from "../repositories/users.repository";
 import { Result } from "../../core/result/result.type";
 import { bcryptService } from "../../auth/adapters/bcrypt.service";
@@ -37,7 +37,7 @@ export const usersService = {
 
     const newUser = await usersRepository.create(user);
     const newUserId = newUser.id;
-
+    console.log(newUser);
     return handleSuccessResult(newUserId);
   },
 

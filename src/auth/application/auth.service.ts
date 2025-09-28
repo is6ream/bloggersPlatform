@@ -17,7 +17,7 @@ import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { UserOutput } from "../../users/types/user.output";
-import {UserDB} from "../../users/input/create-user-dto";
+import { UserDB } from "../../users/input/create-user-dto";
 
 export const authService = {
   async registerUser(
