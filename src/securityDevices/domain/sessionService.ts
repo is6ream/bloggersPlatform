@@ -12,15 +12,22 @@ export const sessionService = {
     return;
   },
   async deleteByDeviceId(
-    deviceId: string,
+    deviceIdFromParams: string,
     sessionDeviceId: string,
   ): Promise<Result<null>> {
     //для начала мы должны проверить, есть ли deviceId из параметров в бд
-    if (deviceId !== sessionDeviceId) {
+    const sessionExist =
+      await sessionsRepository.isSessionExistByDeviceId(deviceIdFromParams);
+    if (!sessionExist) {
+      return handleNotFoundResult("session not found", "deviceId from params");
+    }
+    if (deviceIdFromParams !== sessionDeviceId) {
       return handleForbiddenResult("forbidden", "deviceId");
     }
-    const result = await sessionsRepository.deleteSessionByDeviceId(deviceId);
+    const result =
+      await sessionsRepository.deleteSessionByDeviceId(deviceIdFromParams);
     if (!result) {
+      //на случай race condtion
       return handleNotFoundResult("session not found", "deviceId");
     }
     return handleSuccessResult();
