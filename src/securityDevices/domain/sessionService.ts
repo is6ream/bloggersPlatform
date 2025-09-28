@@ -3,7 +3,6 @@ import {
   handleForbiddenResult,
   handleNotFoundResult,
   handleSuccessResult,
-  handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
 import { Result } from "../../core/result/result.type";
 
@@ -16,6 +15,7 @@ export const sessionService = {
     deviceId: string,
     sessionDeviceId: string,
   ): Promise<Result<null>> {
+    //для начала мы должны проверить, есть ли deviceId из параметров в бд
     if (deviceId !== sessionDeviceId) {
       return handleForbiddenResult("forbidden", "deviceId");
     }
