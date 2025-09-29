@@ -4,6 +4,7 @@ import { UserInputModel } from "../../../../src/users/types/user-types";
 import { AUTH_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { TestUserCredentials } from "../../users/createAndAuthUser";
+
 export async function registerUser(
   app: Express,
   registrationDto: TestUserCredentials,

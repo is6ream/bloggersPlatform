@@ -9,6 +9,7 @@ export async function countApiRequest(ip: string, url: string) {
     url: url,
     date: { $gt: tenSecondsAgo }, //считает документы, которые были записаны в коллекцию за последние 10 секунд
   });
-
-  return count > 5; //если больше 5, то true
+  const result = count > 5;
+  console.log(result);
+  return result; //если больше 5, то true
 }
