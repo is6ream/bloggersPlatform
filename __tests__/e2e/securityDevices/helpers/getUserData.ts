@@ -11,3 +11,11 @@ export function getRegisterCredentials() {
     password: "test123456",
   };
 }
+
+export function getUniqueCredentials() {
+  return {
+    login: `${new Date().getTime()}login`,
+    email: `${new Date().getTime()}@mail.ru`,
+    password: `${new Date().getTime()}pass`,
+  };
+}

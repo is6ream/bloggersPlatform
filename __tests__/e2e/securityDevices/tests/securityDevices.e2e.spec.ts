@@ -6,14 +6,18 @@ import { registerUser } from "../../auth/helpers/registerUser";
 import { TestUserCredentials } from "../../users/createAndAuthUser";
 import { AuthReturnType } from "../types/authReturnTypes";
 import request from "supertest";
-import { SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
+import { AUTH_PATH, SECURITY_DEVICES_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { loginUserWithDeviceName } from "../../auth/helpers/authUser";
-import { getRegisterCredentials } from "../helpers/getUserData";
+import {
+  getRegisterCredentials,
+  getUniqueCredentials,
+} from "../helpers/getUserData";
 import { getDeviceNames } from "../helpers/getDeviceNames";
 import { SessionType } from "../types/sessionType";
 import { SessionDB } from "../../../../src/securityDevices/types/sessionDataTypes";
+import { registerUserMultiplyTimes } from "../helpers/registerUserMultiplyTimes";
 
 describe("sessions flow tests", () => {
   const expressApp: Express = express();
@@ -168,6 +172,17 @@ describe("sessions flow tests", () => {
           (session: SessionType) => (session.title as string) === "iphone",
         ); //ищем сессию с title iphone
       expect(findIphoneSession).toBe(undefined);
+    });
+  });
+  describe("rate limit flow tests", () => { //проходит
+    it("should register user more than 5 times and throw err", async () => {
+      const testCredentials: TestUserCredentials = getUniqueCredentials();
+      await registerUserMultiplyTimes(app, testCredentials, 4);
+
+      const res = await request(app)
+        .post(`${AUTH_PATH}/registration`)
+        .send(testCredentials)
+        .expect(HttpStatus.TooManyRequests);
     });
   });
 });

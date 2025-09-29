@@ -9,7 +9,9 @@ export const deleteSessionByDeviceIdHandler = async (
 ) => {
   try {
     const deviceIdFromParams = req.params.id;
-    const deviceIdFromGuard = req.deviceId?.id; //тут конкретный костыль, провести рефакторинг
+    const deviceIdFromGuard = req.deviceId
+      console.log(deviceIdFromParams, ": params dId");
+      console.log(deviceIdFromGuard, ": guard dId");
     const result = await sessionService.deleteByDeviceId(
       deviceIdFromParams,
       deviceIdFromGuard!,

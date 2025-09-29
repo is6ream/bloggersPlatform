@@ -30,8 +30,8 @@ export const refreshTokenGuard = async (
     console.log("session is not exits by iat");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
-  const { deviceId } = payload;
-  req.deviceId = { id: deviceId } as DeviceIdType;
+  const { deviceId, userId } = payload;
+  req.session = { deviceId: deviceId, userId: userId } as DeviceIdType;
   next();
   return;
 };
