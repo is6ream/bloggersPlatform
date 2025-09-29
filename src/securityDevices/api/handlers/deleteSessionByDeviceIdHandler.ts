@@ -3,18 +3,21 @@ import { sessionService } from "../../domain/sessionService";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
 import { HttpStatus } from "../../../core/http-statuses";
+
 export const deleteSessionByDeviceIdHandler = async (
   req: Request,
   res: Response,
 ) => {
   try {
     const deviceIdFromParams = req.params.id;
-    const deviceIdFromGuard = req.deviceId
-      console.log(deviceIdFromParams, ": params dId");
-      console.log(deviceIdFromGuard, ": guard dId");
+    const deviceIdFromGuard = req.deviceId;
+    const userId = req.userId;
+    console.log(deviceIdFromParams, ": params dId");
+    console.log(deviceIdFromGuard, ": guard dId");
     const result = await sessionService.deleteByDeviceId(
       deviceIdFromParams,
       deviceIdFromGuard!,
+      userId,
     );
     if (result.status !== ResultStatus.Success) {
       return res

@@ -13,7 +13,7 @@ export async function deleteCommentHandler(
 ) {
   try {
     const id = req.params.id;
-    const userId = req.user!.id;
+    const userId = req.userId!;
     const result = await commentsService.delete(id, userId);
     if (result.status !== ResultStatus.Success) {
       res.sendStatus(resultCodeToHttpException(result.status)).send();

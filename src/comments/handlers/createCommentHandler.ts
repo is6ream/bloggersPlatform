@@ -12,7 +12,7 @@ export async function createCommentHandler(
   res: Response,
 ) {
   try {
-    const userId = req.user?.id as string;
+    const userId = req.userId as string;
     if (!userId) {
       res.sendStatus(HttpStatus.Unauthorized);
       return;

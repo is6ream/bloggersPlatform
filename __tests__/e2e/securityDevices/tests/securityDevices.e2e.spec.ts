@@ -174,7 +174,8 @@ describe("sessions flow tests", () => {
       expect(findIphoneSession).toBe(undefined);
     });
   });
-  describe("rate limit flow tests", () => { //проходит
+  describe("rate limit flow tests", () => {
+    //проходит
     it("should register user more than 5 times and throw err", async () => {
       const testCredentials: TestUserCredentials = getUniqueCredentials();
       await registerUserMultiplyTimes(app, testCredentials, 4);

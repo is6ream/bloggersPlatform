@@ -16,6 +16,7 @@ export const sessionService = {
     sessionDeviceId: string,
   ): Promise<Result<null>> {
     //для начала мы должны проверить, есть ли сессия с таким deviceId из параметров в бд
+      const
     console.log(deviceIdFromParams, "did from params");
     console.log(sessionDeviceId, "sessionDeviceId");
     console.log("Are they equal?", deviceIdFromParams === sessionDeviceId);
