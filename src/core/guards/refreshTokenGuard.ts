@@ -4,7 +4,6 @@ import { HttpStatus } from "../http-statuses";
 import { jwtService } from "../../auth/adapters/jwt.service";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { RefreshTokenPayload } from "../../auth/types/auth.types";
-import { DeviceIdType } from "../types/authorization/id";
 
 export const refreshTokenGuard = async (
   req: RequestWithCookies,
@@ -33,5 +32,5 @@ export const refreshTokenGuard = async (
   const { deviceId, userId } = payload; //достаем из payload id и передаем их далее
   req.deviceId = deviceId;
   req.userId = userId;
-  return;
+  next();
 };

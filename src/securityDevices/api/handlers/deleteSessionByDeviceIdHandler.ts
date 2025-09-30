@@ -12,8 +12,10 @@ export const deleteSessionByDeviceIdHandler = async (
     const deviceIdFromParams = req.params.id;
     const deviceIdFromGuard = req.deviceId;
     const userId = req.userId;
-    console.log(deviceIdFromParams, ": params dId");
-    console.log(deviceIdFromGuard, ": guard dId");
+
+    if (!userId || !deviceIdFromGuard) {
+      res.sendStatus(HttpStatus.Forbidden);
+    }
     const result = await sessionService.deleteByDeviceId(
       deviceIdFromParams,
       deviceIdFromGuard!,

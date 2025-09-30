@@ -1,11 +1,10 @@
-import { IdType } from "./id";
-import { DeviceIdType } from "./id";
+import "express";
 
 declare global {
-  declare namespace Express {
-    export interface Request {
-      userId: string | undefined;
-      deviceId: string | undefined;
+  namespace Express {
+    interface Request {
+      userId?: string;
+      deviceId?: string;
     }
   }
 }

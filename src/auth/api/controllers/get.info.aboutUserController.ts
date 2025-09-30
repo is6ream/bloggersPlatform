@@ -1,18 +1,13 @@
 import { HttpStatus } from "../../../core/http-statuses";
-import { IdType } from "../../../core/types/authorization/id";
-import { RequestWithUserId } from "../../../core/types/common/requests";
 import { usersQueryRepository } from "../../../users/repositories/user.query.repository";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { CurrentUser } from "../../../users/types/user-types";
 
-export async function getInfoAboutUserController(
-  req: RequestWithUserId<IdType>,
-  res: Response,
-) {
+export async function getInfoAboutUserController(req: Request, res: Response) {
+  if (!req.userId) res.sendStatus(HttpStatus.Unauthorized);
   const userId = req.userId;
 
-  if (!userId) res.sendStatus(HttpStatus.Unauthorized);
-  const me: CurrentUser | null = await usersQueryRepository.findById(userId);
+  const me: CurrentUser | null = await usersQueryRepository.findById(userId!);
 
   res.status(HttpStatus.Ok).send(me);
 }

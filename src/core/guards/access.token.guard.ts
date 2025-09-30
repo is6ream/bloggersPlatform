@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { jwtService } from "../../auth/adapters/jwt.service";
-import { IdType } from "../types/authorization/id";
 import { HttpStatus } from "../http-statuses";
 
 export const accessTokenGuard = async (
@@ -21,7 +20,7 @@ export const accessTokenGuard = async (
   const payload = await jwtService.verifyToken(token);
   if (payload) {
     const { userId } = payload;
-    req.user = { id: userId } as IdType;
+    req.userId = userId;
     next();
     return;
   }

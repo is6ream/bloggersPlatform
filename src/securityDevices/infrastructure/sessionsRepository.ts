@@ -21,11 +21,12 @@ export const sessionsRepository = {
     });
     return !!session;
   },
-  async isSessionExistByDeviceId(deviceId: string): Promise<boolean> {
-    const session: WithId<SessionDB> | null = await sessionCollection.findOne({
+  async isSessionExistByDeviceId(
+    deviceId: string,
+  ): Promise<WithId<SessionDB> | null> {
+    return await sessionCollection.findOne({
       deviceId: deviceId,
     });
-    return !!session;
   },
   async deleteAllSessions(): Promise<void> {
     await sessionCollection.deleteMany();

@@ -14,19 +14,17 @@ export const sessionService = {
   async deleteByDeviceId(
     deviceIdFromParams: string,
     sessionDeviceId: string,
+    userId: string | undefined,
   ): Promise<Result<null>> {
-    //для начала мы должны проверить, есть ли сессия с таким deviceId из параметров в бд
-      const
-    console.log(deviceIdFromParams, "did from params");
-    console.log(sessionDeviceId, "sessionDeviceId");
-    console.log("Are they equal?", deviceIdFromParams === sessionDeviceId);
-    const sessionExist =
+    //ищем сессию по deviceId из payload
+    const session =
       await sessionsRepository.isSessionExistByDeviceId(deviceIdFromParams);
-    if (!sessionExist) {
+    if (!session) {
       return handleNotFoundResult("session not found", "deviceId from params");
     }
-    if (deviceIdFromParams !== sessionDeviceId) {
-      return handleForbiddenResult("forbidden", "deviceId");
+    //если id пользователя делающего запрос на удаление сессии !== id пользователя, сессии которой user пытается удалить - 403
+    if (session.userId !== userId) {
+      return handleForbiddenResult("access denied", "userId not found");
     }
     const result =
       await sessionsRepository.deleteSessionByDeviceId(deviceIdFromParams);
