@@ -1,16 +1,12 @@
-import { IdType } from "../../../core/types/authorization/id";
-import { RequestWithUserIdAndCookies } from "../../../core/types/common/requests";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { HttpStatus } from "../../../core/http-statuses";
 import { authService } from "../../application/auth.service";
-import { jwtService } from "../../adapters/jwt.service";
-export async function refreshTokenController(
-  req: RequestWithUserIdAndCookies<IdType>,
-  res: Response,
-) {
+export async function refreshTokenController(req: Request, res: Response) {
   try {
-
-    const tokens = await authService.updateTokens(req.cookies.refreshToken!);
+      //получаем id для обновления
+    const userId = req.userId;
+    const deviceId = req.deviceId;
+    const tokens = await authService.updateTokens(userId, deviceId);
 
     if (!tokens) {
       res.sendStatus(HttpStatus.Unauthorized);
