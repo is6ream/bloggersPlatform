@@ -146,9 +146,8 @@ export const authService = {
     await sessionsRepository.createSession(sessionData); //передаем в DAL данные о сессии и сохраняем их в бд
     return handleSuccessResult({ accessToken, refreshToken }); //
   },
-  async logout(oldToken: string): Promise<Result<null>> {
-    const payload = await jwtService.verifyToken(oldToken);
-    await sessionsRepository.deleteSessionByDeviceId(payload!.deviceId); // await tokenBlackListedRepository.addToBlackList(oldToken); //нужно изменить логику эндпоинта log out
+  async logout(deviceId: string): Promise<Result<null>> {
+    await sessionsRepository.deleteSessionByDeviceId(deviceId);
     return handleSuccessResult();
   },
   async refreshSessions(
