@@ -6,7 +6,7 @@ export async function refreshTokenController(req: Request, res: Response) {
     //получаем id для обновления
     const userId = req.userId;
     const deviceId = req.deviceId;
-    const tokens = await authService.updateTokens(userId, deviceId);
+    const tokens = await authService.refreshSessions(userId, deviceId);
 
     if (!tokens) {
       res.sendStatus(HttpStatus.Unauthorized);

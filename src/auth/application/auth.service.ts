@@ -151,7 +151,7 @@ export const authService = {
     await sessionsRepository.deleteSessionByDeviceId(payload!.deviceId); // await tokenBlackListedRepository.addToBlackList(oldToken); //нужно изменить логику эндпоинта log out
     return handleSuccessResult();
   },
-  async updateTokens(
+  async refreshSessions(
     userId: string | undefined,
     deviceId: string | undefined,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
