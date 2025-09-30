@@ -9,8 +9,7 @@ export async function refreshTokenController(
   res: Response,
 ) {
   try {
-    const payload = await jwtService.decodeToken(req.cookies.refreshToken!);
-    console.log(payload, "payload in API check");
+
     const tokens = await authService.updateTokens(req.cookies.refreshToken!);
 
     if (!tokens) {
