@@ -11,6 +11,7 @@ import {
   handleBadRequestResult,
   handleNotFoundResult,
   handleSuccessResult,
+  handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
 import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
@@ -151,16 +152,15 @@ export const authService = {
     return handleSuccessResult();
   },
   async updateTokens(
-    //нужно проверить где создается еще одна сессия?
-    oldToken: string,
+    userId: string | undefined,
+    deviceId: string | undefined,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
-    const payload = await jwtService.decodeToken(oldToken); //декодируем старый токен для доступа к полям deviceId и userId
-    const accessToken = await jwtService.createAccessToken(payload.userId); //создаем пару новых токенов
-    const refreshToken = await jwtService.createRefreshToken(
-      payload.userId,
-      payload.deviceId,
-    );
-    const newRefreshTokenPayload = await jwtService.verifyToken(refreshToken); //декодируем новый payload для доступа к newIat
+    if (!userId || !deviceId) {
+      return handleUnauthorizedFResult("access denied", "deviceId or userId");
+    }
+    const accessToken = await jwtService.createAccessToken(userId); //создаем пару новых токенов
+    const refreshToken = await jwtService.createRefreshToken(userId, deviceId);
+    const newRefreshTokenPayload = await jwtService.verifyToken(refreshToken);
     const newIat = new Date(newRefreshTokenPayload!.iat * 1000).toISOString(); //приводим дату к человеко читаемому формату
     await sessionsRepository.updateSessions(
       newIat, //обновляем сессию, передаем новый iat

@@ -3,7 +3,7 @@ import { HttpStatus } from "../../../core/http-statuses";
 import { authService } from "../../application/auth.service";
 export async function refreshTokenController(req: Request, res: Response) {
   try {
-      //получаем id для обновления
+    //получаем id для обновления
     const userId = req.userId;
     const deviceId = req.deviceId;
     const tokens = await authService.updateTokens(userId, deviceId);
