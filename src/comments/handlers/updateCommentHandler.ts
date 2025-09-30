@@ -16,7 +16,7 @@ export async function updateCommentHandler(
 ) {
   try {
     if (!req.userId) {
-      return res.status(HttpStatus.Unauthorized).send()
+      return res.status(HttpStatus.Unauthorized).send();
     }
     const userId = req.userId;
     const id = req.params.id;
