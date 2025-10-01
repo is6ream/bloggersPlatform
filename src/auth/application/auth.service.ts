@@ -86,11 +86,11 @@ export const authService = {
       return handleBadRequestResult("email already confirmed", "email");
     }
 
-    const newConfimationCode = randomUUID();
+    const newConfirmationCode = randomUUID();
     try {
       await emailAdapter.sendEmail(
         user.email,
-        newConfimationCode,
+        newConfirmationCode,
         emailExamples.registrationEmail,
       );
 
@@ -119,7 +119,8 @@ export const authService = {
 
       if (loginOrEmailError) {
         return handleBadRequestResult("wrong credentials", "loginOrEmail");
-      } else {
+      }
+      if (passwordError) {
         return handleBadRequestResult("wrong credentials", "password");
       }
     }
