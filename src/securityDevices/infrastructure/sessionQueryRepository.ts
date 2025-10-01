@@ -3,8 +3,10 @@ import { SessionDB } from "../types/sessionDataTypes";
 import { DeviceViewModel } from "../types/securityDevicesTypes";
 
 export const sessionQueryRepository = {
-  async getAllSessions(): Promise<DeviceViewModel[]> {
-    const sessions: SessionDB[] = await sessionCollection.find({}).toArray();
+  async getAllSessions(userId: string): Promise<DeviceViewModel[]> {
+    const sessions: SessionDB[] = await sessionCollection
+      .find({ userId: userId })
+      .toArray();
     return sessions.map((session) => {
       return {
         ip: session.ip,
