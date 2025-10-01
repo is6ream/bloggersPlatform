@@ -28,8 +28,11 @@ export const sessionsRepository = {
       deviceId: deviceId,
     });
   },
-  async deleteAllSessions(): Promise<void> {
-    await sessionCollection.deleteMany();
+  async deleteAllSessions(userId: string, deviceId: string): Promise<void> {
+    await sessionCollection.deleteMany({
+      userId: userId,
+      deviceId: { $ne: deviceId },
+    });
     return;
   },
   async deleteSessionByDeviceId(

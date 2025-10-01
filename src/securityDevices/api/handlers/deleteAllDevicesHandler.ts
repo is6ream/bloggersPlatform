@@ -7,10 +7,15 @@ export const deleteAllDeviceSessionsHandler = async (
   res: Response,
 ) => {
   try {
-    await sessionService.deleteAllDeviceSessions();
-    res.sendStatus(HttpStatus.NoContent);
+    const deviceId = req.deviceId;
+    const userId = req.userId;
+    if (!userId || !deviceId) {
+      return res.sendStatus(HttpStatus.Unauthorized);
+    }
+    await sessionService.deleteAllDeviceSessions(userId, deviceId);
+    return res.sendStatus(HttpStatus.NoContent);
   } catch (err: unknown) {
     console.error(err);
-    res.sendStatus(HttpStatus.InternalServerError);
+    return res.sendStatus(HttpStatus.InternalServerError);
   }
 };

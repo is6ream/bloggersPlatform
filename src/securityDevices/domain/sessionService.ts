@@ -7,8 +7,11 @@ import {
 import { Result } from "../../core/result/result.type";
 
 export const sessionService = {
-  async deleteAllDeviceSessions(): Promise<void> {
-    await sessionsRepository.deleteAllSessions();
+  async deleteAllDeviceSessions(
+    userId: string,
+    deviceId: string,
+  ): Promise<void> {
+    await sessionsRepository.deleteAllSessions(userId, deviceId);
     return;
   },
   async deleteByDeviceId(
