@@ -18,6 +18,7 @@ import { SessionDataType } from "../types/input/login-input.models";
 import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { UserOutput } from "../../users/types/user.output";
 import { UserDB } from "../../users/input/create-user-dto";
+import { AuthError } from "../types/authErrorType";
 
 export const authService = {
   async registerUser(
@@ -108,17 +109,11 @@ export const authService = {
     );
     if (result.status !== ResultStatus.Success) {
       //результат проверки credentials
-      const loginOrEmailError:
-        | { message: string; field: string | null }
-        | undefined = result.extensions!.errorsMessages.find(
-        (error) => error.field === "loginOrEmail", //ищем ошибку по полю loginOrEmail
-      );
-      const passwordError:
-        | {
-            message: string;
-            field: string | null;
-          }
-        | undefined = result.extensions!.errorsMessages.find(
+      const loginOrEmailError: AuthError =
+        result.extensions!.errorsMessages.find(
+          (error) => error.field === "loginOrEmail", //ищем ошибку по полю loginOrEmail
+        );
+      const passwordError: AuthError = result.extensions!.errorsMessages.find(
         (error) => error.field === "password", //ищем ошибку по полю password
       );
 

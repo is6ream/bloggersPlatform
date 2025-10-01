@@ -21,10 +21,9 @@ export async function loginUserController(
     const result = await authService.loginUser(sessionDto);
 
     if (result.status !== ResultStatus.Success) {
-      res
+      return res
         .status(resultCodeToHttpException(result.status))
         .send(result.extensions);
-      return;
     }
     const refreshToken = result.data?.refreshToken;
     const accessToken = result.data?.accessToken;

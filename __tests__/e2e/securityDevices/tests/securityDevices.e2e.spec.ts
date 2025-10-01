@@ -179,7 +179,6 @@ describe("sessions flow tests", () => {
     it("should register user more than 5 times and throw err", async () => {
       const testCredentials: TestUserCredentials = getUniqueCredentials();
       await registerUserMultiplyTimes(app, testCredentials, 4);
-
       const res = await request(app)
         .post(`${AUTH_PATH}/registration`)
         .send(testCredentials)

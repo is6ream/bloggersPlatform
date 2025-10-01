@@ -10,14 +10,12 @@ export async function customRateLimitMiddleware(
 ) {
   const ip = req.ip || "127.0.0.1";
   const url = req.baseUrl;
-
+  console.log(url, "url check");
   const isOverLimit = await countApiRequest(ip, url); //считаем запросы за последние 10 сек
-
   if (isOverLimit) {
-    res.status(HttpStatus.TooManyRequests).json({ error: "Too many requests" });
-    await saveApiRequest(req);
+    res.status(HttpStatus.TooManyRequests).send({ error: "Too many requests" });
+    return;
   }
-
   await saveApiRequest(req);
   next();
 }

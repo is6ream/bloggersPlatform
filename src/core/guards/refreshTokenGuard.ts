@@ -12,13 +12,11 @@ export const refreshTokenGuard = async (
 ) => {
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
-    console.log("is token exist in cookies?");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const payload: RefreshTokenPayload | null =
     await jwtService.verifyToken(refreshToken);
   if (!payload) {
-    console.log("is token verify");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const activeSessionCheck = await sessionsRepository.isSessionExistByIat(
@@ -26,7 +24,6 @@ export const refreshTokenGuard = async (
     new Date(payload.iat * 1000).toISOString(),
   );
   if (!activeSessionCheck) {
-    console.log("session is not exits by iat");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const { deviceId, userId } = payload; //достаем из payload id и передаем их далее

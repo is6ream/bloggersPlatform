@@ -5,12 +5,12 @@ import { RefreshTokenPayload } from "../types/auth.types";
 export const jwtService = {
   async createAccessToken(userId: string): Promise<string> {
     return jwt.sign({ userId }, appConfig.JWT_SECRET, {
-      expiresIn: "1 m",
+      expiresIn: "10 s",
     });
   },
   async createRefreshToken(userId: string, deviceId?: string): Promise<string> {
     return jwt.sign({ userId, deviceId }, appConfig.JWT_SECRET, {
-      expiresIn: "2 m",
+      expiresIn: "20 s",
     });
   },
 

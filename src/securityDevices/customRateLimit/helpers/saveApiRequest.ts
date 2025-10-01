@@ -7,7 +7,7 @@ export async function saveApiRequest(req: Request) {
   const apiRequestLog: ApiRequestLogDb = {
     ip: req.ip || "127.0.0.1",
     url: req.baseUrl,
-    date: new Date(),
+    date: new Date(Date.now()),
   };
 
   await rateLimitCollection.insertOne(apiRequestLog);
