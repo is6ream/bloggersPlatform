@@ -10,16 +10,16 @@ export const refreshTokenGuard = async (
   res: Response,
   next: NextFunction,
 ) => {
-    //check
+  //check
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
-      console.error("Refresh token in cookies not found");
+    console.error("Refresh token in cookies not found");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const payload: RefreshTokenPayload | null =
     await jwtService.verifyToken(refreshToken);
   if (!payload) {
-      console.log("Refresh token not verified");
+    console.log("Refresh token not verified");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
   const activeSessionCheck = await sessionsRepository.isSessionExistByIat(

@@ -38,6 +38,8 @@ export const sessionsRepository = {
   async deleteSessionByDeviceId(
     deviceId: string | undefined,
   ): Promise<boolean> {
+    const session = await sessionCollection.findOne({ deviceId: deviceId });
+    console.log("is session exist in DAL?", !!session);
     const deleteResult = await sessionCollection.deleteOne({
       deviceId,
     });
