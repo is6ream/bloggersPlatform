@@ -10,6 +10,7 @@ export const refreshTokenGuard = async (
   res: Response,
   next: NextFunction,
 ) => {
+    //check
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
       console.error("Refresh token in cookies not found");
