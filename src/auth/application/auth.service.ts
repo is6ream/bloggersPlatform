@@ -118,10 +118,10 @@ export const authService = {
       );
 
       if (loginOrEmailError) {
-        return handleBadRequestResult("wrong credentials", "loginOrEmail");
+        return handleUnauthorizedFResult("wrong credentials", "loginOrEmail");
       }
       if (passwordError) {
-        return handleBadRequestResult("wrong credentials", "password");
+        return handleUnauthorizedFResult("wrong credentials", "password");
       }
     }
     const accessToken = await jwtService.createAccessToken(result.data!.id!);
