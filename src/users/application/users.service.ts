@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import { UserInputModel, UserViewModel } from "../types/user-types";
-import { UserDB } from "../input/create-user-dto";
 import { usersRepository } from "../repositories/users.repository";
 import { Result } from "../../core/result/result.type";
 import { bcryptService } from "../../auth/adapters/bcrypt.service";
@@ -9,6 +8,7 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
+import { User } from "../constructors/user.entity";
 
 class UsersService {
   async create(dto: UserInputModel): Promise<Result<string>> {
@@ -23,7 +23,7 @@ class UsersService {
     }
     const { login, password, email } = dto;
     const passwordHash = await bcryptService.generateHash(password);
-    const user: UserDB = {
+    const user: User = {
       login: login,
       email: email,
       passwordHash: passwordHash,

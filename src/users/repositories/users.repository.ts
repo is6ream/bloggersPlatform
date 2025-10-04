@@ -6,7 +6,7 @@ import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 
 class UsersRepository {
-  async create(newUser: UserDB): Promise<UserViewModel> {
+  async create(newUser: User): Promise<UserViewModel> {
     const insertResult = await userCollection.insertOne(newUser);
     const insertId = insertResult.insertedId;
 
