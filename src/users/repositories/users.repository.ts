@@ -5,7 +5,7 @@ import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 
-export const usersRepository = {
+class UsersRepository {
   async create(newUser: UserDB): Promise<UserViewModel> {
     const insertResult = await userCollection.insertOne(newUser);
     const insertId = insertResult.insertedId;
@@ -16,7 +16,7 @@ export const usersRepository = {
       email: newUser.email,
       createdAt: newUser.createdAt,
     };
-  },
+  }
 
   async find(id: string): Promise<UserViewModel> {
     const user = await userCollection.findOne({ _id: new ObjectId(id) });
@@ -26,14 +26,14 @@ export const usersRepository = {
       email: user!.email,
       createdAt: user!.createdAt,
     };
-  },
+  }
 
   async delete(id: string): Promise<boolean> {
     const deleteResult = await userCollection.deleteOne({
       _id: new ObjectId(id),
     });
     return deleteResult.deletedCount === 1;
-  },
+  }
 
   async isUserExistByEmailOrLogin(
     loginOrEmail: string,
@@ -57,7 +57,7 @@ export const usersRepository = {
         isConfirmed: user.emailConfirmation.isConfirmed,
       },
     };
-  },
+  }
   async doesExistByLoginOrEmail(
     login: string,
     email: string,
@@ -71,7 +71,7 @@ export const usersRepository = {
     if (existingByEmail) {
       return existingByEmail;
     }
-  },
+  }
 
   async findUserByConfirmationCode(code: string): Promise<UserDbDto | null> {
     const user: WithId<User> | null = await userCollection.findOne({
@@ -99,7 +99,7 @@ export const usersRepository = {
         isConfirmed: user.emailConfirmation.isConfirmed,
       }, //сделал валидацию на уровне метода
     };
-  },
+  }
 
   async update(id: string): Promise<void> {
     const updateResult = await userCollection.updateOne(
@@ -108,5 +108,7 @@ export const usersRepository = {
     );
     console.log(updateResult, "updateResult check");
     return;
-  },
-};
+  }
+}
+
+export const usersRepository = new UsersRepository();

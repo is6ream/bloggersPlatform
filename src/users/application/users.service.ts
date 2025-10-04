@@ -10,7 +10,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-export const usersService = {
+class UsersService {
   async create(dto: UserInputModel): Promise<Result<string>> {
     //используем этот метод при создании пользователя через createUser
     const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
@@ -39,11 +39,11 @@ export const usersService = {
     const newUserId = newUser.id;
     console.log(newUser);
     return handleSuccessResult(newUserId);
-  },
+  }
 
   async _generateHash(password: string, salt: string) {
     return await bcrypt.hash(password, salt);
-  },
+  }
 
   async delete(id: string): Promise<Result> {
     const result = await usersRepository.delete(id);
@@ -52,11 +52,13 @@ export const usersService = {
     } else {
       return handleSuccessResult();
     }
-  },
+  }
 
   async findUser(id: string): Promise<Result<UserViewModel>> {
     const user: UserViewModel = await usersRepository.find(id);
 
     return handleSuccessResult(user);
-  },
-};
+  }
+}
+
+export const usersService = new UsersService();
