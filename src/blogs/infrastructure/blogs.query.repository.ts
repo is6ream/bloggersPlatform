@@ -4,7 +4,7 @@ import { WithId } from "mongodb";
 import { BlogDB, BlogViewModel } from "../types/blogs-types";
 import { ObjectId } from "mongodb";
 
-export const blogQueryRepository = {
+class BlogQueryRepository {
   async findAll(
     queryDto: BlogQueryInput,
   ): Promise<{ items: WithId<BlogDB>[]; totalCount: number }> {
@@ -25,7 +25,7 @@ export const blogQueryRepository = {
       .toArray();
     const totalCount = await blogCollection.countDocuments(filter);
     return { items, totalCount };
-  },
+  }
 
   async findById(id: string): Promise<BlogViewModel | null> {
     const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
@@ -40,7 +40,7 @@ export const blogQueryRepository = {
       createdAt: blog.createdAt,
       isMembership: blog.isMembership,
     };
-  },
+  }
 
   async findByBlogId(blogId: string): Promise<BlogViewModel | null> {
     const blog = await blogCollection.findOne({ _id: new ObjectId(blogId) });
@@ -55,5 +55,7 @@ export const blogQueryRepository = {
       createdAt: blog.createdAt,
       isMembership: blog.isMembership,
     };
-  },
-};
+  }
+}
+
+export const blogQueryRepository = new BlogQueryRepository();

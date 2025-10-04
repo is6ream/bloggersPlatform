@@ -1,12 +1,12 @@
 import { Result } from "../../core/result/result.type";
 import { BlogInputModel, BlogInputDto } from "../types/blogs-types";
-import { blogsRepository } from "../repositories/blogs.repository";
+import { blogsRepository } from "../infrastructure/blogs.repository";
 import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-export const blogsService = {
+class BlogsService {
   async create(dto: BlogInputModel): Promise<string> {
     const newBlog: BlogInputDto = {
       name: dto.name,
@@ -17,12 +17,12 @@ export const blogsService = {
     };
 
     return blogsRepository.create(newBlog);
-  },
+  }
 
   async update(id: string, dto: BlogInputDto): Promise<void> {
     await blogsRepository.update(id, dto);
     return;
-  },
+  }
 
   async delete(id: string): Promise<Result> {
     const result = await blogsRepository.delete(id);
@@ -31,5 +31,6 @@ export const blogsService = {
     } else {
       return handleSuccessResult();
     }
-  },
-};
+  }
+}
+export const blogsService = new BlogsService();

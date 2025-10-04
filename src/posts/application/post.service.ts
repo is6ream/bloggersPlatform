@@ -1,10 +1,9 @@
-import { Result } from "./../../core/result/result.type";
-import { PostByIdInputDto } from "./../types/posts-types";
+import { Result } from "../../core/result/result.type";
+import { PostByIdInputDto } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
 import { postRepository } from "../repositories/postRepository";
-import { ResultStatus } from "../../core/result/resultCode";
-import { blogsRepository } from "../../blogs/repositories/blogs.repository";
-import { blogQueryRepository } from "../../blogs/repositories/blogs.query.repository";
+import { blogsRepository } from "../../blogs/infrastructure/blogs.repository";
+import { blogQueryRepository } from "../../blogs/infrastructure/blogs.query.repository";
 import {
   handleBadRequestResult,
   handleNotFoundResult,
@@ -17,7 +16,7 @@ export const postsService = {
     if (!foundBlog) {
       return handleBadRequestResult("blog not found", "blogId");
     }
-    const postId = await postRepository.create({
+    await postRepository.create({
       title: dto.title,
       shortDescription: dto.shortDescription,
       content: dto.content,
@@ -37,7 +36,7 @@ export const postsService = {
     if (!blog) {
       return handleBadRequestResult("blog not found", "blogId");
     }
-    const postId = await postRepository.create({
+    await postRepository.create({
       title: dto.title,
       shortDescription: dto.shortDescription,
       content: dto.content,

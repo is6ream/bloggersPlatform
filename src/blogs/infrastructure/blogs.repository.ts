@@ -2,11 +2,11 @@ import { BlogDB, BlogInputDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 
-export const blogsRepository = {
+class BlogsRepository {
   async create(newBlog: BlogInputDto): Promise<string> {
     const insertResult = await blogCollection.insertOne(newBlog);
     return insertResult.insertedId.toString();
-  },
+  }
 
   async findById(id: string): Promise<WithId<BlogDB> | false> {
     const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
@@ -14,7 +14,7 @@ export const blogsRepository = {
       return false;
     }
     return blog;
-  },
+  }
 
   async update(id: string, dto: BlogInputDto): Promise<void | null> {
     const updateResult = await blogCollection.updateOne(
@@ -33,12 +33,14 @@ export const blogsRepository = {
       return null;
     }
     return;
-  },
+  }
 
   async delete(id: string): Promise<boolean> {
     const deleteResult = await blogCollection.deleteOne({
       _id: new ObjectId(id),
     });
     return deleteResult.deletedCount === 1;
-  },
-};
+  }
+}
+
+export const blogsRepository = new BlogsRepository();
