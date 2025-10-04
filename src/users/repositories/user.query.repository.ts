@@ -3,7 +3,7 @@ import { UserQueryInput } from "../input/user-query.input";
 import { CurrentUser, UserViewModel } from "../types/user-types";
 import { ObjectId } from "mongodb";
 
-export const usersQueryRepository = {
+class UsersQueryRepository {
   async findAll(
     queryDto: UserQueryInput,
   ): Promise<{ items: UserViewModel[]; totalCount: number }> {
@@ -49,7 +49,7 @@ export const usersQueryRepository = {
       };
     });
     return { items, totalCount };
-  },
+  }
 
   async findById(id: string): Promise<CurrentUser | null> {
     const user = await userCollection.findOne({ _id: new ObjectId(id) });
@@ -61,5 +61,6 @@ export const usersQueryRepository = {
       login: user.login,
       userId: user._id.toString(),
     };
-  },
-};
+  }
+}
+export const usersQueryRepository = new UsersQueryRepository();
