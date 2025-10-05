@@ -2,7 +2,7 @@ import { sessionCollection } from "../../db/mongo.db";
 import { SessionDB } from "../types/sessionDataTypes";
 import { DeviceViewModel } from "../types/securityDevicesTypes";
 
-export const sessionQueryRepository = {
+class SessionQueryRepository {
   async getAllSessions(userId: string): Promise<DeviceViewModel[]> {
     const sessions: SessionDB[] = await sessionCollection
       .find({ userId: userId })
@@ -15,5 +15,7 @@ export const sessionQueryRepository = {
         deviceId: session.deviceId,
       };
     });
-  },
-};
+  }
+}
+
+export const sessionQueryRepository = new SessionQueryRepository();
