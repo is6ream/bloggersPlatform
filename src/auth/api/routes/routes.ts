@@ -3,21 +3,16 @@ import {
   authValidators,
   codeValidator,
 } from "../../middlewares/auth.validation";
-import { loginUserController } from "../controllers/auth.userController";
+import { authUserController } from "../controllers/auth.userController";
 import { inputValidationResultMiddleware } from "../../../core/middlewares/validation/input-validation-result.middleware";
-import { getInfoAboutUserController } from "../controllers/get.info.aboutUserController";
 import { accessTokenGuard } from "../../../core/guards/access.token.guard";
 import {
   emailValidator,
   userValidators,
 } from "../../../users/middlewares/user-input-dto-validator";
-import { registrationUserController } from "../controllers/registration.userController";
-import { confirmRegisterUserController } from "../controllers/registration.confirmation.userController";
-import { emailResendingController } from "../controllers/email.resending.controller";
 import { refreshTokenGuard } from "../../../core/guards/refreshTokenGuard";
-import { refreshTokenController } from "../controllers/refreshToken.controller";
-import { logoutController } from "../controllers/logoutController";
 import { customRateLimitMiddleware } from "../../../securityDevices/customRateLimit/customRateLimitMiddleware";
+
 export const authRouter = Router();
 
 authRouter
@@ -26,29 +21,29 @@ authRouter
     customRateLimitMiddleware,
     authValidators,
     inputValidationResultMiddleware,
-    loginUserController,
+    authUserController.loginUser,
   )
-  .get("/me", accessTokenGuard, getInfoAboutUserController)
+  .get("/me", accessTokenGuard, authUserController.getInfoAboutUser)
   .post(
     "/registration",
     customRateLimitMiddleware,
     userValidators,
     inputValidationResultMiddleware,
-    registrationUserController,
+    authUserController.registrationUser,
   )
   .post(
     "/registration-email-resending",
     customRateLimitMiddleware,
     emailValidator,
     inputValidationResultMiddleware,
-    emailResendingController,
+    authUserController.emailResending,
   )
   .post(
     "/registration-confirmation",
     customRateLimitMiddleware,
     codeValidator,
     inputValidationResultMiddleware,
-    confirmRegisterUserController,
+    authUserController.confirmRegisterUser,
   )
-  .post("/refresh-token", refreshTokenGuard, refreshTokenController)
-  .post("/logout", refreshTokenGuard, logoutController);
+  .post("/refresh-token", refreshTokenGuard, authUserController.refreshToken)
+  .post("/logout", refreshTokenGuard, authUserController.logout);
