@@ -1,5 +1,5 @@
 import { Collection, Db, MongoClient } from "mongodb";
-import { Blog, BlogDB } from "../blogs/types/blogs-types";
+import { Blog } from "../blogs/types/blogs-types";
 import { PostDB } from "../posts/types/posts-types";
 import { appConfig } from "../core/config/config";
 import { CommentDB } from "../comments/types/commentsTypes";
@@ -39,7 +39,7 @@ export const db = {
     });
     const db: Db = client.db(appConfig.DB_NAME);
     //инициализация коллекция
-    blogCollection = db.collection<BlogDB>(BLOG_COLLECTION_NAME);
+    blogCollection = db.collection<Blog>(BLOG_COLLECTION_NAME);
     postCollection = db.collection<PostDB>(POST_COLLECTION_NAME);
     userCollection = db.collection<User>(USER_COLLECTION_NAME);
     commentsCollection = db.collection<CommentDB>(COMMENTS_COLLECTION_NAME);

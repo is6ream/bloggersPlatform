@@ -1,13 +1,13 @@
 import { blogCollection } from "../../db/mongo.db";
 import { BlogQueryInput } from "../routes/input/blog-query.input";
 import { WithId } from "mongodb";
-import { BlogDB, BlogViewModel } from "../types/blogs-types";
+import { Blog, BlogViewModel } from "../types/blogs-types";
 import { ObjectId } from "mongodb";
 
 class BlogQueryRepository {
   async findAll(
     queryDto: BlogQueryInput,
-  ): Promise<{ items: WithId<BlogDB>[]; totalCount: number }> {
+  ): Promise<{ items: WithId<Blog>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } =
       queryDto;
 

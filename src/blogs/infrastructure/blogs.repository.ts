@@ -1,4 +1,4 @@
-import { BlogDB, BlogInputDto } from "../types/blogs-types";
+import { Blog, BlogInputDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 
@@ -8,7 +8,7 @@ class BlogsRepository {
     return insertResult.insertedId.toString();
   }
 
-  async findById(id: string): Promise<WithId<BlogDB> | false> {
+  async findById(id: string): Promise<WithId<Blog> | false> {
     const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
     if (!blog) {
       return false;
