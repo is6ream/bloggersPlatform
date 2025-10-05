@@ -1,9 +1,7 @@
 import { Router } from "express";
 import { inputValidationResultMiddleware } from "../../../core/middlewares/validation/input-validation-result.middleware";
-import { deleteAllDeviceSessionsHandler } from "../handlers/deleteAllDevicesHandler";
-import { getAllDevicesHandler } from "../handlers/getAllDevicesHandler";
+import { sessionsController } from "../controller/sessionsController";
 import { refreshTokenGuard } from "../../../core/guards/refreshTokenGuard";
-import { deleteSessionByDeviceIdHandler } from "../handlers/deleteSessionByDeviceIdHandler";
 
 export const securityDevicesRouter = Router();
 
@@ -12,17 +10,17 @@ securityDevicesRouter
     "/",
     refreshTokenGuard,
     inputValidationResultMiddleware,
-    getAllDevicesHandler,
+    sessionsController.getAllDevices,
   )
   .delete(
     "/",
     refreshTokenGuard,
     inputValidationResultMiddleware,
-    deleteAllDeviceSessionsHandler,
+    sessionsController.deleteAllDeviceSessions,
   )
   .delete(
     "/:id",
     refreshTokenGuard,
     inputValidationResultMiddleware,
-    deleteSessionByDeviceIdHandler,
+    sessionsController.deleteSessionByDeviceId,
   );

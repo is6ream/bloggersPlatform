@@ -6,14 +6,14 @@ import {
 } from "../../core/result/handleResult";
 import { Result } from "../../core/result/result.type";
 
-export const sessionService = {
+class SessionService {
   async deleteAllDeviceSessions(
     userId: string,
     deviceId: string,
   ): Promise<void> {
     await sessionsRepository.deleteAllSessions(userId, deviceId);
     return;
-  },
+  }
   async deleteByDeviceId(
     deviceIdFromParams: string,
     sessionDeviceId: string,
@@ -36,5 +36,6 @@ export const sessionService = {
       return handleNotFoundResult("session not found", "deviceId");
     }
     return handleSuccessResult();
-  },
-};
+  }
+}
+export const sessionService = new SessionService();
