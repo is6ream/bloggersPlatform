@@ -16,7 +16,6 @@ import {
 } from "../helpers/getUserData";
 import { getDeviceNames } from "../helpers/getDeviceNames";
 import { SessionType } from "../types/sessionType";
-import { SessionDB } from "../../../../src/securityDevices/types/sessionDataTypes";
 import { registerUserMultiplyTimes } from "../helpers/registerUserMultiplyTimes";
 
 describe("sessions flow tests", () => {

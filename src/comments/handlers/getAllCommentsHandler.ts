@@ -1,7 +1,7 @@
-import { IdType } from "./../../core/types/authorization/id";
+import { IdType } from "../../core/types/authorization/id";
 import { Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
+import { commentsQueryRepository } from "../infrastructure/commentsQueryRepository";
 import { RequestWithParams } from "../../core/types/common/requests";
 import { CommentViewModel } from "../types/commentsTypes";
 import { createErrorMessages } from "../../core/errors/create-error-message";

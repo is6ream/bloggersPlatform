@@ -1,8 +1,7 @@
 import { Result } from "../../core/result/result.type";
-import { ResultStatus } from "../../core/result/resultCode";
 import { postRepository } from "../../posts/repositories/postRepository";
-import { usersRepository } from "../../users/repositories/users.repository";
-import { commentsRepository } from "../repositories/comment.repository";
+import { usersRepository } from "../../users/infrastructure/users.repository";
+import { commentsRepository } from "../infrastructure/comment.repository";
 import {
   CommentInputType,
   ContentDto,
@@ -14,7 +13,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-export const commentsService = {
+class CommentsService {
   async createComment(
     dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
@@ -34,8 +33,8 @@ export const commentsService = {
     };
     const commentId: string = await commentsRepository.create(newComment);
 
-    return handleSuccessResult();
-  },
+    return handleSuccessResult({ commentId: commentId });
+  }
 
   async update(
     id: string,
@@ -49,7 +48,7 @@ export const commentsService = {
     }
     await commentsRepository.update(id, dto);
     return handleSuccessResult();
-  },
+  }
 
   async delete(id: string, userId: string): Promise<Result<void | null>> {
     const comment = await commentsRepository.findByCommentId(id);
@@ -59,5 +58,6 @@ export const commentsService = {
     }
     await commentsRepository.delete(id);
     return handleSuccessResult();
-  },
-};
+  }
+}
+export const commentsService = new CommentsService();

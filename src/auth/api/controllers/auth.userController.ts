@@ -19,7 +19,6 @@ export async function loginUserController(
   };
   try {
     const result = await authService.loginUser(sessionDto);
-
     if (result.status !== ResultStatus.Success) {
       return res
         .status(resultCodeToHttpException(result.status))
@@ -32,7 +31,7 @@ export async function loginUserController(
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
+    console.log(accessToken, "accessToken in API");
     res.status(HttpStatus.Ok).send({ accessToken: accessToken });
     return;
   } catch (error: unknown) {

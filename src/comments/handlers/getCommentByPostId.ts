@@ -3,7 +3,7 @@ import { postQueryRepository } from "../../posts/repositories/postQueryRepositor
 import { HttpStatus } from "../../core/http-statuses";
 import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { setDefaultPaginationIfNotExist } from "../../core/helpers/set-default-sort-and-pagination";
-import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
+import { commentsQueryRepository } from "../infrastructure/commentsQueryRepository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { mapToCommentListPaginatedOutput } from "../mappers/mapToCommentListPaginatedOutput";
 

@@ -16,8 +16,9 @@ export const accessTokenGuard = async (
     res.sendStatus(HttpStatus.Unauthorized);
     return;
   }
-
+  console.log(token, "token check in guard");
   const payload = await jwtService.verifyToken(token);
+  console.log(payload, "payload check");
   if (payload) {
     const { userId } = payload;
     req.userId = userId;

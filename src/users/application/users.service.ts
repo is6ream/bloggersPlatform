@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { UserInputModel, UserViewModel } from "../types/user-types";
-import { usersRepository } from "../repositories/users.repository";
+import { usersRepository } from "../infrastructure/users.repository";
 import { Result } from "../../core/result/result.type";
 import { bcryptService } from "../../auth/adapters/bcrypt.service";
 import {

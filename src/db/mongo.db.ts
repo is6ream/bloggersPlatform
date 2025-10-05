@@ -1,5 +1,5 @@
 import { Collection, Db, MongoClient } from "mongodb";
-import { BlogDB } from "../blogs/types/blogs-types";
+import { Blog, BlogDB } from "../blogs/types/blogs-types";
 import { PostDB } from "../posts/types/posts-types";
 import { appConfig } from "../core/config/config";
 import { CommentDB } from "../comments/types/commentsTypes";
@@ -17,7 +17,7 @@ const SESSION_COLLECTION_NAME = "sessions";
 const CUSTOM_RATE_LIMIT_COLLECTION_NAME = "customRateLimits";
 
 export let client: MongoClient;
-export let blogCollection: Collection<BlogDB>;
+export let blogCollection: Collection<Blog>;
 export let postCollection: Collection<PostDB>;
 export let userCollection: Collection<User>; //здесь типом выступает класс
 export let commentsCollection: Collection<CommentDB>;

@@ -2,13 +2,13 @@ import {
   CommentDB,
   CommentQueryOtput,
   CommentViewModel,
-} from "./../types/commentsTypes";
+} from "../types/commentsTypes";
 import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 
-export const commentsQueryRepository = {
+class CommentsQueryRepository {
   async findAll(
     queryDto: CommentsQueryInput,
   ): Promise<{ items: WithId<CommentQueryOtput>[]; totalCount: number }> {
@@ -47,14 +47,14 @@ export const commentsQueryRepository = {
 
     const totalCount = await commentsCollection.countDocuments(filter);
     return { items, totalCount };
-  },
+  }
 
   async findById(id: string): Promise<CommentViewModel | null> {
     const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
     if (!comment) {
       return null;
     }
-    const commentViewModel: CommentViewModel = {
+    return {
       id: comment._id.toString(),
       content: comment.content,
       commentatorInfo: {
@@ -63,9 +63,7 @@ export const commentsQueryRepository = {
       },
       createdAt: comment.createdAt,
     };
-
-    return commentViewModel;
-  },
+  }
 
   async findCommentByPostId(
     queryDto: CommentsQueryInput,
@@ -92,5 +90,6 @@ export const commentsQueryRepository = {
     const totalCount = await commentsCollection.countDocuments(filter);
 
     return { items, totalCount };
-  },
-};
+  }
+}
+export const commentsQueryRepository = new CommentsQueryRepository();

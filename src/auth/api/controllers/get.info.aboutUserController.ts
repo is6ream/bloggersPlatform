@@ -1,5 +1,5 @@
 import { HttpStatus } from "../../../core/http-statuses";
-import { usersQueryRepository } from "../../../users/repositories/user.query.repository";
+import { usersQueryRepository } from "../../../users/infrastructure/user.query.repository";
 import { Request, Response } from "express";
 import { CurrentUser } from "../../../users/types/user-types";
 

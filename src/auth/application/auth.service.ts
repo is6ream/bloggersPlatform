@@ -1,5 +1,5 @@
 import { jwtService } from "../adapters/jwt.service";
-import { usersRepository } from "../../users/repositories/users.repository";
+import { usersRepository } from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
@@ -20,7 +20,7 @@ import { UserOutput } from "../../users/types/user.output";
 import { UserDB } from "../../users/input/create-user-dto";
 import { AuthError } from "../types/authErrorType";
 
-export const authService = {
+class AuthService {
   async registerUser(
     login: string,
     password: string,
@@ -49,7 +49,7 @@ export const authService = {
     } catch (err: unknown) {
       console.error(err);
     }
-  },
+  }
   async confirmEmail(code: string): Promise<RegistrationResult<null>> {
     const user: UserDB | null =
       await usersRepository.findUserByConfirmationCode(code);
@@ -74,7 +74,7 @@ export const authService = {
 
     await usersRepository.update(user.id!);
     return handleSuccessResult();
-  },
+  }
   async resendingEmail(
     email: string,
   ): Promise<RegistrationResult<null> | undefined> {
@@ -99,7 +99,7 @@ export const authService = {
       console.error(err);
       return;
     }
-  },
+  }
   async loginUser(
     sessionDto: SessionDto,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
@@ -125,6 +125,7 @@ export const authService = {
       }
     }
     const accessToken = await jwtService.createAccessToken(result.data!.id!);
+    console.log("accessToken in BLL    ", accessToken);
     const deviceId = randomUUID(); //формируем deviceId
     const refreshToken = await jwtService.createRefreshToken(
       result.data!.id!, //используем id user и кладем в payload refreshToken
@@ -133,7 +134,7 @@ export const authService = {
 
     const payloadOfRefreshToken = await jwtService.verifyToken(refreshToken);
     const sessionData: SessionDataType = {
-      userId: result.data!.id!, //c рейт лимит создать отдельную коллекцию и реализовать через middleware
+      userId: result.data!.id!,
       deviceId: deviceId,
       iat: new Date(payloadOfRefreshToken!.iat * 1000).toISOString(), //приводим к читаемой дате,
       deviceName: sessionDto.deviceName,
@@ -141,11 +142,11 @@ export const authService = {
     };
     await sessionsRepository.createSession(sessionData); //передаем в DAL данные о сессии и сохраняем их в бд
     return handleSuccessResult({ accessToken, refreshToken }); //
-  },
+  }
   async logout(deviceId: string): Promise<Result<null>> {
     await sessionsRepository.deleteSessionByDeviceId(deviceId);
     return handleSuccessResult();
-  },
+  }
   async refreshSessions(
     userId: string | undefined,
     deviceId: string | undefined,
@@ -162,7 +163,7 @@ export const authService = {
       newRefreshTokenPayload!.deviceId,
     );
     return handleSuccessResult({ accessToken, refreshToken });
-  },
+  }
   async checkUserCredentials(
     loginOrEmail: string,
     password: string,
@@ -179,5 +180,6 @@ export const authService = {
       return handleBadRequestResult("password", "wrong password");
     }
     return handleSuccessResult(user);
-  },
-};
+  }
+}
+export const authService = new AuthService();

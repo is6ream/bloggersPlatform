@@ -3,7 +3,7 @@ import { IdType } from "../../core/types/authorization/id";
 import { RequestWithParamsAndBodyAndUserId } from "../../core/types/common/requests";
 import { Response } from "express";
 import { commentsService } from "../application/comments.service";
-import { commentsQueryRepository } from "../repositories/commentsQueryRepository";
+import { commentsQueryRepository } from "../infrastructure/commentsQueryRepository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { PostId } from "../types/commentsTypes";
 

@@ -5,12 +5,12 @@ import { RefreshTokenPayload } from "../types/auth.types";
 export const jwtService = {
   async createAccessToken(userId: string): Promise<string> {
     return jwt.sign({ userId }, appConfig.JWT_SECRET, {
-      expiresIn: "10 s",
+      expiresIn: "1 m",
     });
   },
   async createRefreshToken(userId: string, deviceId?: string): Promise<string> {
     return jwt.sign({ userId, deviceId }, appConfig.JWT_SECRET, {
-      expiresIn: "20 s",
+      expiresIn: "2 m",
     });
   },
 
@@ -31,7 +31,6 @@ export const jwtService = {
       ) as unknown as RefreshTokenPayload;
     } catch (error) {
       console.log(error);
-      console.error("Token verify some error");
       return null;
     }
   },

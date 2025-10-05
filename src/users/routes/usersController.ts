@@ -5,7 +5,7 @@ import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
 import { UserQueryInput } from "../input/user-query.input";
 import { setDefaultPaginationIfNotExist } from "../../core/helpers/set-default-sort-and-pagination";
-import { usersQueryRepository } from "../repositories/user.query.repository";
+import { usersQueryRepository } from "../infrastructure/user.query.repository";
 import { mapToUserListPaginatedOutput } from "./mappers/map-to-user-list-paginated-output.util";
 
 export class UsersController {
