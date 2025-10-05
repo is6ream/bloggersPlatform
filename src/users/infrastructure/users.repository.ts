@@ -5,7 +5,7 @@ import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 
-class UsersRepository {
+export class UsersRepository {
   async create(newUser: User): Promise<UserViewModel> {
     const insertResult = await userCollection.insertOne(newUser);
     const insertId = insertResult.insertedId;

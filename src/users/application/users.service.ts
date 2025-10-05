@@ -1,6 +1,5 @@
-import bcrypt from "bcrypt";
 import { UserInputModel, UserViewModel } from "../types/user-types";
-import { usersRepository } from "../infrastructure/users.repository";
+import { UsersRepository } from "../infrastructure/users.repository";
 import { Result } from "../../core/result/result.type";
 import { bcryptService } from "../../auth/adapters/bcrypt.service";
 import {
@@ -11,13 +10,16 @@ import {
 import { User } from "../constructors/user.entity";
 
 class UsersService {
+  usersRepository: UsersRepository;
+  constructor() {
+    this.usersRepository = new UsersRepository();
+  }
   async create(dto: UserInputModel): Promise<Result<string>> {
     //используем этот метод при создании пользователя через createUser
-    const isEmailExist = await usersRepository.isUserExistByEmailOrLogin(
+    const isEmailExist = await this.usersRepository.isUserExistByEmailOrLogin(
       //проверяем, существует ли такой пользователь в бд
       dto.email,
     );
-    console.log(isEmailExist, "check in BLL"); //здесь приходит null
     if (isEmailExist) {
       return handleBadRequestResult("Email already exists", "email");
     }
@@ -35,27 +37,21 @@ class UsersService {
       },
     };
 
-    const newUser = await usersRepository.create(user);
+    const newUser = await this.usersRepository.create(user);
     const newUserId = newUser.id;
     console.log(newUser);
     return handleSuccessResult(newUserId);
   }
-
-  async _generateHash(password: string, salt: string) {
-    return await bcrypt.hash(password, salt);
-  }
-
   async delete(id: string): Promise<Result> {
-    const result = await usersRepository.delete(id);
+    const result = await this.usersRepository.delete(id);
     if (!result) {
       return handleNotFoundResult("user not found", "userId");
     } else {
       return handleSuccessResult();
     }
   }
-
   async findUser(id: string): Promise<Result<UserViewModel>> {
-    const user: UserViewModel = await usersRepository.find(id);
+    const user: UserViewModel = await this.usersRepository.find(id);
 
     return handleSuccessResult(user);
   }
