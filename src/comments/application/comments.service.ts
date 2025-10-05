@@ -1,5 +1,5 @@
 import { Result } from "../../core/result/result.type";
-import { postRepository } from "../../posts/repositories/postRepository";
+import { postRepository } from "../../posts/infrastructure/postRepository";
 import { usersRepository } from "../../users/infrastructure/users.repository";
 import { commentsRepository } from "../infrastructure/comment.repository";
 import {

@@ -1,7 +1,7 @@
 import { Result } from "../../core/result/result.type";
 import { PostByIdInputDto } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
-import { postRepository } from "../repositories/postRepository";
+import { postRepository } from "../infrastructure/postRepository";
 import { blogsRepository } from "../../blogs/infrastructure/blogs.repository";
 import { blogQueryRepository } from "../../blogs/infrastructure/blogs.query.repository";
 import {
@@ -10,7 +10,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-export const postsService = {
+class PostService {
   async create(dto: PostInputDto): Promise<Result<string>> {
     const foundBlog = await blogsRepository.findById(dto.blogId);
     if (!foundBlog) {
@@ -26,7 +26,7 @@ export const postsService = {
     });
 
     return handleSuccessResult();
-  },
+  }
 
   async createPostByBlogId(
     blogId: string,
@@ -45,7 +45,7 @@ export const postsService = {
       createdAt: new Date(),
     });
     return handleSuccessResult();
-  },
+  }
 
   async update(id: string, dto: PostInputDto): Promise<Result> {
     const result = await postRepository.update(id, dto);
@@ -53,7 +53,7 @@ export const postsService = {
       return handleNotFoundResult("Post not found", "postId");
     }
     return handleSuccessResult();
-  },
+  }
 
   async delete(id: string): Promise<Result> {
     const result = await postRepository.delete(id);
@@ -61,5 +61,7 @@ export const postsService = {
       return handleNotFoundResult("Post not found", "postId");
     }
     return handleSuccessResult();
-  },
-};
+  }
+}
+
+export const postsService = new PostService();

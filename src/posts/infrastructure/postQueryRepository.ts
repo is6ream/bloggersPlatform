@@ -9,7 +9,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-export const postQueryRepository = {
+class PostQueryRepository {
   async findAll(
     queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostDB>[]; totalCount: number }> {
@@ -32,7 +32,7 @@ export const postQueryRepository = {
     const totalCount = await postCollection.countDocuments(filter);
 
     return { items, totalCount }; //репо возвращает items и totalCount
-  },
+  }
 
   async findPostsByBlogId(
     queryDto: PostQueryInput,
@@ -59,7 +59,7 @@ export const postQueryRepository = {
     const totalCount = await postCollection.countDocuments(filter);
 
     return { items, totalCount };
-  },
+  }
 
   async findById(id: string): Promise<Result<PostViewModel | null>> {
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
@@ -77,5 +77,6 @@ export const postQueryRepository = {
       createdAt: post.createdAt,
     };
     return handleSuccessResult(data);
-  },
-};
+  }
+}
+export const postQueryRepository = new PostQueryRepository();

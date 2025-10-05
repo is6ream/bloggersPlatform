@@ -3,25 +3,23 @@ import { PostInputDto } from "../types/posts-types";
 import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
-import { PostSortField } from "../input/post-sort-field";
 
-export const postRepository = {
+class PostRepository {
   async create(newPost: PostDB): Promise<string> {
     const insertResult = await postCollection.insertOne(newPost);
     const insertedId = insertResult.insertedId;
     return insertedId.toString();
-  },
+  }
 
   async createPostByBlogId(newPost: PostDB): Promise<string> {
     const insertResult = await postCollection.insertOne(newPost);
     const insertedId = insertResult.insertedId;
     return insertedId.toString();
-  },
+  }
 
   async findPost(id: string): Promise<WithId<PostDB> | null> {
-    const post = await postCollection.findOne({ _id: new ObjectId(id) });
-    return post;
-  },
+    return await postCollection.findOne({ _id: new ObjectId(id) });
+  }
 
   async update(id: string, dto: PostInputDto): Promise<boolean> {
     const updateResult = await postCollection.updateOne(
@@ -38,12 +36,13 @@ export const postRepository = {
       },
     );
     return updateResult.modifiedCount === 1;
-  },
+  }
 
   async delete(id: string): Promise<boolean> {
     const deleteResult = await postCollection.deleteOne({
       _id: new ObjectId(id),
     });
     return deleteResult.deletedCount === 1;
-  },
-};
+  }
+}
+export const postRepository = new PostRepository();

@@ -1,32 +1,35 @@
 import { postValidators } from "../../core/middlewares/postValidation/post-input-dto.validation";
 import { Router } from "express";
-import { getAllPostsHandler } from "../handlers/getAllpostsHandler";
-import { createPostHandler } from "../handlers/createPostHandler";
-import { findPostHandler } from "../handlers/findPostHandler";
-import { updatePostHandler } from "../handlers/updatePostHandler";
-import { deletePostHandler } from "../handlers/deletePostHandler";
 import { superAdminGuardMiddleware } from "../../core/middlewares/validation/super-admin.guard-middleware";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
 import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
 import { paginationAndSortingValidation } from "../../core/middlewares/query-pagination-sorting/query-pagination-sorting.validation-middleware";
 import { PostSortField } from "../input/post-sort-field";
 import { accessTokenGuard } from "../../core/guards/access.token.guard";
-import { createCommentHandler } from "../../comments/handlers/createCommentHandler";
 import { CommentsSortField } from "../../comments/types/input/comment-sort-field";
-import { getCommentByPostId } from "../../comments/handlers/getCommentByPostId";
 import { commentValidator } from "../../core/middlewares/commentValidation/comment-input-dto.validation";
 export const postRouter = Router();
+import { postController } from "../api/postsController";
 
 postRouter
-  .get("/", paginationAndSortingValidation(PostSortField), getAllPostsHandler)
+  .get(
+    "/",
+    paginationAndSortingValidation(PostSortField),
+    postController.getAllPosts,
+  )
   .post(
     "/",
     superAdminGuardMiddleware,
     postValidators,
     inputValidationResultMiddleware,
-    createPostHandler,
+    postController.createPost,
   )
-  .get("/:id", idValidation, inputValidationResultMiddleware, findPostHandler)
+  .get(
+    "/:id",
+    idValidation,
+    inputValidationResultMiddleware,
+    postController.findPost,
+  )
 
   .put(
     "/:id",
@@ -34,26 +37,26 @@ postRouter
     idValidation,
     postValidators,
     inputValidationResultMiddleware,
-    updatePostHandler,
+    postController.updatePost,
   )
   .delete(
     "/:id",
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deletePostHandler,
+    postController.deletePost,
   )
   .post(
     "/:id/comments",
     accessTokenGuard,
     commentValidator,
     inputValidationResultMiddleware,
-    createCommentHandler,
+    postController.createComment,
   )
 
   .get(
     "/:id/comments",
     paginationAndSortingValidation(CommentsSortField),
     idValidation,
-    getCommentByPostId,
+    postController.getCommentByPostId,
   );

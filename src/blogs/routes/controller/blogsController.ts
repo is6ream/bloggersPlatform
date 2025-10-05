@@ -5,7 +5,7 @@ import { HttpStatus } from "../../../core/http-statuses";
 import { postsService } from "../../../posts/application/post.service";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
-import { postQueryRepository } from "../../../posts/repositories/postQueryRepository";
+import { postQueryRepository } from "../../../posts/infrastructure/postQueryRepository";
 import { BlogViewModel } from "../../types/blogs-types";
 import { createErrorMessages } from "../../../core/errors/create-error-message";
 import { BlogQueryInput } from "../input/blog-query.input";
