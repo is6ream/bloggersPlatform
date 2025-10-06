@@ -1,15 +1,14 @@
-import { UsersQueryRepository } from "../infrastructure/user.query.repository";
+import {
+  usersQueryRepository,
+  UsersQueryRepository,
+} from "../infrastructure/user.query.repository";
 import { UserQueryInput } from "../input/user-query.input";
 import { setDefaultPaginationIfNotExist } from "../../core/helpers/set-default-sort-and-pagination";
 import { mapToUserListPaginatedOutput } from "./mappers/map-to-user-list-paginated-output.util";
 import { HttpStatus } from "../../core/http-statuses";
 import { Response, Request } from "express";
 export class UsersQueryController {
-  private usersQueryRepository: UsersQueryRepository;
-  constructor() {
-    this.usersQueryRepository = new UsersQueryRepository();
-  }
-
+  constructor(private usersQueryRepository: UsersQueryRepository) {}
   async getAllUsers(req: Request<{}, {}, {}, UserQueryInput>, res: Response) {
     try {
       const queryInput = setDefaultPaginationIfNotExist(req.query);
@@ -31,4 +30,6 @@ export class UsersQueryController {
   }
 }
 
-export const usersQueryController = new UsersQueryController();
+export const usersQueryController = new UsersQueryController(
+  usersQueryRepository,
+);

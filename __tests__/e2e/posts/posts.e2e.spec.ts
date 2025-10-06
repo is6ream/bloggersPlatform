@@ -4,14 +4,13 @@ import { setupApp } from "../../../src/setup-app";
 import { POSTS_PATH } from "../../../src/core/paths";
 import request from "supertest";
 import { HttpStatus } from "../../../src/core/http-statuses";
-import { createPostForBlog } from "../utils/blogs/createPostForBlog";
 import { returnPostByBlogId } from "../utils/posts/createPostByBlogId";
 import { PostInputDto } from "../../../src/posts/types/posts-types";
 import { getTestPostData } from "../utils/posts/getPostDto";
 import { BlogViewModel } from "../../../src/blogs/types/blogs-types";
 import { createBlog } from "../utils/blogs/create-blog";
 import { generateBasicAuthToken } from "../utils/secure/genBasicAuthToken";
-import { createUserAndAuth } from "../users/createAndAuthUser";
+import { createUserAndAuth } from "../users/users.e2e.spec";
 import { createComment } from "../comments/createComment";
 
 describe("Testing post branch", () => {

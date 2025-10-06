@@ -8,7 +8,7 @@ import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 
-class CommentsQueryRepository {
+export class CommentsQueryRepository {
   async findAll(
     queryDto: CommentsQueryInput,
   ): Promise<{ items: WithId<CommentQueryOtput>[]; totalCount: number }> {

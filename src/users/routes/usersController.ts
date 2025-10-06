@@ -1,15 +1,11 @@
 import { Request, Response } from "express";
-import { UsersService } from "../application/users.service";
+import { usersService, UsersService } from "../application/users.service";
 import { HttpStatus } from "../../core/http-statuses";
 import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
 
 export class UsersController {
-  private usersService: UsersService;
-  constructor() {
-    this.usersService = new UsersService();
-  }
-
+  constructor(private usersService: UsersService) {}
   async createUser(req: Request, res: Response) {
     try {
       const result = await this.usersService.create(req.body);
@@ -43,4 +39,4 @@ export class UsersController {
   }
 }
 
-export const usersController = new UsersController();
+export const usersController = new UsersController(usersService);

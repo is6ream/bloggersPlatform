@@ -3,7 +3,7 @@ import { db } from "../../../../src/db/mongo.db";
 import { setupApp } from "../../../../src/setup-app";
 import { getFourSessions } from "../helpers/getFourSessions";
 import { registerUser } from "../../auth/helpers/registerUser";
-import { TestUserCredentials } from "../../users/createAndAuthUser";
+import { TestUserCredentials } from "../../users/users.e2e.spec";
 import { AuthReturnType } from "../types/authReturnTypes";
 import request from "supertest";
 import { AUTH_PATH, SECURITY_DEVICES_PATH } from "../../../../src/core/paths";

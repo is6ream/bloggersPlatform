@@ -10,25 +10,27 @@ import { CommentsSortField } from "../../comments/types/input/comment-sort-field
 import { commentValidator } from "../../core/middlewares/commentValidation/comment-input-dto.validation";
 export const postRouter = Router();
 import { postController } from "../api/postsController";
+import { postsQueryController } from "../api/postsQueryController";
 
 postRouter
   .get(
     "/",
     paginationAndSortingValidation(PostSortField),
-    postController.getAllPosts,
+    postsQueryController.getAllPosts.bind(postsQueryController),
   )
   .post(
     "/",
     superAdminGuardMiddleware,
     postValidators,
     inputValidationResultMiddleware,
-    postController.createPost,
+    postController.createPost.bind(postController),
   )
   .get(
+    //перенести в queryController
     "/:id",
     idValidation,
     inputValidationResultMiddleware,
-    postController.findPost,
+    postsQueryController.findPost.bind(postsQueryController),
   )
 
   .put(
@@ -37,26 +39,26 @@ postRouter
     idValidation,
     postValidators,
     inputValidationResultMiddleware,
-    postController.updatePost,
+    postController.updatePost.bind(postController),
   )
   .delete(
     "/:id",
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    postController.deletePost,
+    postController.deletePost.bind(postController),
   )
   .post(
     "/:id/comments",
     accessTokenGuard,
     commentValidator,
     inputValidationResultMiddleware,
-    postController.createComment,
+    postController.createComment.bind(postController),
   )
 
   .get(
-    "/:id/comments",
+    "/:id/comments", //перенести в query
     paginationAndSortingValidation(CommentsSortField),
     idValidation,
-    postController.getCommentByPostId,
+    postsQueryController.getCommentByPostId.bind(postsQueryController),
   );

@@ -1,15 +1,14 @@
-import { PostDB, PostViewModel } from "./../types/posts-types";
-import { postCollection } from "./../../db/mongo.db";
+import { PostDB, PostViewModel } from "../types/posts-types";
+import { postCollection } from "../../db/mongo.db";
 import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
 import { Result } from "../../core/result/result.type";
-import { ResultStatus } from "../../core/result/resultCode";
 import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-class PostQueryRepository {
+export class PostQueryRepository {
   async findAll(
     queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostDB>[]; totalCount: number }> {

@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { TestUserCredentials } from "../../users/createAndAuthUser";
+import { TestUserCredentials } from "../../users/users.e2e.spec";
 import { registerUser } from "../../auth/helpers/registerUser";
 
 export async function registerUserMultiplyTimes(

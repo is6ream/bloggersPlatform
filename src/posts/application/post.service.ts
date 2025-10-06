@@ -20,7 +20,6 @@ class PostService {
     private postRepository: PostRepository,
     private blogsRepository: BlogsRepository,
   ) {}
-  //мы не можем дополнительно создать конструктор для блогов
   async create(dto: PostInputDto): Promise<Result<string>> {
     const foundBlog = await this.blogsRepository.findById(dto.blogId);
     if (!foundBlog) {

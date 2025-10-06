@@ -1,7 +1,7 @@
 import request from "supertest";
 import { Express } from "express";
 import { returnPostByBlogId } from "../utils/posts/createPostByBlogId";
-import { createUserAndAuth } from "../users/createAndAuthUser";
+import { createUserAndAuth } from "../users/users.e2e.spec";
 import { POSTS_PATH } from "../../../src/core/paths";
 import { HttpStatus } from "../../../src/core/http-statuses";
 
