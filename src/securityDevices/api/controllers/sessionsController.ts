@@ -3,7 +3,6 @@ import { HttpStatus } from "../../../core/http-statuses";
 import { SessionService } from "../../domain/sessionService";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
-import { sessionQueryRepository } from "../../infrastructure/sessionQueryRepository";
 
 class SessionsController {
   private sessionsService: SessionService;
@@ -49,15 +48,6 @@ class SessionsController {
       console.error(err);
       return res.sendStatus(HttpStatus.InternalServerError);
     }
-  }
-
-  async getAllDevices(req: Request, res: Response) {
-    const userId = req.userId;
-    if (!userId) {
-      return res.sendStatus(HttpStatus.Unauthorized);
-    }
-    const sessions = await sessionQueryRepository.getAllSessions(userId); //неправильная логика
-    res.status(HttpStatus.Ok).send(sessions);
   }
 }
 

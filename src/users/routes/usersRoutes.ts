@@ -13,7 +13,7 @@ usersRouter
   .get(
     "/",
     paginationAndSortingValidation(UserSortField),
-    usersQueryController.getAllUsers.bind(usersController),
+    usersQueryController.getAllUsers.bind(usersQueryController),
   )
   .post(
     "/",
