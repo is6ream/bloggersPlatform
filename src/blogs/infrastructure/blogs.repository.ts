@@ -2,7 +2,7 @@ import { Blog, BlogInputDto } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 
-class BlogsRepository {
+export class BlogsRepository {
   async create(newBlog: BlogInputDto): Promise<string> {
     const insertResult = await blogCollection.insertOne(newBlog);
     return insertResult.insertedId.toString();

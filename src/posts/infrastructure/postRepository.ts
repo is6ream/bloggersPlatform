@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
 
-class PostRepository {
+export class PostRepository {
   async create(newPost: PostDB): Promise<string> {
     const insertResult = await postCollection.insertOne(newPost);
     const insertedId = insertResult.insertedId;
