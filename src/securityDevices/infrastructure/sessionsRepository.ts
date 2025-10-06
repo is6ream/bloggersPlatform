@@ -2,8 +2,8 @@ import { SessionDataType } from "../../auth/types/input/login-input.models";
 import { sessionCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
 import { SessionDB } from "../types/sessionDataTypes";
-
-class SessionsRepository {
+//нужно внедрить зависимость сервиса от репозитория
+export class SessionsRepository {
   async createSession(sessionData: SessionDataType): Promise<void> {
     await sessionCollection.insertOne(sessionData);
     return;

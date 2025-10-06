@@ -9,7 +9,7 @@ import {
 } from "../../core/result/handleResult";
 import { User } from "../constructors/user.entity";
 
-class UsersService {
+export class UsersService {
   usersRepository: UsersRepository;
   constructor() {
     this.usersRepository = new UsersRepository();

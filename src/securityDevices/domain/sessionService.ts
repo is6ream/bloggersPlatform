@@ -1,27 +1,33 @@
-import { sessionsRepository } from "../infrastructure/sessionsRepository";
+import { SessionsRepository } from "../infrastructure/sessionsRepository";
 import {
   handleForbiddenResult,
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { Result } from "../../core/result/result.type";
-
-class SessionService {
+//остановился на том, что начал внедрять зависимость BLL от DAL
+export class SessionService {
+  sessionsRepository: SessionsRepository;
+  constructor() {
+    this.sessionsRepository = new SessionsRepository();
+  }
   async deleteAllDeviceSessions(
     userId: string,
     deviceId: string,
   ): Promise<void> {
-    await sessionsRepository.deleteAllSessions(userId, deviceId);
+    await this.sessionsRepository.deleteAllSessions(userId, deviceId);
     return;
   }
   async deleteByDeviceId(
     deviceIdFromParams: string,
-    sessionDeviceId: string,
+    sessionDeviceId: string, //для чего?
     userId: string | undefined,
   ): Promise<Result<null>> {
     //ищем сессию по deviceId из payload
     const session =
-      await sessionsRepository.isSessionExistByDeviceId(deviceIdFromParams);
+      await this.sessionsRepository.isSessionExistByDeviceId(
+        deviceIdFromParams,
+      );
     if (!session) {
       return handleNotFoundResult("session not found", "deviceId from params");
     }
@@ -30,7 +36,7 @@ class SessionService {
       return handleForbiddenResult("access denied", "userId not found");
     }
     const result =
-      await sessionsRepository.deleteSessionByDeviceId(deviceIdFromParams);
+      await this.sessionsRepository.deleteSessionByDeviceId(deviceIdFromParams);
     if (!result) {
       //на случай race condtion
       return handleNotFoundResult("session not found", "deviceId");

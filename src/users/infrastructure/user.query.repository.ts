@@ -3,7 +3,7 @@ import { UserQueryInput } from "../input/user-query.input";
 import { CurrentUser, UserViewModel } from "../types/user-types";
 import { ObjectId } from "mongodb";
 
-class UsersQueryRepository {
+export class UsersQueryRepository {
   async findAll(
     queryDto: UserQueryInput,
   ): Promise<{ items: UserViewModel[]; totalCount: number }> {
