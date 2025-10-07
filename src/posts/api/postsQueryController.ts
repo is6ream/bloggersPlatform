@@ -1,7 +1,7 @@
 import { commentsQueryRepository } from "../../comments/infrastructure/commentsQueryRepository";
 import {
-    postsQueryRepository,
-    PostsQueryRepository,
+  postsQueryRepository,
+  PostsQueryRepository,
 } from "../infrastructure/postQueryRepository";
 import { Request, Response } from "express";
 import { ResultStatus } from "../../core/result/resultCode";
