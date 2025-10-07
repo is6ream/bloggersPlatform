@@ -16,20 +16,20 @@ blogsRouter
   .get(
     "/",
     paginationAndSortingValidation(BlogSortField),
-    blogController.getAllBlogs,
+    blogController.getAllBlogs.bind(blogController),
   )
   .post(
     "/",
     superAdminGuardMiddleware,
     blogValidators,
     inputValidationResultMiddleware,
-    blogController.createBlog,
+    blogController.createBlog.bind(blogController),
   )
   .get(
     "/:id/posts",
     paginationAndSortingValidation(PostSortField),
     idValidation,
-    blogController.getPostsByBlogId,
+    blogController.getPostsByBlogId.bind(blogController),
   )
 
   .post(
@@ -38,14 +38,14 @@ blogsRouter
     idValidation,
     createPostByBlogIdValidators,
     inputValidationResultMiddleware,
-    blogController.createPostByBlogId,
+    blogController.createPostByBlogId.bind(blogController),
   )
 
   .get(
     "/:id",
     idValidation,
     inputValidationResultMiddleware,
-    blogController.findBlog,
+    blogController.findBlog.bind(blogController),
   )
 
   .put(
@@ -54,7 +54,7 @@ blogsRouter
     idValidation,
     blogValidators,
     inputValidationResultMiddleware,
-    blogController.updateBlog,
+    blogController.updateBlog.bind(blogController),
   )
 
   .delete(
@@ -62,5 +62,5 @@ blogsRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    blogController.deleteBlog,
+    blogController.deleteBlog.bind(blogController),
   );
