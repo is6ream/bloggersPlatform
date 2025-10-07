@@ -21,7 +21,6 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
-//начал внедрять зависимости в комментс BLL
 export class CommentsService {
   constructor(
     private commentsRepository: CommentRepository,
