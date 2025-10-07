@@ -8,7 +8,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-export class PostQueryRepository {
+export class PostsQueryRepository {
   async findAll(
     queryDto: PostQueryInput,
   ): Promise<{ items: WithId<PostDB>[]; totalCount: number }> {
@@ -78,4 +78,4 @@ export class PostQueryRepository {
     return handleSuccessResult(data);
   }
 }
-export const postQueryRepository = new PostQueryRepository();
+export const postsQueryRepository = new PostsQueryRepository();

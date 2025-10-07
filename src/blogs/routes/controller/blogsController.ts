@@ -1,11 +1,20 @@
 import { Request, Response } from "express";
-import { blogsService } from "../../domain/blogs.service";
-import { blogQueryRepository } from "../../infrastructure/blogs.query.repository";
+import { BlogsService, blogsService } from "../../application/blogs.service";
+import {
+  blogsQueryRepository,
+  BlogsQueryRepository,
+} from "../../infrastructure/blogs.query.repository";
 import { HttpStatus } from "../../../core/http-statuses";
-import { postsService } from "../../../posts/application/post.service";
+import {
+    PostsService,
+    postsService,
+} from "../../../posts/application/post.service";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
-import { postQueryRepository } from "../../../posts/infrastructure/postQueryRepository";
+import {
+  postsQueryRepository,
+  PostsQueryRepository,
+} from "../../../posts/infrastructure/postQueryRepository";
 import { BlogViewModel } from "../../types/blogs-types";
 import { createErrorMessages } from "../../../core/errors/create-error-message";
 import { BlogQueryInput } from "../input/blog-query.input";
@@ -13,18 +22,23 @@ import { setDefaultPaginationIfNotExist } from "../../../core/helpers/set-defaul
 import { mapToBlogListPaginatedOutput } from "../mappers/map-to-blog-list-paginated-output.util";
 import { PostQueryInput } from "../../../posts/input/post-query.input";
 import { mapToPostListPaginatedOutput } from "../../../posts/mappers/map-to-post-list-paginated-output.util";
-import { blogsRepository } from "../../infrastructure/blogs.repository";
 
 class BlogsController {
+  constructor(
+    private blogsService: BlogsService,
+    private postsService: PostsService,
+    private blogsQueryRepository: BlogsQueryRepository,
+    private postsQueryRepository: PostsQueryRepository,
+  ) {}
   async createBlog(req: Request, res: Response) {
     try {
-      const createdBlogId = await blogsService.create({
+      const createdBlogId = await this.blogsService.create({
         name: req.body.name,
         description: req.body.description,
         websiteUrl: req.body.websiteUrl,
       });
 
-      const blog = await blogQueryRepository.findByBlogId(createdBlogId);
+      const blog = await this.blogsQueryRepository.findByBlogId(createdBlogId);
       res.status(HttpStatus.Created).send(blog);
     } catch (error: unknown) {
       console.log(error);
@@ -35,7 +49,7 @@ class BlogsController {
   async createPostByBlogId(req: Request, res: Response): Promise<void> {
     try {
       const { id: id } = req.params;
-      const result = await postsService.createPostByBlogId(id, req.body);
+      const result = await this.postsService.createPostByBlogId(id, req.body);
       if (result.status !== ResultStatus.Success) {
         res
           .status(resultCodeToHttpException(result.status))
@@ -43,7 +57,7 @@ class BlogsController {
         return;
       }
       const resultId = result.data;
-      const post = await postQueryRepository.findById(resultId!);
+      const post = await this.postsQueryRepository.findById(resultId!);
       res.status(HttpStatus.Created).send(post.data);
     } catch (error: unknown) {
       console.log(error);
@@ -55,7 +69,7 @@ class BlogsController {
     try {
       const id = req.params.id;
 
-      const result = await blogsService.delete(id);
+      const result = await this.blogsService.delete(id);
       if (result.status !== ResultStatus.Success) {
         res.sendStatus(HttpStatus.NotFound);
       }
@@ -70,7 +84,8 @@ class BlogsController {
   async findBlog(req: Request, res: Response) {
     try {
       const id: string = req.params.id;
-      const blog: BlogViewModel | null = await blogQueryRepository.findById(id);
+      const blog: BlogViewModel | null =
+        await this.blogsQueryRepository.findById(id);
 
       if (blog === null) {
         res
@@ -94,7 +109,7 @@ class BlogsController {
       const queryInput = setDefaultPaginationIfNotExist(req.query);
 
       const { items, totalCount } =
-        await blogQueryRepository.findAll(queryInput);
+        await this.blogsQueryRepository.findAll(queryInput);
 
       const blogsListOutput = mapToBlogListPaginatedOutput(items, {
         pageNumber: Number(queryInput.pageNumber),
@@ -114,15 +129,13 @@ class BlogsController {
         req.query,
       );
       const { id: blogId } = req.params;
-      const foundBlog = await blogQueryRepository.findById(blogId);
+      const foundBlog = await this.blogsQueryRepository.findById(blogId);
       if (!foundBlog) {
         res.sendStatus(HttpStatus.NotFound);
         return;
       }
-      const { items, totalCount } = await postQueryRepository.findPostsByBlogId(
-        queryInput,
-        blogId,
-      );
+      const { items, totalCount } =
+        await this.postsQueryRepository.findPostsByBlogId(queryInput, blogId);
 
       const postsListOutput = mapToPostListPaginatedOutput(items, {
         pageNumber: Number(queryInput.pageNumber),
@@ -139,7 +152,7 @@ class BlogsController {
   async updateBlog(req: Request, res: Response) {
     try {
       const id = req.params.id;
-      const updateResult = await blogsRepository.update(id, req.body);
+      const updateResult = await this.blogsService.update(id, req.body);
       if (updateResult === null) {
         res
           .status(HttpStatus.NotFound)
@@ -158,4 +171,9 @@ class BlogsController {
   }
 }
 
-export const blogController = new BlogsController();
+export const blogController = new BlogsController(
+  blogsService,
+  postsService,
+  blogsQueryRepository,
+  postsQueryRepository,
+);

@@ -15,7 +15,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-class PostService {
+export class PostsService {
   constructor(
     private postRepository: PostRepository,
     private blogsRepository: BlogsRepository,
@@ -73,4 +73,4 @@ class PostService {
   }
 }
 
-export const postsService = new PostService(postRepository, blogsRepository); //так еще не писал, проверить - будет ли работать
+export const postsService = new PostsService(postRepository, blogsRepository); //так еще не писал, проверить - будет ли работать

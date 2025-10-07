@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-import { postQueryRepository } from "../infrastructure/postQueryRepository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
 import { postsService } from "../application/post.service";

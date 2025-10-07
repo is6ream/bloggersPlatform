@@ -4,7 +4,7 @@ import { WithId } from "mongodb";
 import { Blog, BlogViewModel } from "../types/blogs-types";
 import { ObjectId } from "mongodb";
 
-class BlogQueryRepository {
+export class BlogsQueryRepository {
   async findAll(
     queryDto: BlogQueryInput,
   ): Promise<{ items: WithId<Blog>[]; totalCount: number }> {
@@ -58,4 +58,4 @@ class BlogQueryRepository {
   }
 }
 
-export const blogQueryRepository = new BlogQueryRepository();
+export const blogsQueryRepository = new BlogsQueryRepository();

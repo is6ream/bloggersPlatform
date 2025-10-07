@@ -1,12 +1,16 @@
 import { Result } from "../../core/result/result.type";
 import { BlogInputModel, BlogInputDto } from "../types/blogs-types";
-import { blogsRepository } from "../infrastructure/blogs.repository";
+import {
+  BlogsRepository,
+  blogsRepository,
+} from "../infrastructure/blogs.repository";
 import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
 
-class BlogsService {
+export class BlogsService {
+  constructor(private blogsRepository: BlogsRepository) {}
   async create(dto: BlogInputModel): Promise<string> {
     const newBlog: BlogInputDto = {
       name: dto.name,
@@ -16,16 +20,16 @@ class BlogsService {
       isMembership: false,
     };
 
-    return blogsRepository.create(newBlog);
+    return this.blogsRepository.create(newBlog);
   }
 
   async update(id: string, dto: BlogInputDto): Promise<void> {
-    await blogsRepository.update(id, dto);
+    await this.blogsRepository.update(id, dto);
     return;
   }
 
   async delete(id: string): Promise<Result> {
-    const result = await blogsRepository.delete(id);
+    const result = await this.blogsRepository.delete(id);
     if (!result) {
       return handleNotFoundResult("Blog not found", "blogId");
     } else {
@@ -33,4 +37,4 @@ class BlogsService {
     }
   }
 }
-export const blogsService = new BlogsService();
+export const blogsService = new BlogsService(blogsRepository);
