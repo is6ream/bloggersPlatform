@@ -1,7 +1,7 @@
 import { commentsQueryRepository } from "../../comments/infrastructure/commentsQueryRepository";
 import {
-  postQueryRepository,
-  PostQueryRepository,
+    postsQueryRepository,
+    PostsQueryRepository,
 } from "../infrastructure/postQueryRepository";
 import { Request, Response } from "express";
 import { ResultStatus } from "../../core/result/resultCode";
@@ -15,7 +15,7 @@ import { mapToCommentListPaginatedOutput } from "../../comments/mappers/mapToCom
 
 class PostsQueryController {
   constructor(
-    private postQueryRepository: PostQueryRepository,
+    private postQueryRepository: PostsQueryRepository,
     private commentsQueryRepository: CommentsQueryRepository,
   ) {}
   async findPost(req: Request, res: Response) {
@@ -88,6 +88,6 @@ class PostsQueryController {
 }
 
 export const postsQueryController = new PostsQueryController(
-  postQueryRepository,
+  postsQueryRepository,
   commentsQueryRepository,
 );

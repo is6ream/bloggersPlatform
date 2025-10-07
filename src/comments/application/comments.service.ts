@@ -22,7 +22,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 //начал внедрять зависимости в комментс BLL
-class CommentsService {
+export class CommentsService {
   constructor(
     private commentsRepository: CommentRepository,
     private postsRepository: PostRepository,

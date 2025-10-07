@@ -6,8 +6,8 @@ import {
 } from "../../infrastructure/blogs.query.repository";
 import { HttpStatus } from "../../../core/http-statuses";
 import {
-    PostsService,
-    postsService,
+  PostsService,
+  postsService,
 } from "../../../posts/application/post.service";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";

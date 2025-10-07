@@ -2,18 +2,35 @@ import { Request, Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
-import { postsService } from "../application/post.service";
+import { PostsService, postsService } from "../application/post.service";
 import { createErrorMessages } from "../../core/middlewares/validation/input-validation-result.middleware";
 import { RequestWithParamsAndBodyAndUserId } from "../../core/types/common/requests";
 import { PostId } from "../../comments/types/commentsTypes";
 import { IdType } from "../../core/types/authorization/id";
-import { commentsService } from "../../comments/application/comments.service";
-import { commentsQueryRepository } from "../../comments/infrastructure/commentsQueryRepository";
+import {
+  CommentsService,
+  commentsService,
+} from "../../comments/application/comments.service";
+import {
+  CommentsQueryRepository,
+  commentsQueryRepository,
+} from "../../comments/infrastructure/commentsQueryRepository";
+import {
+  postsQueryRepository,
+  PostsQueryRepository,
+} from "../infrastructure/postQueryRepository";
 
 class PostsController {
+  constructor(
+    private postsService: PostsService,
+    private postsQueryRepository: PostsQueryRepository,
+    private commentsService: CommentsService,
+    private commentsQueryRepository: CommentsQueryRepository,
+  ) {}
+
   async createPost(req: Request, res: Response) {
     try {
-      const result = await postsService.create({
+      const result = await this.postsService.create({
         title: req.body.title,
         shortDescription: req.body.shortDescription,
         content: req.body.content,
@@ -25,7 +42,7 @@ class PostsController {
           .send(result.extensions);
         return;
       }
-      const newPost = await postQueryRepository.findById(result.data!);
+      const newPost = await this.postsQueryRepository.findById(result.data!);
       res.status(HttpStatus.Created).send(newPost.data!);
       return;
     } catch (error: unknown) {
@@ -38,7 +55,7 @@ class PostsController {
     try {
       const id = req.params.id;
 
-      const result = await postsService.delete(id);
+      const result = await this.postsService.delete(id);
       if (result.status !== ResultStatus.Success) {
         res.sendStatus(HttpStatus.NotFound);
         return;
@@ -54,7 +71,7 @@ class PostsController {
 
   async updatePost(req: Request, res: Response) {
     try {
-      const result = await postsService.update(req.params.id, req.body);
+      const result = await this.postsService.update(req.params.id, req.body);
       if (result.status !== ResultStatus.Success) {
         res
           .status(HttpStatus.NotFound)
@@ -87,11 +104,11 @@ class PostsController {
         userId: userId,
         postId: req.params.id,
       };
-      const result = await commentsService.createComment(content);
+      const result = await this.commentsService.createComment(content);
       if (result.status !== ResultStatus.Success) {
         res.sendStatus(HttpStatus.NotFound);
       }
-      const comment = await commentsQueryRepository.findById(
+      const comment = await this.commentsQueryRepository.findById(
         result.data!.commentId,
       );
       res.status(HttpStatus.Created).send(comment);
@@ -103,4 +120,9 @@ class PostsController {
   }
 }
 
-export const postController = new PostsController();
+export const postController = new PostsController(
+  postsService,
+  postsQueryRepository,
+  commentsService,
+  commentsQueryRepository,
+);
