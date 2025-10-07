@@ -10,16 +10,12 @@ import { generateBasicAuthToken } from "../secure/genBasicAuthToken";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 export async function createPost(
   app: Express,
-  postDto?: PostInputDto,
+  postDto: PostInputDto,
 ): Promise<PostViewModel> {
-  const defaultPostData: PostInputDto = getPostDto();
-
-  const testPostData = { ...defaultPostData, ...postDto };
-
   const createdPostResponse = await request(app)
     .post(POSTS_PATH)
     .set("Authorization", generateBasicAuthToken())
-    .send(testPostData)
+    .send(postDto)
     .expect(HttpStatus.Created);
 
   return createdPostResponse.body;
