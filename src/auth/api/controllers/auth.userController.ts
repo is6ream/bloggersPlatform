@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { authService } from "../../application/auth.service";
+import { AuthService, authService } from "../../application/auth.service";
 import { HttpStatus } from "../../../core/http-statuses";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
@@ -8,11 +8,18 @@ import { AuthCredentials } from "../../types/input/login-input.models";
 import { SessionDto } from "../../../securityDevices/types/sessionDataTypes";
 import { ResendingBodyType } from "../../types/auth.types";
 import { CurrentUser } from "../../../users/types/user-types";
-import { usersQueryRepository } from "../../../users/infrastructure/user.query.repository";
+import {
+  UsersQueryRepository,
+  usersQueryRepository,
+} from "../../../users/infrastructure/user.query.repository";
 import { CreateUserDto } from "../../types/auth.types";
 import { EmailConfirmCode } from "../../types/emailConfirmCode";
 
 class AuthUserController {
+  constructor(
+    private authService: AuthService,
+    private usersQueryRepository: UsersQueryRepository,
+  ) {}
   async loginUser(req: RequestWithBody<AuthCredentials>, res: Response) {
     const sessionDto: SessionDto = {
       deviceName: req.headers["user-agent"] || "unknown",
@@ -21,7 +28,7 @@ class AuthUserController {
       password: req.body.password,
     };
     try {
-      const result = await authService.loginUser(sessionDto);
+      const result = await this.authService.loginUser(sessionDto);
       if (result.status !== ResultStatus.Success) {
         return res
           .status(resultCodeToHttpException(result.status))
@@ -34,7 +41,6 @@ class AuthUserController {
         secure: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      console.log(accessToken, "accessToken in API");
       res.status(HttpStatus.Ok).send({ accessToken: accessToken });
       return;
     } catch (error: unknown) {
@@ -47,7 +53,7 @@ class AuthUserController {
   async emailResending(req: RequestWithBody<ResendingBodyType>, res: Response) {
     const { email } = req.body;
 
-    const result = await authService.resendingEmail(email);
+    const result = await this.authService.resendingEmail(email);
     if (result === undefined) {
       res.sendStatus(HttpStatus.InternalServerError);
     }
@@ -64,7 +70,9 @@ class AuthUserController {
     if (!req.userId) res.sendStatus(HttpStatus.Unauthorized);
     const userId = req.userId;
 
-    const me: CurrentUser | null = await usersQueryRepository.findById(userId!);
+    const me: CurrentUser | null = await this.usersQueryRepository.findById(
+      userId!,
+    );
 
     res.status(HttpStatus.Ok).send(me);
   }
@@ -75,8 +83,7 @@ class AuthUserController {
       if (!deviceId) {
         throw Error(`DeviceId ${deviceId} not found`);
       }
-      console.log(deviceId, "deviceId in logout API");
-      await authService.logout(deviceId);
+      await this.authService.logout(deviceId);
       res.sendStatus(HttpStatus.NoContent);
     } catch (err) {
       console.error(err);
@@ -89,7 +96,7 @@ class AuthUserController {
       //получаем id для обновления
       const userId = req.userId;
       const deviceId = req.deviceId;
-      const tokens = await authService.refreshSessions(userId, deviceId);
+      const tokens = await this.authService.refreshSessions(userId, deviceId);
 
       if (!tokens) {
         res.sendStatus(HttpStatus.Unauthorized);
@@ -114,7 +121,7 @@ class AuthUserController {
     res: Response,
   ) {
     const { code } = req.body;
-    const result = await authService.confirmEmail(code);
+    const result = await this.authService.confirmEmail(code);
 
     if (result.status !== ResultStatus.Success) {
       res.status(HttpStatus.BadRequest).send(result.extensions);
@@ -127,12 +134,11 @@ class AuthUserController {
 
   async registrationUser(req: RequestWithBody<CreateUserDto>, res: Response) {
     const { login, email, password } = req.body;
-    const result = await authService.registerUser(login, password, email);
+    const result = await this.authService.registerUser(login, password, email);
     if (result === undefined) {
       res.sendStatus(HttpStatus.InternalServerError);
     }
     if (result!.status !== ResultStatus.Success) {
-      console.log(result?.extensions, "extensions check in register API");
       res.status(HttpStatus.BadRequest).send(result!.extensions);
       return;
     }
@@ -142,4 +148,7 @@ class AuthUserController {
   }
 }
 
-export const authUserController = new AuthUserController();
+export const authUserController = new AuthUserController(
+  authService,
+  usersQueryRepository,
+);

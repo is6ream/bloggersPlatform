@@ -88,7 +88,7 @@ class PostsController {
       return;
     }
   }
-
+  //пока не понял почему в тестах падает 400 ошибка, найти где мой api ее выдает при создании коммента
   async createComment(
     req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
     res: Response,

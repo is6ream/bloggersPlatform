@@ -39,7 +39,6 @@ export class UsersService {
 
     const newUser = await this.usersRepository.create(user);
     const newUserId = newUser.id;
-    console.log(newUser);
     return handleSuccessResult(newUserId);
   }
   async delete(id: string): Promise<Result> {

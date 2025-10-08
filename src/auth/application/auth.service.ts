@@ -20,7 +20,7 @@ import { UserOutput } from "../../users/types/user.output";
 import { UserDB } from "../../users/input/create-user-dto";
 import { AuthError } from "../types/authErrorType";
 
-class AuthService {
+export class AuthService {
   async registerUser(
     login: string,
     password: string,
@@ -125,7 +125,6 @@ class AuthService {
       }
     }
     const accessToken = await jwtService.createAccessToken(result.data!.id!);
-    console.log("accessToken in BLL    ", accessToken);
     const deviceId = randomUUID(); //формируем deviceId
     const refreshToken = await jwtService.createRefreshToken(
       result.data!.id!, //используем id user и кладем в payload refreshToken
