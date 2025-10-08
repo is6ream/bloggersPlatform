@@ -1,5 +1,8 @@
 import { jwtService } from "../adapters/jwt.service";
-import { usersRepository } from "../../users/infrastructure/users.repository";
+import {
+  UsersRepository,
+  usersRepository,
+} from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
@@ -15,18 +18,29 @@ import {
 } from "../../core/result/handleResult";
 import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
-import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
+import {
+  SessionsRepository,
+  sessionsRepository,
+} from "../../securityDevices/infrastructure/sessionsRepository";
 import { UserOutput } from "../../users/types/user.output";
 import { UserDB } from "../../users/input/create-user-dto";
 import { AuthError } from "../types/authErrorType";
 
 export class AuthService {
+  constructor(
+    private usersRepository: UsersRepository,
+    private sessionsRepository: SessionsRepository,
+  ) {}
+
   async registerUser(
     login: string,
     password: string,
     email: string,
   ): Promise<RegistrationResult<User | null> | undefined> {
-    const user = await usersRepository.doesExistByLoginOrEmail(login, email); //проверяем, существует ли пользователь уже в системе
+    const user = await this.usersRepository.doesExistByLoginOrEmail(
+      login,
+      email,
+    ); //проверяем, существует ли пользователь уже в системе
     if (user?.login === login) {
       //если логин юзера равен логину, который поступил, 404
       return handleBadRequestResult("user already registered", "login");
@@ -36,7 +50,7 @@ export class AuthService {
     const passwordHash = await bcryptService.generateHash(password);
 
     const newUser: User = new User(login, email, passwordHash);
-    await usersRepository.create(newUser);
+    await this.usersRepository.create(newUser);
 
     try {
       await emailAdapter.sendEmail(
@@ -50,9 +64,10 @@ export class AuthService {
       console.error(err);
     }
   }
+
   async confirmEmail(code: string): Promise<RegistrationResult<null>> {
     const user: UserDB | null =
-      await usersRepository.findUserByConfirmationCode(code);
+      await this.usersRepository.findUserByConfirmationCode(code);
     if (!user) {
       return handleBadRequestResult(
         "confirmation code is incorrect",
@@ -72,13 +87,14 @@ export class AuthService {
       return handleBadRequestResult("code has already been applied", "code");
     }
 
-    await usersRepository.update(user.id!);
+    await this.usersRepository.update(user.id!);
     return handleSuccessResult();
   }
+
   async resendingEmail(
     email: string,
   ): Promise<RegistrationResult<null> | undefined> {
-    const user = await usersRepository.isUserExistByEmailOrLogin(email);
+    const user = await this.usersRepository.isUserExistByEmailOrLogin(email);
     if (!user) {
       return handleBadRequestResult("user does not exist", "email");
     }
@@ -100,6 +116,7 @@ export class AuthService {
       return;
     }
   }
+
   async loginUser(
     sessionDto: SessionDto,
   ): Promise<Result<{ accessToken: string; refreshToken: string } | null>> {
@@ -139,13 +156,15 @@ export class AuthService {
       deviceName: sessionDto.deviceName,
       ip: sessionDto.ip,
     };
-    await sessionsRepository.createSession(sessionData); //передаем в DAL данные о сессии и сохраняем их в бд
+    await this.sessionsRepository.createSession(sessionData); //передаем в DAL данные о сессии и сохраняем их в бд
     return handleSuccessResult({ accessToken, refreshToken }); //
   }
+
   async logout(deviceId: string): Promise<Result<null>> {
-    await sessionsRepository.deleteSessionByDeviceId(deviceId);
+    await this.sessionsRepository.deleteSessionByDeviceId(deviceId);
     return handleSuccessResult();
   }
+
   async refreshSessions(
     userId: string | undefined,
     deviceId: string | undefined,
@@ -157,17 +176,19 @@ export class AuthService {
     const refreshToken = await jwtService.createRefreshToken(userId, deviceId);
     const newRefreshTokenPayload = await jwtService.verifyToken(refreshToken);
     const newIat = new Date(newRefreshTokenPayload!.iat * 1000).toISOString(); //приводим дату к человеко читаемому формату
-    await sessionsRepository.updateSessions(
+    await this.sessionsRepository.updateSessions(
       newIat, //обновляем сессию, передаем новый iat
       newRefreshTokenPayload!.deviceId,
     );
     return handleSuccessResult({ accessToken, refreshToken });
   }
+
   async checkUserCredentials(
     loginOrEmail: string,
     password: string,
   ): Promise<Result<UserOutput | null>> {
-    const user = await usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
+    const user =
+      await this.usersRepository.isUserExistByEmailOrLogin(loginOrEmail);
     if (!user) {
       return handleNotFoundResult("not found", "loginOrEmail");
     }
@@ -181,4 +202,5 @@ export class AuthService {
     return handleSuccessResult(user);
   }
 }
-export const authService = new AuthService();
+
+export const authService = new AuthService(usersRepository, sessionsRepository);
