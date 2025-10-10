@@ -10,10 +10,7 @@ import {
 import { User } from "../constructors/user.entity";
 
 export class UsersService {
-  usersRepository: UsersRepository;
-  constructor() {
-    this.usersRepository = new UsersRepository();
-  }
+  constructor(private usersRepository: UsersRepository) {}
   async create(dto: UserInputModel): Promise<Result<string>> {
     //используем этот метод при создании пользователя через createUser
     const isEmailExist = await this.usersRepository.isUserExistByEmailOrLogin(
@@ -55,5 +52,3 @@ export class UsersService {
     return handleSuccessResult(user);
   }
 }
-
-export const usersService = new UsersService();

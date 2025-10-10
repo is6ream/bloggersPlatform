@@ -5,7 +5,7 @@ import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
 
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(protected usersService: UsersService) {}
   async createUser(req: Request, res: Response) {
     try {
       const result = await this.usersService.create(req.body);
@@ -22,7 +22,6 @@ export class UsersController {
       res.status(400).send(err);
     }
   }
-
   async deleteUser(req: Request, res: Response) {
     try {
       const id = req.params.id;

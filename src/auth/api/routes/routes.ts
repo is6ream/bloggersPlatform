@@ -21,29 +21,41 @@ authRouter
     customRateLimitMiddleware,
     authValidators,
     inputValidationResultMiddleware,
-    authUserController.loginUser,
+    authUserController.loginUser.bind(authUserController),
   )
-  .get("/me", accessTokenGuard, authUserController.getInfoAboutUser)
+  .get(
+    "/me",
+    accessTokenGuard,
+    authUserController.getInfoAboutUser.bind(authUserController),
+  )
   .post(
     "/registration",
     customRateLimitMiddleware,
     userValidators,
     inputValidationResultMiddleware,
-    authUserController.registrationUser,
+    authUserController.registrationUser.bind(authUserController),
   )
   .post(
     "/registration-email-resending",
     customRateLimitMiddleware,
     emailValidator,
     inputValidationResultMiddleware,
-    authUserController.emailResending,
+    authUserController.emailResending.bind(authUserController),
   )
   .post(
     "/registration-confirmation",
     customRateLimitMiddleware,
     codeValidator,
     inputValidationResultMiddleware,
-    authUserController.confirmRegisterUser,
+    authUserController.confirmRegisterUser.bind(authUserController),
   )
-  .post("/refresh-token", refreshTokenGuard, authUserController.refreshToken)
-  .post("/logout", refreshTokenGuard, authUserController.logout);
+  .post(
+    "/refresh-token",
+    refreshTokenGuard,
+    authUserController.refreshToken.bind(authUserController),
+  )
+  .post(
+    "/logout",
+    refreshTokenGuard,
+    authUserController.logout.bind(authUserController),
+  );
