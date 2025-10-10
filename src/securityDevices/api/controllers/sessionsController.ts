@@ -4,10 +4,11 @@ import { SessionService } from "../../domain/sessionService";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
 
-class SessionsController {
-  private sessionsService: SessionService;
-  constructor() {
-    this.sessionsService = new SessionService();
+export class SessionsController {
+  constructor(
+      private sessionsService: SessionService;
+
+) {
   }
   async deleteAllDeviceSessions(req: Request, res: Response) {
     try {
@@ -51,4 +52,3 @@ class SessionsController {
   }
 }
 
-export const sessionsController = new SessionsController();

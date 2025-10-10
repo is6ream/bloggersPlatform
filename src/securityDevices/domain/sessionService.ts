@@ -7,10 +7,7 @@ import {
 import { Result } from "../../core/result/result.type";
 //остановился на том, что начал внедрять зависимость BLL от DAL
 export class SessionService {
-  sessionsRepository: SessionsRepository;
-  constructor() {
-    this.sessionsRepository = new SessionsRepository();
-  }
+  constructor(private sessionsRepository: SessionsRepository) {}
   async deleteAllDeviceSessions(
     userId: string,
     deviceId: string,
@@ -44,4 +41,3 @@ export class SessionService {
     return handleSuccessResult();
   }
 }
-export const sessionService = new SessionService();

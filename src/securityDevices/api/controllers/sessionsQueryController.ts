@@ -2,10 +2,11 @@ import { SessionQueryRepository } from "../../infrastructure/sessionQueryReposit
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../core/http-statuses";
 
-class SessionsQueryController {
-  private sessionsQueryRepository: SessionQueryRepository;
-  constructor() {
-    this.sessionsQueryRepository = new SessionQueryRepository();
+export class SessionsQueryController {
+  constructor(
+      private sessionsQueryRepository: SessionQueryRepository;
+
+) {
   }
   async getAllDevices(req: Request, res: Response) {
     const userId = req.userId;
