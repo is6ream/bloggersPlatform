@@ -1,8 +1,6 @@
 import { Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
-import {
-  CommentsService,
-} from "../application/comments.service";
+import { CommentsService } from "../application/comments.service";
 import {
   RequestWithParamsAndBodyAndUserId,
   RequestWithParamsAndUserId,

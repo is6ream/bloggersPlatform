@@ -15,14 +15,24 @@ import { CommentsService } from "./comments/application/comments.service";
 import { BlogsQueryRepository } from "./blogs/infrastructure/blogs.query.repository";
 import { CommentsQueryRepository } from "./comments/infrastructure/commentsQueryRepository";
 import { BlogsService } from "./blogs/application/blogs.service";
-import {AuthService} from "./auth/application/auth.service";
-import {BlogsController} from "./blogs/routes/controller/blogsController";
-import {BlogsQueryController} from "./blogs/routes/controller/blogsQueryController";
+import { AuthService } from "./auth/application/auth.service";
+import { BlogsController } from "./blogs/routes/controller/blogsController";
+import { BlogsQueryController } from "./blogs/routes/controller/blogsQueryController";
+import { UsersQueryController } from "./users/routes/usersQueryController";
+import { SessionsQueryController } from "./securityDevices/api/controllers/sessionsQueryController";
+import { PostsController } from "./posts/api/postsController";
+import { PostsQueryController } from "./posts/api/postsQueryController";
+import { CommentsController } from "./comments/controller/commentsController";
+import { CommentsQueryController } from "./comments/controller/commentsQueryController";
+import { AuthUserController } from "./auth/api/controllers/auth.userController";
+import { AuthUserQueryController } from "./auth/api/controllers/auth.userQueryController";
 
 //DAL
 const usersRepository = new UsersRepository();
+const usersQueryRepository = new UsersQueryRepository();
 
 const sessionsRepository = new SessionsRepository();
+const sessionsQueryReoisitory = new SessionQueryRepository();
 
 const blogsRepository = new BlogsRepository();
 const blogsQueryRepository = new BlogsQueryRepository();
@@ -43,10 +53,44 @@ const commentsService = new CommentsService(
   postsRepository,
   usersRepository,
 );
-const authService = new AuthService(usersRepository, sessionsRepository)
+const authService = new AuthService(usersRepository, sessionsRepository);
 
 //API
 const usersController = new UsersController(usersService);
+const usersQueryController = new UsersQueryController(usersQueryRepository);
+
 const sessionsController = new SessionsController(sessionsService);
-const blogsController = new BlogsController(blogsService, postsService)
-const blogsQueryController= new  BlogsQueryController(blogsQueryRepository);
+const sessionsQueryController = new SessionsQueryController(
+  sessionsQueryReoisitory,
+);
+export const blogsController = new BlogsController(
+  blogsService,
+  postsService,
+  blogsRepository,
+  postsRepository,
+);
+export const blogsQueryController = new BlogsQueryController(
+  blogsQueryRepository,
+  postsQueryRepository,
+);
+
+const postsController = new PostsController(
+  postsService,
+  postsRepository,
+  commentsService,
+  commentsRepository,
+);
+const postsQueryController = new PostsQueryController(
+  postsQueryRepository,
+  commentsQueryRepository,
+);
+
+const commentsController = new CommentsController(commentsService);
+const commentsQueryController = new CommentsQueryController(
+  commentsQueryRepository,
+);
+
+export const authUserController = new AuthUserController(authService);
+export const authUserQueryController = new AuthUserQueryController(
+  usersQueryRepository,
+);

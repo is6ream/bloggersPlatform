@@ -1,10 +1,9 @@
 import { Router } from "express";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
-import { blogController } from "./controller/blogsController";
 import { blogValidators } from "../../core/middlewares/blogValidation/blog-input-dto.validation";
 import { superAdminGuardMiddleware } from "../../core/middlewares/validation/super-admin.guard-middleware";
 import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
-
+import { blogsController, blogsQueryController } from "../../compositionRoot";
 import { createPostByBlogIdValidators } from "../../core/middlewares/postValidation/post-input-dto.validation";
 import { paginationAndSortingValidation } from "../../core/middlewares/query-pagination-sorting/query-pagination-sorting.validation-middleware";
 import { BlogSortField } from "./input/blog-sort-field";
@@ -16,20 +15,20 @@ blogsRouter
   .get(
     "/",
     paginationAndSortingValidation(BlogSortField),
-    blogController.getAllBlogs.bind(blogController),
+    blogsQueryController.getAllBlogs.bind(blogsQueryController),
   )
   .post(
     "/",
     superAdminGuardMiddleware,
     blogValidators,
     inputValidationResultMiddleware,
-    blogController.createBlog.bind(blogController),
+    blogsController.createBlog.bind(blogsController),
   )
   .get(
     "/:id/posts",
     paginationAndSortingValidation(PostSortField),
     idValidation,
-    blogController.getPostsByBlogId.bind(blogController),
+    blogsQueryController.getPostsByBlogId.bind(blogsQueryController),
   )
 
   .post(
@@ -38,14 +37,14 @@ blogsRouter
     idValidation,
     createPostByBlogIdValidators,
     inputValidationResultMiddleware,
-    blogController.createPostByBlogId.bind(blogController),
+    blogsController.createPostByBlogId.bind(blogsController),
   )
 
   .get(
     "/:id",
     idValidation,
     inputValidationResultMiddleware,
-    blogController.findBlog.bind(blogController),
+    blogsQueryController.findBlog.bind(blogsQueryController),
   )
 
   .put(
@@ -54,7 +53,7 @@ blogsRouter
     idValidation,
     blogValidators,
     inputValidationResultMiddleware,
-    blogController.updateBlog.bind(blogController),
+    blogsController.updateBlog.bind(blogsController),
   )
 
   .delete(
@@ -62,5 +61,5 @@ blogsRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    blogController.deleteBlog.bind(blogController),
+    blogsController.deleteBlog.bind(blogsController),
   );

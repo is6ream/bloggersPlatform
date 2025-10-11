@@ -1,15 +1,13 @@
 import { Request, Response } from "express";
 import { BlogsService } from "../../application/blogs.service";
 import { HttpStatus } from "../../../core/http-statuses";
-import {
-  PostsService,
-} from "../../../posts/application/post.service";
+import { PostsService } from "../../../posts/application/post.service";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
 import { createErrorMessages } from "../../../core/errors/create-error-message";
 
-import {BlogsRepository} from "../../infrastructure/blogs.repository";
-import {PostsRepository} from "../../../posts/infrastructure/postRepository";
+import { BlogsRepository } from "../../infrastructure/blogs.repository";
+import { PostsRepository } from "../../../posts/infrastructure/postRepository";
 
 export class BlogsController {
   constructor(
@@ -90,4 +88,3 @@ export class BlogsController {
     }
   }
 }
-

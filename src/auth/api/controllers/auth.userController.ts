@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthService, authService } from "../../application/auth.service";
+import { AuthService } from "../../application/auth.service";
 import { HttpStatus } from "../../../core/http-statuses";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
@@ -7,19 +7,12 @@ import { RequestWithBody } from "../../../core/types/common/requests";
 import { AuthCredentials } from "../../types/input/login-input.models";
 import { SessionDto } from "../../../securityDevices/types/sessionDataTypes";
 import { ResendingBodyType } from "../../types/auth.types";
-import { CurrentUser } from "../../../users/types/user-types";
-import {
-  UsersQueryRepository,
-  usersQueryRepository,
-} from "../../../users/infrastructure/user.query.repository";
-import { CreateUserDto } from "../../types/auth.types";
 import { EmailConfirmCode } from "../../types/emailConfirmCode";
+import { CreateUserDto } from "../../types/auth.types";
 
-class AuthUserController {
-  constructor(
-    private authService: AuthService,
-    private usersQueryRepository: UsersQueryRepository,
-  ) {}
+export class AuthUserController {
+  constructor(private authService: AuthService) {}
+
   async loginUser(req: RequestWithBody<AuthCredentials>, res: Response) {
     const sessionDto: SessionDto = {
       deviceName: req.headers["user-agent"] || "unknown",
@@ -66,17 +59,6 @@ class AuthUserController {
     return;
   }
 
-  async getInfoAboutUser(req: Request, res: Response) {
-    if (!req.userId) res.sendStatus(HttpStatus.Unauthorized);
-    const userId = req.userId;
-
-    const me: CurrentUser | null = await this.usersQueryRepository.findById(
-      userId!,
-    );
-
-    res.status(HttpStatus.Ok).send(me);
-  }
-
   async logout(req: Request, res: Response) {
     try {
       const deviceId = req.deviceId;
@@ -111,7 +93,8 @@ class AuthUserController {
       });
       return;
     } catch (err: unknown) {
-      (console.log(err), res.sendStatus(HttpStatus.InternalServerError));
+      console.log(err);
+      res.sendStatus(HttpStatus.InternalServerError);
       return;
     }
   }
@@ -147,8 +130,3 @@ class AuthUserController {
     return;
   }
 }
-
-export const authUserController = new AuthUserController(
-  authService,
-  usersQueryRepository,
-);

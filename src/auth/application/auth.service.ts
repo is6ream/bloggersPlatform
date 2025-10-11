@@ -1,8 +1,5 @@
 import { jwtService } from "../adapters/jwt.service";
-import {
-  UsersRepository,
-  usersRepository,
-} from "../../users/infrastructure/users.repository";
+import { UsersRepository } from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
@@ -18,10 +15,7 @@ import {
 } from "../../core/result/handleResult";
 import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
-import {
-  SessionsRepository,
-  sessionsRepository,
-} from "../../securityDevices/infrastructure/sessionsRepository";
+import { SessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { UserOutput } from "../../users/types/user.output";
 import { UserDB } from "../../users/input/create-user-dto";
 import { AuthError } from "../types/authErrorType";
@@ -202,5 +196,3 @@ export class AuthService {
     return handleSuccessResult(user);
   }
 }
-
-export const authService = new AuthService(usersRepository, sessionsRepository);

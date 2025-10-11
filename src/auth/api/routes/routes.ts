@@ -3,7 +3,6 @@ import {
   authValidators,
   codeValidator,
 } from "../../middlewares/auth.validation";
-import { authUserController } from "../controllers/auth.userController";
 import { inputValidationResultMiddleware } from "../../../core/middlewares/validation/input-validation-result.middleware";
 import { accessTokenGuard } from "../../../core/guards/access.token.guard";
 import {
@@ -12,6 +11,8 @@ import {
 } from "../../../users/middlewares/user-input-dto-validator";
 import { refreshTokenGuard } from "../../../core/guards/refreshTokenGuard";
 import { customRateLimitMiddleware } from "../../../securityDevices/customRateLimit/customRateLimitMiddleware";
+import { authUserController } from "../../../compositionRoot";
+import { authUserQueryController } from "../../../compositionRoot";
 
 export const authRouter = Router();
 
@@ -26,7 +27,7 @@ authRouter
   .get(
     "/me",
     accessTokenGuard,
-    authUserController.getInfoAboutUser.bind(authUserController),
+    authUserQueryController.getInfoAboutUser.bind(authUserController),
   )
   .post(
     "/registration",
