@@ -5,11 +5,7 @@ import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
 
 export class SessionsController {
-  constructor(
-      private sessionsService: SessionService;
-
-) {
-  }
+  constructor(private sessionsService: SessionService) {}
   async deleteAllDeviceSessions(req: Request, res: Response) {
     try {
       const deviceId = req.deviceId;
@@ -51,4 +47,3 @@ export class SessionsController {
     }
   }
 }
-

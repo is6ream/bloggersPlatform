@@ -13,7 +13,7 @@ import { CommentsQueryInput } from "../../comments/types/input/comment-Query-Inp
 import { CommentsQueryRepository } from "../../comments/infrastructure/commentsQueryRepository";
 import { mapToCommentListPaginatedOutput } from "../../comments/mappers/mapToCommentListPaginatedOutput";
 
-class PostsQueryController {
+export class PostsQueryController {
   constructor(
     private postQueryRepository: PostsQueryRepository,
     private commentsQueryRepository: CommentsQueryRepository,

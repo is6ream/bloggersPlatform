@@ -3,11 +3,7 @@ import { Request, Response } from "express";
 import { HttpStatus } from "../../../core/http-statuses";
 
 export class SessionsQueryController {
-  constructor(
-      private sessionsQueryRepository: SessionQueryRepository;
-
-) {
-  }
+  constructor(private sessionsQueryRepository: SessionQueryRepository) {}
   async getAllDevices(req: Request, res: Response) {
     const userId = req.userId;
     if (!userId) {

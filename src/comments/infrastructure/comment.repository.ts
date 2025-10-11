@@ -6,7 +6,7 @@ import {
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 
-export class CommentRepository {
+export class CommentsRepository {
   async create(newComment: CommentInputType): Promise<string> {
     const insertResult = await commentsCollection.insertOne(newComment);
     return insertResult.insertedId.toString();

@@ -2,10 +2,8 @@ import { Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import {
   CommentsService,
-  commentsService,
 } from "../application/comments.service";
 import {
-  RequestWithParams,
   RequestWithParamsAndBodyAndUserId,
   RequestWithParamsAndUserId,
 } from "../../core/types/common/requests";
@@ -16,18 +14,8 @@ import {
   CommentCreateType,
   CommentId,
 } from "../types/input/updateCommentTypes";
-import { createErrorMessages } from "../../core/errors/create-error-message";
-import {
-  commentsQueryRepository,
-  CommentsQueryRepository,
-} from "../infrastructure/commentsQueryRepository";
-import { CommentViewModel } from "../types/commentsTypes";
-
-class CommentsController {
-  constructor(
-    private commentsService: CommentsService,
-    private commentsQueryRepository: CommentsQueryRepository,
-  ) {}
+export class CommentsController {
+  constructor(private commentsService: CommentsService) {}
   async deleteComment(
     req: RequestWithParamsAndUserId<CommentId, IdType>,
     res: Response,
@@ -41,27 +29,6 @@ class CommentsController {
         return;
       }
       res.sendStatus(HttpStatus.NoContent);
-    } catch (error: unknown) {
-      console.log(error);
-      res.sendStatus(HttpStatus.InternalServerError);
-    }
-  }
-
-  async getCommentById(req: RequestWithParams<IdType>, res: Response) {
-    try {
-      const id: string = req.params.id;
-      const comment: null | CommentViewModel =
-        await this.commentsQueryRepository.findById(id);
-      if (!comment) {
-        res
-          .status(HttpStatus.NotFound)
-          .send(
-            createErrorMessages([
-              { field: "id", message: "comment not found" },
-            ]),
-          );
-      }
-      res.status(HttpStatus.Ok).send(comment);
     } catch (error: unknown) {
       console.log(error);
       res.sendStatus(HttpStatus.InternalServerError);
@@ -98,8 +65,3 @@ class CommentsController {
     }
   }
 }
-
-export const commentsController = new CommentsController(
-  commentsService,
-  commentsQueryRepository,
-);

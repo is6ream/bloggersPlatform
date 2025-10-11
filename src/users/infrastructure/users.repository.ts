@@ -110,5 +110,3 @@ export class UsersRepository {
     return;
   }
 }
-
-export const usersRepository = new UsersRepository();
