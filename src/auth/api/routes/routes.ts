@@ -27,7 +27,7 @@ authRouter
   .get(
     "/me",
     accessTokenGuard,
-    authUserQueryController.getInfoAboutUser.bind(authUserController),
+    authUserQueryController.getInfoAboutUser.bind(authUserQueryController),
   )
   .post(
     "/registration",

@@ -7,13 +7,14 @@ export class AuthUserQueryController {
   constructor(private usersQueryRepository: UsersQueryRepository) {}
 
   async getInfoAboutUser(req: Request, res: Response) {
-    if (!req.userId) res.sendStatus(HttpStatus.Unauthorized);
+    if (!req.userId) {
+      return res.sendStatus(HttpStatus.Unauthorized);
+    }
     const userId = req.userId;
 
-    const me: CurrentUser | null = await this.usersQueryRepository.findById(
-      userId!,
-    );
+    const me: CurrentUser | null =
+      await this.usersQueryRepository.findById(userId);
 
-    res.status(HttpStatus.Ok).send(me);
+    return res.status(HttpStatus.Ok).send(me);
   }
 }
