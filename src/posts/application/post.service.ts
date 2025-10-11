@@ -19,7 +19,7 @@ export class PostsService {
     if (!foundBlog) {
       return handleBadRequestResult("blog not found", "blogId");
     }
-    await this.postRepository.create({
+    const newPostId = await this.postRepository.create({
       title: dto.title,
       shortDescription: dto.shortDescription,
       content: dto.content,
@@ -27,8 +27,9 @@ export class PostsService {
       blogName: foundBlog.name,
       createdAt: new Date(),
     });
+    console.log(newPostId);
 
-    return handleSuccessResult();
+    return handleSuccessResult(newPostId);
   }
 
   async createPostByBlogId(

@@ -34,8 +34,13 @@ export class PostsController {
           .send(result.extensions);
         return;
       }
-      const newPost = await this.postsRepository.findById(result.data!);
-      res.status(HttpStatus.Created).send(newPost.data!);
+      const newPostId = result.data;
+      if (!newPostId) {
+        res.sendStatus(HttpStatus.BadRequest);
+        return;
+      }
+      const newPost = await this.postsRepository.findById(newPostId);
+      res.status(HttpStatus.Created).send(newPost);
       return;
     } catch (error: unknown) {
       console.log(error);

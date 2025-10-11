@@ -3,11 +3,6 @@ import { PostInputDto } from "../types/posts-types";
 import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
-import { Result } from "../../core/result/result.type";
-import {
-  handleNotFoundResult,
-  handleSuccessResult,
-} from "../../core/result/handleResult";
 
 export class PostsRepository {
   async create(newPost: PostDB): Promise<string> {
@@ -26,13 +21,14 @@ export class PostsRepository {
     return await postCollection.findOne({ _id: new ObjectId(id) });
   }
 
-  async findById(id: string): Promise<Result<PostViewModel | null>> {
+  async findById(id: string): Promise<PostViewModel | null> {
+    //ранее возвращался objectResult, сейчас переделал на примитивы, упало много ошибок
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
 
     if (!post) {
-      return handleNotFoundResult("post not found", "postId");
+      return null;
     }
-    const data = {
+    return {
       id: post._id.toString(),
       title: post.title,
       shortDescription: post.shortDescription,
@@ -41,7 +37,6 @@ export class PostsRepository {
       blogName: post.blogName,
       createdAt: post.createdAt,
     };
-    return handleSuccessResult(data);
   }
 
   async update(id: string, dto: PostInputDto): Promise<boolean> {
