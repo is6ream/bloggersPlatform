@@ -26,13 +26,13 @@ import { CommentsController } from "./comments/controller/commentsController";
 import { CommentsQueryController } from "./comments/controller/commentsQueryController";
 import { AuthUserController } from "./auth/api/controllers/auth.userController";
 import { AuthUserQueryController } from "./auth/api/controllers/auth.userQueryController";
-
+const objects: any[] = []
 //DAL
 const usersRepository = new UsersRepository();
 const usersQueryRepository = new UsersQueryRepository();
 
 export const sessionsRepository = new SessionsRepository();
-const sessionsQueryReoisitory = new SessionQueryRepository();
+const sessionsQueryRepository = new SessionQueryRepository();
 
 const blogsRepository = new BlogsRepository();
 const blogsQueryRepository = new BlogsQueryRepository();
@@ -63,7 +63,7 @@ export const usersQueryController = new UsersQueryController(
 
 export const sessionsController = new SessionsController(sessionsService);
 export const sessionsQueryController = new SessionsQueryController(
-  sessionsQueryReoisitory,
+  sessionsQueryRepository,
 );
 export const blogsController = new BlogsController(
   blogsService,

@@ -26,7 +26,6 @@ postRouter
     postsController.createPost.bind(postsController),
   )
   .get(
-    //перенести в queryController
     "/:id",
     idValidation,
     inputValidationResultMiddleware,

@@ -14,7 +14,7 @@ commentsRouter
   .get(
     "/:id",
     idValidation,
-    commentsQueryController.getCommentById.bind(commentsController),
+    commentsQueryController.getCommentById.bind(commentsQueryController),
   )
   .delete(
     "/:id",
