@@ -59,8 +59,8 @@ const authService = new AuthService(usersRepository, sessionsRepository);
 const usersController = new UsersController(usersService);
 const usersQueryController = new UsersQueryController(usersQueryRepository);
 
-const sessionsController = new SessionsController(sessionsService);
-const sessionsQueryController = new SessionsQueryController(
+export const sessionsController = new SessionsController(sessionsService);
+export const sessionsQueryController = new SessionsQueryController(
   sessionsQueryReoisitory,
 );
 export const blogsController = new BlogsController(

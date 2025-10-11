@@ -13,5 +13,3 @@ export class SessionsQueryController {
     res.status(HttpStatus.Ok).send(sessions);
   }
 }
-
-export const sessionsQueryController = new SessionsQueryController();
