@@ -26,6 +26,9 @@ export class CommentsService {
     if (!post) {
       return handleNotFoundResult("Post not found", "postId");
     }
+    if (!user) {
+      return handleNotFoundResult("User not found", "userId");
+    }
     const newComment: CommentInputType = {
       postId: post._id.toString(),
       content: dto.comment,

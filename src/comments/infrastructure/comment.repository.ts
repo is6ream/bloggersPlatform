@@ -2,6 +2,7 @@ import {
   CommentDB,
   CommentInputDto,
   CommentInputType,
+  CommentViewModel,
 } from "../types/commentsTypes";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
@@ -36,8 +37,19 @@ export class CommentsRepository {
     return await commentsCollection.findOne({ _id: new ObjectId(id) });
   }
 
-  async findById(id: string): Promise<string> {
-    const content = await commentsCollection.findOne({ _id: new ObjectId(id) });
-    return content?.content!;
+  async findById(id: string): Promise<CommentViewModel | null> {
+    const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
+    if (!comment) {
+      return null;
+    }
+    return {
+      id: comment._id.toString(),
+      content: comment.content,
+      commentatorInfo: {
+        userId: comment.commentatorInfo.userId,
+        userLogin: comment.commentatorInfo.userLogin,
+      },
+      createdAt: comment.createdAt,
+    };
   }
 }

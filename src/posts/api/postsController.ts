@@ -8,7 +8,6 @@ import { RequestWithParamsAndBodyAndUserId } from "../../core/types/common/reque
 import { PostId } from "../../comments/types/commentsTypes";
 import { IdType } from "../../core/types/authorization/id";
 import { CommentsService } from "../../comments/application/comments.service";
-import { PostsQueryRepository } from "../infrastructure/postQueryRepository";
 import { CommentsRepository } from "../../comments/infrastructure/comment.repository";
 import { PostsRepository } from "../infrastructure/postRepository";
 
@@ -103,10 +102,15 @@ export class PostsController {
       const result = await this.commentsService.createComment(content);
       if (result.status !== ResultStatus.Success) {
         res.sendStatus(HttpStatus.NotFound);
+        return;
       }
-      const comment = await this.commentsRepository.findById(
-        result.data!.commentId,
-      );
+      const commentId = result.data?.commentId;
+      if (!commentId) {
+        res.sendStatus(HttpStatus.BadRequest);
+        return;
+      }
+      const comment = await this.commentsRepository.findById(commentId);
+      console.log(comment);
       res.status(HttpStatus.Created).send(comment);
       return;
     } catch (error: unknown) {
