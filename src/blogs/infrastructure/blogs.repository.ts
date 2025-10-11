@@ -1,6 +1,6 @@
-import { Blog, BlogInputDto } from "../types/blogs-types";
+import { BlogInputDto, BlogViewModel } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
-import { ObjectId, WithId } from "mongodb";
+import { ObjectId } from "mongodb";
 
 export class BlogsRepository {
   async create(newBlog: BlogInputDto): Promise<string> {
@@ -8,12 +8,19 @@ export class BlogsRepository {
     return insertResult.insertedId.toString();
   }
 
-  async findById(id: string): Promise<WithId<Blog> | false> {
+  async findById(id: string): Promise<BlogViewModel | false> {
     const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
     if (!blog) {
       return false;
     }
-    return blog;
+    return {
+      id: blog._id.toString(),
+      name: blog.name,
+      description: blog.description,
+      websiteUrl: blog.websiteUrl,
+      createdAt: blog.createdAt,
+      isMembership: blog.isMembership,
+    };
   }
 
   async update(id: string, dto: BlogInputDto): Promise<void | null> {
