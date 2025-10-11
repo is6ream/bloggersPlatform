@@ -1,6 +1,4 @@
-import {
-  UsersQueryRepository,
-} from "../infrastructure/user.query.repository";
+import { UsersQueryRepository } from "../infrastructure/user.query.repository";
 import { UserQueryInput } from "../input/user-query.input";
 import { setDefaultPaginationIfNotExist } from "../../core/helpers/set-default-sort-and-pagination";
 import { mapToUserListPaginatedOutput } from "./mappers/map-to-user-list-paginated-output.util";
@@ -28,4 +26,3 @@ export class UsersQueryController {
     }
   }
 }
-

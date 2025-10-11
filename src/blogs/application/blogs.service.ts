@@ -1,9 +1,6 @@
 import { Result } from "../../core/result/result.type";
 import { BlogInputModel, BlogInputDto } from "../types/blogs-types";
-import {
-  BlogsRepository,
-  blogsRepository,
-} from "../infrastructure/blogs.repository";
+import { BlogsRepository } from "../infrastructure/blogs.repository";
 import {
   handleNotFoundResult,
   handleSuccessResult,
@@ -37,4 +34,3 @@ export class BlogsService {
     }
   }
 }
-export const blogsService = new BlogsService(blogsRepository);

@@ -46,4 +46,3 @@ export class SessionsRepository {
     return !!deleteResult.deletedCount;
   }
 }
-export const sessionsRepository = new SessionsRepository();

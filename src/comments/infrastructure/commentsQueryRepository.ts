@@ -92,4 +92,3 @@ export class CommentsQueryRepository {
     return { items, totalCount };
   }
 }
-export const commentsQueryRepository = new CommentsQueryRepository();

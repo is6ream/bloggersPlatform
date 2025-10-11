@@ -31,7 +31,7 @@ import { AuthUserQueryController } from "./auth/api/controllers/auth.userQueryCo
 const usersRepository = new UsersRepository();
 const usersQueryRepository = new UsersQueryRepository();
 
-const sessionsRepository = new SessionsRepository();
+export const sessionsRepository = new SessionsRepository();
 const sessionsQueryReoisitory = new SessionQueryRepository();
 
 const blogsRepository = new BlogsRepository();
@@ -57,7 +57,9 @@ const authService = new AuthService(usersRepository, sessionsRepository);
 
 //API
 export const usersController = new UsersController(usersService);
-export const usersQueryController = new UsersQueryController(usersQueryRepository);
+export const usersQueryController = new UsersQueryController(
+  usersQueryRepository,
+);
 
 export const sessionsController = new SessionsController(sessionsService);
 export const sessionsQueryController = new SessionsQueryController(

@@ -57,5 +57,3 @@ export class BlogsQueryRepository {
     };
   }
 }
-
-export const blogsQueryRepository = new BlogsQueryRepository();

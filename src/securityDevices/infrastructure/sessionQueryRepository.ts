@@ -17,5 +17,3 @@ export class SessionQueryRepository {
     });
   }
 }
-
-export const sessionQueryRepository = new SessionQueryRepository();

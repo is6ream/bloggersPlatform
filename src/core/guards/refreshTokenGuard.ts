@@ -2,8 +2,8 @@ import { RequestWithCookies } from "../types/common/requests";
 import { NextFunction, Response } from "express";
 import { HttpStatus } from "../http-statuses";
 import { jwtService } from "../../auth/adapters/jwt.service";
-import { sessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { RefreshTokenPayload } from "../../auth/types/auth.types";
+import { sessionsRepository } from "../../compositionRoot";
 
 export const refreshTokenGuard = async (
   req: RequestWithCookies,
