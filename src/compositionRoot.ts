@@ -74,19 +74,19 @@ export const blogsQueryController = new BlogsQueryController(
   postsQueryRepository,
 );
 
-const postsController = new PostsController(
+export const postsController = new PostsController(
   postsService,
   postsRepository,
   commentsService,
   commentsRepository,
 );
-const postsQueryController = new PostsQueryController(
+export const postsQueryController = new PostsQueryController(
   postsQueryRepository,
   commentsQueryRepository,
 );
 
-const commentsController = new CommentsController(commentsService);
-const commentsQueryController = new CommentsQueryController(
+export const commentsController = new CommentsController(commentsService);
+export const commentsQueryController = new CommentsQueryController(
   commentsQueryRepository,
 );
 

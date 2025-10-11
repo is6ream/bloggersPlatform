@@ -43,7 +43,7 @@ export class BlogsController {
         return;
       }
       const resultId = result.data;
-      const post = await this.postsRepository.findPost(resultId!);
+      const post = await this.postsRepository.findById(resultId!);
       res.status(HttpStatus.Created).send(post.data);
     } catch (error: unknown) {
       console.log(error);

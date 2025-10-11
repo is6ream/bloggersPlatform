@@ -1,16 +1,7 @@
-import {
-  CommentRepository,
-  commentsRepository,
-} from "../infrastructure/comment.repository";
+import { CommentsRepository } from "../infrastructure/comment.repository";
 import { Result } from "../../core/result/result.type";
-import {
-  PostRepository,
-  postRepository,
-} from "../../posts/infrastructure/postRepository";
-import {
-  UsersRepository,
-  usersRepository,
-} from "../../users/infrastructure/users.repository";
+import { PostsRepository } from "../../posts/infrastructure/postRepository";
+import { UsersRepository } from "../../users/infrastructure/users.repository";
 import {
   CommentInputType,
   ContentDto,
@@ -23,8 +14,8 @@ import {
 } from "../../core/result/handleResult";
 export class CommentsService {
   constructor(
-    private commentsRepository: CommentRepository,
-    private postsRepository: PostRepository,
+    private commentsRepository: CommentsRepository,
+    private postsRepository: PostsRepository,
     private usersRepository: UsersRepository,
   ) {}
   async createComment(
@@ -73,8 +64,3 @@ export class CommentsService {
     return handleSuccessResult();
   }
 }
-export const commentsService = new CommentsService(
-  commentsRepository,
-  postRepository,
-  usersRepository,
-);

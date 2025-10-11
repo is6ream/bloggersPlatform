@@ -78,4 +78,3 @@ export class PostsQueryRepository {
     return handleSuccessResult(data);
   }
 }
-export const postsQueryRepository = new PostsQueryRepository();

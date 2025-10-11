@@ -1,8 +1,4 @@
-import { commentsQueryRepository } from "../../comments/infrastructure/commentsQueryRepository";
-import {
-  postsQueryRepository,
-  PostsQueryRepository,
-} from "../infrastructure/postQueryRepository";
+import { PostsQueryRepository } from "../infrastructure/postQueryRepository";
 import { Request, Response } from "express";
 import { ResultStatus } from "../../core/result/resultCode";
 import { HttpStatus } from "../../core/http-statuses";
@@ -86,8 +82,3 @@ export class PostsQueryController {
     }
   }
 }
-
-export const postsQueryController = new PostsQueryController(
-  postsQueryRepository,
-  commentsQueryRepository,
-);

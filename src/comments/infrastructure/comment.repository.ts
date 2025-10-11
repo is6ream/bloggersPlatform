@@ -41,4 +41,3 @@ export class CommentsRepository {
     return content?.content!;
   }
 }
-export const commentsRepository = new CommentRepository();

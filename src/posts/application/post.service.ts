@@ -1,14 +1,8 @@
 import { Result } from "../../core/result/result.type";
 import { PostByIdInputDto } from "../types/posts-types";
 import { PostInputDto } from "../types/posts-types";
-import {
-  PostRepository,
-  postRepository,
-} from "../infrastructure/postRepository";
-import {
-  blogsRepository,
-  BlogsRepository,
-} from "../../blogs/infrastructure/blogs.repository";
+import { PostsRepository } from "../infrastructure/postRepository";
+import { BlogsRepository } from "../../blogs/infrastructure/blogs.repository";
 import {
   handleBadRequestResult,
   handleNotFoundResult,
@@ -17,7 +11,7 @@ import {
 
 export class PostsService {
   constructor(
-    private postRepository: PostRepository,
+    private postRepository: PostsRepository,
     private blogsRepository: BlogsRepository,
   ) {}
   async create(dto: PostInputDto): Promise<Result<string>> {
@@ -72,5 +66,3 @@ export class PostsService {
     return handleSuccessResult();
   }
 }
-
-export const postsService = new PostsService(postRepository, blogsRepository); //так еще не писал, проверить - будет ли работать

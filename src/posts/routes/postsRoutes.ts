@@ -8,9 +8,9 @@ import { PostSortField } from "../input/post-sort-field";
 import { accessTokenGuard } from "../../core/guards/access.token.guard";
 import { CommentsSortField } from "../../comments/types/input/comment-sort-field";
 import { commentValidator } from "../../core/middlewares/commentValidation/comment-input-dto.validation";
+import { postsController, postsQueryController} from "../../compositionRoot";
+
 export const postRouter = Router();
-import { postController } from "../api/postsController";
-import { postsQueryController } from "../api/postsQueryController";
 
 postRouter
   .get(
@@ -23,7 +23,7 @@ postRouter
     superAdminGuardMiddleware,
     postValidators,
     inputValidationResultMiddleware,
-    postController.createPost.bind(postController),
+    postsController.createPost.bind(postsController),
   )
   .get(
     //перенести в queryController
@@ -39,21 +39,21 @@ postRouter
     idValidation,
     postValidators,
     inputValidationResultMiddleware,
-    postController.updatePost.bind(postController),
+    postsController.updatePost.bind(postsController),
   )
   .delete(
     "/:id",
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    postController.deletePost.bind(postController),
+    postsController.deletePost.bind(postsController),
   )
   .post(
     "/:id/comments",
     accessTokenGuard,
     commentValidator,
     inputValidationResultMiddleware,
-    postController.createComment.bind(postController),
+    postsController.createComment.bind(postsController),
   )
 
   .get(
