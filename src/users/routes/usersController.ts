@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { usersService, UsersService } from "../application/users.service";
+import { UsersService } from "../application/users.service";
 import { HttpStatus } from "../../core/http-statuses";
 import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
@@ -37,5 +37,3 @@ export class UsersController {
     }
   }
 }
-
-export const usersController = new UsersController(usersService);

@@ -56,8 +56,8 @@ const commentsService = new CommentsService(
 const authService = new AuthService(usersRepository, sessionsRepository);
 
 //API
-const usersController = new UsersController(usersService);
-const usersQueryController = new UsersQueryController(usersQueryRepository);
+export const usersController = new UsersController(usersService);
+export const usersQueryController = new UsersQueryController(usersQueryRepository);
 
 export const sessionsController = new SessionsController(sessionsService);
 export const sessionsQueryController = new SessionsQueryController(

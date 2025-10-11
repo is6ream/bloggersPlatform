@@ -1,5 +1,4 @@
 import {
-  usersQueryRepository,
   UsersQueryRepository,
 } from "../infrastructure/user.query.repository";
 import { UserQueryInput } from "../input/user-query.input";
@@ -30,6 +29,3 @@ export class UsersQueryController {
   }
 }
 
-export const usersQueryController = new UsersQueryController(
-  usersQueryRepository,
-);

@@ -5,8 +5,7 @@ import { superAdminGuardMiddleware } from "../../core/middlewares/validation/sup
 import { userValidators } from "../middlewares/user-input-dto-validator";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
 import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
-import { usersQueryController } from "../../compositionRoot";
-import { usersController } from "../../compositionRoot";
+import { usersController, usersQueryController} from "../../compositionRoot";
 
 export const usersRouter = Router();
 
