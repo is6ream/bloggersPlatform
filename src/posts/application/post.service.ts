@@ -21,7 +21,7 @@ export class PostsService {
     if (!foundBlog) {
       return handleBadRequestResult("blog not found", "blogId");
     }
-    const newPostId = await this.postRepository.create({
+    const newPostId = await this.postRepository.createPostByBlogId({
       title: dto.title,
       shortDescription: dto.shortDescription,
       content: dto.content,
@@ -40,9 +40,10 @@ export class PostsService {
   ): Promise<Result<string>> {
     const blog = await this.blogsRepository.findById(blogId);
     if (!blog) {
+      console.log("blog exist check in BLL");
       return handleBadRequestResult("blog not found", "blogId");
     }
-    await this.postRepository.create({
+    const createdPostsId: string = await this.postRepository.create({
       title: dto.title,
       shortDescription: dto.shortDescription,
       content: dto.content,
@@ -50,7 +51,7 @@ export class PostsService {
       blogName: blog.name,
       createdAt: new Date(),
     });
-    return handleSuccessResult();
+    return handleSuccessResult(createdPostsId);
   }
 
   async update(id: string, dto: PostInputDto): Promise<Result> {

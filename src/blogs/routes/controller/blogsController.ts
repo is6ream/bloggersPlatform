@@ -38,18 +38,15 @@ export class BlogsController {
     try {
       const { id: id } = req.params;
       const result = await this.postsService.createPostByBlogId(id, req.body);
+      console.log(result.extensions, "extensions check in posts API");
       if (result.status !== ResultStatus.Success) {
         res
           .status(resultCodeToHttpException(result.status))
-          .send(result.extensions); //при неверно введенном id тут падает 500 ошибка, должна быть 404
+          .send(result.extensions);
         return;
       }
       const resultId = result.data;
-      if (!resultId) {
-        res.sendStatus(HttpStatus.BadRequest);
-        return;
-      }
-      const post = await this.postsRepository.findById(resultId);
+      const post = await this.postsRepository.findById(resultId as string);
       res.status(HttpStatus.Created).send(post);
     } catch (error: unknown) {
       console.log(error);
