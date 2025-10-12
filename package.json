@@ -27,9 +27,11 @@
     "express-session": "^1.18.2",
     "express-useragent": "^1.0.15",
     "express-validator": "^7.2.1",
+    "inversify": "^7.10.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.19.0",
     "nodemailer": "^7.0.6",
+    "reflect-metadata": "^0.2.2",
     "types@nodemailer": "link:/types@nodemailer"
   },
   "devDependencies": {
