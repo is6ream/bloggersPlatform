@@ -8,7 +8,9 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { User } from "../constructors/user.entity";
+import { injectable } from "inversify";
 
+@injectable()
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
   async create(dto: UserInputModel): Promise<Result<string>> {

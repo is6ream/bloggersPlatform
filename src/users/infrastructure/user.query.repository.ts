@@ -2,7 +2,9 @@ import { userCollection } from "../../db/mongo.db";
 import { UserQueryInput } from "../input/user-query.input";
 import { CurrentUser, UserViewModel } from "../types/user-types";
 import { ObjectId } from "mongodb";
+import { injectable } from "inversify";
 
+@injectable()
 export class UsersQueryRepository {
   async findAll(
     queryDto: UserQueryInput,

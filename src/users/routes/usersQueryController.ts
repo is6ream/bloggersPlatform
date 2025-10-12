@@ -4,6 +4,9 @@ import { setDefaultPaginationIfNotExist } from "../../core/helpers/set-default-s
 import { mapToUserListPaginatedOutput } from "./mappers/map-to-user-list-paginated-output.util";
 import { HttpStatus } from "../../core/http-statuses";
 import { Response, Request } from "express";
+import { injectable } from "inversify";
+
+@injectable()
 export class UsersQueryController {
   constructor(private usersQueryRepository: UsersQueryRepository) {}
   async getAllUsers(req: Request<{}, {}, {}, UserQueryInput>, res: Response) {

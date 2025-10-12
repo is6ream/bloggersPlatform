@@ -12,8 +12,7 @@
     "skipLibCheck": true,
     "types": ["express", "jest", "node"],
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*",
