@@ -1,7 +1,9 @@
 import { sessionCollection } from "../../db/mongo.db";
 import { SessionDB } from "../types/sessionDataTypes";
 import { DeviceViewModel } from "../types/securityDevicesTypes";
+import { injectable } from "inversify";
 
+@injectable()
 export class SessionQueryRepository {
   async getAllSessions(userId: string): Promise<DeviceViewModel[]> {
     const sessions: SessionDB[] = await sessionCollection

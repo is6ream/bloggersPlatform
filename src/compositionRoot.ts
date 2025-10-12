@@ -26,19 +26,9 @@ import { CommentsController } from "./comments/controller/commentsController";
 import { CommentsQueryController } from "./comments/controller/commentsQueryController";
 import { AuthUserController } from "./auth/api/controllers/auth.userController";
 import { AuthUserQueryController } from "./auth/api/controllers/auth.userQueryController";
-const objects: any[] = [];
-//DAL
+//DAL, //посмотрел видео про SOLID, нужно внедрить зависимости во все ветки проекта
 const usersRepository = new UsersRepository();
-objects.push(usersRepository);
 const usersQueryRepository = new UsersQueryRepository();
-objects.push(usersQueryRepository);
-
-export const ioc = {
-  getInstance<T>(ClassType: any) {
-    const targetInstance = objects.find((o) => o instanceof ClassType);
-    return targetInstance as T;
-  },
-};
 
 export const sessionsRepository = new SessionsRepository();
 const sessionsQueryRepository = new SessionQueryRepository();
@@ -54,8 +44,6 @@ const commentsQueryRepository = new CommentsQueryRepository();
 
 //BLL
 const usersService = new UsersService(usersRepository);
-objects.push(usersService);
-
 const sessionsService = new SessionService(sessionsRepository);
 const blogsService = new BlogsService(blogsRepository);
 const postsService = new PostsService(postsRepository, blogsRepository);
@@ -68,11 +56,9 @@ const authService = new AuthService(usersRepository, sessionsRepository);
 
 //API
 export const usersController = new UsersController(usersService);
-objects.push(usersController);
 export const usersQueryController = new UsersQueryController(
   usersQueryRepository,
 );
-objects.push(usersQueryController);
 
 export const sessionsController = new SessionsController(sessionsService);
 export const sessionsQueryController = new SessionsQueryController(
