@@ -3,13 +3,13 @@ import { accessTokenGuard } from "../../core/guards/access.token.guard";
 import { inputValidationResultMiddleware } from "../../core/middlewares/validation/input-validation-result.middleware";
 import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
 import { commentValidator } from "../../core/middlewares/commentValidation/comment-input-dto.validation";
-import {
-  commentsController,
-  commentsQueryController,
-} from "../../compositionRoot";
+import { container } from "../../container";
+import { CommentsController } from "../controller/commentsController";
+import { CommentsQueryController } from "../controller/commentsQueryController";
 
 export const commentsRouter = Router();
-
+const commentsController = container.get(CommentsController);
+const commentsQueryController = container.get(CommentsQueryController);
 commentsRouter
   .get(
     "/:id",
