@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { inputValidationResultMiddleware } from "../../../core/middlewares/validation/input-validation-result.middleware";
 import { refreshTokenGuard } from "../../../core/guards/refreshTokenGuard";
-import {
-  sessionsQueryController,
-  sessionsController,
-} from "../../../compositionRoot";
+import { container } from "../../../container";
+import { SessionsController } from "../controllers/sessionsController";
+import { SessionsQueryController } from "../controllers/sessionsQueryController";
 
 export const securityDevicesRouter = Router();
+const sessionsController = container.get(SessionsController);
+const sessionsQueryController = container.get(SessionsQueryController);
 
 securityDevicesRouter
   .get(

@@ -8,8 +8,12 @@ import { PostSortField } from "../input/post-sort-field";
 import { accessTokenGuard } from "../../core/guards/access.token.guard";
 import { CommentsSortField } from "../../comments/types/input/comment-sort-field";
 import { commentValidator } from "../../core/middlewares/commentValidation/comment-input-dto.validation";
-import { postsController, postsQueryController } from "../../compositionRoot";
+import { PostsController } from "../api/postsController";
+import { container } from "../../container";
+import { PostsQueryController } from "../api/postsQueryController";
 
+const postsController = container.get(PostsController);
+const postsQueryController = container.get(PostsQueryController);
 export const postRouter = Router();
 
 postRouter

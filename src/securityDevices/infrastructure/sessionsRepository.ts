@@ -3,7 +3,7 @@ import { sessionCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
 import { SessionDB } from "../types/sessionDataTypes";
 import { injectable } from "inversify";
-//нужно внедрить зависимость сервиса от репозитория
+
 @injectable()
 export class SessionsRepository {
   async createSession(sessionData: SessionDataType): Promise<void> {

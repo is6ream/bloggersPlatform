@@ -8,7 +8,9 @@ import { mapToPostListPaginatedOutput } from "../mappers/map-to-post-list-pagina
 import { CommentsQueryInput } from "../../comments/types/input/comment-Query-Input";
 import { CommentsQueryRepository } from "../../comments/infrastructure/commentsQueryRepository";
 import { mapToCommentListPaginatedOutput } from "../../comments/mappers/mapToCommentListPaginatedOutput";
+import {injectable} from "inversify";
 
+@injectable()
 export class PostsQueryController {
   constructor(
     private postQueryRepository: PostsQueryRepository,

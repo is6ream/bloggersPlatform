@@ -8,7 +8,9 @@ import { createErrorMessages } from "../../../core/errors/create-error-message";
 
 import { BlogsRepository } from "../../infrastructure/blogs.repository";
 import { PostsRepository } from "../../../posts/infrastructure/postRepository";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogsController {
   constructor(
     private blogsService: BlogsService,

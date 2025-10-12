@@ -5,7 +5,9 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { Result } from "../../core/result/result.type";
-//остановился на том, что начал внедрять зависимость BLL от DAL
+import { injectable } from "inversify";
+
+@injectable()
 export class SessionService {
   constructor(private sessionsRepository: SessionsRepository) {}
   async deleteAllDeviceSessions(

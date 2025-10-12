@@ -12,6 +12,9 @@ import {
   CommentCreateType,
   CommentId,
 } from "../types/input/updateCommentTypes";
+import {injectable} from "inversify";
+
+@injectable()
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
   async deleteComment(
