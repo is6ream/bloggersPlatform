@@ -6,7 +6,7 @@ import {
 } from "../types/commentsTypes";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class CommentsRepository {

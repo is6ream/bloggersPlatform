@@ -1,7 +1,7 @@
 import { BlogInputDto, BlogViewModel } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class BlogsRepository {

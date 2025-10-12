@@ -3,7 +3,7 @@ import { BlogQueryInput } from "../routes/input/blog-query.input";
 import { WithId } from "mongodb";
 import { Blog, BlogViewModel } from "../types/blogs-types";
 import { ObjectId } from "mongodb";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class BlogsQueryRepository {

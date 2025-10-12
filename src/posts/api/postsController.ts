@@ -10,7 +10,7 @@ import { IdType } from "../../core/types/authorization/id";
 import { CommentsService } from "../../comments/application/comments.service";
 import { CommentsRepository } from "../../comments/infrastructure/comment.repository";
 import { PostsRepository } from "../infrastructure/postRepository";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class PostsController {

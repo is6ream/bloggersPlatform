@@ -7,7 +7,7 @@ import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class CommentsQueryRepository {

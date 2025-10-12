@@ -5,7 +5,7 @@ import { Response } from "express";
 import { CommentViewModel } from "../types/commentsTypes";
 import { HttpStatus } from "../../core/http-statuses";
 import { createErrorMessages } from "../../core/errors/create-error-message";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class CommentsQueryController {

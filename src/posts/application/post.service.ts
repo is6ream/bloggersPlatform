@@ -8,7 +8,7 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class PostsService {

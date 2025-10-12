@@ -12,7 +12,7 @@ import {
   CommentCreateType,
   CommentId,
 } from "../types/input/updateCommentTypes";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class CommentsController {

@@ -9,7 +9,7 @@ import { createErrorMessages } from "../../../core/errors/create-error-message";
 import { PostsQueryRepository } from "../../../posts/infrastructure/postQueryRepository";
 import { mapToPostListPaginatedOutput } from "../../../posts/mappers/map-to-post-list-paginated-output.util";
 import { PostQueryInput } from "../../../posts/input/post-query.input";
-import {injectable} from "inversify";
+import { injectable } from "inversify";
 
 @injectable()
 export class BlogsQueryController {

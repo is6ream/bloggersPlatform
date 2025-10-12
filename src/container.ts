@@ -19,11 +19,11 @@ import { BlogsQueryController } from "./blogs/routes/controller/blogsQueryContro
 import { BlogsService } from "./blogs/application/blogs.service";
 import { BlogsRepository } from "./blogs/infrastructure/blogs.repository";
 import { BlogsQueryRepository } from "./blogs/infrastructure/blogs.query.repository";
-import {CommentsController} from "./comments/controller/commentsController";
-import {CommentsQueryController} from "./comments/controller/commentsQueryController";
-import {CommentsService} from "./comments/application/comments.service";
-import {CommentsRepository} from "./comments/infrastructure/comment.repository";
-import {CommentsQueryRepository} from "./comments/infrastructure/commentsQueryRepository";
+import { CommentsController } from "./comments/controller/commentsController";
+import { CommentsQueryController } from "./comments/controller/commentsQueryController";
+import { CommentsService } from "./comments/application/comments.service";
+import { CommentsRepository } from "./comments/infrastructure/comment.repository";
+import { CommentsQueryRepository } from "./comments/infrastructure/commentsQueryRepository";
 
 export const container = new Container();
 //for users

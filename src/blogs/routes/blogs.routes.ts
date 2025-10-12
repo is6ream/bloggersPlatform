@@ -3,14 +3,17 @@ import { inputValidationResultMiddleware } from "../../core/middlewares/validati
 import { blogValidators } from "../../core/middlewares/blogValidation/blog-input-dto.validation";
 import { superAdminGuardMiddleware } from "../../core/middlewares/validation/super-admin.guard-middleware";
 import { idValidation } from "../../core/middlewares/validation/params-id.validation-middleware";
-import { blogsController, blogsQueryController } from "../../compositionRoot";
 import { createPostByBlogIdValidators } from "../../core/middlewares/postValidation/post-input-dto.validation";
 import { paginationAndSortingValidation } from "../../core/middlewares/query-pagination-sorting/query-pagination-sorting.validation-middleware";
 import { BlogSortField } from "./input/blog-sort-field";
 import { PostSortField } from "../../posts/input/post-sort-field";
+import { BlogsController } from "./controller/blogsController";
+import { container } from "../../container";
+import { BlogsQueryController } from "./controller/blogsQueryController";
 
 export const blogsRouter = Router();
-
+const blogsController = container.get(BlogsController);
+const blogsQueryController = container.get(BlogsQueryController);
 blogsRouter
   .get(
     "/",
