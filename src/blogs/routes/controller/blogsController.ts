@@ -38,7 +38,6 @@ export class BlogsController {
     try {
       const { id: id } = req.params;
       const result = await this.postsService.createPostByBlogId(id, req.body);
-      console.log(result.extensions, "extensions check in posts API");
       if (result.status !== ResultStatus.Success) {
         res
           .status(resultCodeToHttpException(result.status))
@@ -69,12 +68,13 @@ export class BlogsController {
       return;
     }
   }
-
+ //остановился тут, теперь все работает корректно
   async updateBlog(req: Request, res: Response) {
     try {
-      const id = req.params.id;
+      const id = req.params.id; //принимаем id из параметров
       const updateResult = await this.blogsService.update(id, req.body);
-      if (updateResult === null) {
+      console.log(updateResult, "updateRes check");
+      if (updateResult.status !== ResultStatus.Success) {
         res
           .status(HttpStatus.NotFound)
           .send(

@@ -25,7 +25,7 @@ export class BlogsRepository {
     };
   }
 
-  async update(id: string, dto: BlogInputDto): Promise<void | null> {
+  async update(id: string, dto: BlogInputDto): Promise<boolean> {
     const updateResult = await blogCollection.updateOne(
       {
         _id: new ObjectId(id),
@@ -38,10 +38,7 @@ export class BlogsRepository {
         },
       },
     );
-    if (updateResult.matchedCount < 1) {
-      return null;
-    }
-    return;
+    return updateResult.modifiedCount === 1;
   }
 
   async delete(id: string): Promise<boolean> {

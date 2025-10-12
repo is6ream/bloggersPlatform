@@ -22,9 +22,12 @@ export class BlogsService {
     return this.blogsRepository.create(newBlog);
   }
 
-  async update(id: string, dto: BlogInputDto): Promise<void> {
-    await this.blogsRepository.update(id, dto);
-    return;
+  async update(id: string, dto: BlogInputDto): Promise<Result> {
+    const updateResult = await this.blogsRepository.update(id, dto);
+    if (!updateResult) {
+      return handleNotFoundResult("Blog not found", "blogId");
+    }
+    return handleSuccessResult();
   }
 
   async delete(id: string): Promise<Result> {
