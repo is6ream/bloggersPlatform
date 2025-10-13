@@ -19,7 +19,9 @@ import { SessionsRepository } from "../../securityDevices/infrastructure/session
 import { UserOutput } from "../../users/types/user.output";
 import { UserDB } from "../../users/input/create-user-dto";
 import { AuthError } from "../types/authErrorType";
+import { injectable } from "inversify";
 
+@injectable()
 export class AuthService {
   constructor(
     private usersRepository: UsersRepository,

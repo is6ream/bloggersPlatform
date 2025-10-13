@@ -11,10 +11,13 @@ import {
 } from "../../../users/middlewares/user-input-dto-validator";
 import { refreshTokenGuard } from "../../../core/guards/refreshTokenGuard";
 import { customRateLimitMiddleware } from "../../../securityDevices/customRateLimit/customRateLimitMiddleware";
-import { authUserController } from "../../../compositionRoot";
-import { authUserQueryController } from "../../../compositionRoot";
+import { AuthUserController } from "../controllers/auth.userController";
+import { container } from "../../../container";
+import { AuthUserQueryController } from "../controllers/auth.userQueryController";
 
 export const authRouter = Router();
+const authUserController = container.get(AuthUserController);
+const authUserQueryController = container.get(AuthUserQueryController);
 
 authRouter
   .post(

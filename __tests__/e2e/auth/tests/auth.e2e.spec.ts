@@ -22,18 +22,21 @@ describe("Auth API authorization flow check", () => {
     await db.drop();
     await db.stop();
   });
-  it("should register, login, and refreshToken", async () => {
-    const { login, password, email } = testSeeder.createUserDto();
-    const registerCredentials = {
-      login: login,
-      password: password,
-      email: email,
-    };
-    //Registration
+  const { login, password, email } = testSeeder.createUserDto();
+  const registerCredentials = {
+    login: login,
+    password: password,
+    email: email,
+  };
+  //Registration
+  beforeAll(async () => {
     await request(app)
       .post(AUTH_PATH + "/registration")
       .send(registerCredentials);
     expect(HttpStatus.NoContent);
+  });
+
+  it("should register, login, logout, and refreshToken", async () => {
     //Login
     const loginCredentials = { loginOrEmail: login, password: password };
     const resLogin = await request(app)

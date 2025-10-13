@@ -2,7 +2,9 @@ import { UsersQueryRepository } from "../../../users/infrastructure/user.query.r
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../core/http-statuses";
 import { CurrentUser } from "../../../users/types/user-types";
+import { injectable } from "inversify";
 
+@injectable()
 export class AuthUserQueryController {
   constructor(private usersQueryRepository: UsersQueryRepository) {}
 

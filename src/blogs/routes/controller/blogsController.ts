@@ -68,7 +68,7 @@ export class BlogsController {
       return;
     }
   }
- //остановился тут, теперь все работает корректно
+  //остановился тут, теперь все работает корректно
   async updateBlog(req: Request, res: Response) {
     try {
       const id = req.params.id; //принимаем id из параметров

@@ -24,6 +24,9 @@ import { CommentsQueryController } from "./comments/controller/commentsQueryCont
 import { CommentsService } from "./comments/application/comments.service";
 import { CommentsRepository } from "./comments/infrastructure/comment.repository";
 import { CommentsQueryRepository } from "./comments/infrastructure/commentsQueryRepository";
+import { AuthService } from "./auth/application/auth.service";
+import { AuthUserController } from "./auth/api/controllers/auth.userController";
+import { AuthUserQueryController } from "./auth/api/controllers/auth.userQueryController";
 
 export const container = new Container();
 //for users
@@ -60,3 +63,8 @@ container.bind(CommentsQueryController).to(CommentsQueryController);
 container.bind(CommentsService).to(CommentsService);
 container.bind(CommentsRepository).to(CommentsRepository);
 container.bind(CommentsQueryRepository).to(CommentsQueryRepository);
+
+//for auth
+container.bind(AuthService).to(AuthService);
+container.bind(AuthUserController).to(AuthUserController);
+container.bind(AuthUserQueryController).to(AuthUserQueryController);

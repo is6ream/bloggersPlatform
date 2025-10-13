@@ -3,8 +3,10 @@ import { NextFunction, Response } from "express";
 import { HttpStatus } from "../http-statuses";
 import { jwtService } from "../../auth/adapters/jwt.service";
 import { RefreshTokenPayload } from "../../auth/types/auth.types";
-import { sessionsRepository } from "../../compositionRoot";
+import { SessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
+import { container } from "../../container";
 
+const sessionsRepository = container.get(SessionsRepository);
 export const refreshTokenGuard = async (
   req: RequestWithCookies,
   res: Response,
