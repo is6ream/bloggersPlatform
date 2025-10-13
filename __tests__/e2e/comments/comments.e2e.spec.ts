@@ -1,14 +1,12 @@
 import express, { Express } from "express";
 import { db } from "../../../src/db/mongo.db";
 import { setupApp } from "../../../src/setup-app";
-import { createBlog } from "../utils/blogs/create-blog";
-import { BlogViewModel } from "../../../src/blogs/types/blogs-types";
 import { testSeeder } from "../../integration_test/testSeeder";
-import { registerUser } from "../auth/helpers/registerUser";
-import { createPost } from "../utils/posts/create-post";
-import { AUTH_PATH, POSTS_PATH } from "../../../src/core/paths";
+import { COMMENTS_PATH } from "../../../src/core/paths";
 import { HttpStatus } from "../../../src/core/http-statuses";
 import request from "supertest";
+import { createComment } from "./createComment";
+import { CreateCommentResult } from "./types";
 
 describe("Testing the comments branch", () => {
   let app: Express;
@@ -36,33 +34,26 @@ describe("Testing the comments branch", () => {
     };
 
     it("should create new comment", async () => {
-      const blog: BlogViewModel = await createBlog(app); //создаем блог
-      const post = await createPost(app, {
-        //создаем пост для блога
-        title: "title",
-        shortDescription: "sh1",
-        content: "content",
-        blogId: blog.id,
-      });
-      await registerUser(app, registerCredentials);
-      const loginCredentials = { loginOrEmail: login, password: password };
-      const resLogin = await request(app)
-        .post(AUTH_PATH + "/login")
-        .send(loginCredentials)
-        .expect(HttpStatus.Ok);
-      expect(resLogin.body.accessToken).toBeDefined();
-      expect(resLogin.headers["set cookie"]);
+      await createComment(app);
+    });
 
-      const accessToken = await resLogin.body.accessToken;
+    it("should delete comment", async () => {
+      const comment: CreateCommentResult = await createComment(app);
+      await request(app)
+        .delete(`${COMMENTS_PATH}/${comment.commentId}`)
+        .set("Authorization", `Bearer ${comment.accessToken}`)
+        .expect(HttpStatus.NoContent);
+    });
 
-      const createCommentRes = await request(app)
-        .post(`${POSTS_PATH}/${post.id}/comments`)
-        .set("Authorization", `Bearer ${accessToken}`)
-        .send({ content: "stringstringstrinstring" })
-        .expect(HttpStatus.Created);
-
-      expect(createCommentRes.body).toBeDefined();
-      console.log(createCommentRes.body);
+    it("should update comment", async () => {
+      const comment: CreateCommentResult = await createComment(app);
+      console.log(comment.commentId, "id check");
+      const updatedComment = { content: "newstringstringstrinstring" };
+      await request(app)
+        .put(`${COMMENTS_PATH}/${comment.commentId}`)
+        .set("Authorization", `Bearer ${comment.accessToken}`)
+        .send(updatedComment)
+        .expect(HttpStatus.NoContent)
     });
   });
 });

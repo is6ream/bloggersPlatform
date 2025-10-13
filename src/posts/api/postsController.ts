@@ -112,7 +112,6 @@ export class PostsController {
         return;
       }
       const comment = await this.commentsRepository.findById(commentId);
-      console.log(comment);
       res.status(HttpStatus.Created).send(comment);
       return;
     } catch (error: unknown) {
