@@ -15,7 +15,6 @@ export async function createBlog(
 
   const testBlogData = { ...defaultBlogData, ...blogDto };
   const token = generateBasicAuthToken();
-  // console.log(token);
   const createdBlogResponse = await request(app)
     .post(BLOGS_PATH)
     .set("Authorization", token)

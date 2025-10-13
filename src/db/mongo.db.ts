@@ -89,9 +89,9 @@ export const db = {
       console.log("...dropping database");
       const collections = await this.getDbName().listCollections().toArray();
       for (const coll of collections) {
-        console.log(
-          `db.drop: Deleting all documents from collection: ${coll.name}`,
-        );
+        // console.log(
+        //   `db.drop: Deleting all documents from collection: ${coll.name}`,
+        // );
         const collectionName = coll.name;
         await this.getDbName().collection(collectionName).deleteMany({});
       }

@@ -131,9 +131,11 @@ export class AuthService {
       );
 
       if (loginOrEmailError) {
+        console.log("loginOrEmailError", loginOrEmailError);
         return handleUnauthorizedFResult("wrong credentials", "loginOrEmail");
       }
       if (passwordError) {
+        console.log("passwordError", passwordError);
         return handleUnauthorizedFResult("wrong credentials", "password");
       }
     }

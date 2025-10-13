@@ -29,7 +29,7 @@ export class PostsService {
       blogName: foundBlog.name,
       createdAt: new Date(),
     });
-    console.log(newPostId);
+    // console.log(newPostId);
 
     return handleSuccessResult(newPostId);
   }

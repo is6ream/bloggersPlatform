@@ -3,7 +3,7 @@ import { Express } from "express";
 import { UserInputModel } from "../../../../src/users/types/user-types";
 import { AUTH_PATH } from "../../../../src/core/paths";
 import { HttpStatus } from "../../../../src/core/http-statuses";
-import { TestUserCredentials } from "../../users/users.e2e.spec";
+import { TestUserCredentials } from "../types/types";
 
 export async function registerUser(
   app: Express,

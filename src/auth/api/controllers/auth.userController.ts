@@ -22,6 +22,7 @@ export class AuthUserController {
       loginOrEmail: req.body.loginOrEmail,
       password: req.body.password,
     };
+    console.log(sessionDto, "sessionDto check in API");
     try {
       const result = await this.authService.loginUser(sessionDto);
       if (result.status !== ResultStatus.Success) {
