@@ -5,11 +5,13 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { Result } from "../../core/result/result.type";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class SessionService {
-  constructor(private sessionsRepository: SessionsRepository) {}
+  constructor(
+    @inject(SessionsRepository) private sessionsRepository: SessionsRepository,
+  ) {}
   async deleteAllDeviceSessions(
     userId: string,
     deviceId: string,

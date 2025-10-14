@@ -3,11 +3,13 @@ import { HttpStatus } from "../../../core/http-statuses";
 import { SessionService } from "../../domain/sessionService";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class SessionsController {
-  constructor(private sessionsService: SessionService) {}
+  constructor(
+    @inject(SessionService) private sessionsService: SessionService,
+  ) {}
   async deleteAllDeviceSessions(req: Request, res: Response) {
     try {
       const deviceId = req.deviceId;

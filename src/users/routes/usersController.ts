@@ -3,11 +3,11 @@ import { UsersService } from "../application/users.service";
 import { HttpStatus } from "../../core/http-statuses";
 import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class UsersController {
-  constructor(protected usersService: UsersService) {}
+  constructor(@inject(UsersService) protected usersService: UsersService) {}
   async createUser(req: Request, res: Response) {
     try {
       const result = await this.usersService.create(req.body);

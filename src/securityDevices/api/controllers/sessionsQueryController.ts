@@ -1,11 +1,14 @@
 import { SessionQueryRepository } from "../../infrastructure/sessionQueryRepository";
 import { Request, Response } from "express";
 import { HttpStatus } from "../../../core/http-statuses";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class SessionsQueryController {
-  constructor(private sessionsQueryRepository: SessionQueryRepository) {}
+  constructor(
+    @inject(SessionQueryRepository)
+    private sessionsQueryRepository: SessionQueryRepository,
+  ) {}
   async getAllDevices(req: Request, res: Response) {
     const userId = req.userId;
     if (!userId) {
