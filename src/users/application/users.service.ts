@@ -8,11 +8,13 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { User } from "../constructors/user.entity";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class UsersService {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    @inject(UsersRepository) private usersRepository: UsersRepository,
+  ) {}
   async create(dto: UserInputModel): Promise<Result<string>> {
     //используем этот метод при создании пользователя через createUser
     const isEmailExist = await this.usersRepository.isUserExistByEmailOrLogin(

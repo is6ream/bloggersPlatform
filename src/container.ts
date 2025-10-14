@@ -27,6 +27,7 @@ import { CommentsQueryRepository } from "./comments/infrastructure/commentsQuery
 import { AuthService } from "./auth/application/auth.service";
 import { AuthUserController } from "./auth/api/controllers/auth.userController";
 import { AuthUserQueryController } from "./auth/api/controllers/auth.userQueryController";
+import "reflect-metadata";
 
 export const container = new Container();
 //for users

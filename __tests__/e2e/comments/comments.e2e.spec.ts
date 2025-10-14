@@ -53,7 +53,7 @@ describe("Testing the comments branch", () => {
         .put(`${COMMENTS_PATH}/${comment.commentId}`)
         .set("Authorization", `Bearer ${comment.accessToken}`)
         .send(updatedComment)
-        .expect(HttpStatus.NoContent)
+        .expect(HttpStatus.NoContent);
     });
   });
 });
