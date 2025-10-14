@@ -5,11 +5,14 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class BlogsService {
-  constructor(private blogsRepository: BlogsRepository) {}
+  constructor(
+    @inject(BlogsRepository) private blogsRepository: BlogsRepository,
+  ) {}
+
   async create(dto: BlogInputModel): Promise<string> {
     const newBlog: BlogInputDto = {
       name: dto.name,

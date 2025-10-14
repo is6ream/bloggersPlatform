@@ -8,16 +8,17 @@ import { createErrorMessages } from "../../../core/errors/create-error-message";
 
 import { BlogsRepository } from "../../infrastructure/blogs.repository";
 import { PostsRepository } from "../../../posts/infrastructure/postRepository";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class BlogsController {
   constructor(
-    private blogsService: BlogsService,
-    private postsService: PostsService,
-    private blogsRepository: BlogsRepository,
-    private postsRepository: PostsRepository,
+    @inject(BlogsService) private blogsService: BlogsService,
+    @inject(PostsService) private postsService: PostsService,
+    @inject(BlogsRepository) private blogsRepository: BlogsRepository,
+    @inject(PostsRepository) private postsRepository: PostsRepository,
   ) {}
+
   async createBlog(req: Request, res: Response) {
     try {
       const createdBlogId = await this.blogsService.create({
@@ -68,6 +69,7 @@ export class BlogsController {
       return;
     }
   }
+
   //остановился тут, теперь все работает корректно
   async updateBlog(req: Request, res: Response) {
     try {

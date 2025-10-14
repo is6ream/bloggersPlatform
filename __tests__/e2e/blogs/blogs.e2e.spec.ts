@@ -1,4 +1,4 @@
-import { BlogUpdateInput } from "./../../../src/blogs/routes/input/blog-update-input";
+import { BlogUpdateInput } from "../../../src/blogs/routes/input/blog-update-input";
 import express, { Express } from "express";
 import { setupApp } from "../../../src/setup-app";
 import { db } from "../../../src/db/mongo.db";
