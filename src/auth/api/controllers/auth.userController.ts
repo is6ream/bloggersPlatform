@@ -9,11 +9,11 @@ import { SessionDto } from "../../../securityDevices/types/sessionDataTypes";
 import { ResendingBodyType } from "../../types/auth.types";
 import { EmailConfirmCode } from "../../types/emailConfirmCode";
 import { CreateUserDto } from "../../types/auth.types";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class AuthUserController {
-  constructor(private authService: AuthService) {}
+  constructor(@inject(AuthService) private authService: AuthService) {}
 
   async loginUser(req: RequestWithBody<AuthCredentials>, res: Response) {
     const sessionDto: SessionDto = {
