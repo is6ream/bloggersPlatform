@@ -10,15 +10,15 @@ import { IdType } from "../../core/types/authorization/id";
 import { CommentsService } from "../../comments/application/comments.service";
 import { CommentsRepository } from "../../comments/infrastructure/comment.repository";
 import { PostsRepository } from "../infrastructure/postRepository";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class PostsController {
   constructor(
-    private postsService: PostsService,
-    private postsRepository: PostsRepository,
-    private commentsService: CommentsService,
-    private commentsRepository: CommentsRepository,
+    @inject(PostsService) private postsService: PostsService,
+    @inject(PostsRepository) private postsRepository: PostsRepository,
+    @inject(CommentsService) private commentsService: CommentsService,
+    @inject(CommentsRepository) private commentsRepository: CommentsRepository,
   ) {}
 
   async createPost(req: Request, res: Response) {

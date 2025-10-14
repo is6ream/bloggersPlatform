@@ -8,13 +8,13 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class PostsService {
   constructor(
-    private postRepository: PostsRepository,
-    private blogsRepository: BlogsRepository,
+    @inject(PostsRepository) private postRepository: PostsRepository,
+    @inject(BlogsRepository) private blogsRepository: BlogsRepository,
   ) {}
   async create(dto: PostInputDto): Promise<Result<string>> {
     const foundBlog = await this.blogsRepository.findById(dto.blogId);
@@ -29,7 +29,6 @@ export class PostsService {
       blogName: foundBlog.name,
       createdAt: new Date(),
     });
-    // console.log(newPostId);
 
     return handleSuccessResult(newPostId);
   }
