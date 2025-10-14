@@ -12,14 +12,14 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class CommentsService {
   constructor(
-    private commentsRepository: CommentsRepository,
-    private postsRepository: PostsRepository,
-    private usersRepository: UsersRepository,
+    @inject(CommentsRepository) private commentsRepository: CommentsRepository,
+    @inject(PostsRepository) private postsRepository: PostsRepository,
+    @inject(UsersRepository) private usersRepository: UsersRepository,
   ) {}
   async createComment(
     dto: ContentDto,

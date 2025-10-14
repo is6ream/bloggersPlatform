@@ -5,11 +5,14 @@ import { Response } from "express";
 import { CommentViewModel } from "../types/commentsTypes";
 import { HttpStatus } from "../../core/http-statuses";
 import { createErrorMessages } from "../../core/errors/create-error-message";
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 
 @injectable()
 export class CommentsQueryController {
-  constructor(private commentsQueryRepository: CommentsQueryRepository) {}
+  constructor(
+    @inject(CommentsQueryRepository)
+    private commentsQueryRepository: CommentsQueryRepository,
+  ) {}
   async getCommentById(req: RequestWithParams<IdType>, res: Response) {
     try {
       const id: string = req.params.id;

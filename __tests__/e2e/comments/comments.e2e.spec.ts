@@ -25,14 +25,7 @@ describe("Testing the comments branch", () => {
     await db.drop();
     await db.stop();
   });
-  describe("Tests for commands requests on comments branch", () => {
-    const { login, password, email } = testSeeder.createUserDto();
-    const registerCredentials = {
-      login: login,
-      password: password,
-      email: email,
-    };
-
+  describe("Tests for comments branch", () => {
     it("should create new comment", async () => {
       await createComment(app);
     });
@@ -54,6 +47,15 @@ describe("Testing the comments branch", () => {
         .set("Authorization", `Bearer ${comment.accessToken}`)
         .send(updatedComment)
         .expect(HttpStatus.NoContent);
+    });
+
+    it("should create and get comment", async () => {
+      const comment: CreateCommentResult = await createComment(app);
+      const res = await request(app)
+        .get(`${COMMENTS_PATH}/${comment.commentId}`)
+        .expect(HttpStatus.Ok);
+
+      expect(res.body.content).toEqual(comment.comment);
     });
   });
 });
