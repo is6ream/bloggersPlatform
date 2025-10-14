@@ -62,4 +62,10 @@ authRouter
     "/logout",
     refreshTokenGuard,
     authUserController.logout.bind(authUserController),
+  )
+  .post(
+    "/password-recovery",
+    customRateLimitMiddleware,
+    emailValidator,
+    inputValidationResultMiddleware,
   );
