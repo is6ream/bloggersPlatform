@@ -6,7 +6,7 @@ import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttp
 import { RequestWithBody } from "../../../core/types/common/requests";
 import { AuthCredentials } from "../../types/input/login-input.models";
 import { SessionDto } from "../../../securityDevices/types/sessionDataTypes";
-import { ResendingBodyType } from "../../types/auth.types";
+import { EmailInBodyType, ResendingBodyType } from "../../types/auth.types";
 import { EmailConfirmCode } from "../../types/emailConfirmCode";
 import { CreateUserDto } from "../../types/auth.types";
 import { injectable, inject } from "inversify";
@@ -43,22 +43,6 @@ export class AuthUserController {
       res.sendStatus(HttpStatus.InternalServerError);
       return;
     }
-  }
-
-  async emailResending(req: RequestWithBody<ResendingBodyType>, res: Response) {
-    const { email } = req.body;
-
-    const result = await this.authService.resendingEmail(email);
-    if (result === undefined) {
-      res.sendStatus(HttpStatus.InternalServerError);
-    }
-
-    if (result!.status !== ResultStatus.Success) {
-      res.status(HttpStatus.BadRequest).send(result!.extensions);
-      return;
-    }
-    res.sendStatus(HttpStatus.NoContent);
-    return;
   }
 
   async logout(req: Request, res: Response) {
@@ -129,6 +113,34 @@ export class AuthUserController {
     }
     res.sendStatus(HttpStatus.NoContent);
 
+    return;
+  }
+
+  async emailResending(req: RequestWithBody<ResendingBodyType>, res: Response) {
+    const { email } = req.body;
+
+    const result = await this.authService.resendingEmail(email);
+    if (result === undefined) {
+      res.sendStatus(HttpStatus.InternalServerError);
+    }
+
+    if (result!.status !== ResultStatus.Success) {
+      res.status(HttpStatus.BadRequest).send(result!.extensions);
+      return;
+    }
+    res.sendStatus(HttpStatus.NoContent);
+    return;
+  }
+
+  async passwordRecovery(req: RequestWithBody<EmailInBodyType>, res: Response) {
+    const email = req.body.email;
+
+    const result = await this.authService.passwordRecovery(email);
+    if (result === undefined) {
+      res.sendStatus(HttpStatus.InternalServerError);
+      return;
+    }
+    res.sendStatus(HttpStatus.NoContent);
     return;
   }
 }

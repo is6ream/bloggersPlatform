@@ -26,6 +26,7 @@ export type ResendingBodyType = {
   email: string;
 };
 
+export type EmailInBodyType = ResendingBodyType;
 export type RefreshTokenPayload = {
   deviceId: string;
   userId: string;

@@ -68,4 +68,5 @@ authRouter
     customRateLimitMiddleware,
     emailValidator,
     inputValidationResultMiddleware,
+    authUserController.passwordRecovery.bind(authUserController),
   );

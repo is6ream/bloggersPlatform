@@ -181,6 +181,22 @@ export class AuthService {
     return handleSuccessResult({ accessToken, refreshToken });
   }
 
+  async passwordRecovery(email: string): Promise<Result<void> | undefined> {
+    const newConfirmationCode = randomUUID();
+    try {
+      await emailAdapter.sendEmail(
+        email,
+        newConfirmationCode,
+        emailExamples.passwordRecoveryEmail,
+      );
+
+      return handleSuccessResult();
+    } catch (err: unknown) {
+      console.error(err);
+      return;
+    }
+  }
+
   async checkUserCredentials(
     loginOrEmail: string,
     password: string,
