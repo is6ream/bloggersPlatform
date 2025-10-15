@@ -189,7 +189,7 @@ export class AuthService {
         newConfirmationCode,
         emailExamples.passwordRecoveryEmail,
       );
-      const result;
+      await this.usersRepository.saveConfirmationCode(newConfirmationCode); //сохраняем код из параметров для дальнейшего подтверждения
       return handleSuccessResult();
     } catch (err: unknown) {
       console.error(err);

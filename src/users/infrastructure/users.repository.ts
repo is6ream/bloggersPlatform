@@ -1,6 +1,6 @@
 import { UserDB } from "../input/create-user-dto";
 import { UserDbDto, UserViewModel } from "../types/user-types";
-import { userCollection } from "../../db/mongo.db";
+import {recoveryCodeCollection, userCollection} from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
@@ -113,7 +113,7 @@ export class UsersRepository {
   }
 
   async saveConfirmationCode(code: string): Promise<void> {
-    await userCollection.insertOne(code);
+    await recoveryCodeCollection.insertOne(code);
     return;
   }
 }
