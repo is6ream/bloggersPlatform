@@ -45,7 +45,7 @@ export class AuthService {
     }
     const passwordHash = await bcryptService.generateHash(password);
 
-    const newUser: User = new User(login, email, passwordHash);
+    const newUser: User = new User(login, email, passwordHash); //сначала создаем пользователя, потом, отправляем его же код подтверждения в path
     await this.usersRepository.create(newUser);
 
     try {
@@ -189,7 +189,7 @@ export class AuthService {
         newConfirmationCode,
         emailExamples.passwordRecoveryEmail,
       );
-
+      const result;
       return handleSuccessResult();
     } catch (err: unknown) {
       console.error(err);

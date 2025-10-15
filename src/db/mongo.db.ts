@@ -7,6 +7,7 @@ import { User } from "../users/constructors/user.entity";
 import { BlackListedTokensDB } from "../core/types/common/blackListedTokens.collection.types";
 import { SessionDB } from "../securityDevices/types/sessionDataTypes";
 import { ApiRequestLogDb } from "../securityDevices/customRateLimit/customRateLimitType";
+import { RecoveryCodeTypeDB } from "../auth/types/recoveryCodeType";
 
 const BLOG_COLLECTION_NAME = "blogs";
 const POST_COLLECTION_NAME = "posts";
@@ -15,6 +16,7 @@ const COMMENTS_COLLECTION_NAME = "comments";
 const BLACK_LISTED_TOKENS_NAME = "blackListedTokens";
 const SESSION_COLLECTION_NAME = "sessions";
 const CUSTOM_RATE_LIMIT_COLLECTION_NAME = "customRateLimits";
+const RECOVERY_CODE_COLLECTION_NAME = "recoveryCode";
 
 export let client: MongoClient;
 export let blogCollection: Collection<Blog>;
@@ -24,6 +26,8 @@ export let commentsCollection: Collection<CommentDB>;
 export let blackListTokensCollection: Collection<BlackListedTokensDB>;
 export let sessionCollection: Collection<SessionDB>; //создал новую коллекцию
 export let rateLimitCollection: Collection<ApiRequestLogDb>;
+export let recoveryCodeCollection: Collection<RecoveryCodeType>;
+
 export const db = {
   client: null as MongoClient | null,
   getDbName(): Db {
@@ -46,9 +50,12 @@ export const db = {
     blackListTokensCollection = db.collection<BlackListedTokensDB>(
       BLACK_LISTED_TOKENS_NAME,
     );
-    sessionCollection = db.collection<SessionDB>(SESSION_COLLECTION_NAME); //инициализировал
+    sessionCollection = db.collection<SessionDB>(SESSION_COLLECTION_NAME);
     rateLimitCollection = db.collection<ApiRequestLogDb>(
       CUSTOM_RATE_LIMIT_COLLECTION_NAME,
+    );
+    recoveryCodeCollection = db.collection<RecoveryCodeTypeDB>(
+      RECOVERY_CODE_COLLECTION_NAME,
     );
     try {
       this.client = client;

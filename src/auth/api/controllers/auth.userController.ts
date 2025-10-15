@@ -133,8 +133,8 @@ export class AuthUserController {
   }
 
   async passwordRecovery(req: RequestWithBody<EmailInBodyType>, res: Response) {
+    //мы сохраняем этот запрос в бд?
     const email = req.body.email;
-
     const result = await this.authService.passwordRecovery(email);
     if (result === undefined) {
       res.sendStatus(HttpStatus.InternalServerError);
@@ -143,4 +143,11 @@ export class AuthUserController {
     res.sendStatus(HttpStatus.NoContent);
     return;
   }
+
+  async newPassword(req: RequestWithBody<string>, res: Response) {}
 }
+
+export type PasswordRecoveryModel = {
+  newPassword: string;
+  recoveryCode: string;
+};

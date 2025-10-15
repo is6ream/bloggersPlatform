@@ -111,4 +111,9 @@ export class UsersRepository {
     console.log(updateResult, "updateResult check");
     return;
   }
+
+  async saveConfirmationCode(code: string): Promise<void> {
+    await userCollection.insertOne(code);
+    return;
+  }
 }

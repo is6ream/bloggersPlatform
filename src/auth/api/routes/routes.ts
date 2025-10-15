@@ -14,6 +14,7 @@ import { customRateLimitMiddleware } from "../../../securityDevices/customRateLi
 import { AuthUserController } from "../controllers/auth.userController";
 import { container } from "../../../container";
 import { AuthUserQueryController } from "../controllers/auth.userQueryController";
+import { newPasswordValidator } from "../../middlewares/newPassword.validation";
 
 export const authRouter = Router();
 const authUserController = container.get(AuthUserController);
@@ -69,4 +70,10 @@ authRouter
     emailValidator,
     inputValidationResultMiddleware,
     authUserController.passwordRecovery.bind(authUserController),
+  )
+  .post(
+    "new-password",
+    customRateLimitMiddleware,
+    newPasswordValidator,
+    inputValidationResultMiddleware,
   );
