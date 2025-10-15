@@ -26,7 +26,7 @@ export let commentsCollection: Collection<CommentDB>;
 export let blackListTokensCollection: Collection<BlackListedTokensDB>;
 export let sessionCollection: Collection<SessionDB>; //создал новую коллекцию
 export let rateLimitCollection: Collection<ApiRequestLogDb>;
-export let recoveryCodeCollection: Collection<RecoveryCodeType>;
+export let recoveryCodeCollection: Collection<RecoveryCodeTypeDB>;
 
 export const db = {
   client: null as MongoClient | null,

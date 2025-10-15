@@ -10,6 +10,7 @@ import { EmailInBodyType, ResendingBodyType } from "../../types/auth.types";
 import { EmailConfirmCode } from "../../types/emailConfirmCode";
 import { CreateUserDto } from "../../types/auth.types";
 import { injectable, inject } from "inversify";
+import { PasswordRecoveryModel } from "../../types/recoveryCodeType";
 
 @injectable()
 export class AuthUserController {
@@ -133,21 +134,16 @@ export class AuthUserController {
   }
 
   async passwordRecovery(req: RequestWithBody<EmailInBodyType>, res: Response) {
-    //мы сохраняем этот запрос в бд?
     const email = req.body.email;
-    const result = await this.authService.passwordRecovery(email);
-    if (result === undefined) {
-      res.sendStatus(HttpStatus.InternalServerError);
-      return;
-    }
+    await this.authService.passwordRecovery(email);
     res.sendStatus(HttpStatus.NoContent);
     return;
   }
 
-  async newPassword(req: RequestWithBody<string>, res: Response) {}
+  async newPassword(
+    req: RequestWithBody<PasswordRecoveryModel>,
+    res: Response,
+  ) {
+    const { newPassword, recoveryCode } = req.body;
+  }
 }
-
-export type PasswordRecoveryModel = {
-  newPassword: string;
-  recoveryCode: string;
-};

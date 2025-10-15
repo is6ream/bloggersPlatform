@@ -1,10 +1,11 @@
 import { UserDB } from "../input/create-user-dto";
 import { UserDbDto, UserViewModel } from "../types/user-types";
-import {recoveryCodeCollection, userCollection} from "../../db/mongo.db";
+import { recoveryCodeCollection, userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 import { injectable } from "inversify";
+import { RecoveryCodeTypeDB } from "../../auth/types/recoveryCodeType";
 
 @injectable()
 export class UsersRepository {
@@ -112,8 +113,10 @@ export class UsersRepository {
     return;
   }
 
-  async saveConfirmationCode(code: string): Promise<void> {
-    await recoveryCodeCollection.insertOne(code);
+  async saveConfirmationCode(
+    confirmationDto: RecoveryCodeTypeDB,
+  ): Promise<void> {
+    await recoveryCodeCollection.insertOne(confirmationDto);
     return;
   }
 }

@@ -20,6 +20,7 @@ import { UserOutput } from "../../users/types/user.output";
 import { UserDB } from "../../users/input/create-user-dto";
 import { AuthError } from "../types/authErrorType";
 import { injectable, inject } from "inversify";
+import { RecoveryCodeTypeDB } from "../types/recoveryCodeType";
 
 @injectable()
 export class AuthService {
@@ -182,18 +183,21 @@ export class AuthService {
   }
 
   async passwordRecovery(email: string): Promise<Result<void> | undefined> {
-    const newConfirmationCode = randomUUID();
+    const confirmationDto: RecoveryCodeTypeDB = {
+      recoveryCode: randomUUID(),
+      expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    };
     try {
       await emailAdapter.sendEmail(
         email,
-        newConfirmationCode,
+        confirmationDto.recoveryCode,
         emailExamples.passwordRecoveryEmail,
       );
-      await this.usersRepository.saveConfirmationCode(newConfirmationCode); //сохраняем код из параметров для дальнейшего подтверждения
+      await this.usersRepository.saveConfirmationCode(confirmationDto); //сохраняем код из параметров для дальнейшего подтверждения
       return handleSuccessResult();
     } catch (err: unknown) {
       console.error(err);
-      return;
+      return handleSuccessResult();
     }
   }
 
