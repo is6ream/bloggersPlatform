@@ -114,9 +114,7 @@ export class UsersRepository {
   }
 
   async resetPassword(newPassword: string): Promise<void> {
-    const updateResult = await userCollection.updateOne(
-      { passwordHash }, //в коллекции user хранится passwordHash а не просто паспорт, нужно переписать!
-    );
+    const updateResult = await userCollection;
     return;
   }
 

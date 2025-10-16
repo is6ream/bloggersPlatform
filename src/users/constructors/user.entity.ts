@@ -5,10 +5,19 @@ export class User {
   email: string;
   passwordHash: string;
   createdAt: Date;
+
   emailConfirmation: {
     confirmationCode: string | null;
     expirationDate: Date | null;
     isConfirmed: boolean;
+  };
+
+  passwordRecovery: {
+    recoveryCode: string | null;
+    expirationDate: Date | null;
+    isUsed: boolean /*этот флаг нужен для того,
+      чтобы злоумышленник не смог использовать recovery code
+      несколько раз **/;
   };
 
   constructor(login: string, email: string, hash: string) {
@@ -16,10 +25,29 @@ export class User {
     this.email = email;
     this.passwordHash = hash;
     this.createdAt = new Date();
+
     this.emailConfirmation = {
       expirationDate: new Date(Date.now() + 3 * 60 * 1000),
       confirmationCode: randomUUID(),
       isConfirmed: false,
     };
+
+    this.passwordRecovery = {
+      recoveryCode: null,
+      expirationDate: null,
+      isUsed: false,
+    };
+  }
+
+  setPasswordRecoveryCode(): void {
+    this.passwordRecovery = {
+      recoveryCode: randomUUID(),
+      expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      isUsed: false,
+    };
+  }
+
+  useRecoveryCode(): void {
+    this.passwordRecovery.isUsed = true;
   }
 }
