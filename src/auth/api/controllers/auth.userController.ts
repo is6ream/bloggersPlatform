@@ -135,7 +135,7 @@ export class AuthUserController {
 
   async passwordRecovery(req: RequestWithBody<EmailInBodyType>, res: Response) {
     const email = req.body.email;
-    await this.authService.passwordRecovery(email);
+    await this.authService.requestPasswordReset(email);
     res.sendStatus(HttpStatus.NoContent);
     return;
   }

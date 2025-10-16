@@ -38,15 +38,6 @@ export class User {
       isUsed: false,
     };
   }
-
-  setPasswordRecoveryCode(): void {
-    this.passwordRecovery = {
-      recoveryCode: randomUUID(),
-      expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      isUsed: false,
-    };
-  }
-
   useRecoveryCode(): void {
     this.passwordRecovery.isUsed = true;
   }

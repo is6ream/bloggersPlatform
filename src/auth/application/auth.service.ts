@@ -1,6 +1,5 @@
 import { jwtService } from "../adapters/jwt.service";
 import {
-  PassRecoveryDtoType,
   UsersRepository,
 } from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
@@ -186,19 +185,13 @@ export class AuthService {
   }
 
   async requestPasswordReset(email: string): Promise<Result<void> | null> {
-    const user = await this.usersRepository.findByEmail(email);
+    const user: User | null = await this.usersRepository.findByEmail(email);
     if (!user) {
       return null;
     }
-    user.setPasswordRecoveryCode(); //генерируем код для восстановления пароля
+    const recoveryData = this.generateRecoveryCode();
 
-    const dataForSave: PassRecoveryDtoType = {
-      email: user.email,
-      recoveryCode: user.passwordRecovery.recoveryCode!,
-      expirationDate: user.passwordRecovery.expirationDate!,
-    };
-
-    await this.usersRepository.save(dataForSave);
+    await this.usersRepository.updatePasswordRecovery(user.email, recoveryData);
     try {
       await emailAdapter.sendEmail(
         email,
@@ -249,5 +242,13 @@ export class AuthService {
       return handleBadRequestResult("password", "wrong password");
     }
     return handleSuccessResult(user);
+  }
+
+  private generateRecoveryCode() {
+    return {
+      recoveryCode: randomUUID(),
+      expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      isUsed: false,
+    };
   }
 }

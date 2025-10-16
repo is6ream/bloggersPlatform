@@ -5,7 +5,9 @@ import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 import { injectable } from "inversify";
-import { RecoveryCodeTypeDB } from "../../auth/types/recoveryCodeType";
+import {
+  RecoveryCodeTypeDB,
+} from "../../auth/types/recoveryCodeType";
 
 @injectable()
 export class UsersRepository {
@@ -128,13 +130,16 @@ export class UsersRepository {
     return user;
   }
 
-  async save(user: PassRecoveryDtoType): Promise<void> {
-    await userCollection.findOneAndUpdate(
-      { email: user.email },
+  async updatePasswordRecovery(
+    email: string,
+    recoveryData: PassRecoveryDtoType,
+  ): Promise<void> {
+    await userCollection.updateOne(
+      { email: email },
       {
         $set: {
-          recoveryCode: user.recoveryCode,
-          expirationDate: user.expirationDate,
+          recoveryCode: recoveryData.recoveryCode,
+          expirationDate: recoveryData.expirationDate,
         },
       },
     );
@@ -142,7 +147,7 @@ export class UsersRepository {
 }
 
 export type PassRecoveryDtoType = {
-  email: string;
   recoveryCode: string;
   expirationDate: Date;
+  isUsed: boolean;
 };
