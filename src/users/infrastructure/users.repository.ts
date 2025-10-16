@@ -113,21 +113,17 @@ export class UsersRepository {
     return;
   }
 
-  async resetPassword(newPassword: string): Promise<void> {
-    const updateResult = await userCollection;
-    return;
-  }
-
-  async saveConfirmationCode(
-    confirmationDto: RecoveryCodeTypeDB,
-  ): Promise<void> {
-    await recoveryCodeCollection.insertOne(confirmationDto);
-    return;
-  }
-
   async findConfirmationCode(code: string): Promise<RecoveryCodeTypeDB | null> {
     return await recoveryCodeCollection.findOne({
       recoveryCode: code,
     });
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await userCollection.findOne({ email: email });
+    if (!user) {
+      return null;
+    }
+    return user;
   }
 }

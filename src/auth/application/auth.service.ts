@@ -182,12 +182,8 @@ export class AuthService {
     return handleSuccessResult({ accessToken, refreshToken });
   }
 
-  async passwordRecovery(email: string): Promise<Result<void>> {
-    const confirmationDto: RecoveryCodeTypeDB = {
-      //формируем для записи в бд
-      recoveryCode: randomUUID(),
-      expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    };
+  async requestPasswordReset(email: string): Promise<Result<void>> {
+    const user = await this.usersRepository.fi;
     try {
       await emailAdapter.sendEmail(
         email,
