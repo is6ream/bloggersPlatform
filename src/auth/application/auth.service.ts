@@ -182,8 +182,9 @@ export class AuthService {
     return handleSuccessResult({ accessToken, refreshToken });
   }
 
-  async passwordRecovery(email: string): Promise<Result<void> | undefined> {
+  async passwordRecovery(email: string): Promise<Result<void>> {
     const confirmationDto: RecoveryCodeTypeDB = {
+      //формируем для записи в бд
       recoveryCode: randomUUID(),
       expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
     };
@@ -199,6 +200,26 @@ export class AuthService {
       console.error(err);
       return handleSuccessResult();
     }
+  }
+
+  //я создал отдельную коллекцию в бд и записал туда код для восстановления. Проблема в том, что этот код никакого отнощения не имеет к коллекции users
+  async resetPassword(
+    newPassword: string,
+    recoveryCode: string,
+  ): Promise<Result> {
+    const code: RecoveryCodeTypeDB | null =
+      await this.usersRepository.findConfirmationCode(recoveryCode);
+    if (!code) {
+      return handleBadRequestResult(
+        "message code is incorrect",
+        "recoveryCode",
+      );
+    }
+    if (code.expirationDate < new Date(Date.now())) {
+      return handleBadRequestResult("code is expired", "recoveryCode");
+    }
+
+    const user = await this.usersRepository;
   }
 
   async checkUserCredentials(

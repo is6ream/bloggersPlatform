@@ -12,7 +12,6 @@ export const emailAdapter = {
         pass: process.env.GOOGLE_APP_PASSWORD,
       },
     });
-    //нужно понять как связать код подтверждения и пароль. В бд уже должен быть созданный пользователь?
     const info = transport.sendMail({
       from: '"Danil" <d.ilyasovunibell@gmail.com>',
       to: email,

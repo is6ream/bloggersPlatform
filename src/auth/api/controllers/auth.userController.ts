@@ -145,5 +145,9 @@ export class AuthUserController {
     res: Response,
   ) {
     const { newPassword, recoveryCode } = req.body;
+    const result = await this.authService.resetPassword(
+      newPassword,
+      recoveryCode,
+    );
   }
 }

@@ -113,10 +113,23 @@ export class UsersRepository {
     return;
   }
 
+  async resetPassword(newPassword: string): Promise<void> {
+    const updateResult = await userCollection.updateOne(
+      { passwordHash }, //в коллекции user хранится passwordHash а не просто паспорт, нужно переписать!
+    );
+    return;
+  }
+
   async saveConfirmationCode(
     confirmationDto: RecoveryCodeTypeDB,
   ): Promise<void> {
     await recoveryCodeCollection.insertOne(confirmationDto);
     return;
+  }
+
+  async findConfirmationCode(code: string): Promise<RecoveryCodeTypeDB | null> {
+    return await recoveryCodeCollection.findOne({
+      recoveryCode: code,
+    });
   }
 }
