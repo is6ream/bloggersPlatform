@@ -1,5 +1,8 @@
 import { jwtService } from "../adapters/jwt.service";
-import { UsersRepository } from "../../users/infrastructure/users.repository";
+import {
+  PassRecoveryDtoType,
+  UsersRepository,
+} from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
@@ -182,15 +185,26 @@ export class AuthService {
     return handleSuccessResult({ accessToken, refreshToken });
   }
 
-  async requestPasswordReset(email: string): Promise<Result<void>> {
-    const user = await this.usersRepository.fi;
+  async requestPasswordReset(email: string): Promise<Result<void> | null> {
+    const user = await this.usersRepository.findByEmail(email);
+    if (!user) {
+      return null;
+    }
+    user.setPasswordRecoveryCode(); //генерируем код для восстановления пароля
+
+    const dataForSave: PassRecoveryDtoType = {
+      email: user.email,
+      recoveryCode: user.passwordRecovery.recoveryCode!,
+      expirationDate: user.passwordRecovery.expirationDate!,
+    };
+
+    await this.usersRepository.save(dataForSave);
     try {
       await emailAdapter.sendEmail(
         email,
-        confirmationDto.recoveryCode,
+        user.passwordRecovery.recoveryCode!,
         emailExamples.passwordRecoveryEmail,
       );
-      await this.usersRepository.saveConfirmationCode(confirmationDto); //сохраняем код из параметров для дальнейшего подтверждения
       return handleSuccessResult();
     } catch (err: unknown) {
       console.error(err);

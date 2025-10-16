@@ -61,6 +61,7 @@ export class UsersRepository {
       },
     };
   }
+
   async doesExistByLoginOrEmail(
     login: string,
     email: string,
@@ -126,4 +127,22 @@ export class UsersRepository {
     }
     return user;
   }
+
+  async save(user: PassRecoveryDtoType): Promise<void> {
+    await userCollection.findOneAndUpdate(
+      { email: user.email },
+      {
+        $set: {
+          recoveryCode: user.recoveryCode,
+          expirationDate: user.expirationDate,
+        },
+      },
+    );
+  }
 }
+
+export type PassRecoveryDtoType = {
+  email: string;
+  recoveryCode: string;
+  expirationDate: Date;
+};
