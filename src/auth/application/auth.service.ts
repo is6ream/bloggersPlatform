@@ -1,5 +1,8 @@
 import { jwtService } from "../adapters/jwt.service";
-import { UsersRepository } from "../../users/infrastructure/users.repository";
+import {
+  PassRecoveryDtoType,
+  UsersRepository,
+} from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
@@ -187,11 +190,16 @@ export class AuthService {
     if (!user) {
       return null;
     }
-
-    /*при поиске user по email нам нужно POJO, который мы достали из бд отмапить
-          в инстанс класса User, для того, чтобы мы могли обращаться к его методам */
-
-    await this.usersRepository.updatePasswordRecovery(user.email, recoveryData);
+    console.log(user);
+    user.createRecoveryObject();
+    console.log(user.passwordRecovery)
+    const recoveryCode = user.passwordRecovery.recoveryCode; //здесь падает ошибка undefined
+    const expirationDate = user.passwordRecovery.passRecoveryExpDate;
+    const recoveryDto: PassRecoveryDtoType = {
+      recoveryCode: recoveryCode!,
+      expirationDate: expirationDate!,
+    };
+    await this.usersRepository.updatePasswordRecovery(user.email, recoveryDto);
     try {
       await emailAdapter.sendEmail(
         email,
@@ -204,8 +212,6 @@ export class AuthService {
       return handleSuccessResult();
     }
   }
-
-  //я создал отдельную коллекцию в бд и записал туда код для восстановления. Проблема в том, что этот код никакого отнощения не имеет к коллекции users
   async resetPassword(
     newPassword: string,
     recoveryCode: string,

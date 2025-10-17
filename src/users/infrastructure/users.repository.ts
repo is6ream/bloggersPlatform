@@ -141,9 +141,11 @@ export class UsersRepository {
         },
       },
     );
+    return;
   }
 
-  private mapToUserDomain(userData: any): User { //функция маппер, которая приводит искомый объект к инстансу класса User для дальнейшей работы с методами
+  private mapToUserDomain(userData: any): User {
+    //функция маппер, которая приводит искомый объект к инстансу класса User для дальнейшей работы с методами
     const user = new User(
       userData.login,
       userData.email,
@@ -161,5 +163,5 @@ export class UsersRepository {
 export type PassRecoveryDtoType = {
   recoveryCode: string;
   expirationDate: Date;
-  isUsed: boolean;
+  // isUsed: boolean; //стоит ли передавать это поле для обновления класса при отправке ссылки на восстановление пароля?
 };
