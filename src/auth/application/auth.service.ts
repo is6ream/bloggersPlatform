@@ -215,15 +215,12 @@ export class AuthService {
   async resetPassword(
     newPassword: string,
     recoveryCode: string,
-  ): Promise<Result> {
-    const user: RecoveryCodeTypeDB | null =
-      await this.usersRepository.findByCode(recoveryCode);
-
-    if (code.expirationDate < new Date(Date.now())) {
-      return handleBadRequestResult("code is expired", "recoveryCode");
-    }
-
-    const user = await this.usersRepository;
+  ): Promise<Result>{
+    //нужно проверить не закэспайрился ли код восстановления, а уже потом обновить
+    const newPasswordHash = await bcryptService.generateHash(newPassword);
+    console.log(newPasswordHash);
+    await this.usersRepository.resetPassword(newPassword, recoveryCode);
+    return;
   }
 
   async checkUserCredentials(

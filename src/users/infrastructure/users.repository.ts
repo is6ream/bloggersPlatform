@@ -113,13 +113,16 @@ export class UsersRepository {
     console.log(updateResult, "updateResult check");
     return;
   }
-//у меня есть пасс и код, мне нужно по коду достать user, и обновить пароль
-  async findByCode(code: string): Promise<User | null> {
-    const user =  await userCollection.findOne({ confirmationCode: code });
-
-    return {
-
-    }
+  //у меня есть пасс и код, мне нужно по коду достать user, и обновить пароль
+  async resetPassword(newHash: string, recoveryCode: string): Promise<void> {
+    await userCollection.updateOne(
+      //как в таком случае проверить не заэкспайрился ли код подтверждения?
+      {
+        recoveryCode: recoveryCode,
+      },
+      { $set: { passwordHash: newHash } },
+    );
+    return;
   }
 
   async findByEmail(email: string): Promise<User | null> {

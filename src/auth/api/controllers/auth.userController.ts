@@ -149,5 +149,7 @@ export class AuthUserController {
       newPassword,
       recoveryCode,
     );
+    res.sendStatus(HttpStatus.Ok); //пока заглушка для тестов
+    return;
   }
 }

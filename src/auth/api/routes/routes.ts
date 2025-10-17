@@ -72,8 +72,9 @@ authRouter
     authUserController.passwordRecovery.bind(authUserController),
   )
   .post(
-    "new-password",
+    "/new-password",
     customRateLimitMiddleware,
     newPasswordValidator,
     inputValidationResultMiddleware,
+    authUserController.newPassword.bind(authUserController),
   );
