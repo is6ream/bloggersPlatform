@@ -192,7 +192,7 @@ export class AuthService {
     }
     console.log(user);
     user.createRecoveryObject();
-    console.log(user.passwordRecovery)
+    console.log(user.passwordRecovery);
     const recoveryCode = user.passwordRecovery.recoveryCode; //здесь падает ошибка undefined
     const expirationDate = user.passwordRecovery.passRecoveryExpDate;
     const recoveryDto: PassRecoveryDtoType = {
@@ -216,14 +216,9 @@ export class AuthService {
     newPassword: string,
     recoveryCode: string,
   ): Promise<Result> {
-    const code: RecoveryCodeTypeDB | null =
-      await this.usersRepository.findConfirmationCode(recoveryCode);
-    if (!code) {
-      return handleBadRequestResult(
-        "message code is incorrect",
-        "recoveryCode",
-      );
-    }
+    const user: RecoveryCodeTypeDB | null =
+      await this.usersRepository.findByCode(recoveryCode);
+
     if (code.expirationDate < new Date(Date.now())) {
       return handleBadRequestResult("code is expired", "recoveryCode");
     }

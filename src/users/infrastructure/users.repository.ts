@@ -113,11 +113,13 @@ export class UsersRepository {
     console.log(updateResult, "updateResult check");
     return;
   }
+//у меня есть пасс и код, мне нужно по коду достать user, и обновить пароль
+  async findByCode(code: string): Promise<User | null> {
+    const user =  await userCollection.findOne({ confirmationCode: code });
 
-  async findConfirmationCode(code: string): Promise<RecoveryCodeTypeDB | null> {
-    return await recoveryCodeCollection.findOne({
-      recoveryCode: code,
-    });
+    return {
+
+    }
   }
 
   async findByEmail(email: string): Promise<User | null> {
