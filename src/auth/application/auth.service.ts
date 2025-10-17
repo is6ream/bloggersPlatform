@@ -1,7 +1,5 @@
 import { jwtService } from "../adapters/jwt.service";
-import {
-  UsersRepository,
-} from "../../users/infrastructure/users.repository";
+import { UsersRepository } from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
@@ -189,7 +187,9 @@ export class AuthService {
     if (!user) {
       return null;
     }
-    const recoveryData = this.generateRecoveryCode();
+
+    /*при поиске user по email нам нужно POJO, который мы достали из бд отмапить
+          в инстанс класса User, для того, чтобы мы могли обращаться к его методам */
 
     await this.usersRepository.updatePasswordRecovery(user.email, recoveryData);
     try {
@@ -242,13 +242,5 @@ export class AuthService {
       return handleBadRequestResult("password", "wrong password");
     }
     return handleSuccessResult(user);
-  }
-
-  private generateRecoveryCode() {
-    return {
-      recoveryCode: randomUUID(),
-      expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      isUsed: false,
-    };
   }
 }

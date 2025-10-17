@@ -14,7 +14,7 @@ export class User {
 
   passwordRecovery: {
     recoveryCode: string | null;
-    expirationDate: Date | null;
+    passRecoveryExpDate: Date | null;
     isUsed: boolean /*этот флаг нужен для того,
       чтобы злоумышленник не смог использовать recovery code
       несколько раз **/;
@@ -34,10 +34,20 @@ export class User {
 
     this.passwordRecovery = {
       recoveryCode: null,
-      expirationDate: null,
+      passRecoveryExpDate: null,
       isUsed: false,
     };
   }
+
+  createRecoveryObject() {
+    return {
+      recoveryCode: randomUUID(),
+      expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      isUsed: false,
+    };
+  }
+  //в бд объект с данными confirmation не является цельным объектом, потому что мы создаем его не с помощью класса, а берем извне
+
   useRecoveryCode(): void {
     this.passwordRecovery.isUsed = true;
   }

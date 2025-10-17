@@ -5,9 +5,7 @@ import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 import { injectable } from "inversify";
-import {
-  RecoveryCodeTypeDB,
-} from "../../auth/types/recoveryCodeType";
+import { RecoveryCodeTypeDB } from "../../auth/types/recoveryCodeType";
 
 @injectable()
 export class UsersRepository {
@@ -127,7 +125,7 @@ export class UsersRepository {
     if (!user) {
       return null;
     }
-    return user;
+    return this.mapToUserDomain(user);
   }
 
   async updatePasswordRecovery(
@@ -139,10 +137,24 @@ export class UsersRepository {
       {
         $set: {
           recoveryCode: recoveryData.recoveryCode,
-          expirationDate: recoveryData.expirationDate,
+          passRecoveryExpDate: recoveryData.expirationDate,
         },
       },
     );
+  }
+
+  private mapToUserDomain(userData: any): User { //функция маппер, которая приводит искомый объект к инстансу класса User для дальнейшей работы с методами
+    const user = new User(
+      userData.login,
+      userData.email,
+      userData.passwordHash,
+    );
+
+    user.createdAt = userData.createdAt;
+    user.emailConfirmation = userData.emailConfirmation;
+    user.passwordRecovery = userData.passwordRecovery;
+
+    return user;
   }
 }
 
