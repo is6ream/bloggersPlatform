@@ -183,16 +183,17 @@ export class AuthService {
     );
     return handleSuccessResult({ accessToken, refreshToken });
   }
-
+  // сейчас проблема возникает в том, что при создании user у нас уже есть объект recovery, и,
+  // когда я делаю запрос на восстановление пароля, у меня создаются дополнительные поля recovery
   async requestPasswordReset(email: string): Promise<Result<void> | null> {
     const user: User | null = await this.usersRepository.findByEmail(email);
     if (!user) {
       return null;
     }
-    console.log(user);
+    console.log(user, "user in BLL");
     user.createRecoveryObject();
-    console.log(user.passwordRecovery);
-    const recoveryCode = user.passwordRecovery.recoveryCode; //здесь падает ошибка undefined
+    console.log(user, "user after applying the method");
+    const recoveryCode = user.passwordRecovery.recoveryCode; //ти строки кода лишние, я могу просто перезаписать юзера в бд
     const expirationDate = user.passwordRecovery.passRecoveryExpDate;
     const recoveryDto: PassRecoveryDtoType = {
       recoveryCode: recoveryCode!,
@@ -218,6 +219,8 @@ export class AuthService {
     //достаем поле expirationDate
     const expirationDate: Date | null =
       await this.usersRepository.checkRecoveryCodeExpirationDate(recoveryCode);
+    console.log(expirationDate!);
+    console.log(new Date(Date.now()));
     //проверяем не истек ли срок годности
     if (expirationDate! < new Date(Date.now())) {
       return handleBadRequestResult("code is expired!", "recoveryCode");
