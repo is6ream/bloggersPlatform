@@ -22,12 +22,10 @@ export const passwordValidator = body("password")
 export const emailValidator = body("email")
   .exists()
   .withMessage("field email is required")
-  .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
-  .withMessage("input must be a email")
   .isString()
   .withMessage("field email must be a string")
-  .bail();
-
+  .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
+  .withMessage("input must be a email");
 export const userValidators = [
   loginValidator,
   passwordValidator,
