@@ -207,12 +207,15 @@ export class AuthService {
     newPassword: string,
     recoveryCode: string,
   ): Promise<Result<string | void>> {
-    //достаем поле expirationDate
     const expirationDate: Date | null =
       await this.usersRepository.checkRecoveryCodeExpirationDate(recoveryCode);
-    if (expirationDate! < new Date(Date.now())) {
+    if (!expirationDate) {
+      return handleBadRequestResult("wrong recoveryCode", "recoveryCode");
+    }
+    if (expirationDate < new Date(Date.now())) {
       return handleBadRequestResult("code is expired!", "recoveryCode");
     }
+
     const newPasswordHash = await bcryptService.generateHash(newPassword);
     console.log(newPasswordHash, "newPassHash check"); //пароль не обновляется
     //если не истек, обновляем пароль
