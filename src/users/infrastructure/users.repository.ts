@@ -1,11 +1,10 @@
 import { UserDB } from "../input/create-user-dto";
 import { UserDbDto, UserViewModel } from "../types/user-types";
-import { recoveryCodeCollection, userCollection } from "../../db/mongo.db";
+import {  userCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 import { injectable } from "inversify";
-import { RecoveryCodeTypeDB } from "../../auth/types/recoveryCodeType";
 
 @injectable()
 export class UsersRepository {
@@ -123,6 +122,16 @@ export class UsersRepository {
       { $set: { passwordHash: newHash } },
     );
     return;
+  }
+
+  async checkRecoveryCodeExpirationDate(code: string): Promise<Date | null> {
+    const user: WithId<User> | null = await userCollection.findOne({
+      recoveryCode: code,
+    });
+    if (!user) {
+      return null;
+    }
+    return user.passwordRecovery.passRecoveryExpDate;
   }
 
   async findByEmail(email: string): Promise<User | null> {

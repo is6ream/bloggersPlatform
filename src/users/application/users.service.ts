@@ -7,8 +7,8 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
-import { User } from "../constructors/user.entity";
 import { injectable, inject } from "inversify";
+import { User } from "../constructors/user.entity";
 
 @injectable()
 export class UsersService {
@@ -16,9 +16,7 @@ export class UsersService {
     @inject(UsersRepository) private usersRepository: UsersRepository,
   ) {}
   async create(dto: UserInputModel): Promise<Result<string>> {
-    //используем этот метод при создании пользователя через createUser
     const isEmailExist = await this.usersRepository.isUserExistByEmailOrLogin(
-      //проверяем, существует ли такой пользователь в бд
       dto.email,
     );
     if (isEmailExist) {
@@ -26,18 +24,7 @@ export class UsersService {
     }
     const { login, password, email } = dto;
     const passwordHash = await bcryptService.generateHash(password);
-    const user: User = {
-      login: login,
-      email: email,
-      passwordHash: passwordHash,
-      createdAt: new Date(),
-      emailConfirmation: {
-        confirmationCode: null,
-        expirationDate: null,
-        isConfirmed: true,
-      },
-    };
-
+    const user = new User(login, email, passwordHash);
     const newUser = await this.usersRepository.create(user);
     const newUserId = newUser.id;
     return handleSuccessResult(newUserId);

@@ -149,7 +149,11 @@ export class AuthUserController {
       newPassword,
       recoveryCode,
     );
-    res.sendStatus(HttpStatus.Ok); //пока заглушка для тестов
+    if (result.status !== ResultStatus.Success) {
+      res.status(HttpStatus.BadRequest).send(result!.extensions);
+      return;
+    }
+    res.sendStatus(HttpStatus.NoContent);
     return;
   }
 }

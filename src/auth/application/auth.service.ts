@@ -23,7 +23,6 @@ import { UserOutput } from "../../users/types/user.output";
 import { UserDB } from "../../users/input/create-user-dto";
 import { AuthError } from "../types/authErrorType";
 import { injectable, inject } from "inversify";
-import { RecoveryCodeTypeDB } from "../types/recoveryCodeType";
 
 @injectable()
 export class AuthService {
@@ -215,12 +214,18 @@ export class AuthService {
   async resetPassword(
     newPassword: string,
     recoveryCode: string,
-  ): Promise<Result>{
-    //нужно проверить не закэспайрился ли код восстановления, а уже потом обновить
+  ): Promise<Result<string | void>> {
+    //достаем поле expirationDate
+    const expirationDate: Date | null =
+      await this.usersRepository.checkRecoveryCodeExpirationDate(recoveryCode);
+    //проверяем не истек ли срок годности
+    if (expirationDate! < new Date(Date.now())) {
+      return handleBadRequestResult("code is expired!", "recoveryCode");
+    }
     const newPasswordHash = await bcryptService.generateHash(newPassword);
-    console.log(newPasswordHash);
-    await this.usersRepository.resetPassword(newPassword, recoveryCode);
-    return;
+    //если не истек, обновляем пароль
+    await this.usersRepository.resetPassword(newPasswordHash, recoveryCode);
+    return handleSuccessResult();
   }
 
   async checkUserCredentials(
