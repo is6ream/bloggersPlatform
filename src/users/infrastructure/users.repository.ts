@@ -112,27 +112,29 @@ export class UsersRepository {
     console.log(updateResult, "updateResult check");
     return;
   }
+
   //у меня есть пасс и код, мне нужно по коду достать user, и обновить пароль
   async resetPassword(newHash: string, recoveryCode: string): Promise<void> {
     await userCollection.updateOne(
-      //как в таком случае проверить не заэкспайрился ли код подтверждения?
       {
-        recoveryCode: recoveryCode,
+        "passwordRecovery.recoveryCode": recoveryCode,
       },
-      { $set: { passwordHash: newHash } },
+      {
+        $set: {
+          passwordHash: newHash,
+          "passwordRecovery.isUsed": true,
+        },
+      },
     );
     return;
   }
-
   async checkRecoveryCodeExpirationDate(code: string): Promise<Date | null> {
     const user: WithId<User> | null = await userCollection.findOne({
-      recoveryCode: code,
+      "passwordRecovery.recoveryCode": code,
     });
     if (!user) {
       return null;
     }
-    console.log(user, "user check in DAL");
-    console.log(user.passwordRecovery.passRecoveryExpDate, "check in DAL");
     return user.passwordRecovery.passRecoveryExpDate;
   }
 

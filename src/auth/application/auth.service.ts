@@ -1,7 +1,5 @@
 import { jwtService } from "../adapters/jwt.service";
-import {
-  UsersRepository,
-} from "../../users/infrastructure/users.repository";
+import { UsersRepository } from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
 import { RegistrationResult, Result } from "../../core/result/result.type";
 import { bcryptService } from "../adapters/bcrypt.service";
@@ -212,13 +210,11 @@ export class AuthService {
     //достаем поле expirationDate
     const expirationDate: Date | null =
       await this.usersRepository.checkRecoveryCodeExpirationDate(recoveryCode);
-    console.log(expirationDate!);
-    console.log(new Date(Date.now()));
-    //проверяем не истек ли срок годности
     if (expirationDate! < new Date(Date.now())) {
       return handleBadRequestResult("code is expired!", "recoveryCode");
     }
     const newPasswordHash = await bcryptService.generateHash(newPassword);
+    console.log(newPasswordHash, "newPassHash check"); //пароль не обновляется
     //если не истек, обновляем пароль
     await this.usersRepository.resetPassword(newPasswordHash, recoveryCode);
     return handleSuccessResult();
