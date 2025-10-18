@@ -1,6 +1,5 @@
 import { jwtService } from "../adapters/jwt.service";
 import {
-  PassRecoveryDtoType,
   UsersRepository,
 } from "../../users/infrastructure/users.repository";
 import { ResultStatus } from "../../core/result/resultCode";
@@ -193,13 +192,7 @@ export class AuthService {
     console.log(user, "user in BLL");
     user.createRecoveryObject();
     console.log(user, "user after applying the method");
-    const recoveryCode = user.passwordRecovery.recoveryCode; //ти строки кода лишние, я могу просто перезаписать юзера в бд
-    const expirationDate = user.passwordRecovery.passRecoveryExpDate;
-    const recoveryDto: PassRecoveryDtoType = {
-      recoveryCode: recoveryCode!,
-      expirationDate: expirationDate!,
-    };
-    await this.usersRepository.updatePasswordRecovery(user.email, recoveryDto);
+    await this.usersRepository.updatePasswordRecovery(user);
     try {
       await emailAdapter.sendEmail(
         email,

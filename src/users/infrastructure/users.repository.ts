@@ -144,17 +144,11 @@ export class UsersRepository {
     return this.mapToUserDomain(user);
   }
 
-  async updatePasswordRecovery(
-    email: string,
-    recoveryData: PassRecoveryDtoType,
-  ): Promise<void> {
+  async updatePasswordRecovery(user: User): Promise<void> {
     await userCollection.updateOne(
-      { email: email },
+      { email: user.email },
       {
-        $set: {
-          recoveryCode: recoveryData.recoveryCode,
-          passRecoveryExpDate: recoveryData.expirationDate,
-        },
+        $set: { ...user },
       },
     );
     return;
