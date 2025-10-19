@@ -78,4 +78,3 @@ authRouter
     inputValidationResultMiddleware,
     authUserController.newPassword.bind(authUserController),
   );
-

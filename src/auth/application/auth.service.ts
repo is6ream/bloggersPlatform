@@ -131,15 +131,19 @@ export class AuthService {
       );
 
       if (loginOrEmailError) {
-        console.log("loginOrEmailError", loginOrEmailError);
         return handleUnauthorizedFResult("wrong credentials", "loginOrEmail");
       }
       if (passwordError) {
-        console.log("passwordError", passwordError);
         return handleUnauthorizedFResult("wrong credentials", "password");
       }
-    }//передаем сюда старый пароль и сервер выдает 500 ошибку, исправить
-    const accessToken = await jwtService.createAccessToken(result.data!.id!);
+    } //передаем сюда старый пароль и сервер выдает 500 ошибку, исправить
+    if (!result.data) {
+      return handleUnauthorizedFResult(
+        "wrong credentials",
+        "password or login",
+      );
+    }
+    const accessToken = await jwtService.createAccessToken(result.data.id!);
     const deviceId = randomUUID(); //формируем deviceId
     const refreshToken = await jwtService.createRefreshToken(
       result.data!.id!, //используем id user и кладем в payload refreshToken
