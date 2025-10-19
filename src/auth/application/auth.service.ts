@@ -138,7 +138,7 @@ export class AuthService {
         console.log("passwordError", passwordError);
         return handleUnauthorizedFResult("wrong credentials", "password");
       }
-    }
+    }//передаем сюда старый пароль и сервер выдает 500 ошибку, исправить
     const accessToken = await jwtService.createAccessToken(result.data!.id!);
     const deviceId = randomUUID(); //формируем deviceId
     const refreshToken = await jwtService.createRefreshToken(

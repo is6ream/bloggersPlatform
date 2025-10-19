@@ -20,14 +20,15 @@ export const passwordValidator = body("password")
   .bail();
 
 export const emailValidator = body("email")
-  .exists()
-  .withMessage("field email is required")
-  .isString()
-  .withMessage("field email must be a string")
-  .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)
-  .withMessage("input must be a email");
+    .exists()
+    .withMessage("field email is required")
+    .isString()
+    .withMessage("field email must be a string")
+    .matches(/^[\w-\.\+]+@([\w-]+\.)+[\w-]{2,4}$/)
+    .withMessage("input must be a email");
 export const userValidators = [
   loginValidator,
   passwordValidator,
   emailValidator,
 ];
+
