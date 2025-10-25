@@ -14,14 +14,14 @@ export type BlogViewModel = {
   isMembership: boolean;
 };
 
-// export type BlogDB = {
-//   id?: string;
-//   name: string;
-//   description: string;
-//   websiteUrl: string;
-//   createdAt: Date;
-//   isMembership: boolean;
-// };
+export type BlogDB = {
+  // id?: string;
+  name: string;
+  description: string;
+  websiteUrl: string;
+  createdAt: Date;
+  isMembership: boolean;
+};
 
 //использую интерфейс класса Blog для описания сущности в бд
 export class Blog {

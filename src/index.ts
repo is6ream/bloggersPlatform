@@ -2,7 +2,7 @@ import express from "express";
 import { setupApp } from "./setup-app";
 import { appConfig } from "./core/config/config";
 // import { db } from "./db/mongo.db";
-import {db} from "./db/runDb";
+import { db } from "./db/runDb";
 
 const bootStrap = async () => {
   const app = express();
