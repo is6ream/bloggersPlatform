@@ -2,10 +2,13 @@ import { BlogInputDto, BlogViewModel } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 import { injectable } from "inversify";
+import {BlogModel} from "../types/mongoose";
 
 @injectable()
 export class BlogsRepository {
   async create(newBlog: BlogInputDto): Promise<string> {
+
+
     const insertResult = await blogCollection.insertOne(newBlog);
     return insertResult.insertedId.toString();
   }
