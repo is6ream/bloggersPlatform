@@ -1,36 +1,15 @@
-import { Document, Types, Schema } from "mongoose";
+import mongoose, { HydratedDocument, model, Model } from "mongoose";
+import { BlogDB } from "./blogs-types";
 
-export interface BlogDocument extends Document {
-  //описал то, что будет храниться в базе данных
-  _id: Types.ObjectId;
-  name: string;
-  description: string;
-  websiteUrl: string;
-  createdAt: Date;
-  isMembership: boolean;
-}
+export type BlogModel = Model<BlogDB>;
+export type BlogDocument = HydratedDocument<BlogDB>; //можно добавить статистические методы для сохранения пользователя
 
-const BlogsSchema = new Schema<BlogDocument>({
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  websiteUrl: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    required: true,
-  },
-  isMembership: {
-    type: Boolean,
-    required: true,
-  },
+const blogsSchema = new mongoose.Schema<BlogDB, BlogModel>({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  websiteUrl: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now() }, //автоматически генерируем поле createdAt
+  isMembership: { type: Boolean, default: false },
 });
 
-export const BlogModel = mongoose.model<BlogDocument>("blogs", BlogsSchema);
+export const BlogModel = model<BlogDB, BlogModel>("BlogModel", blogsSchema);

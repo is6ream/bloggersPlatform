@@ -21,7 +21,6 @@ export class BlogsService {
       createdAt: new Date(),
       isMembership: false,
     };
-
     return this.blogsRepository.create(newBlog);
   }
 

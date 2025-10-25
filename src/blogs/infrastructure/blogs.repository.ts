@@ -2,19 +2,25 @@ import { BlogInputDto, BlogViewModel } from "../types/blogs-types";
 import { blogCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 import { injectable } from "inversify";
-import {BlogModel} from "../types/mongoose";
+import { BlogModel } from "../types/mongoose";
 
 @injectable()
 export class BlogsRepository {
   async create(newBlog: BlogInputDto): Promise<string> {
+    const blogInstance = new BlogModel();
 
-
-    const insertResult = await blogCollection.insertOne(newBlog);
-    return insertResult.insertedId.toString();
+    blogInstance.name = newBlog.name;
+    blogInstance.description = newBlog.description;
+    blogInstance.websiteUrl = newBlog.websiteUrl;
+    blogInstance.createdAt = newBlog.createdAt;
+    blogInstance.isMembership = newBlog.isMembership;
+    await blogInstance.save(); //сделать save через репозиторий
+    return blogInstance._id.toString();
+    //в постман возвращается созданный блог, но в бд он не отображается
   }
 
   async findById(id: string): Promise<BlogViewModel | false> {
-    const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
+    const blog = await BlogModel.findOne({ _id: new ObjectId(id) });
     if (!blog) {
       return false;
     }
