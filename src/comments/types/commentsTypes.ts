@@ -1,10 +1,11 @@
+export type CommentInfoType = {
+  userId: string;
+  userLogin: string;
+};
+
 export type CommentDB = {
-  id?: string;
   content: string;
-  commentatorInfo: {
-    userId: string;
-    userLogin: string;
-  };
+  commentatorInfo: CommentInfoType;
   createdAt: Date;
 };
 

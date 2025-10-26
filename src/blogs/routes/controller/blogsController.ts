@@ -61,8 +61,10 @@ export class BlogsController {
       const result = await this.blogsService.delete(id);
       if (result.status !== ResultStatus.Success) {
         res.sendStatus(HttpStatus.NotFound);
+        return;
       }
       res.status(HttpStatus.NoContent).send();
+      return;
     } catch (error: unknown) {
       console.log(error);
       res.sendStatus(HttpStatus.InternalServerError);
