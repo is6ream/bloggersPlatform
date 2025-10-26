@@ -37,6 +37,7 @@ export type UserDbDto = {
 };
 
 export type UserDB = {
+    id?: string;
   login: string;
   email: string;
   passwordHash: string;
@@ -48,7 +49,7 @@ export type UserDB = {
     isConfirmed: boolean;
   };
 
-  passwordRecovery: {
+  passwordRecovery?: {
     recoveryCode: string | null;
     passRecoveryExpDate: Date | null;
     isUsed: boolean /*этот флаг нужен для того,

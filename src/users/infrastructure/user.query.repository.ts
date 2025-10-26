@@ -3,6 +3,7 @@ import { UserQueryInput } from "../input/user-query.input";
 import { CurrentUser, UserViewModel } from "../types/user-types";
 import { ObjectId } from "mongodb";
 import { injectable } from "inversify";
+import {UserModel} from "../types/usersMongoose";
 
 @injectable()
 export class UsersQueryRepository {
@@ -33,14 +34,14 @@ export class UsersQueryRepository {
       }
     }
 
-    const dbItems = await userCollection
+    const dbItems = await UserModel
       .find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .toArray();
+      .lean();
 
-    const totalCount = await userCollection.countDocuments(filter);
+    const totalCount = await UserModel.countDocuments(filter);
 
     const items = dbItems.map((item) => {
       return {
@@ -54,7 +55,7 @@ export class UsersQueryRepository {
   }
 
   async findById(id: string): Promise<CurrentUser | null> {
-    const user = await userCollection.findOne({ _id: new ObjectId(id) });
+    const user = await UserModel.findOne({ _id: new ObjectId(id) });
     if (!user) {
       return null;
     }

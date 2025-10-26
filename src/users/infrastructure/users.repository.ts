@@ -1,179 +1,194 @@
-import { UserDB } from "../input/create-user-dto";
-import { UserDbDto, UserViewModel } from "../types/user-types";
-import { userCollection } from "../../db/mongo.db";
-import { ObjectId, WithId } from "mongodb";
-import { User } from "../constructors/user.entity";
-import { UserOutput } from "../types/user.output";
-import { injectable } from "inversify";
+import {UserDbDto, UserViewModel} from "../types/user-types";
+import {userCollection} from "../../db/mongo.db";
+import {ObjectId, WithId} from "mongodb";
+import {User} from "../constructors/user.entity";
+import {UserOutput} from "../types/user.output";
+import {injectable} from "inversify";
+import {UserModel} from "../types/usersMongoose";
+import { UserDB} from "../types/user-types";
 
 @injectable()
 export class UsersRepository {
-  async create(newUser: User): Promise<UserViewModel> {
-    const insertResult = await userCollection.insertOne(newUser);
-    const insertId = insertResult.insertedId;
+    async create(newUser: User): Promise<UserViewModel> {
+        const user = new UserModel();
 
-    return {
-      id: insertId.toString(),
-      login: newUser.login,
-      email: newUser.email,
-      createdAt: newUser.createdAt,
-    };
-  }
+        user.login = newUser.login;
+        user.email = newUser.email;
+        user.passwordHash = newUser.passwordHash;
+        user.createdAt = newUser.createdAt;
 
-  async find(id: string): Promise<UserViewModel> {
-    const user = await userCollection.findOne({ _id: new ObjectId(id) });
-    return {
-      id: user!._id.toString(),
-      login: user!.login,
-      email: user!.email,
-      createdAt: user!.createdAt,
-    };
-  }
+        user.emailConfirmation = newUser.emailConfirmation;
+        user.passwordRecovery = newUser.passwordRecovery;
 
-  async delete(id: string): Promise<boolean> {
-    const deleteResult = await userCollection.deleteOne({
-      _id: new ObjectId(id),
-    });
-    return deleteResult.deletedCount === 1;
-  }
+        await user.save();
 
-  async isUserExistByEmailOrLogin(
-    loginOrEmail: string,
-  ): Promise<UserOutput | null> {
-    const user: WithId<User> | null = await userCollection.findOne({
-      //
-      $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
-    });
-    if (!user) {
-      return null;
-    }
-    return {
-      id: user._id.toString(),
-      login: user.login,
-      email: user.email,
-      passwordHash: user!.passwordHash,
-      createdAt: user.createdAt,
-      emailConfirmation: {
-        confirmationCode: user.emailConfirmation.confirmationCode!,
-        expirationDate: user.emailConfirmation.expirationDate!,
-        isConfirmed: user.emailConfirmation.isConfirmed,
-      },
-    };
-  }
+        console.log(user, "user check");
+        // const insertResult = await userCollection.insertOne(newUser);
+        // const insertId = insertResult.insertedId;
 
-  async doesExistByLoginOrEmail(
-    login: string,
-    email: string,
-  ): Promise<UserDB | undefined> {
-    const existingByLogin = await userCollection.findOne({ login });
-    if (existingByLogin) {
-      return existingByLogin;
+        return {
+            id: user.id.toString(),
+            login: user.login,
+            email: user.email,
+            createdAt: user.createdAt,
+        };
     }
 
-    const existingByEmail = await userCollection.findOne({ email });
-    if (existingByEmail) {
-      return existingByEmail;
-    }
-  }
-
-  async findUserByConfirmationCode(code: string): Promise<UserDbDto | null> {
-    const user: WithId<User> | null = await userCollection.findOne({
-      "emailConfirmation.confirmationCode": code,
-    });
-    if (!user) {
-      return null;
+    async find(id: string): Promise<UserViewModel> {
+        const user = await UserModel.findOne({_id: new ObjectId(id)});
+        return {
+            id: user!._id.toString(),
+            login: user!.login,
+            email: user!.email,
+            createdAt: user!.createdAt,
+        };
     }
 
-    if (
-      !user.emailConfirmation?.confirmationCode || //если у объекта user нет confirmationCode или expirationDate
-      !user.emailConfirmation?.expirationDate
-    ) {
-      return null;
+    async delete(id: string): Promise<boolean> {
+        const deleteResult = await UserModel.deleteOne({
+            _id: new ObjectId(id),
+        });
+        return deleteResult.deletedCount === 1;
     }
-    return {
-      id: user._id.toString(),
-      login: user.login,
-      email: user.email,
-      passwordHash: user.passwordHash,
-      createdAt: user.createdAt,
-      emailConfirmation: {
-        confirmationCode: user.emailConfirmation.confirmationCode,
-        expirationDate: user.emailConfirmation.expirationDate,
-        isConfirmed: user.emailConfirmation.isConfirmed,
-      }, //сделал валидацию на уровне метода
-    };
-  }
 
-  async update(id: string): Promise<void> {
-    const updateResult = await userCollection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: { "emailConfirmation.isConfirmed": true } },
-    );
-    console.log(updateResult, "updateResult check");
-    return;
-  }
-
-  //у меня есть пасс и код, мне нужно по коду достать user, и обновить пароль
-  async resetPassword(newHash: string, recoveryCode: string): Promise<void> {
-    await userCollection.updateOne(
-      {
-        "passwordRecovery.recoveryCode": recoveryCode,
-      },
-      {
-        $set: {
-          passwordHash: newHash,
-          "passwordRecovery.isUsed": true,
-        },
-      },
-    );
-    return;
-  }
-  async checkRecoveryCodeExpirationDate(code: string): Promise<Date | null> {
-    const user: WithId<User> | null = await userCollection.findOne({
-      "passwordRecovery.recoveryCode": code,
-    });
-    if (!user) {
-      return null;
+    async isUserExistByEmailOrLogin(
+        loginOrEmail: string,
+    ): Promise<UserOutput | null> {
+        const user: WithId<User> | null = await UserModel.findOne({
+            //
+            $or: [{email: loginOrEmail}, {login: loginOrEmail}],
+        });
+        if (!user) {
+            return null;
+        }
+        return {
+            id: user._id.toString(),
+            login: user.login,
+            email: user.email,
+            passwordHash: user!.passwordHash,
+            createdAt: user.createdAt,
+            emailConfirmation: {
+                confirmationCode: user.emailConfirmation.confirmationCode!,
+                expirationDate: user.emailConfirmation.expirationDate!,
+                isConfirmed: user.emailConfirmation.isConfirmed,
+            },
+        };
     }
-    return user.passwordRecovery.passRecoveryExpDate;
-  }
 
-  async findByEmail(email: string): Promise<User | null> {
-    const user = await userCollection.findOne({ email: email });
-    if (!user) {
-      return null;
+    async doesExistByLoginOrEmail(
+        login: string,
+        email: string,
+    ): Promise<UserDB | undefined> {
+        const existingByLogin = await UserModel.findOne({login});
+        if (existingByLogin) {
+            return existingByLogin;
+        }
+
+        const existingByEmail = await UserModel.findOne({email});
+        if (existingByEmail) {
+            return existingByEmail;
+        }
     }
-    return this.mapToUserDomain(user);
-  }
 
-  async updatePasswordRecovery(user: User): Promise<void> {
-    await userCollection.updateOne(
-      { email: user.email },
-      {
-        $set: { ...user },
-      },
-    );
-    return;
-  }
+    async findUserByConfirmationCode(code: string): Promise<UserDbDto | null> {
+        const user: WithId<User> | null = await UserModel.findOne({
+            "emailConfirmation.confirmationCode": code,
+        });
+        if (!user) {
+            return null;
+        }
 
-  private mapToUserDomain(userData: any): User {
-    //функция маппер, которая приводит искомый объект к инстансу класса User для дальнейшей работы с методами
-    const user = new User(
-      userData.login,
-      userData.email,
-      userData.passwordHash,
-    );
+        if (
+            !user.emailConfirmation?.confirmationCode || //если у объекта user нет confirmationCode или expirationDate
+            !user.emailConfirmation?.expirationDate
+        ) {
+            return null;
+        }
+        return {
+            id: user._id.toString(),
+            login: user.login,
+            email: user.email,
+            passwordHash: user.passwordHash,
+            createdAt: user.createdAt,
+            emailConfirmation: {
+                confirmationCode: user.emailConfirmation.confirmationCode,
+                expirationDate: user.emailConfirmation.expirationDate,
+                isConfirmed: user.emailConfirmation.isConfirmed,
+            }, //сделал валидацию на уровне метода
+        };
+    }
 
-    user.createdAt = userData.createdAt;
-    user.emailConfirmation = userData.emailConfirmation;
-    user.passwordRecovery = userData.passwordRecovery;
+    async update(id: string): Promise<void> {
+        const updateResult = await UserModel.updateOne(
+            {_id: new ObjectId(id)},
+            {$set: {"emailConfirmation.isConfirmed": true}},
+        );
+        console.log(updateResult, "updateResult check");
+        return;
+    }
 
-    return user;
-  }
+    //у меня есть пасс и код, мне нужно по коду достать user, и обновить пароль
+    async resetPassword(newHash: string, recoveryCode: string): Promise<void> {
+        await UserModel.updateOne(
+            {
+                "passwordRecovery.recoveryCode": recoveryCode,
+            },
+            {
+                $set: {
+                    passwordHash: newHash,
+                    "passwordRecovery.isUsed": true,
+                },
+            },
+        );
+        return;
+    }
+
+    async checkRecoveryCodeExpirationDate(code: string): Promise<Date | null> {
+        const user: WithId<User> | null = await UserModel.findOne({
+            "passwordRecovery.recoveryCode": code,
+        });
+        if (!user) {
+            return null;
+        }
+        return user.passwordRecovery.passRecoveryExpDate;
+    }
+
+    async findByEmail(email: string): Promise<User | null> {
+        const user = await UserModel.findOne({email: email});
+        if (!user) {
+            return null;
+        }
+        return this.mapToUserDomain(user);
+    }
+
+    async updatePasswordRecovery(user: User): Promise<void> {
+        await UserModel.updateOne(
+            {email: user.email},
+            {
+                $set: {...user},
+            },
+        );
+        return;
+    }
+
+    private mapToUserDomain(userData: any): User {
+        //функция маппер, которая приводит искомый объект к инстансу класса User для дальнейшей работы с методами
+        const user = new User(
+            userData.login,
+            userData.email,
+            userData.passwordHash,
+        );
+
+        user.createdAt = userData.createdAt;
+        user.emailConfirmation = userData.emailConfirmation;
+        user.passwordRecovery = userData.passwordRecovery;
+
+        return user;
+    }
 }
 
 export type PassRecoveryDtoType = {
-  recoveryCode: string;
-  expirationDate: Date;
-  // isUsed: boolean; //стоит ли передавать это поле для обновления класса при отправке ссылки на восстановление пароля?
+    recoveryCode: string;
+    expirationDate: Date;
+    // isUsed: boolean; //стоит ли передавать это поле для обновления класса при отправке ссылки на восстановление пароля?
 };
