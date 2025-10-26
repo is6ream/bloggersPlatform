@@ -12,4 +12,4 @@ const blogsSchema = new mongoose.Schema<BlogDB, BlogModel>({
   isMembership: { type: Boolean, default: false },
 });
 
-export const BlogModel = model<BlogDB, BlogModel>("BlogModel", blogsSchema);
+export const BlogModel = model<BlogDB, BlogModel>("blogModel", blogsSchema);
