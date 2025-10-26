@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { ApiRequestLogDb } from "../customRateLimitType";
 import { rateLimitCollection } from "../../../db/mongo.db";
+import {SessionModel} from "../../types/securityDevicesMongoose";
 
 export async function saveApiRequest(req: Request) {
   //создаем функцию, которая формирует объект запроса и записывает его в бд
@@ -10,6 +11,6 @@ export async function saveApiRequest(req: Request) {
     date: new Date(),
   };
 
-  await rateLimitCollection.insertOne(apiRequestLog);
+  await SessionModel.insertOne(apiRequestLog); //остановился тут
   return;
 }
