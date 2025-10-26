@@ -4,6 +4,7 @@ import { WithId } from "mongodb";
 import { Blog, BlogViewModel } from "../types/blogs-types";
 import { ObjectId } from "mongodb";
 import { injectable } from "inversify";
+import { BlogModel } from "../types/mongoose";
 
 @injectable()
 export class BlogsQueryRepository {
@@ -19,18 +20,18 @@ export class BlogsQueryRepository {
     if (searchNameTerm) {
       filter["name"] = { $regex: searchNameTerm, $options: "i" };
     }
-    const items = await blogCollection
+    const items = await BlogModel
       .find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .toArray();
+      .toArray(); //
     const totalCount = await blogCollection.countDocuments(filter);
     return { items, totalCount };
   }
 
   async findById(id: string): Promise<BlogViewModel | null> {
-    const blog = await blogCollection.findOne({ _id: new ObjectId(id) });
+    const blog = await BlogModel.findOne({ _id: new ObjectId(id) });
     if (!blog) {
       return null;
     }

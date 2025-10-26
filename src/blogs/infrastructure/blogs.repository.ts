@@ -6,17 +6,25 @@ import { BlogModel } from "../types/mongoose";
 
 @injectable()
 export class BlogsRepository {
+  //нужно понять, куда сохраняются данные
   async create(newBlog: BlogInputDto): Promise<string> {
     const blogInstance = new BlogModel();
-
+    //как сделать save через репозиторий?
     blogInstance.name = newBlog.name;
     blogInstance.description = newBlog.description;
     blogInstance.websiteUrl = newBlog.websiteUrl;
     blogInstance.createdAt = newBlog.createdAt;
     blogInstance.isMembership = newBlog.isMembership;
-    await blogInstance.save(); //сделать save через репозиторий
+
+    console.log("Before save - isNew:", blogInstance.isNew); // true
+    console.log("Before save - isModified:", blogInstance.isModified()); // true
+
+    await blogInstance.save();
+
+    console.log("After save - isNew:", blogInstance.isNew); // false
+    console.log("After save - _id:", blogInstance._id);
+
     return blogInstance._id.toString();
-    //в постман возвращается созданный блог, но в бд он не отображается
   }
 
   async findById(id: string): Promise<BlogViewModel | false> {
