@@ -20,12 +20,11 @@ export class BlogsQueryRepository {
     if (searchNameTerm) {
       filter["name"] = { $regex: searchNameTerm, $options: "i" };
     }
-    const items = await BlogModel
-      .find(filter)
+    const items = await BlogModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .toArray(); //
+      .toArray(); //нужно применить другой метод
     const totalCount = await blogCollection.countDocuments(filter);
     return { items, totalCount };
   }

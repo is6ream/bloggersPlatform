@@ -43,19 +43,21 @@ export class BlogsRepository {
   }
 
   async update(id: string, dto: BlogInputDto): Promise<boolean> {
-    const updateResult = await blogCollection.updateOne(
-      {
-        _id: new ObjectId(id),
-      },
-      {
-        $set: {
-          name: dto.name,
-          description: dto.description,
-          websiteUrl: dto.websiteUrl,
-        },
-      },
-    );
-    return updateResult.modifiedCount === 1;
+    const updateResult = BlogModel.updateOne({ _id: new ObjectId(id) }, dto);
+    return true;
+    // await blogCollection.updateOne(
+    //   {
+    //     _id: new ObjectId(id),
+    //   },
+    //   {
+    //     $set: {
+    //       name: dto.name,
+    //       description: dto.description,
+    //       websiteUrl: dto.websiteUrl,
+    //     },
+    //   },
+    // );
+    // return updateResult.modifiedCount === 1;
   }
 
   async delete(id: string): Promise<boolean> {
