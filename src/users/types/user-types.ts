@@ -37,7 +37,7 @@ export type UserDbDto = {
 };
 
 export type UserDB = {
-    id?: string;
+  id?: string;
   login: string;
   email: string;
   passwordHash: string;

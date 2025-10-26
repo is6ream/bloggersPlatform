@@ -16,7 +16,7 @@ export class UsersService {
     @inject(UsersRepository) private usersRepository: UsersRepository,
   ) {}
   async create(dto: UserInputModel): Promise<Result<string>> {
-   const isEmailExist = await this.usersRepository.isUserExistByEmailOrLogin(
+    const isEmailExist = await this.usersRepository.isUserExistByEmailOrLogin(
       dto.email,
     );
     if (isEmailExist) {

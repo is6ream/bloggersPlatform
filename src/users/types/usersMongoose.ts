@@ -1,8 +1,8 @@
-import { Model, Schema, model } from "mongoose";
+import { Model, Schema, model, HydratedDocument } from "mongoose";
 import { UserDB } from "./user-types";
 
 export type UserModel = Model<UserDB>;
-export type UserDocument = Model<UserDB>;
+export type UserDocument = HydratedDocument<UserDB>;
 
 const userSchema = new Schema<UserDB, UserModel>({
   login: { type: String, required: true },

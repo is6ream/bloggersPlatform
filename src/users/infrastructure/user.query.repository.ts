@@ -1,9 +1,8 @@
-import { userCollection } from "../../db/mongo.db";
 import { UserQueryInput } from "../input/user-query.input";
 import { CurrentUser, UserViewModel } from "../types/user-types";
 import { ObjectId } from "mongodb";
 import { injectable } from "inversify";
-import {UserModel} from "../types/usersMongoose";
+import { UserModel } from "../types/usersMongoose";
 
 @injectable()
 export class UsersQueryRepository {
@@ -34,8 +33,7 @@ export class UsersQueryRepository {
       }
     }
 
-    const dbItems = await UserModel
-      .find(filter)
+    const dbItems = await UserModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
