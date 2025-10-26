@@ -24,8 +24,8 @@ export class BlogsQueryRepository {
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .toArray(); //нужно применить другой метод
-    const totalCount = await blogCollection.countDocuments(filter);
+      .lean(); //нужно применить другой метод
+    const totalCount = await BlogModel.countDocuments(filter);
     return { items, totalCount };
   }
 
