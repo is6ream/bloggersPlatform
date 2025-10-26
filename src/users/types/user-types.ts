@@ -35,3 +35,24 @@ export type UserDbDto = {
     isConfirmed: boolean;
   };
 };
+
+export type UserDB = {
+  login: string;
+  email: string;
+  passwordHash: string;
+  createdAt: Date;
+
+  emailConfirmation: {
+    confirmationCode: string | null;
+    expirationDate: Date | null;
+    isConfirmed: boolean;
+  };
+
+  passwordRecovery: {
+    recoveryCode: string | null;
+    passRecoveryExpDate: Date | null;
+    isUsed: boolean /*этот флаг нужен для того,
+      чтобы злоумышленник не смог использовать recovery code
+      несколько раз **/;
+  };
+};

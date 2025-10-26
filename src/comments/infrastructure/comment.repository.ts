@@ -19,6 +19,7 @@ export class CommentsRepository {
     comment.createdAt = newComment.createdAt;
     await comment.save();
     return comment._id.toString();
+    //теперь, чтобы проверить нужно переписать ветку users на mongoose
   }
 
   async update(id: string, dto: CommentInputDto): Promise<any> {

@@ -17,9 +17,9 @@ import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
 import { SessionDataType } from "../types/input/login-input.models";
 import { SessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { UserOutput } from "../../users/types/user.output";
-import { UserDB } from "../../users/input/create-user-dto";
 import { AuthError } from "../types/authErrorType";
 import { injectable, inject } from "inversify";
+import { UserDB } from "../../users/types/user-types";
 
 @injectable()
 export class AuthService {
