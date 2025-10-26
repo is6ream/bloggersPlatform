@@ -4,6 +4,7 @@ export type CommentInfoType = {
 };
 
 export type CommentDB = {
+  postId?: string;
   content: string;
   commentatorInfo: CommentInfoType;
   createdAt: Date;

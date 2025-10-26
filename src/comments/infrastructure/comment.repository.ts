@@ -7,12 +7,18 @@ import {
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { injectable } from "inversify";
+import { CommentDocument, CommentModel } from "../types/mongoose/mongoose";
 
 @injectable()
 export class CommentsRepository {
   async create(newComment: CommentInputType): Promise<string> {
-    const insertResult = await commentsCollection.insertOne(newComment);
-    return insertResult.insertedId.toString();
+    const comment: CommentDocument = new CommentModel();
+    comment.postId = newComment.postId;
+    comment.content = newComment.content;
+    comment.commentatorInfo = newComment.commentatorInfo;
+    comment.createdAt = newComment.createdAt;
+    await comment.save();
+    return comment._id.toString();
   }
 
   async update(id: string, dto: CommentInputDto): Promise<any> {
