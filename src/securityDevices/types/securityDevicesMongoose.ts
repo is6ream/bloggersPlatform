@@ -6,8 +6,8 @@ export type SecurityDeviceModel = Model<SessionDB>;
 export type SecurityDocument = HydratedDocument<SecurityDeviceModel>;
 
 const sessionSchema = new Schema<SessionDB, SecurityDeviceModel>({
-  userId: { type: String, unique: true, required: true },
-  deviceId: { type: String, unique: true, required: true },
+  userId: { type: String, required: true },
+  deviceId: { type: String, required: true },
   iat: { type: String, required: true },
   deviceName: { type: String, required: true },
   ip: { type: String, required: true },
