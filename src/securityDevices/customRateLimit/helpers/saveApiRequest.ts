@@ -13,5 +13,5 @@ export async function saveApiRequest(req: Request) {
   requestLog.ip = apiRequestLog.ip;
   requestLog.url = apiRequestLog.url;
   requestLog.date = apiRequestLog.date;
-  await RequestLogModel.save(); //остановился тут
+  await requestLog.save(); //тип Model не добавляет метода save?
 }

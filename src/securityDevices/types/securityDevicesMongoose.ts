@@ -1,5 +1,5 @@
 import { SessionDB } from "./sessionDataTypes";
-import { HydratedDocument, Schema, Model, model } from "mongoose";
+import { HydratedDocument, Schema, model, Model } from "mongoose";
 import { ApiRequestLogDb } from "../customRateLimit/customRateLimitType";
 
 export type SecurityDeviceModel = Model<SessionDB>;
@@ -17,7 +17,7 @@ export const SessionModel = model<SessionDB, SecurityDeviceModel>(
   "sessionModel",
   sessionSchema,
 );
-
+//-------------------------------------------
 //описал модель для сохранения запроса в бд
 export type ApiRequestLogModel = Model<ApiRequestLogDb>;
 export type ApiRequestLogDocument = HydratedDocument<ApiRequestLogModel>;
@@ -27,8 +27,8 @@ const apiRequestLogSchema = new Schema<ApiRequestLogDb, ApiRequestLogModel>({
   url: { type: String, required: true },
   date: { type: Date, required: true },
 });
-
-export const RequestLogModel = model<ApiRequestLogDb, ApiRequestLogDocument>( //т
+//задача - через mongoose записать реквест в бд
+export const RequestLogModel = model<ApiRequestLogDb, ApiRequestLogModel>( //т
   "apiRequestLog",
   apiRequestLogSchema,
 );
