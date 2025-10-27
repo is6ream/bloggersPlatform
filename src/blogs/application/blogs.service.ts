@@ -6,6 +6,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { injectable, inject } from "inversify";
+import { BlogModel } from "../types/mongoose";
 
 @injectable()
 export class BlogsService {
@@ -14,17 +15,18 @@ export class BlogsService {
   ) {}
 
   async create(dto: BlogInputModel): Promise<string> {
-    const newBlog: BlogInputDto = {
-      name: dto.name,
-      description: dto.description,
-      websiteUrl: dto.websiteUrl,
-      createdAt: new Date(),
-      isMembership: false,
-    };
-    return this.blogsRepository.create(newBlog);
+    const blogInstance = new BlogModel();
+    //создаем инстанс от модели блога из mongoose и присваиваем ей поля из dto, остальные поля стоят по дефолту
+    blogInstance.name = dto.name;
+    blogInstance.description = dto.description;
+    blogInstance.websiteUrl = dto.websiteUrl;
+
+    return this.blogsRepository.create(blogInstance);
   }
 
   async update(id: string, dto: BlogInputDto): Promise<Result> {
+
+
     const updateResult = await this.blogsRepository.update(id, dto);
     if (!updateResult) {
       return handleNotFoundResult("Blog not found", "blogId");
