@@ -9,9 +9,9 @@ import { PostModel } from "../types/postMongoose";
 @injectable()
 export class PostsRepository {
   async create(newPost: PostDB): Promise<string> {
-    const post = new PostModel();
+    const post = new PostModel(); //это все нужно сделать в сервисе, создать инстанс модели поста в монгус и сохранить в репозитории
 
-    post.id = newPost.id;
+    post.id = newPost.id; //id  в посте не нужен, монго создает Id
     post.title = newPost.title;
     post.shortDescription = newPost.shortDescription;
     post.content = newPost.content;
@@ -19,18 +19,18 @@ export class PostsRepository {
     post.blogName = newPost.blogName;
     post.createdAt = newPost.createdAt;
 
-    await post.save();
+    await post.save(); //создавать объекты в бд так?
     return post._id.toString();
   }
 
   async createPostByBlogId(newPost: PostDB): Promise<string> {
-    const insertResult = await postCollection.insertOne(newPost);
-    const insertedId = insertResult.insertedId;
-    return insertedId.toString();
+    const post = await PostModel.create(newPost); //или так?
+    await post.save();
+    return post._id.toString();
   }
 
   async findPost(id: string): Promise<WithId<PostDB> | null> {
-    return await postCollection.findOne({ _id: new ObjectId(id) });
+    return await PostModel.findOne({ _id: new ObjectId(id) });
   }
 
   async findById(id: string): Promise<PostViewModel | null> {
