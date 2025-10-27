@@ -26,15 +26,7 @@ export class BlogsRepository {
     };
   }
 
-  async update(id: string, dto: BlogInputDto): Promise<boolean> {
-    const blog = await BlogModel.findOne({ _id: new ObjectId(id) });
-    if (!blog) {
-      return false;
-    }
-    blog.name = dto.name;
-    blog.description = dto.description;
-    blog.websiteUrl = dto.websiteUrl;
-
+  async update(blog: BlogDocument): Promise<boolean> {
     await blog.save();
     return true;
   }

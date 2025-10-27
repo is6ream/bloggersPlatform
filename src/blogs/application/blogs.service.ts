@@ -6,7 +6,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { injectable, inject } from "inversify";
-import { BlogModel } from "../types/mongoose";
+import { BlogDocument, BlogModel } from "../types/mongoose";
 
 @injectable()
 export class BlogsService {
@@ -25,12 +25,15 @@ export class BlogsService {
   }
 
   async update(id: string, dto: BlogInputDto): Promise<Result> {
-
-
-    const updateResult = await this.blogsRepository.update(id, dto);
-    if (!updateResult) {
+    const blog = await BlogModel.findById(id);
+    if (!blog) {
       return handleNotFoundResult("Blog not found", "blogId");
     }
+    blog.name = dto.name;
+    blog.description = dto.description;
+    blog.websiteUrl = dto.websiteUrl;
+
+    await this.blogsRepository.update(blog);
     return handleSuccessResult();
   }
 
