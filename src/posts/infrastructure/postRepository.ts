@@ -4,13 +4,23 @@ import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
+import { PostModel } from "../types/postMongoose";
 
 @injectable()
 export class PostsRepository {
   async create(newPost: PostDB): Promise<string> {
-    const insertResult = await postCollection.insertOne(newPost);
-    const insertedId = insertResult.insertedId;
-    return insertedId.toString();
+    const post = new PostModel();
+
+    post.id = newPost.id;
+    post.title = newPost.title;
+    post.shortDescription = newPost.shortDescription;
+    post.content = newPost.content;
+    post.blogId = newPost.blogId;
+    post.blogName = newPost.blogName;
+    post.createdAt = newPost.createdAt;
+
+    await post.save();
+    return post._id.toString();
   }
 
   async createPostByBlogId(newPost: PostDB): Promise<string> {
