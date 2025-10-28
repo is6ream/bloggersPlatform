@@ -66,10 +66,11 @@ export class PostsService {
   }
 
   async delete(id: string): Promise<Result> {
-    const result = await this.postRepository.delete(id);
-    if (!result) {
+    const post = await PostModel.findById(id);
+    if (!post) {
       return handleNotFoundResult("Post not found", "postId");
     }
+    await this.postRepository.delete(id);
     return handleSuccessResult();
   }
 }
