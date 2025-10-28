@@ -24,7 +24,7 @@ export class BlogsQueryRepository {
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .lean(); //нужно применить другой метод
+      .lean();
     const totalCount = await BlogModel.countDocuments(filter);
     return { items, totalCount };
   }
@@ -45,7 +45,7 @@ export class BlogsQueryRepository {
   }
 
   async findByBlogId(blogId: string): Promise<BlogViewModel | null> {
-    const blog = await blogCollection.findOne({ _id: new ObjectId(blogId) });
+    const blog = await BlogModel.findOne({ _id: new ObjectId(blogId) });
     if (!blog) {
       return null;
     }

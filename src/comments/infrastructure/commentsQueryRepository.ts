@@ -8,6 +8,7 @@ import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
+import { CommentModel } from "../types/mongoose/mongoose";
 
 @injectable()
 export class CommentsQueryRepository {
@@ -40,19 +41,18 @@ export class CommentsQueryRepository {
       }
     }
 
-    const items = await commentsCollection
-      .find(filter)
+    const items = await CommentModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .toArray();
+      .lean();
 
-    const totalCount = await commentsCollection.countDocuments(filter);
+    const totalCount = await CommentModel.countDocuments(filter);
     return { items, totalCount };
   }
 
   async findById(id: string): Promise<CommentViewModel | null> {
-    const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
+    const comment = await CommentModel.findOne({ _id: new ObjectId(id) });
     if (!comment) {
       return null;
     }
@@ -82,14 +82,13 @@ export class CommentsQueryRepository {
       filter.name = { $regex: searchContentTerm, $options: "i" };
     }
 
-    const items = await commentsCollection
-      .find(filter)
+    const items = await CommentModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .toArray();
+      .lean();
 
-    const totalCount = await commentsCollection.countDocuments(filter);
+    const totalCount = await CommentModel.countDocuments(filter);
 
     return { items, totalCount };
   }

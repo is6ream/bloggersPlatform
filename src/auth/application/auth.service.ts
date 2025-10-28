@@ -20,7 +20,7 @@ import { UserOutput } from "../../users/types/user.output";
 import { AuthError } from "../types/authErrorType";
 import { injectable, inject } from "inversify";
 import { UserDB } from "../../users/types/user-types";
-import {SessionModel} from "../../securityDevices/types/securityDevicesMongoose";
+import { SessionModel } from "../../securityDevices/types/securityDevicesMongoose";
 
 @injectable()
 export class AuthService {
