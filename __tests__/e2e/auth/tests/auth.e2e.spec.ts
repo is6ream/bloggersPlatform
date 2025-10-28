@@ -1,26 +1,24 @@
 import { testSeeder } from "../../../integration_test/testSeeder";
 import express from "express";
 import { setupApp } from "../../../../src/setup-app";
-import { db } from "../../../../src/db/mongo.db";
 import request from "supertest";
 import { HttpStatus } from "../../../../src/core/http-statuses";
 import { Express } from "express";
 import { AUTH_PATH } from "../../../../src/core/paths";
+import { db } from "../../../../src/db/runDb";
 
 describe("Auth API authorization flow check", () => {
   let app: Express;
   beforeAll(async () => {
-    await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.nm5nplv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    );
-    await db.drop();
+    await db.runDb();
+    await db.dropDb();
     const expressApp = express();
     app = setupApp(expressApp);
   });
 
   afterAll(async () => {
-    await db.drop();
-    await db.stop();
+    await db.dropDb();
+    await db.stopDb();
   });
   const { login, password, email } = testSeeder.createUserDto();
   const registerCredentials = {
@@ -56,7 +54,7 @@ describe("Auth API authorization flow check", () => {
     const resRefresh = await request(app)
       .post(AUTH_PATH + "/refresh-token")
       .set("Cookie", refreshToken)
-      .expect(HttpStatus.Ok);
+      .expect(HttpStatus.Ok); //здесь падает 401 ошибка
 
     expect(resRefresh.body.accessToken).toBeDefined();
 

@@ -24,7 +24,7 @@ import { CommentsQueryController } from "./comments/controller/commentsQueryCont
 import { CommentsService } from "./comments/application/comments.service";
 import { CommentsRepository } from "./comments/infrastructure/comment.repository";
 import { CommentsQueryRepository } from "./comments/infrastructure/commentsQueryRepository";
-import { AuthService } from "./auth/application/auth.service";
+import { AuthService } from "./auth/domain/auth.service";
 import { AuthUserController } from "./auth/api/controllers/auth.userController";
 import { AuthUserQueryController } from "./auth/api/controllers/auth.userQueryController";
 import "reflect-metadata";

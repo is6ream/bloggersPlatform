@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthService } from "../../application/auth.service";
+import { AuthService } from "../../domain/auth.service";
 import { HttpStatus } from "../../../core/http-statuses";
 import { ResultStatus } from "../../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../../core/result/resultCodeToHttpException";
@@ -67,6 +67,7 @@ export class AuthUserController {
       const deviceId = req.deviceId;
       const tokens = await this.authService.refreshSessions(userId, deviceId);
 
+      console.log(tokens);
       if (!tokens) {
         res.sendStatus(HttpStatus.Unauthorized);
       }

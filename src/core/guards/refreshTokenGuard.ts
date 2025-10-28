@@ -28,7 +28,7 @@ export const refreshTokenGuard = async (
     //проверяем - есть ли активный пользователь на данный момент
     new Date(payload.iat * 1000).toISOString(),
   );
-  console.log(activeSessionCheck, "check active session");
+  console.log(activeSessionCheck, "check active session"); //тут false, значит при логине сессия не записвыается
   if (!activeSessionCheck) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }

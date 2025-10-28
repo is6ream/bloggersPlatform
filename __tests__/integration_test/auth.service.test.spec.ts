@@ -2,7 +2,7 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import express, { Express } from "express";
 import { db } from "../../src/db/mongo.db";
 import { setupApp } from "../../src/setup-app";
-import { authService } from "../../src/auth/application/auth.service";
+import { authService } from "../../src/auth/domain/auth.service";
 import { ResultStatus } from "../../src/core/result/resultCode";
 import { emailAdapter } from "../../src/auth/adapters/nodemailer.service";
 import { testSeeder } from "./testSeeder";
