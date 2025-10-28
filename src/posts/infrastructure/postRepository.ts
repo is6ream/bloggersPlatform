@@ -12,9 +12,11 @@ export class PostsRepository {
     await post.save();
     return post._id.toString();
   }
+
   async findPost(id: string): Promise<WithId<PostDB> | null> {
     return PostModel.findOne({ _id: new ObjectId(id) }).lean();
   }
+
   async findById(id: string): Promise<PostViewModel | null> {
     //ранее возвращался objectResult, сейчас переделал на примитивы, упало много ошибок
     const post = await PostModel.findOne({ _id: new ObjectId(id) }).lean();
@@ -32,25 +34,13 @@ export class PostsRepository {
     };
   }
 
-  async update(id: string, dto: PostInputDto): Promise<boolean> {
-    const updateResult = await postCollection.updateOne(
-      {
-        _id: new ObjectId(id),
-      },
-      {
-        $set: {
-          title: dto.title,
-          shortDescription: dto.shortDescription,
-          content: dto.content,
-          blogId: dto.blogId,
-        },
-      },
-    );
-    return updateResult.modifiedCount === 1;
+  async update(post: PostDocument): Promise<boolean> {
+    await post.save();
+    return true;
   }
 
   async delete(id: string): Promise<boolean> {
-    const deleteResult = await postCollection.deleteOne({
+    const deleteResult = await PostModel.deleteOne({
       _id: new ObjectId(id),
     });
     return deleteResult.deletedCount === 1;

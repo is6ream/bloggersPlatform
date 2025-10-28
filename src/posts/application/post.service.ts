@@ -52,10 +52,16 @@ export class PostsService {
   }
 
   async update(id: string, dto: PostInputDto): Promise<Result> {
-    const result = await this.postRepository.update(id, dto);
-    if (!result) {
+    const post = await PostModel.findById(id);
+    if (!post) {
       return handleNotFoundResult("Post not found", "postId");
     }
+    post.title = dto.title;
+    post.shortDescription = dto.shortDescription;
+    post.content = dto.content;
+    post.blogId = dto.blogId;
+
+    await this.postRepository.update(post);
     return handleSuccessResult();
   }
 

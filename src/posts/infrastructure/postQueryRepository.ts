@@ -1,5 +1,4 @@
 import { PostDB, PostViewModel } from "../types/posts-types";
-import { postCollection } from "../../db/mongo.db";
 import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
 import { Result } from "../../core/result/result.type";
@@ -8,6 +7,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { injectable } from "inversify";
+import { PostModel } from "../types/postMongoose";
 
 @injectable()
 export class PostsQueryRepository {
@@ -23,16 +23,15 @@ export class PostsQueryRepository {
     if (searchPostNameTerm) {
       filter["name"] = { $regex: searchPostNameTerm, $options: "i" };
     }
-    const items = await postCollection
-      .find(filter)
+    const items = await PostModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .toArray();
+      .lean();
 
-    const totalCount = await postCollection.countDocuments(filter);
+    const totalCount = await PostModel.countDocuments(filter);
 
-    return { items, totalCount }; //репо возвращает items и totalCount
+    return { items, totalCount };
   }
 
   async findPostsByBlogId(
@@ -50,20 +49,19 @@ export class PostsQueryRepository {
       filter.name = { $regex: searchPostNameTerm, $options: "i" };
     }
 
-    const items = await postCollection
-      .find(filter) //тут изменил на findOne, изменил обратно, т.к нужен массив
+    const items = await PostModel.find(filter) //тут изменил на findOne, изменил обратно, т.к нужен массив
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .toArray();
+      .lean();
 
-    const totalCount = await postCollection.countDocuments(filter);
+    const totalCount = await PostModel.countDocuments(filter);
 
     return { items, totalCount };
   }
 
   async findById(id: string): Promise<Result<PostViewModel | null>> {
-    const post = await postCollection.findOne({ _id: new ObjectId(id) });
+    const post = await PostModel.findOne({ _id: new ObjectId(id) });
 
     if (!post) {
       return handleNotFoundResult("post not found", "postId");
