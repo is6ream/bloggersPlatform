@@ -9,6 +9,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { inject, injectable } from "inversify";
+import {PostModel} from "../types/postMongoose";
 
 @injectable()
 export class PostsService {
@@ -21,15 +22,13 @@ export class PostsService {
     if (!foundBlog) {
       return handleBadRequestResult("blog not found", "blogId");
     }
-    const newPostId = await this.postRepository.createPostByBlogId({
-      title: dto.title,
-      shortDescription: dto.shortDescription,
-      content: dto.content,
-      blogId: dto.blogId,
-      blogName: foundBlog.name,
-      createdAt: new Date(),
-    });
-
+    const newPost = new PostModel();
+    newPost.title = dto.title;
+    newPost.shortDescription = dto.shortDescription;
+    newPost.content = dto.content;
+    newPost.blogId = foundBlog.id;
+    newPost.blogName = foundBlog.name
+    const newPostId = await this.postRepository.create(newPost);
     return handleSuccessResult(newPostId);
   }
 

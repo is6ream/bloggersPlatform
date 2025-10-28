@@ -4,22 +4,12 @@ import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
-import { PostModel } from "../types/postMongoose";
+import {PostDocument, PostModel} from "../types/postMongoose";
 
 @injectable()
 export class PostsRepository {
-  async create(newPost: PostDB): Promise<string> {
-    const post = new PostModel(); //это все нужно сделать в сервисе, создать инстанс модели поста в монгус и сохранить в репозитории
-
-    post.id = newPost.id; //id  в посте не нужен, монго создает Id
-    post.title = newPost.title;
-    post.shortDescription = newPost.shortDescription;
-    post.content = newPost.content;
-    post.blogId = newPost.blogId;
-    post.blogName = newPost.blogName;
-    post.createdAt = newPost.createdAt;
-
-    await post.save(); //создавать объекты в бд так?
+  async create(post: PostDocument): Promise<string> {
+    await post.save();
     return post._id.toString();
   }
 
@@ -35,8 +25,7 @@ export class PostsRepository {
 
   async findById(id: string): Promise<PostViewModel | null> {
     //ранее возвращался objectResult, сейчас переделал на примитивы, упало много ошибок
-    const post = await postCollection.findOne({ _id: new ObjectId(id) });
-
+    const post = await PostModel.findOne({ _id: new ObjectId(id) }).lean();
     if (!post) {
       return null;
     }
