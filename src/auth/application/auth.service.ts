@@ -20,6 +20,7 @@ import { UserOutput } from "../../users/types/user.output";
 import { AuthError } from "../types/authErrorType";
 import { injectable, inject } from "inversify";
 import { UserDB } from "../../users/types/user-types";
+import {SessionModel} from "../../securityDevices/types/securityDevicesMongoose";
 
 @injectable()
 export class AuthService {
@@ -150,15 +151,13 @@ export class AuthService {
       deviceId,
     );
 
-    const payloadOfRefreshToken = await jwtService.verifyToken(refreshToken);
-    const sessionData: SessionDataType = {
-      userId: result.data!.id!,
-      deviceId: deviceId,
-      iat: new Date(payloadOfRefreshToken!.iat * 1000).toISOString(), //приводим к читаемой дате,
-      deviceName: sessionDto.deviceName,
-      ip: sessionDto.ip,
-    };
-    await this.sessionsRepository.createSession(sessionData); //передаем в DAL данные о сессии и сохраняем их в бд
+    const newSession = new SessionModel();
+    newSession.userId = result.data.id!;
+    newSession.deviceId = deviceId;
+    newSession.deviceName = sessionDto.deviceName;
+    newSession.ip = sessionDto.ip;
+
+    await this.sessionsRepository.createSession(newSession); //передаем в DAL данные о сессии и сохраняем их в бд
     return handleSuccessResult({ accessToken, refreshToken }); //
   }
 

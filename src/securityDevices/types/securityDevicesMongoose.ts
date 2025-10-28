@@ -8,7 +8,11 @@ export type SecurityDocument = HydratedDocument<SecurityDeviceModel>;
 const sessionSchema = new Schema<SessionDB, SecurityDeviceModel>({
   userId: { type: String, required: true },
   deviceId: { type: String, required: true },
-  iat: { type: String, required: true },
+  iat: {
+    type: String,
+    default: new Date(Date.now()).toISOString(), //для чего я захотел по дефолту установить Iat?
+    required: true,
+  },
   deviceName: { type: String, required: true },
   ip: { type: String, required: true },
 });

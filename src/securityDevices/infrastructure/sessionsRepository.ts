@@ -10,7 +10,6 @@ export class SessionsRepository {
     const session = new SessionModel();
     session.userId = sessionData.userId;
     session.deviceId = sessionData.deviceId;
-    session.iat = sessionData.iat;
     session.deviceName = sessionData.deviceName;
     session.ip = sessionData.ip;
 

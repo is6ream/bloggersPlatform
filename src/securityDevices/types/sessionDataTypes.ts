@@ -1,5 +1,3 @@
-import { SessionDataType } from "../../auth/types/input/login-input.models";
-
 export type SessionDto = {
   deviceName: string;
   ip: string;
