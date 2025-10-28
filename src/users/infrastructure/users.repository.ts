@@ -3,34 +3,14 @@ import { ObjectId, WithId } from "mongodb";
 import { User } from "../constructors/user.entity";
 import { UserOutput } from "../types/user.output";
 import { injectable } from "inversify";
-import { UserModel } from "../types/usersMongoose";
+import { UserDocument, UserModel } from "../types/usersMongoose";
 import { UserDB } from "../types/user-types";
 
 @injectable()
 export class UsersRepository {
-  async create(newUser: User): Promise<UserViewModel> {
-    const user = new UserModel();
-
-    user.login = newUser.login;
-    user.email = newUser.email;
-    user.passwordHash = newUser.passwordHash;
-    user.createdAt = newUser.createdAt;
-
-    user.emailConfirmation = newUser.emailConfirmation;
-    user.passwordRecovery = newUser.passwordRecovery;
-
-    await user.save();
-
-    console.log(user, "user check");
-    // const insertResult = await userCollection.insertOne(newUser);
-    // const insertId = insertResult.insertedId;
-
-    return {
-      id: user.id.toString(),
-      login: user.login,
-      email: user.email,
-      createdAt: user.createdAt,
-    };
+  async create(newUser: UserDocument): Promise<string> {
+    await newUser.save();
+    return newUser.id;
   }
 
   async find(id: string): Promise<UserViewModel> {
@@ -87,6 +67,12 @@ export class UsersRepository {
     if (existingByEmail) {
       return existingByEmail;
     }
+    console.log(
+      existingByLogin, //тут показывает null
+      " existingByLogin",
+      existingByEmail, //и тут null
+      " existingByEmail",
+    );
   }
 
   async findUserByConfirmationCode(code: string): Promise<UserDbDto | null> {

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UsersService } from "../application/users.service";
+import { UsersService } from "../domain/users.service";
 import { HttpStatus } from "../../core/http-statuses";
 import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";

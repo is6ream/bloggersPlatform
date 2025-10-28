@@ -18,7 +18,6 @@ export class PostsRepository {
   }
 
   async findById(id: string): Promise<PostViewModel | null> {
-    //ранее возвращался objectResult, сейчас переделал на примитивы, упало много ошибок
     const post = await PostModel.findOne({ _id: new ObjectId(id) }).lean();
     if (!post) {
       return null;

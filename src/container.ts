@@ -1,6 +1,6 @@
 import { Container } from "inversify";
 import { UsersController } from "./users/routes/usersController";
-import { UsersService } from "./users/application/users.service";
+import { UsersService } from "./users/domain/users.service";
 import { UsersRepository } from "./users/infrastructure/users.repository";
 import { SessionsController } from "./securityDevices/api/controllers/sessionsController";
 import { UsersQueryController } from "./users/routes/usersQueryController";

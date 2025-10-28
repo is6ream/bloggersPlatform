@@ -1,5 +1,5 @@
 // import { UsersRepository } from "./users/infrastructure/users.repository";
-// import { UsersService } from "./users/application/users.service";
+// import { UsersService } from "./users/domain/users.service";
 // import { UsersController } from "./users/routes/usersController";
 // import { UsersQueryRepository } from "./users/infrastructure/user.query.repository";
 // import { SessionsRepository } from "./securityDevices/infrastructure/sessionsRepository";
@@ -8,14 +8,14 @@
 // import { SessionQueryRepository } from "./securityDevices/infrastructure/sessionQueryRepository";
 // import { PostsRepository } from "./posts/infrastructure/postRepository";
 // import { PostsQueryRepository } from "./posts/infrastructure/postQueryRepository";
-// import { PostsService } from "./posts/application/post.service";
+// import { PostsService } from "./posts/domain/post.service";
 // import { BlogsRepository } from "./blogs/infrastructure/blogs.repository";
 // import { CommentsRepository } from "./comments/infrastructure/comment.repository";
-// import { CommentsService } from "./comments/application/comments.service";
+// import { CommentsService } from "./comments/domain/comments.service";
 // import { BlogsQueryRepository } from "./blogs/infrastructure/blogs.query.repository";
 // import { CommentsQueryRepository } from "./comments/infrastructure/commentsQueryRepository";
-// import { BlogsService } from "./blogs/application/blogs.service";
-// import { AuthService } from "./auth/application/auth.service";
+// import { BlogsService } from "./blogs/domain/blogs.service";
+// import { AuthService } from "./auth/domain/auth.service";
 // import { BlogsController } from "./blogs/routes/controller/blogsController";
 // import { BlogsQueryController } from "./blogs/routes/controller/blogsQueryController";
 // import { UsersQueryController } from "./users/routes/usersQueryController";

@@ -21,6 +21,7 @@ import { AuthError } from "../types/authErrorType";
 import { injectable, inject } from "inversify";
 import { UserDB } from "../../users/types/user-types";
 import { SessionModel } from "../../securityDevices/types/securityDevicesMongoose";
+import { UserModel } from "../../users/types/usersMongoose";
 
 @injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
     login: string,
     password: string,
     email: string,
-  ): Promise<RegistrationResult<User | null> | undefined> {
+  ): Promise<RegistrationResult | undefined> {
     const user = await this.usersRepository.doesExistByLoginOrEmail(
       login,
       email,
@@ -46,17 +47,19 @@ export class AuthService {
     }
     const passwordHash = await bcryptService.generateHash(password);
 
-    const newUser: User = new User(login, email, passwordHash); //сначала создаем пользователя, потом, отправляем его же код подтверждения в path
+    const newUser = new UserModel();
+    newUser.login = login;
+    newUser.email = email;
+    newUser.passwordHash = passwordHash; //сначала создаем пользователя, потом, отправляем его же код подтверждения в path
+    console.log(newUser, "user check in BLL");
     await this.usersRepository.create(newUser);
-
     try {
       await emailAdapter.sendEmail(
         newUser.email,
         newUser.emailConfirmation!.confirmationCode!,
         emailExamples.registrationEmail,
       );
-
-      return handleSuccessResult(newUser);
+      return handleSuccessResult();
     } catch (err: unknown) {
       console.error(err);
     }
@@ -183,6 +186,7 @@ export class AuthService {
     );
     return handleSuccessResult({ accessToken, refreshToken });
   }
+
   // сейчас проблема возникает в том, что при создании user у нас уже есть объект recovery, и,
   // когда я делаю запрос на восстановление пароля, у меня создаются дополнительные поля recovery
   async requestPasswordReset(email: string): Promise<Result<void> | null> {
@@ -206,6 +210,7 @@ export class AuthService {
       return handleSuccessResult();
     }
   }
+
   async resetPassword(
     newPassword: string,
     recoveryCode: string,

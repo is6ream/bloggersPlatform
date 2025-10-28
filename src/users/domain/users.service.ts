@@ -9,12 +9,14 @@ import {
 } from "../../core/result/handleResult";
 import { injectable, inject } from "inversify";
 import { User } from "../constructors/user.entity";
+import { UserModel } from "../types/usersMongoose";
 
 @injectable()
 export class UsersService {
   constructor(
     @inject(UsersRepository) private usersRepository: UsersRepository,
   ) {}
+
   async create(dto: UserInputModel): Promise<Result<string>> {
     const isEmailExist = await this.usersRepository.isUserExistByEmailOrLogin(
       dto.email,
@@ -22,13 +24,15 @@ export class UsersService {
     if (isEmailExist) {
       return handleBadRequestResult("Email already exists", "email");
     }
-    const { login, password, email } = dto;
-    const passwordHash = await bcryptService.generateHash(password);
-    const user = new User(login, email, passwordHash);
-    const newUser = await this.usersRepository.create(user);
-    const newUserId = newUser.id;
+    const passwordHash = await bcryptService.generateHash(dto.password);
+    const user = new UserModel();
+    user.login = dto.login;
+    user.passwordHash = passwordHash;
+    user.email = dto.email;
+    const newUserId = await this.usersRepository.create(user);
     return handleSuccessResult(newUserId);
   }
+
   async delete(id: string): Promise<Result> {
     const result = await this.usersRepository.delete(id);
     if (!result) {
@@ -37,6 +41,7 @@ export class UsersService {
       return handleSuccessResult();
     }
   }
+
   async findUser(id: string): Promise<Result<UserViewModel>> {
     const user: UserViewModel = await this.usersRepository.find(id);
 

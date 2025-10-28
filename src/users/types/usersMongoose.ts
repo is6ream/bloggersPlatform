@@ -1,5 +1,6 @@
 import { Model, Schema, model, HydratedDocument } from "mongoose";
 import { UserDB } from "./user-types";
+import { randomUUID } from "crypto";
 
 export type UserModel = Model<UserDB>;
 export type UserDocument = HydratedDocument<UserDB>;
@@ -10,8 +11,11 @@ const userSchema = new Schema<UserDB, UserModel>({
   passwordHash: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   emailConfirmation: {
-    confirmPassword: String,
-    expirationDate: Date,
+    confirmationCode: { type: String, default: randomUUID() },
+    expirationDate: {
+      type: Date,
+      default: new Date(Date.now() + 60 * 60 * 1000),
+    },
     isConfirmed: { type: Boolean, default: false },
   },
   passwordRecovery: {

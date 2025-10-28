@@ -21,7 +21,7 @@ export class SessionsRepository {
       { deviceId: deviceId },
       { $set: { iat: newIat } },
     );
-    return updateResult.modifiedCount === 1; //нужно всегда проверять количество изменных документов
+    return updateResult.modifiedCount === 1;
   }
 
   async isSessionExistByIat(iat: string): Promise<boolean> {
