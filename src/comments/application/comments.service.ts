@@ -47,12 +47,13 @@ export class CommentsService {
     dto: CommentInputDto,
     userId: string,
   ): Promise<Result<void | null>> {
-    const comment = await this.commentsRepository.findByCommentId(id);
+    const comment = await CommentModel.findById(id);
     if (!comment) return handleNotFoundResult("comment not found", "commentId");
     if (comment.commentatorInfo.userId.toString() !== userId) {
       return handleForbiddenResult("access denied", "commentId");
     }
-    await this.commentsRepository.update(id, dto);
+    comment.content = dto.content;
+    await this.commentsRepository.update(comment);
     return handleSuccessResult();
   }
 

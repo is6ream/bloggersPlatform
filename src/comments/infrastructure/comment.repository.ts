@@ -15,17 +15,9 @@ export class CommentsRepository {
     return comment._id.toString();
   }
 
-  async update(id: string, dto: CommentInputDto): Promise<any> {
-    const updateResult = await commentsCollection.updateOne(
-      {
-        _id: new ObjectId(id),
-      },
-      {
-        $set: dto,
-      },
-    );
-
-    return updateResult.matchedCount === 1;
+  async update(comment: CommentDocument): Promise<boolean> {
+    await comment.save();
+    return true;
   }
 
   async delete(id: string): Promise<boolean> {
