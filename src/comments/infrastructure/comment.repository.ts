@@ -1,5 +1,4 @@
-import { CommentDB, CommentViewModel } from "../types/commentsTypes";
-import { ObjectId, WithId } from "mongodb";
+import { ObjectId } from "mongodb";
 import { injectable } from "inversify";
 import { CommentDocument } from "../types/mongoose/mongoose";
 import { CommentModel } from "../types/mongoose/mongoose";
@@ -22,26 +21,33 @@ export class CommentsRepository {
     });
     return deleteResult.deletedCount === 1;
   }
+  //
+  // async findByCommentId(id: string): Promise<WithId<CommentDB> | null> {
+  //   return CommentModel.findOne({ _id: new ObjectId(id) }).lean();
+  // }
 
-  async findByCommentId(id: string): Promise<WithId<CommentDB> | null> {
-    return CommentModel.findOne({ _id: new ObjectId(id) }).lean();
-  }
-
-  async findById(id: string): Promise<CommentViewModel | null> {
+  async findById(id: string): Promise<CommentDocument | null> {
     const comment = await CommentModel.findOne({
       _id: new ObjectId(id),
-    }).lean();
-    if (!comment) {
-      return null;
-    }
-    return {
-      id: comment._id.toString(),
-      content: comment.content,
-      commentatorInfo: {
-        userId: comment.commentatorInfo.userId,
-        userLogin: comment.commentatorInfo.userLogin,
-      },
-      createdAt: comment.createdAt,
-    };
+    });
+    if (!comment) return null;
+    return comment;
   }
+
+  //   const comment = await CommentModel.findOne({
+  //     _id: new ObjectId(id),
+  //   }).lean();
+  //   if (!comment) {
+  //     return null;
+  //   }
+  //   return {
+  //     id: comment._id.toString(),
+  //     content: comment.content,
+  //     commentatorInfo: {
+  //       userId: comment.commentatorInfo.userId,
+  //       userLogin: comment.commentatorInfo.userLogin,
+  //     },
+  //     createdAt: comment.createdAt,
+  //   };
+  // }
 }

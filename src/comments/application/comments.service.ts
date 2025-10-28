@@ -22,8 +22,8 @@ export class CommentsService {
   async createComment(
     dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
-    const user = await this.usersRepository.find(dto.userId);
-    const post = await this.postsRepository.findPost(dto.postId);
+    const user = await this.usersRepository.find(dto.userId); //Все ок, ищем через модель
+    const post = await this.postsRepository.findPost(dto.postId); //Все ок, ищем через модел
     if (!post) {
       return handleNotFoundResult("Post not found", "postId");
     }
@@ -47,7 +47,7 @@ export class CommentsService {
     dto: CommentInputDto,
     userId: string,
   ): Promise<Result<void | null>> {
-    const comment = await CommentModel.findById(id);
+    const comment = await this.commentsRepository.findById(id); //тут нужно через репозиторий сходить
     if (!comment) return handleNotFoundResult("comment not found", "commentId");
     if (comment.commentatorInfo.userId.toString() !== userId) {
       return handleForbiddenResult("access denied", "commentId");
@@ -58,7 +58,7 @@ export class CommentsService {
   }
 
   async delete(id: string, userId: string): Promise<Result<void | null>> {
-    const comment = await this.commentsRepository.findByCommentId(id);
+    const comment = await this.commentsRepository.findById(id);
     if (!comment) return handleNotFoundResult("comment not found", "commentId");
     if (comment.commentatorInfo.userId.toString() !== userId) {
       return handleForbiddenResult("access denied", "commentId");
