@@ -30,7 +30,7 @@ export class PostsRepository {
   }
 
   async findPost(id: string): Promise<WithId<PostDB> | null> {
-    return await PostModel.findOne({ _id: new ObjectId(id) });
+    return PostModel.findOne({ _id: new ObjectId(id) }).lean();
   }
 
   async findById(id: string): Promise<PostViewModel | null> {

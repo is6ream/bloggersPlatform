@@ -3,7 +3,6 @@ import { Result } from "../../core/result/result.type";
 import { PostsRepository } from "../../posts/infrastructure/postRepository";
 import { UsersRepository } from "../../users/infrastructure/users.repository";
 import {
-  CommentInputType,
   ContentDto,
   CommentInputDto,
 } from "../types/commentsTypes";
@@ -13,6 +12,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { injectable, inject } from "inversify";
+import { CommentModel } from "../types/mongoose/mongoose";
 
 @injectable()
 export class CommentsService {
@@ -21,6 +21,7 @@ export class CommentsService {
     @inject(PostsRepository) private postsRepository: PostsRepository,
     @inject(UsersRepository) private usersRepository: UsersRepository,
   ) {}
+
   async createComment(
     dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
@@ -32,14 +33,12 @@ export class CommentsService {
     if (!user) {
       return handleNotFoundResult("User not found", "userId");
     }
-    const newComment: CommentInputType = {
-      postId: post._id.toString(),
-      content: dto.comment,
-      commentatorInfo: {
-        userId: dto.userId,
-        userLogin: user.login,
-      },
-      createdAt: new Date(),
+    const newComment = new CommentModel();
+    newComment.id = post.id;
+    newComment.content = post.content;
+    newComment.commentatorInfo = {
+      userId: user.id,
+      userLogin: user.login,
     };
     const commentId: string = await this.commentsRepository.create(newComment);
 

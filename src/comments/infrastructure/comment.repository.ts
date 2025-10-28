@@ -1,25 +1,18 @@
 import {
   CommentDB,
   CommentInputDto,
-  CommentInputType,
   CommentViewModel,
 } from "../types/commentsTypes";
 import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId, WithId } from "mongodb";
 import { injectable } from "inversify";
-import { CommentDocument, CommentModel } from "../types/mongoose/mongoose";
+import { CommentDocument } from "../types/mongoose/mongoose";
 
 @injectable()
 export class CommentsRepository {
-  async create(newComment: CommentInputType): Promise<string> {
-    const comment: CommentDocument = new CommentModel();
-    comment.postId = newComment.postId;
-    comment.content = newComment.content;
-    comment.commentatorInfo = newComment.commentatorInfo;
-    comment.createdAt = newComment.createdAt;
+  async create(comment: CommentDocument): Promise<string> {
     await comment.save();
     return comment._id.toString();
-    //теперь, чтобы проверить нужно переписать ветку users на mongoose
   }
 
   async update(id: string, dto: CommentInputDto): Promise<any> {
