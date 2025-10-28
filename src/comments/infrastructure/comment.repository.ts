@@ -1,12 +1,8 @@
-import {
-  CommentDB,
-  CommentInputDto,
-  CommentViewModel,
-} from "../types/commentsTypes";
-import { commentsCollection } from "../../db/mongo.db";
+import { CommentDB, CommentViewModel } from "../types/commentsTypes";
 import { ObjectId, WithId } from "mongodb";
 import { injectable } from "inversify";
 import { CommentDocument } from "../types/mongoose/mongoose";
+import { CommentModel } from "../types/mongoose/mongoose";
 
 @injectable()
 export class CommentsRepository {
@@ -21,18 +17,20 @@ export class CommentsRepository {
   }
 
   async delete(id: string): Promise<boolean> {
-    const deleteResult = await commentsCollection.deleteOne({
+    const deleteResult = await CommentModel.deleteOne({
       _id: new ObjectId(id),
     });
     return deleteResult.deletedCount === 1;
   }
 
   async findByCommentId(id: string): Promise<WithId<CommentDB> | null> {
-    return await commentsCollection.findOne({ _id: new ObjectId(id) });
+    return CommentModel.findOne({ _id: new ObjectId(id) }).lean();
   }
 
   async findById(id: string): Promise<CommentViewModel | null> {
-    const comment = await commentsCollection.findOne({ _id: new ObjectId(id) });
+    const comment = await CommentModel.findOne({
+      _id: new ObjectId(id),
+    }).lean();
     if (!comment) {
       return null;
     }
