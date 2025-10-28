@@ -2,10 +2,7 @@ import { CommentsRepository } from "../infrastructure/comment.repository";
 import { Result } from "../../core/result/result.type";
 import { PostsRepository } from "../../posts/infrastructure/postRepository";
 import { UsersRepository } from "../../users/infrastructure/users.repository";
-import {
-  ContentDto,
-  CommentInputDto,
-} from "../types/commentsTypes";
+import { ContentDto, CommentInputDto } from "../types/commentsTypes";
 import {
   handleForbiddenResult,
   handleNotFoundResult,

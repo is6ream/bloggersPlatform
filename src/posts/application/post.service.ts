@@ -9,7 +9,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { inject, injectable } from "inversify";
-import {PostModel} from "../types/postMongoose";
+import { PostModel } from "../types/postMongoose";
 
 @injectable()
 export class PostsService {
@@ -17,6 +17,7 @@ export class PostsService {
     @inject(PostsRepository) private postRepository: PostsRepository,
     @inject(BlogsRepository) private blogsRepository: BlogsRepository,
   ) {}
+
   async create(dto: PostInputDto): Promise<Result<string>> {
     const foundBlog = await this.blogsRepository.findById(dto.blogId);
     if (!foundBlog) {
@@ -27,7 +28,7 @@ export class PostsService {
     newPost.shortDescription = dto.shortDescription;
     newPost.content = dto.content;
     newPost.blogId = foundBlog.id;
-    newPost.blogName = foundBlog.name
+    newPost.blogName = foundBlog.name;
     const newPostId = await this.postRepository.create(newPost);
     return handleSuccessResult(newPostId);
   }
@@ -38,18 +39,16 @@ export class PostsService {
   ): Promise<Result<string>> {
     const blog = await this.blogsRepository.findById(blogId);
     if (!blog) {
-      console.log("blog exist check in BLL");
       return handleBadRequestResult("blog not found", "blogId");
     }
-    const createdPostsId: string = await this.postRepository.create({
-      title: dto.title,
-      shortDescription: dto.shortDescription,
-      content: dto.content,
-      blogId: blogId,
-      blogName: blog.name,
-      createdAt: new Date(),
-    });
-    return handleSuccessResult(createdPostsId);
+    const newPost = new PostModel();
+    newPost.title = dto.title;
+    newPost.shortDescription = dto.shortDescription;
+    newPost.content = dto.content;
+    newPost.blogId = blogId;
+    newPost.blogName = blog.name;
+    const newPostId = await this.postRepository.create(newPost);
+    return handleSuccessResult(newPostId);
   }
 
   async update(id: string, dto: PostInputDto): Promise<Result> {

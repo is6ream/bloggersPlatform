@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 import { postCollection } from "../../db/mongo.db";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
-import {PostDocument, PostModel} from "../types/postMongoose";
+import { PostDocument, PostModel } from "../types/postMongoose";
 
 @injectable()
 export class PostsRepository {
@@ -12,17 +12,9 @@ export class PostsRepository {
     await post.save();
     return post._id.toString();
   }
-
-  async createPostByBlogId(newPost: PostDB): Promise<string> {
-    const post = await PostModel.create(newPost); //или так?
-    await post.save();
-    return post._id.toString();
-  }
-
   async findPost(id: string): Promise<WithId<PostDB> | null> {
     return PostModel.findOne({ _id: new ObjectId(id) }).lean();
   }
-
   async findById(id: string): Promise<PostViewModel | null> {
     //ранее возвращался objectResult, сейчас переделал на примитивы, упало много ошибок
     const post = await PostModel.findOne({ _id: new ObjectId(id) }).lean();
