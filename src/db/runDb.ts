@@ -20,4 +20,9 @@ export const db = {
       console.error("Connection error", err);
     }
   },
+
+  async dropDb() {
+    await mongoose.connection.dropDatabase();
+    console.log("Database dropped successfully");
+  },
 };

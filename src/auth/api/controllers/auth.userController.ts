@@ -98,8 +98,7 @@ export class AuthUserController {
       return;
     }
     res.status(HttpStatus.NoContent).send();
-
-    res.sendStatus(HttpStatus.NoContent);
+    return;
   }
 
   async registrationUser(req: RequestWithBody<CreateUserDto>, res: Response) {
@@ -107,6 +106,7 @@ export class AuthUserController {
     const result = await this.authService.registerUser(login, password, email);
     if (result === undefined) {
       res.sendStatus(HttpStatus.InternalServerError);
+      return;
     }
     if (result!.status !== ResultStatus.Success) {
       res.status(HttpStatus.BadRequest).send(result!.extensions);
