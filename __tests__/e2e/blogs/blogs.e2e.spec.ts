@@ -1,7 +1,6 @@
 import { BlogUpdateInput } from "../../../src/blogs/routes/input/blog-update-input";
 import express, { Express } from "express";
 import { setupApp } from "../../../src/setup-app";
-import { db } from "../../../src/db/mongo.db";
 import request from "supertest";
 import { BLOGS_PATH } from "../../../src/core/paths";
 import { createPostForBlog } from "../utils/blogs/createPostForBlog";
@@ -10,23 +9,22 @@ import { getBlogDto } from "../utils/blogs/get-blog-dto";
 import { generateBasicAuthToken } from "../utils/secure/genBasicAuthToken";
 import { PostByIdInputDto } from "../../../src/posts/types/posts-types";
 import { createBlog } from "../utils/blogs/create-blog";
+import { db } from "../../../src/db/runDb";
 
 describe("Testing the blog branch", () => {
   let app: Express;
   beforeAll(async () => {
-    await db.runDB(
-      "mongodb+srv://admin:admin@cluster0.x2itf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    );
+    await db.runDb();
     const expressApp = express();
     app = setupApp(expressApp);
   });
   beforeEach(async () => {
-    await db.drop();
+    await db.runDb();
   });
 
   afterAll(async () => {
-    await db.drop();
-    await db.stop();
+    await db.dropDb();
+    await db.stopDb();
   });
   describe("Tests for query requests on blogs branch", () => {
     it("should return blogs with paging", async () => {

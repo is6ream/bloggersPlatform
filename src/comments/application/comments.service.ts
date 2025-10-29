@@ -22,8 +22,8 @@ export class CommentsService {
   async createComment(
     dto: ContentDto,
   ): Promise<Result<{ commentId: string } | null>> {
-    const user = await this.usersRepository.find(dto.userId); //Все ок, ищем через модель
-    const post = await this.postsRepository.findPost(dto.postId); //Все ок, ищем через модел
+    const user = await this.usersRepository.find(dto.userId);
+    const post = await this.postsRepository.findPost(dto.postId);
     if (!post) {
       return handleNotFoundResult("Post not found", "postId");
     }
@@ -32,7 +32,7 @@ export class CommentsService {
     }
     const newComment = new CommentModel();
     newComment.id = post.id;
-    newComment.content = post.content;
+    newComment.content = dto.comment;
     newComment.commentatorInfo = {
       userId: user.id,
       userLogin: user.login,

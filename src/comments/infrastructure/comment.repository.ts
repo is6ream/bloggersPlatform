@@ -6,6 +6,7 @@ import { CommentModel } from "../types/mongoose/mongoose";
 @injectable()
 export class CommentsRepository {
   async create(comment: CommentDocument): Promise<string> {
+      console.log(comment, "check comment in DAL");
     await comment.save();
     return comment._id.toString();
   }
