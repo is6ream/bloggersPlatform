@@ -152,14 +152,14 @@ export class AuthService {
       result.data!.id!, //используем id user и кладем в payload refreshToken
       deviceId,
     );
-    const payload = await jwtService.verifyToken(refreshToken);
-    console.log(payload.iat, "rt iat check in BLL"); //1761704598 в таком формате iat выдаваться не должен
+    const payload = await jwtService.decodeToken(refreshToken); //iat для записи в бд сессий
 
     const newSession = new SessionModel();
     newSession.userId = result.data.id!;
     newSession.deviceId = deviceId;
     newSession.deviceName = sessionDto.deviceName;
     newSession.ip = sessionDto.ip;
+    newSession.iat = new Date(payload.iat * 1000).toISOString();
 
     await this.sessionsRepository.createSession(newSession); //передаем в DAL данные о сессии и сохраняем их в бд
     return handleSuccessResult({ accessToken, refreshToken }); //

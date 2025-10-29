@@ -24,13 +24,18 @@ export const refreshTokenGuard = async (
     console.log("Refresh token not verified");
     return res.sendStatus(HttpStatus.Unauthorized);
   }
-  console.log(new Date(payload.iat).toISOString(), "iat check in rt guard"); //ОСТАНОВИЛСЯ ТУТ
-  const activeSessionCheck = await sessionsRepository.isSessionExistByIat(
-    //1970-01-21T09:21:44.397Z почему iat прилетает в таком формате?
-    //проверяем - есть ли активный пользователь на данный момент
-    payload.iat.toString(),
+  console.log(
+    new Date(payload.iat * 1000).toISOString(), //нужно привести iat из payload в такой формат - "2025-10-29T02:31:56.677Z"
+    "iat check in rt guard",
   );
-  console.log(activeSessionCheck, "check active session"); //тут false, значит при логине сессия не записвыается
+  const tokenCreationDate = new Date(payload.iat * 1000).toISOString();
+
+
+  const activeSessionCheck = await sessionsRepository.isSessionExistByIat(
+    tokenCreationDate, payload.deviceId, //почему здесь формируется дата в момент проверки, а не дата, которая была записана в момент формирования сессии???
+  );
+  //ошибка возникает из-за того, что при авторизации в бд сохраняется одна дата, а при проверке формируется другая
+  console.log(activeSessionCheck, "check active session");
   if (!activeSessionCheck) {
     return res.sendStatus(HttpStatus.Unauthorized);
   }

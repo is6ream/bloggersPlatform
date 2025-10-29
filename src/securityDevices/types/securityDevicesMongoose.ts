@@ -10,7 +10,7 @@ const sessionSchema = new Schema<SessionDB, SecurityDeviceModel>({
   deviceId: { type: String, required: true },
   iat: {
     type: String,
-    default: new Date(Date.now()).toISOString(), //для чего я захотел по дефолту установить Iat?
+    default: new Date(Date.now()).toISOString(),
     required: true,
   },
   deviceName: { type: String, required: true },

@@ -12,6 +12,7 @@ export class SessionsRepository {
     session.deviceId = sessionData.deviceId;
     session.deviceName = sessionData.deviceName;
     session.ip = sessionData.ip;
+    session.iat = sessionData.iat;
 
     await session.save();
   }
@@ -24,9 +25,12 @@ export class SessionsRepository {
     return updateResult.modifiedCount === 1;
   }
 
-  async isSessionExistByIat(iat: string): Promise<boolean> {
+  async isSessionExistByIat(iat: string, deviceId: string): Promise<boolean> {
+    console.log(iat, "iat check in DAL");
     const session: WithId<SessionDB> | null = await SessionModel.findOne({
-      iat: iat, //возможно iat в запросе, не соответствует формату iat, который лежит в бд
+      iat: iat,
+      deviceId: deviceId,
+      //возможно iat в запросе, не соответствует формату iat, который лежит в бд
     });
     return !!session;
   }
