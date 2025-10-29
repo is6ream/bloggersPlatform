@@ -6,7 +6,7 @@ import { CommentModel } from "../types/mongoose/mongoose";
 @injectable()
 export class CommentsRepository {
   async create(comment: CommentDocument): Promise<string> {
-      console.log(comment, "check comment in DAL");
+    console.log(comment, "check comment in DAL");
     await comment.save();
     return comment._id.toString();
   }
@@ -27,6 +27,9 @@ export class CommentsRepository {
       _id: new ObjectId(id),
     });
     if (!comment) return null;
-    return comment;
+    return {
+      id: comment._id.toString(),
+        content: comment.content //
+    };
   }
 }

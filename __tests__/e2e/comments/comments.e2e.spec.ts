@@ -5,7 +5,7 @@ import { HttpStatus } from "../../../src/core/http-statuses";
 import request from "supertest";
 import { createComment } from "./createComment";
 import { CreateCommentResult } from "./types";
-import {db} from "../../../src/db/runDb";
+import { db } from "../../../src/db/runDb";
 
 describe("Testing the comments branch", () => {
   let app: Express;
