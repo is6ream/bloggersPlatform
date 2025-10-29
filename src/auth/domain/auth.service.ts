@@ -14,7 +14,6 @@ import {
   handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
 import { SessionDto } from "../../securityDevices/types/sessionDataTypes";
-import { SessionDataType } from "../types/input/login-input.models";
 import { SessionsRepository } from "../../securityDevices/infrastructure/sessionsRepository";
 import { UserOutput } from "../../users/types/user.output";
 import { AuthError } from "../types/authErrorType";
@@ -153,6 +152,8 @@ export class AuthService {
       result.data!.id!, //используем id user и кладем в payload refreshToken
       deviceId,
     );
+    const payload = await jwtService.verifyToken(refreshToken);
+    console.log(payload.iat, "rt iat check in BLL"); //1761704598 в таком формате iat выдаваться не должен
 
     const newSession = new SessionModel();
     newSession.userId = result.data.id!;

@@ -26,7 +26,7 @@ export class SessionsRepository {
 
   async isSessionExistByIat(iat: string): Promise<boolean> {
     const session: WithId<SessionDB> | null = await SessionModel.findOne({
-      iat: iat,
+      iat: iat, //возможно iat в запросе, не соответствует формату iat, который лежит в бд
     });
     return !!session;
   }
