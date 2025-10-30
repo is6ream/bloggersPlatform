@@ -12,13 +12,17 @@ const commentsSchema = new Schema<CommentDB, CommentModel>(
       userId: { type: String, required: true },
       userLogin: { type: String, required: true },
     },
-    createdAt: { type: Date, default: Date.now(), required: true },
     postId: { type: String, required: true },
+    likesCount: { type: Number, required: true },
+    dislikesCount: { type: Number, required: true },
+    createdAt: { type: Date, default: Date.now(), required: true },
   },
   {
     versionKey: false,
   },
 );
+
+const likesSchema = new Schema<>()
 
 export const CommentModel = model<CommentDB, CommentModel>(
   "commentModel",
