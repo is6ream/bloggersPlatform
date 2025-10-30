@@ -4,7 +4,6 @@ import {
   CommentViewModel,
 } from "../types/commentsTypes";
 import { CommentsQueryInput } from "../types/input/comment-Query-Input";
-import { commentsCollection } from "../../db/mongo.db";
 import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";

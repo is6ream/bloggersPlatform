@@ -5,7 +5,7 @@ import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpExc
 import { PostsService } from "../application/post.service";
 import { createErrorMessages } from "../../core/middlewares/validation/input-validation-result.middleware";
 import { RequestWithParamsAndBodyAndUserId } from "../../core/types/common/requests";
-import { PostId } from "../../comments/types/commentsTypes";
+import { ContentDto, PostId } from "../../comments/types/commentsTypes";
 import { IdType } from "../../core/types/authorization/id";
 import { CommentsService } from "../../comments/application/comments.service";
 import { CommentsRepository } from "../../comments/infrastructure/comment.repository";
@@ -96,7 +96,7 @@ export class PostsController {
         res.sendStatus(HttpStatus.Unauthorized);
         return;
       }
-      const content = {
+      const content: ContentDto = {
         comment: req.body.content,
         userId: userId,
         postId: req.params.id,

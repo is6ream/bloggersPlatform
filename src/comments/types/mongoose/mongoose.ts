@@ -13,6 +13,7 @@ const commentsSchema = new Schema<CommentDB, CommentModel>(
       userLogin: { type: String, required: true },
     },
     createdAt: { type: Date, default: Date.now(), required: true },
+    postId: { type: String, required: true },
   },
   {
     versionKey: false,

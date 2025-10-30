@@ -61,6 +61,7 @@ export class PostsQueryController {
         req.query,
       );
       const { id: postId } = req.params;
+      console.log(postId);
       const foundPost = await this.postQueryRepository.findById(postId);
       if (foundPost.status !== ResultStatus.Success) {
         res.sendStatus(HttpStatus.NotFound);

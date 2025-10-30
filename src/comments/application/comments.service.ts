@@ -31,12 +31,15 @@ export class CommentsService {
       return handleNotFoundResult("User not found", "userId");
     }
     const newComment = new CommentModel();
-    newComment.id = post.id;
     newComment.content = dto.comment;
     newComment.commentatorInfo = {
       userId: user.id,
       userLogin: user.login,
     };
+    newComment.postId = post.id;
+
+    console.log(post.id, "postId check in BLL");
+    console.log(newComment, "comment entity check in BLL");
     const commentId: string = await this.commentsRepository.create(newComment);
 
     return handleSuccessResult({ commentId: commentId });
