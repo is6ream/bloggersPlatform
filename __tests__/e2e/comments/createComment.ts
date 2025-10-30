@@ -18,7 +18,6 @@ const registerCredentials = {
 export async function createComment(app: Express) {
   const blog: BlogViewModel = await createBlog(app); //создаем блог
   const post = await createPost(app, {
-    //создаем пост для блога
     title: "title",
     shortDescription: "sh1",
     content: "content",

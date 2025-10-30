@@ -47,7 +47,7 @@ export class CommentsService {
     dto: CommentInputDto,
     userId: string,
   ): Promise<Result<void | null>> {
-    const comment = await this.commentsRepository.findById(id); //тут нужно через репозиторий сходить
+    const comment = await this.commentsRepository.getCommentDocument(id); //тут нужно через репозиторий сходить
     if (!comment) return handleNotFoundResult("comment not found", "commentId");
     if (comment.commentatorInfo.userId.toString() !== userId) {
       return handleForbiddenResult("access denied", "commentId");
