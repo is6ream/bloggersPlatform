@@ -33,7 +33,7 @@ export type CommentInputDto = {
   content: string;
 };
 
-export type CommentQueryOtput = {
+export type CommentQueryOutput = {
   content: string;
   commentatorInfo: {
     userId: string;

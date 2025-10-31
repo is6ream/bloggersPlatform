@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const likeStatusValidator = body("like")
+export const likeStatusValidator = body("likeStatus")
   .exists()
   .withMessage("like status is required")
   .bail()

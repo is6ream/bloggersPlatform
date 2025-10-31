@@ -1,6 +1,6 @@
 import {
   CommentDB,
-  CommentQueryOtput,
+  CommentQueryOutput,
   CommentViewModel,
 } from "../types/commentsTypes";
 import { CommentsQueryInput } from "../types/input/comment-Query-Input";
@@ -13,7 +13,7 @@ import { CommentModel } from "../types/mongoose/mongoose";
 export class CommentsQueryRepository {
   async findAll(
     queryDto: CommentsQueryInput,
-  ): Promise<{ items: WithId<CommentQueryOtput>[]; totalCount: number }> {
+  ): Promise<{ items: WithId<CommentQueryOutput>[]; totalCount: number }> {
     const {
       pageNumber,
       pageSize,

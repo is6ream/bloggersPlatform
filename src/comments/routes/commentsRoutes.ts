@@ -6,6 +6,7 @@ import { commentValidator } from "../../core/middlewares/commentValidation/comme
 import { container } from "../../container";
 import { CommentsController } from "../controller/commentsController";
 import { CommentsQueryController } from "../controller/commentsQueryController";
+import { likeStatusValidator } from "../likes/likeStatusValidator";
 
 export const commentsRouter = Router();
 const commentsController = container.get(CommentsController);
@@ -35,5 +36,7 @@ commentsRouter
     "/:id/like-status",
     accessTokenGuard,
     idValidation,
+    likeStatusValidator,
     inputValidationResultMiddleware,
+    commentsController.updateLikeStatus.bind(commentsController),
   );

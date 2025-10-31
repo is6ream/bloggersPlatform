@@ -71,8 +71,13 @@ export class CommentsController {
     }
   }
 
-  async updateLikeStatus(req: RequestWithBody<LikeStatus>, res: Response) {
-      try {
-      }
+  async updateLikeStatus(req: RequestWithParamsAndBody<LikeStatus>, res: Response) {
+      //нужно прописать тип для реквеста
+    const status = req.body;
+    const userId = req.userId;
+    const commentId = req.params.
+    console.log(status, "status check");
+    res.sendStatus(HttpStatus.NoContent);
+    return;
   }
 }
