@@ -30,4 +30,10 @@ commentsRouter
     commentValidator,
     inputValidationResultMiddleware,
     commentsController.updateComment.bind(commentsController),
+  )
+  .put(
+    "/:id/like-status",
+    accessTokenGuard,
+    idValidation,
+    inputValidationResultMiddleware,
   );

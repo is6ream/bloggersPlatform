@@ -2,6 +2,7 @@ import { Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { CommentsService } from "../application/comments.service";
 import {
+  RequestWithBody,
   RequestWithParamsAndBodyAndUserId,
   RequestWithParamsAndUserId,
 } from "../../core/types/common/requests";
@@ -13,6 +14,7 @@ import {
   CommentId,
 } from "../types/input/updateCommentTypes";
 import { inject, injectable } from "inversify";
+import { LikeStatus } from "../likes/likesMongoose";
 
 @injectable()
 export class CommentsController {
@@ -67,5 +69,10 @@ export class CommentsController {
       res.sendStatus(HttpStatus.InternalServerError);
       return;
     }
+  }
+
+  async updateLikeStatus(req: RequestWithBody<LikeStatus>, res: Response) {
+      try {
+      }
   }
 }
