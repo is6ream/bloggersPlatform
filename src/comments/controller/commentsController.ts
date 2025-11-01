@@ -2,7 +2,7 @@ import { Response } from "express";
 import { HttpStatus } from "../../core/http-statuses";
 import { CommentsService } from "../application/comments.service";
 import {
-  RequestWithBody,
+  RequestWithParamsAndBody,
   RequestWithParamsAndBodyAndUserId,
   RequestWithParamsAndUserId,
 } from "../../core/types/common/requests";
@@ -14,7 +14,7 @@ import {
   CommentId,
 } from "../types/input/updateCommentTypes";
 import { inject, injectable } from "inversify";
-import { LikeStatus } from "../likes/likesMongoose";
+import { LikeStatusRequest } from "../likes/likeStatusRequestType";
 
 @injectable()
 export class CommentsController {
@@ -71,13 +71,22 @@ export class CommentsController {
     }
   }
 
-  async updateLikeStatus(req: RequestWithParamsAndBody<LikeStatus>, res: Response) {
-      //нужно прописать тип для реквеста
-    const status = req.body;
-    const userId = req.userId;
-    const commentId = req.params.
-    console.log(status, "status check");
-    res.sendStatus(HttpStatus.NoContent);
-    return;
+  async updateLikeStatus(
+    req: RequestWithParamsAndBody<{ id: string }, LikeStatusRequest>,
+    res: Response,
+  ) {
+    const dto = {
+      status: req.body,
+      commentId: req.params.id,
+      userId: req.userId,
+    };
+    console.log(dto, "dto check in API");
+
+    const result = await this.commentsService.updateLikeStatus(dto);
+    if (result.status !== ResultStatus.Success) {
+      return res.status(HttpStatus.NotFound).send(result.extensions);
+    }
+
+    return res.sendStatus(HttpStatus.NoContent);
   }
 }

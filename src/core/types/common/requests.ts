@@ -19,7 +19,12 @@ export type RequestWithParamsAndDeviceId<P, U extends DeviceIdType> = Request<
   {},
   U
 >;
-export type RequestWithBodyAndParams<P, B> = Request<P, {}, B, {}>;
+export type RequestWithBodyAndParams<P = string, B = any> = Request<
+  P,
+  {},
+  B,
+  {}
+>;
 export type RequestWithQueryAndParams<P, Q> = Request<P, {}, {}, Q>;
 export type RequestWithParamsAndBodyAndUserId<P, B, U extends IdType> = Request<
   P,
@@ -28,6 +33,7 @@ export type RequestWithParamsAndBodyAndUserId<P, B, U extends IdType> = Request<
   {},
   U
 >;
+export type RequestWithParamsAndBody<P, B> = Request<P, {}, B, {}>;
 export type RequestWithBodyAndUserId<B, U extends IdType> = Request<
   {},
   {},
