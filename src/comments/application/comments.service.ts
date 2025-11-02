@@ -74,7 +74,20 @@ export class CommentsService {
   }
 
   async updateLikeStatus(dto: LikeStatusDto): Promise<Result<any>> {
-
+    const comment = await CommentModel.findOne({
+      _id: new ObjectId(dto.commentId),
+    });
+    if (!comment) {
+      return handleNotFoundResult("Comment not found", "commentId");
+    }
+    if (dto.status === "Like") {
+      comment.likesCount++;
+      await this.commentsRepository.save(comment);
+    }
+    if (dto.status === "Dislike") {
+      comment.dislikesCount++;
+      await this.commentsRepository.save(comment);
+    }
     let like = await LikeModel.findOne({ userId: dto.userId }); //проверяем, есть ли лайк
     if (!like) {
       like = new LikeModel();
@@ -82,23 +95,7 @@ export class CommentsService {
       like.commentId = dto.commentId;
       like.userId = dto.userId;
       await this.commentsRepository.likeStatusSave(like); //как этот блок, логически связан с блоком коммент?
-      const comment = await CommentModel.findOne({
-        _id: new ObjectId(dto.commentId),
-      });
-      if (!comment) {
-        return handleNotFoundResult("Comment not found", "commentId"); //в сервисе мы должны проверить - есть ли лайк?
-      }
-      if (dto.status === "Like") {
-        comment.likesCount += comment.likesCount;
-        await this.commentsRepository.save(comment);
-      }
-      if (dto.status === "Dislike") {
-        comment.dislikesCount++;
-        await this.commentsRepository.save(comment);
-      }
-      console.log(comment, "comment entity check in BLL after iterating");
     }
-
     await this.commentsRepository.likeStatusSave(like);
     return handleSuccessResult();
   }

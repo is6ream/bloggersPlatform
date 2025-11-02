@@ -83,9 +83,7 @@ export class CommentsController {
       commentId: req.params.id,
       userId: req.userId,
     };
-    console.log(dto, "dto check in API"); //тут все ок, валидатор работает
     const result = await this.commentsService.updateLikeStatus(dto);
-    console.log(result);
     if (result.status !== ResultStatus.Success) {
       return res.status(HttpStatus.NotFound).send(result.extensions);
     }
