@@ -21,7 +21,7 @@ export class BlogsService {
     blogInstance.description = dto.description;
     blogInstance.websiteUrl = dto.websiteUrl;
 
-    return this.blogsRepository.create(blogInstance);
+    return this.blogsRepository.save(blogInstance);
   }
 
   async update(id: string, dto: BlogInputDto): Promise<Result> {

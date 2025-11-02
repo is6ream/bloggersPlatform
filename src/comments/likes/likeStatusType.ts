@@ -5,7 +5,7 @@ export type LikeStatusRequest = {
 };
 
 export type LikeStatusDto = {
-  status: string;
+  status: LikeStatus;
   commentId: string;
   userId: string;
 };

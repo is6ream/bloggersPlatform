@@ -3,11 +3,11 @@ import { injectable } from "inversify";
 import { CommentDocument } from "../types/mongoose/mongoose";
 import { CommentModel } from "../types/mongoose/mongoose";
 import { CommentViewModel } from "../types/commentsTypes";
+import { LikeDocument } from "../likes/likesMongoose";
 
 @injectable()
 export class CommentsRepository {
-  async create(comment: CommentDocument): Promise<string> {
-    console.log(comment, "check comment in DAL");
+  async save(comment: CommentDocument): Promise<string> {
     await comment.save();
     return comment._id.toString();
   }
@@ -46,5 +46,10 @@ export class CommentsRepository {
       },
       createdAt: comment.createdAt,
     };
+  }
+
+  async likeStatusSave(like: LikeDocument): Promise<boolean> {
+    await like.save();
+    return true;
   }
 }

@@ -19,7 +19,7 @@ const likesSchema = new Schema<LikesDbType, LikeModel>({
   status: { type: String, enum: Object.values(LikeStatus), required: true },
   userId: { type: String, required: true },
   commentId: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now(), required: true },
+  createdAt: { type: Date, default: () => Date.now(), required: true }, //изменил тут время создания даты
 });
 
 export const LikeModel = model<LikesDbType, LikeModel>(
