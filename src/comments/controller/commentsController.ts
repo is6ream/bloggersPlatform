@@ -14,7 +14,7 @@ import {
   CommentId,
 } from "../types/input/updateCommentTypes";
 import { inject, injectable } from "inversify";
-import { LikeStatusRequest } from "../likes/likeStatusRequestType";
+import { LikeStatusDto, LikeStatusRequest } from "../likes/likeStatusType";
 
 @injectable()
 export class CommentsController {
@@ -75,13 +75,15 @@ export class CommentsController {
     req: RequestWithParamsAndBody<{ id: string }, LikeStatusRequest>,
     res: Response,
   ) {
-    const dto = {
-      status: req.body,
+    if (!req.userId) {
+      return res.sendStatus(HttpStatus.Unauthorized);
+    }
+    const dto: LikeStatusDto = {
+      status: req.body.likeStatus,
       commentId: req.params.id,
       userId: req.userId,
     };
-    console.log(dto, "dto check in API");
-
+    console.log(dto, "dto check in API"); //тут все ок, валидатор работает
     const result = await this.commentsService.updateLikeStatus(dto);
     if (result.status !== ResultStatus.Success) {
       return res.status(HttpStatus.NotFound).send(result.extensions);

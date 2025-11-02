@@ -10,6 +10,9 @@ import {
 } from "../../core/result/handleResult";
 import { injectable, inject } from "inversify";
 import { CommentModel } from "../types/mongoose/mongoose";
+import { LikeStatusDto } from "../likes/likeStatusType";
+import { ObjectId } from "mongodb";
+import { LikeModel } from "../likes/likesMongoose";
 
 @injectable()
 export class CommentsService {
@@ -68,5 +71,13 @@ export class CommentsService {
     }
     await this.commentsRepository.delete(id);
     return handleSuccessResult();
+  }
+
+  async updateLikeStatus(dto: LikeStatusDto): Promise<Result<any>> {
+    const comment = CommentModel.findOne({ _id: new ObjectId(dto.commentId) });
+    if (!comment) {
+      return handleNotFoundResult("Comment not found", "commentId");
+    }
+    const like = LikeModel.findOne({ _id: new ObjectId(dto.userId) }).lean();
   }
 }
