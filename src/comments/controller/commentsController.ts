@@ -75,19 +75,26 @@ export class CommentsController {
     req: RequestWithParamsAndBody<{ id: string }, LikeStatusRequest>,
     res: Response,
   ) {
-    if (!req.userId) {
-      return res.sendStatus(HttpStatus.Unauthorized);
-    }
-    const dto: LikeStatusDto = {
-      status: req.body.likeStatus,
-      commentId: req.params.id,
-      userId: req.userId,
-    };
-    const result = await this.commentsService.updateLikeStatus(dto);
-    if (result.status !== ResultStatus.Success) {
-      return res.status(HttpStatus.NotFound).send(result.extensions);
-    }
+    try {
+      if (!req.userId) {
+        return res.sendStatus(HttpStatus.Unauthorized);
+      }
+      const dto: LikeStatusDto = {
+        status: req.body.likeStatus,
+        commentId: req.params.id,
+        userId: req.userId,
+      };
+      const result = await this.commentsService.updateLikeStatus(dto);
+      if (result.status !== ResultStatus.Success) {
+        //здесь 500 тит
+        return res.status(HttpStatus.NotFound).send(result.extensions);
+      }
 
-    return res.sendStatus(HttpStatus.NoContent);
+      return res.sendStatus(HttpStatus.NoContent);
+    } catch (err: unknown) {
+      console.log(err);
+      res.sendStatus(HttpStatus.InternalServerError);
+      return;
+    }
   }
 }

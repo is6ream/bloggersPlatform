@@ -73,60 +73,24 @@ export class CommentsService {
     return handleSuccessResult();
   }
 
-  async updateLikeStatus(dto: LikeStatusDto): Promise<Result<any>> {
-    let like = await LikeModel.findOne({ commentId: dto.commentId });
+  async updateLikeStatus(
+    dto: LikeStatusDto,
+  ): Promise<Result<null> | undefined> {
+    let like = await LikeModel.findOne({ userId: dto.userId });
     let comment = await CommentModel.findOne({
       _id: new ObjectId(dto.commentId),
     });
-    if (!comment) return handleNotFoundResult("comment not found", "commentId");
-    console.log("is like exist? ", !!like);
+    if (!comment) {
+      return handleNotFoundResult("comment not found", "commentId");
+    }
     if (!like) {
       like = new LikeModel();
       like.status = dto.status;
       like.userId = dto.userId;
       like.commentId = dto.commentId;
-
-      await this.commentsRepository.likeStatusSave(like);
     }
-    if (dto.status === "Like" && like.status === "Like") {
-      like.status = "None" as LikeStatus;
-      comment.likesCount--; //мы же эту операцию должны сделать только один раз
-      await this.commentsRepository.save(comment);
-      await this.commentsRepository.likeStatusSave(like);
+    if (dto.status === like.status) {
+      return handleSuccessResult();
     }
-    if (dto.status === "Dislike" && like.status === "Dislike") {
-      like.status = "None" as LikeStatus;
-      comment.dislikesCount--;
-      await this.commentsRepository.save(comment);
-      await this.commentsRepository.likeStatusSave(like);
-    }
-    if (dto.status === "Like" && like.status === "Dislike") {
-      like.status = "Like" as LikeStatus;
-      comment.likesCount++;
-      await this.commentsRepository.save(comment);
-      await this.commentsRepository.likeStatusSave(like);
-    }
-    if (dto.status === "Dislike" && like.status === "Like") {
-      like.status = "Dislike" as LikeStatus;
-      comment.dislikesCount++;
-      await this.commentsRepository.save(comment);
-      await this.commentsRepository.likeStatusSave(like);
-    }
-    if (dto.status === "None" && like.status === "None") {
-      like.status = "None" as LikeStatus;
-      await this.commentsRepository.likeStatusSave(like);
-    }
-    if (dto.status === "Like" && like.status === "None") {
-      like.status = "Like" as LikeStatus;
-      await this.commentsRepository.likeStatusSave(like);
-    }
-    if (dto.status === "Dislike" && like.status === "None") {
-      like.status = "Dislike" as LikeStatus;
-      await this.commentsRepository.likeStatusSave(like);
-    }
-    //
-    // like.status = dto.status; //если сущность лайка есть в бд, мы обновляем его статус
-    // await this.commentsRepository.likeStatusSave(like);
-    return handleSuccessResult();
   }
 }
