@@ -86,7 +86,6 @@ export class CommentsController {
       };
       const result = await this.commentsService.updateLikeStatus(dto);
       if (result.status !== ResultStatus.Success) {
-        //здесь 500 тит
         return res.status(HttpStatus.NotFound).send(result.extensions);
       }
 

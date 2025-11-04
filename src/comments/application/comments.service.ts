@@ -11,7 +11,7 @@ import {
 import { injectable, inject } from "inversify";
 import { CommentModel } from "../types/mongoose/mongoose";
 import { LikeStatusDto } from "../likes/likeStatusType";
-import { LikeModel, LikeStatus } from "../likes/likesMongoose";
+import { LikeModel } from "../likes/likesMongoose";
 import { ObjectId } from "mongodb";
 
 @injectable()
@@ -73,9 +73,7 @@ export class CommentsService {
     return handleSuccessResult();
   }
 
-  async updateLikeStatus(
-    dto: LikeStatusDto,
-  ): Promise<Result<null> | undefined> {
+  async updateLikeStatus(dto: LikeStatusDto): Promise<Result<void | null>> {
     let like = await LikeModel.findOne({ userId: dto.userId });
     let comment = await CommentModel.findOne({
       _id: new ObjectId(dto.commentId),
@@ -88,9 +86,14 @@ export class CommentsService {
       like.status = dto.status;
       like.userId = dto.userId;
       like.commentId = dto.commentId;
+      await this.commentsRepository.likeStatusSave(like);
     }
-    if (dto.status === like.status) {
+    if (like.status === dto.status) {
       return handleSuccessResult();
     }
+    like.status = dto.status;
+    like.createdAt = new Date();
+    await this.commentsRepository.likeStatusSave(like);
+    return handleSuccessResult();
   }
 }
