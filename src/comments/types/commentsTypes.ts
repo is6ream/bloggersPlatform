@@ -50,6 +50,11 @@ export type CommentViewModel = {
     userLogin: string;
   };
   createdAt: Date;
+  likesInfo: {
+    likesCount: number;
+    dislikesCount: number;
+    myStatus: string;
+  };
 };
 
 export type PostId = { id: string };

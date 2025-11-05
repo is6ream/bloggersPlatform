@@ -77,26 +77,19 @@ export class CommentsService {
     let like = await LikeModel.findOne({
       userId: dto.userId,
       commentId: dto.commentId,
-    }); //ищем лайк
+    });
     let comment = await CommentModel.findOne({
-      //ищем коммент
       _id: new ObjectId(dto.commentId),
     });
     if (!comment) {
-      //если коммента нет - выбрасываем ошибку
       return handleNotFoundResult("comment not found", "commentId");
     }
     if (!like) {
-      //если лайк пока не создан, мы создаем новую сущность, инкрементируем счетчик реакций и сохраняем в бд
       like = new LikeModel();
       like.status = dto.status;
       like.userId = dto.userId;
       like.commentId = dto.commentId;
       await this.commentsRepository.likeStatusSave(like);
-      console.log(comment, "comment check");
-      console.log(like.status, "like status check");
-      console.log(dto.status, "dto status check"); //данные передаются, но счетчик не инкерментируется
-      await this.likesCount(comment, "None" as LikeStatus, dto.status); //здесь лайк должен инкерементироваться
       return handleSuccessResult();
     }
     if (like.status === dto.status) {
@@ -105,7 +98,6 @@ export class CommentsService {
     let oldLikeStatus = like.status;
     like.status = dto.status;
     like.createdAt = new Date();
-    console.log(like.status, "like status check");
     await this.likesCount(comment, oldLikeStatus, dto.status);
     await this.commentsRepository.likeStatusSave(like);
     return handleSuccessResult();
@@ -117,7 +109,6 @@ export class CommentsService {
     newLikeStatus: LikeStatus,
   ) {
     if (oldLikeStatus === "Like" && newLikeStatus === "Dislike") {
-      console.log("trigger"); //при постановке лайка на новую сущность лайка счетчик делает плюс один
       comment.likesCount--;
       comment.dislikesCount++;
       await this.commentsRepository.save(comment);
@@ -129,7 +120,6 @@ export class CommentsService {
       return;
     }
     if (oldLikeStatus === "Dislike" && newLikeStatus === "Like") {
-      console.log("comment", comment);
       comment.likesCount++;
       comment.dislikesCount--;
       await this.commentsRepository.save(comment);
@@ -141,29 +131,14 @@ export class CommentsService {
       return;
     }
     if (oldLikeStatus === "None" && newLikeStatus === "Like") {
-      console.log("trigger");
       comment.likesCount++;
       await this.commentsRepository.save(comment);
       return;
     }
     if (oldLikeStatus === "None" && newLikeStatus === "Dislike") {
-      console.log("trigger");
       comment.dislikesCount++;
       await this.commentsRepository.save(comment);
       return;
     }
   }
 }
-
-//1 old L new D => L- D+
-//5 old L new N => L-
-
-//2 old D new L => L+ D-
-//6 old D new N => D-
-
-//3 old N new D => D+
-//4 old N new L => L+
-
-//1смотрим лайк и статус
-//2 меняем в комменте count
-//3 сохраняем коммент

@@ -7,7 +7,8 @@ import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
-import { CommentModel } from "../types/mongoose/mongoose";
+import {CommentDocument, CommentModel} from "../types/mongoose/mongoose";
+import {LikeModel} from "../likes/likesMongoose";
 
 @injectable()
 export class CommentsQueryRepository {
@@ -52,6 +53,8 @@ export class CommentsQueryRepository {
 
   async findById(id: string): Promise<CommentViewModel | null> {
     const comment = await CommentModel.findOne({ _id: new ObjectId(id) });
+    const like = await LikeModel.findOne({ commentId: new ObjectId(id) }); //если лайка нет,
+      //в каком формате мы должны отдать данные?
     if (!comment) {
       return null;
     }
@@ -63,6 +66,11 @@ export class CommentsQueryRepository {
         userLogin: comment.commentatorInfo.userLogin,
       },
       createdAt: comment.createdAt,
+      likesInfo: {
+        likesCount: comment.likesCount,
+        dislikesCount: comment.dislikesCount,
+        myStatus: like.status,
+      },
     };
   }
 
