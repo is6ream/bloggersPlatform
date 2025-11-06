@@ -51,11 +51,14 @@ export class CommentsQueryRepository {
     return { items, totalCount };
   }
 
-  async findById(id: string): Promise<CommentViewModel | null> {
+  async findById(
+    id: string,
+    userId: string | undefined,
+  ): Promise<CommentViewModel | null> {
     const comment = await CommentModel.findOne({ _id: new ObjectId(id) });
-    const like = await LikeModel.findOne({ commentId: new ObjectId(id) }); //если лайка нет,
-    //в каком формате мы должны отдать данные?
-    if (!comment) {
+    const like = await LikeModel.findOne({ commentId: new ObjectId(id) });
+      console.log(userId, "userId check in DAL")
+      if (!comment) {
       return null;
     }
     if (!like)
@@ -71,6 +74,21 @@ export class CommentsQueryRepository {
           likesCount: comment.likesInfo.likesCount,
           dislikesCount: comment.likesInfo.dislikesCount,
           myStatus: "None", //по дефолту установлено None
+        },
+      };
+    if (!userId)
+      return {
+        id: comment._id.toString(),
+        content: comment.content,
+        commentatorInfo: {
+          userId: comment.commentatorInfo.userId, //тут возвращается null, так быть не должно
+          userLogin: comment.commentatorInfo.userLogin,
+        },
+        createdAt: comment.createdAt,
+        likesInfo: {
+          likesCount: comment.likesInfo.likesCount,
+          dislikesCount: comment.likesInfo.dislikesCount,
+          myStatus: "None",
         },
       };
     return {

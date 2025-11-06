@@ -7,6 +7,7 @@ import { container } from "../../container";
 import { CommentsController } from "../controller/commentsController";
 import { CommentsQueryController } from "../controller/commentsQueryController";
 import { likeStatusValidator } from "../likes/likeStatusValidator";
+import { optionalGuard } from "../../core/guards/optionalGuard";
 
 export const commentsRouter = Router();
 const commentsController = container.get(CommentsController);
@@ -14,6 +15,7 @@ const commentsQueryController = container.get(CommentsQueryController);
 commentsRouter
   .get(
     "/:id",
+    optionalGuard,
     idValidation,
     commentsQueryController.getCommentById.bind(commentsQueryController),
   )
