@@ -17,6 +17,7 @@ const commentsSchema = new Schema<CommentDB, CommentModel>(
     likesInfo: {
       likesCount: { type: Number, required: true, default: 0 },
       dislikesCount: { type: Number, required: true, default: 0 },
+        myStatus: { type: String, required: true, default: "None" },
     },
   },
   {

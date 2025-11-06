@@ -40,11 +40,7 @@ export class CommentsService {
       userLogin: user.login,
     };
     newComment.postId = post.id;
-
-    console.log(post.id, "postId check in BLL");
-    console.log(newComment, "comment entity check in BLL");
     const commentId: string = await this.commentsRepository.save(newComment);
-
     return handleSuccessResult({ commentId: commentId });
   }
 

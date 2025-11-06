@@ -45,6 +45,11 @@ export class CommentsRepository {
         userLogin: comment.commentatorInfo.userLogin,
       },
       createdAt: comment.createdAt,
+      likesInfo: {
+        likesCount: comment.likesInfo.likesCount,
+        dislikesCount: comment.likesInfo.dislikesCount,
+        myStatus: comment.likesInfo.myStatus, //почему здесь undefined?
+      },
     };
   }
 

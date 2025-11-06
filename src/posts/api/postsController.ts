@@ -86,6 +86,7 @@ export class PostsController {
       return;
     }
   }
+
   async createComment(
     req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
     res: Response,
@@ -112,6 +113,7 @@ export class PostsController {
         return;
       }
       const comment = await this.commentsRepository.findById(commentId);
+      console.log(comment, "comment check in API");
       res.status(HttpStatus.Created).send(comment);
       return;
     } catch (error: unknown) {
