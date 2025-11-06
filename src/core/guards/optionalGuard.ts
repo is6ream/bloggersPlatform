@@ -10,14 +10,21 @@ export const optionalGuard = async (
     next();
     return;
   }
-  const [token] = req.headers.authorization.split(" ");
+  const [authType, token] = req.headers.authorization.split(" ");
+  console.log(token, "TOKEN");
   const payload = await jwtService.verifyToken(token);
   if (!payload) {
     next();
     return;
   }
   const { userId } = payload;
+  console.log(userId, "GUARD");
   req.userId = userId;
   next();
   return;
 };
+//создаем коммент
+//лайкаем коммент первый пользователем
+//запрашиваем коммент вторым пользователем
+//дизлайкаем комментарий вторым пользователем
+//запрашиваем первым пользователем
