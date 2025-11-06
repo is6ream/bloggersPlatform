@@ -62,7 +62,7 @@ export class PostsQueryRepository {
 
   async findById(id: string): Promise<Result<PostViewModel | null>> {
     const post = await PostModel.findOne({ _id: new ObjectId(id) });
-
+    console.log(post);
     if (!post) {
       return handleNotFoundResult("post not found", "postId");
     }

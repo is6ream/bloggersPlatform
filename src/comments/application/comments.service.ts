@@ -89,6 +89,7 @@ export class CommentsService {
       like.status = dto.status;
       like.userId = dto.userId;
       like.commentId = dto.commentId;
+      await this.likesCount(comment, "None" as LikeStatus, like.status);
       await this.commentsRepository.likeStatusSave(like);
       return handleSuccessResult();
     }
@@ -109,34 +110,34 @@ export class CommentsService {
     newLikeStatus: LikeStatus,
   ) {
     if (oldLikeStatus === "Like" && newLikeStatus === "Dislike") {
-      comment.likesCount--;
-      comment.dislikesCount++;
+      comment.likesInfo.likesCount--;
+      comment.likesInfo.dislikesCount++;
       await this.commentsRepository.save(comment);
       return;
     }
     if (oldLikeStatus === "Like" && newLikeStatus === "None") {
-      comment.likesCount--;
+      comment.likesInfo.likesCount--;
       await this.commentsRepository.save(comment);
       return;
     }
     if (oldLikeStatus === "Dislike" && newLikeStatus === "Like") {
-      comment.likesCount++;
-      comment.dislikesCount--;
+      comment.likesInfo.likesCount++;
+      comment.likesInfo.dislikesCount--;
       await this.commentsRepository.save(comment);
       return;
     }
     if (oldLikeStatus === "Dislike" && newLikeStatus === "None") {
-      comment.dislikesCount--;
+      comment.likesInfo.dislikesCount--;
       await this.commentsRepository.save(comment);
       return;
     }
     if (oldLikeStatus === "None" && newLikeStatus === "Like") {
-      comment.likesCount++;
+      comment.likesInfo.likesCount++;
       await this.commentsRepository.save(comment);
       return;
     }
     if (oldLikeStatus === "None" && newLikeStatus === "Dislike") {
-      comment.dislikesCount++;
+      comment.likesInfo.dislikesCount++;
       await this.commentsRepository.save(comment);
       return;
     }

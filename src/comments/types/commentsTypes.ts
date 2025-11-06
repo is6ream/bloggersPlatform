@@ -8,8 +8,11 @@ export type CommentDB = {
   content: string;
   commentatorInfo: CommentInfoType;
   createdAt: Date;
-  likesCount: number;
-  dislikesCount: number;
+  likesInfo: {
+    likesCount: number;
+    dislikesCount: number;
+    myStatus: string;
+  };
 };
 
 export type CommentInputType = {
@@ -20,6 +23,11 @@ export type CommentInputType = {
     userLogin: string;
   };
   createdAt: Date;
+  likesInfo: {
+    likesCount: number;
+    dislikesCount: number;
+    myStatus: string;
+  };
 };
 
 export type ContentDto = {
@@ -50,7 +58,7 @@ export type CommentViewModel = {
     userLogin: string;
   };
   createdAt: Date;
-  likesInfo: {
+  likesInfo?: {
     likesCount: number;
     dislikesCount: number;
     myStatus: string;

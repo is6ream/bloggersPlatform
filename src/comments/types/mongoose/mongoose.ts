@@ -13,9 +13,11 @@ const commentsSchema = new Schema<CommentDB, CommentModel>(
       userLogin: { type: String, required: true },
     },
     postId: { type: String, required: true },
-    likesCount: { type: Number, required: true, default: 0 },
-    dislikesCount: { type: Number, required: true, default: 0 },
     createdAt: { type: Date, default: Date.now(), required: true },
+    likesInfo: {
+      likesCount: { type: Number, required: true, default: 0 },
+      dislikesCount: { type: Number, required: true, default: 0 },
+    },
   },
   {
     versionKey: false,

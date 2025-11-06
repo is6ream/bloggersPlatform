@@ -16,6 +16,7 @@ export class CommentsQueryController {
   async getCommentById(req: RequestWithParams<IdType>, res: Response) {
     try {
       const id: string = req.params.id;
+      console.log(id, "id check in API");
       const comment: null | CommentViewModel =
         await this.commentsQueryRepository.findById(id);
       if (!comment) {

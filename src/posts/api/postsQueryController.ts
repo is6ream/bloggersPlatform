@@ -64,6 +64,7 @@ export class PostsQueryController {
       console.log(postId);
       const foundPost = await this.postQueryRepository.findById(postId);
       if (foundPost.status !== ResultStatus.Success) {
+        //проверяем, есть ли такой пост
         res.sendStatus(HttpStatus.NotFound);
         return;
       }
@@ -72,7 +73,7 @@ export class PostsQueryController {
           queryInput,
           postId,
         );
-
+      console.log(items, "items check in API");
       const commentsListOutput = mapToCommentListPaginatedOutput(items, {
         pageNumber: Number(queryInput.pageNumber),
         pageSize: Number(queryInput.pageSize),

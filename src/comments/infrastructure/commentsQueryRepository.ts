@@ -7,8 +7,8 @@ import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
-import {CommentDocument, CommentModel} from "../types/mongoose/mongoose";
-import {LikeModel} from "../likes/likesMongoose";
+import { CommentModel } from "../types/mongoose/mongoose";
+import { LikeModel } from "../likes/likesMongoose";
 
 @injectable()
 export class CommentsQueryRepository {
@@ -54,10 +54,25 @@ export class CommentsQueryRepository {
   async findById(id: string): Promise<CommentViewModel | null> {
     const comment = await CommentModel.findOne({ _id: new ObjectId(id) });
     const like = await LikeModel.findOne({ commentId: new ObjectId(id) }); //если лайка нет,
-      //в каком формате мы должны отдать данные?
+    //в каком формате мы должны отдать данные?
     if (!comment) {
       return null;
     }
+    if (!like)
+      return {
+        id: comment._id.toString(),
+        content: comment.content,
+        commentatorInfo: {
+          userId: comment.commentatorInfo.userId,
+          userLogin: comment.commentatorInfo.userLogin,
+        },
+        createdAt: comment.createdAt,
+        likesInfo: {
+          likesCount: comment.likesInfo.likesCount,
+          dislikesCount: comment.likesInfo.dislikesCount,
+          myStatus: "None", //по дефолту установлено None
+        },
+      };
     return {
       id: comment._id.toString(),
       content: comment.content,
@@ -67,8 +82,8 @@ export class CommentsQueryRepository {
       },
       createdAt: comment.createdAt,
       likesInfo: {
-        likesCount: comment.likesCount,
-        dislikesCount: comment.dislikesCount,
+        likesCount: comment.likesInfo.likesCount,
+        dislikesCount: comment.likesInfo.dislikesCount,
         myStatus: like.status,
       },
     };
@@ -88,7 +103,7 @@ export class CommentsQueryRepository {
     if (searchContentTerm) {
       filter.name = { $regex: searchContentTerm, $options: "i" };
     }
-
+    console.log(filter);
     const items = await CommentModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
@@ -96,7 +111,7 @@ export class CommentsQueryRepository {
       .lean();
 
     const totalCount = await CommentModel.countDocuments(filter);
-
+    console.log(items, "items check in dAL"); //остановился тут, залогал items. Нужно возвращать комменты с лайк инфо
     return { items, totalCount };
   }
 }
