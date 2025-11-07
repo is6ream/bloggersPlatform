@@ -11,6 +11,7 @@ import { commentValidator } from "../../core/middlewares/commentValidation/comme
 import { PostsController } from "../api/postsController";
 import { container } from "../../container";
 import { PostsQueryController } from "../api/postsQueryController";
+import { optionalGuard } from "../../core/guards/optionalGuard";
 
 const postsController = container.get(PostsController);
 const postsQueryController = container.get(PostsQueryController);
@@ -61,6 +62,7 @@ postRouter
 
   .get(
     "/:id/comments", //перенести в query
+    optionalGuard,
     paginationAndSortingValidation(CommentsSortField),
     idValidation,
     postsQueryController.getCommentByPostId.bind(postsQueryController),

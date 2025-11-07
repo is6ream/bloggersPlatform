@@ -61,19 +61,18 @@ export class PostsQueryController {
         req.query,
       );
       const { id: postId } = req.params;
-      console.log(postId);
+      const userId = req.userId;
       const foundPost = await this.postQueryRepository.findById(postId);
       if (foundPost.status !== ResultStatus.Success) {
-        //проверяем, есть ли такой пост
         res.sendStatus(HttpStatus.NotFound);
         return;
       }
       const { items, totalCount } =
         await this.commentsQueryRepository.findCommentByPostId(
           queryInput,
+          userId,
           postId,
         );
-      console.log(items, "items check in API");
       const commentsListOutput = mapToCommentListPaginatedOutput(items, {
         pageNumber: Number(queryInput.pageNumber),
         pageSize: Number(queryInput.pageSize),

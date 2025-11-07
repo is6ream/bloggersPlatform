@@ -96,19 +96,27 @@ export class CommentsQueryRepository {
 
   async findCommentByPostId(
     queryDto: CommentsQueryInput,
+    userId: string | undefined,
     postId: string,
   ): Promise<{ items: WithId<CommentDB>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchContentTerm } =
       queryDto;
     const skip = (pageNumber - 1) * pageSize;
-    const filter: Record<string, any> = {
+    let filter: Record<string, any>;
+    if (!userId) {
+      filter = {
+        postId,
+      };
+    }
+    filter = {
       postId,
+      commentatorInfo: {
+        userId: userId,
+      },
     };
-
     if (searchContentTerm) {
       filter.name = { $regex: searchContentTerm, $options: "i" };
     }
-    console.log(filter);
     const items = await CommentModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
@@ -116,7 +124,16 @@ export class CommentsQueryRepository {
       .lean();
 
     const totalCount = await CommentModel.countDocuments(filter);
-    console.log(items, "items check in dAL"); //остановился тут, залогал items. Нужно возвращать комменты с лайк инфо
     return { items, totalCount };
   }
 }
+
+//Создаем 6 комментариев
+//ставим лайк первому комментарию первым и вторым пользователем
+//ставим лайк второму комментарию вторым и третьим пользователем
+//ставим дизлайк третьему комментарию первым пользователем
+//ставим лайк четвертому комментарию первым, четвертым, вторым, третьим пользователем
+//ставим лайк пятому комментарию вторым пользователем, ставим дизлайк третьим пользователем
+//ставим лайк шестому комментарию первым пользователем, ставим дизлайк вторым пользователем
+
+//И запрашиваем комментарии первым пользователем
