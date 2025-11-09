@@ -1,10 +1,9 @@
 import { CommentInputType } from "../types/commentsTypes";
 import { CommentsListPaginatedOutput } from "../types/output/commentsListPaginatedOutput";
-import { WithId } from "mongodb";
 import { CommentViewModel } from "../types/commentsTypes";
 
 export function mapToCommentListPaginatedOutput(
-  comments: WithId<CommentInputType>[],
+  comments: CommentInputType[],
   meta: { pageNumber: number; pageSize: number; totalCount: number },
 ): CommentsListPaginatedOutput {
   return {
@@ -15,7 +14,7 @@ export function mapToCommentListPaginatedOutput(
 
     items: comments.map(
       (comment): CommentViewModel => ({
-        id: comment._id.toString(),
+        id: comment.id,
         content: comment.content,
         commentatorInfo: {
           userId: comment.commentatorInfo.userId,
@@ -25,7 +24,7 @@ export function mapToCommentListPaginatedOutput(
         likesInfo: {
           likesCount: comment.likesInfo.likesCount,
           dislikesCount: comment.likesInfo.dislikesCount,
-          myStatus: "None",
+          myStatus: comment.likesInfo.myStatus,
         },
       }),
     ),

@@ -13,7 +13,7 @@ const commentsSchema = new Schema<CommentDB, CommentModel>(
       userLogin: { type: String, required: true },
     },
     postId: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now(), required: true },
+    createdAt: { type: Date, default: () => new Date(), required: true },
     likesInfo: {
       likesCount: { type: Number, required: true, default: 0 },
       dislikesCount: { type: Number, required: true, default: 0 },

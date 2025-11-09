@@ -1,7 +1,7 @@
 import {
-  CommentDB,
-  CommentQueryOutput,
-  CommentViewModel,
+    CommentDB, CommentInfoType, CommentInputDto, CommentInputType,
+    CommentQueryOutput,
+    CommentViewModel,
 } from "../types/commentsTypes";
 import { CommentsQueryInput } from "../types/input/comment-Query-Input";
 import { ObjectId } from "mongodb";
@@ -93,35 +93,46 @@ export class CommentsQueryRepository {
       },
     };
   }
-
   async findCommentByPostId(
     queryDto: CommentsQueryInput,
     userId: string | undefined,
     postId: string,
-  ): Promise<{ items: WithId<CommentDB>[]; totalCount: number }> {
+  ): Promise<{ items: CommentInputType[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchContentTerm } =
       queryDto;
     const skip = (pageNumber - 1) * pageSize;
-    let filter: Record<string, any>;
-    if (!userId) {
-      filter = {
-        postId,
-      };
-    }
-    filter = {
-      postId,
-      commentatorInfo: {
-        userId: userId,
-      },
-    };
+    const filter: Record<string, any> = { postId };
     if (searchContentTerm) {
       filter.name = { $regex: searchContentTerm, $options: "i" };
     }
-    const items = await CommentModel.find(filter)
+    const comments = await CommentModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
       .lean();
+    //нужно разобраться в каком формате возвращать данные`
+    const items: CommentInputType[] = await Promise.all(
+      comments.map(async (comment) => {
+        const userLike = await LikeModel.findOne({
+          commentId: comment._id,
+          userId: userId,
+        });
+        return {
+          id: comment._id.toString(),
+          content: comment.content,
+          commentatorInfo: {
+            userId: comment.commentatorInfo.userId,
+            userLogin: comment.commentatorInfo.userLogin,
+          },
+          createdAt: comment.createdAt,
+          likesInfo: {
+            likesCount: comment.likesInfo.likesCount,
+            dislikesCount: comment.likesInfo.dislikesCount,
+            myStatus: userLike?.status || "None",
+          },
+        };
+      }),
+    );
 
     const totalCount = await CommentModel.countDocuments(filter);
     return { items, totalCount };

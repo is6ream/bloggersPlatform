@@ -16,6 +16,7 @@ export type CommentDB = {
 };
 
 export type CommentInputType = {
+  id: string;
   postId?: string;
   content: string;
   commentatorInfo: {
