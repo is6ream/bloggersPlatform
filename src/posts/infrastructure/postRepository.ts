@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
 import { PostDocument, PostModel } from "../types/postMongoose";
+import { LikeDocument } from "../../comments/likes/likesMongoose";
 
 @injectable()
 export class PostsRepository {
@@ -12,7 +13,7 @@ export class PostsRepository {
   }
 
   async save(post: PostDocument): Promise<void> {
-      await post.save();
+    await post.save();
   }
 
   async findPost(id: string): Promise<WithId<PostDB> | null> {
@@ -52,5 +53,9 @@ export class PostsRepository {
       _id: new ObjectId(id),
     });
     return deleteResult.deletedCount === 1;
+  }
+  async likeStatusSave(like: LikeDocument): Promise<void> {
+    await like.save;
+    return;
   }
 }

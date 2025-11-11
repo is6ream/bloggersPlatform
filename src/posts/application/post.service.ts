@@ -94,7 +94,14 @@ export class PostsService {
       like.parentId = dto.postId;
       like.parentType = "Post";
       await this.likesForPostCount(post, "None" as LikeStatus, like.status);
+      await this.postRepository.
     }
+    if(like.status === dto.status){
+        return handleSuccessResult();
+    }
+    let oldLikeStatus = like.status;
+    like.status = dto.status;
+    like.createdAt = new Date();
   }
   private async likesForPostCount(
     post: PostDocument,
