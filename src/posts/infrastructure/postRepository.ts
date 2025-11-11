@@ -55,7 +55,7 @@ export class PostsRepository {
     return deleteResult.deletedCount === 1;
   }
   async likeStatusSave(like: LikeDocument): Promise<void> {
-    await like.save;
+    await like.save();
     return;
   }
 }

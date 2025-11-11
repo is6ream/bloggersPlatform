@@ -9,7 +9,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { inject, injectable } from "inversify";
-import {PostDocument, PostModel} from "../types/postMongoose";
+import { PostDocument, PostModel } from "../types/postMongoose";
 import { PostLikeStatusDto } from "../../comments/likes/likeStatusType";
 import { LikeModel, LikeStatus } from "../../comments/likes/likesMongoose";
 import { ObjectId } from "mongodb";
@@ -78,30 +78,36 @@ export class PostsService {
     return handleSuccessResult();
   }
 
-  async updateLikeForPostStatus(dto: PostLikeStatusDto): Promise<Result> {
-    let like = await LikeModel.findOne({
+  async updateLikeForPostStatus(
+    dto: PostLikeStatusDto,
+  ): Promise<Result<null> | void> {
+    let like = await LikeModel.findOne({ //ищем лайк по полям из dto
       userId: dto.userId,
       parentId: dto.postId,
     });
-    let post = await PostModel.findOne({ _id: new ObjectId(dto.userId) });
+    let post = await PostModel.findOne({ _id: new ObjectId(dto.postId) }); //аналогично с постом
     if (!post) {
       return handleNotFoundResult("Post not found", "postId");
     }
-    if (!like) {
+    if (!like) { //если нет лайка, создаем новый
       like = new LikeModel();
       like.status = dto.status;
       like.userId = dto.userId;
       like.parentId = dto.postId;
       like.parentType = "Post";
-      await this.likesForPostCount(post, "None" as LikeStatus, like.status);
-      await this.postRepository.
+      await this.likesForPostCount(post, "None" as LikeStatus, like.status); //обновляем счетчик
+      await this.postRepository.likeStatusSave(like);
+      return handleSuccessResult();
     }
-    if(like.status === dto.status){
-        return handleSuccessResult();
+    if (like.status === dto.status) { //если статус найденного лайка равен данным из дто, ничего не делаем
+      return handleSuccessResult();
     }
-    let oldLikeStatus = like.status;
-    like.status = dto.status;
-    like.createdAt = new Date();
+    let oldLikeStatus = like.status; //в противном случае сохраняем старый статус
+    like.status = dto.status; //приписываем новый статус
+    like.createdAt = new Date(); //обновляем поле createdAt
+    await this.likesForPostCount(post, oldLikeStatus, dto.status); //инкрементируем счетчик согласно статусу
+    await this.postRepository.likeStatusSave(like);
+    return handleSuccessResult();
   }
   private async likesForPostCount(
     post: PostDocument,
