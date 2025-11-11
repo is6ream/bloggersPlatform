@@ -11,6 +11,11 @@ const postSchema = new Schema<PostDB, PostModel>({
   blogId: { type: String, required: true },
   blogName: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
+  likesInfo: {
+    likesCount: { type: Number, required: true, default: 0 },
+    dislikesCount: { type: Number, required: true, default: 0 },
+    myStatus: { type: String, required: true, default: "None" },
+  },
 });
 
 export const PostModel = model<PostDB, PostModel>("posts", postSchema);
