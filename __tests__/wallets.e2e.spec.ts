@@ -1,4 +1,3 @@
-import { Wallet } from "../DDD/wallet";
 import { User } from "../DDD/ddd";
 
 describe("some", () => {
