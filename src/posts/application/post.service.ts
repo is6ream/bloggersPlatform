@@ -10,6 +10,7 @@ import {
 } from "../../core/result/handleResult";
 import { inject, injectable } from "inversify";
 import { PostModel } from "../types/postMongoose";
+import {LikeStatusDto} from "../../comments/likes/likeStatusType";
 
 @injectable()
 export class PostsService {
@@ -72,5 +73,12 @@ export class PostsService {
     }
     await this.postRepository.delete(id);
     return handleSuccessResult();
+  }
+
+  async updateLikeForPostStatus(dto: LikeStatusDto): Promise<Result> {
+      let like = await LikeModel.findOne({
+          userId: dto.userId,
+          parentId: dto.
+      })
   }
 }

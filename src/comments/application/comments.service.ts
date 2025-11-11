@@ -10,7 +10,7 @@ import {
 } from "../../core/result/handleResult";
 import { injectable, inject } from "inversify";
 import { CommentDocument, CommentModel } from "../types/mongoose/mongoose";
-import { LikeStatusDto } from "../likes/likeStatusType";
+import { CommentLikeStatusDto, LikeStatusDto } from "../likes/likeStatusType";
 import { LikeModel, LikeStatus } from "../likes/likesMongoose";
 import { ObjectId } from "mongodb";
 
@@ -69,7 +69,9 @@ export class CommentsService {
     return handleSuccessResult();
   }
 
-  async updateLikeStatus(dto: LikeStatusDto): Promise<Result<void | null>> {
+  async updateLikeStatus(
+    dto: CommentLikeStatusDto,
+  ): Promise<Result<void | null>> {
     let like = await LikeModel.findOne({
       userId: dto.userId,
       commentId: dto.commentId,
