@@ -48,7 +48,7 @@ export class CommentsRepository {
       likesInfo: {
         likesCount: comment.likesInfo.likesCount,
         dislikesCount: comment.likesInfo.dislikesCount,
-        myStatus: comment.likesInfo.myStatus, //почему здесь undefined?
+        myStatus: comment.likesInfo.myStatus,
       },
     };
   }

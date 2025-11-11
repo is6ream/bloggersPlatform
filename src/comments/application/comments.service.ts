@@ -84,8 +84,9 @@ export class CommentsService {
       like = new LikeModel();
       like.status = dto.status;
       like.userId = dto.userId;
-      like.commentId = dto.commentId;
-      await this.likesCount(comment, "None" as LikeStatus, like.status);
+      like.parentId = dto.commentId;
+      like.parentType = "Comment"; //тут добавил
+      await this.likesCount(comment, "None" as LikeStatus, like.status); //вот это поле относится к другой сущности, не к самому лайку
       await this.commentsRepository.likeStatusSave(like);
       return handleSuccessResult();
     }
