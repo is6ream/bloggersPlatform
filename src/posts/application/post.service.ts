@@ -9,7 +9,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { inject, injectable } from "inversify";
-import { PostModel } from "../types/postMongoose";
+import {PostDocument, PostModel} from "../types/postMongoose";
 import { PostLikeStatusDto } from "../../comments/likes/likeStatusType";
 import { LikeModel, LikeStatus } from "../../comments/likes/likesMongoose";
 import { ObjectId } from "mongodb";
@@ -93,44 +93,44 @@ export class PostsService {
       like.userId = dto.userId;
       like.parentId = dto.postId;
       like.parentType = "Post";
-      await this.likesCount(post, "None" as LikeStatus, like.status);
+      await this.likesForPostCount(post, "None" as LikeStatus, like.status);
     }
   }
-  private async likesCount(
-    comment: CommentDocument,
+  private async likesForPostCount(
+    post: PostDocument,
     oldLikeStatus: LikeStatus,
     newLikeStatus: LikeStatus,
   ) {
     if (oldLikeStatus === "Like" && newLikeStatus === "Dislike") {
-      comment.likesInfo.likesCount--;
-      comment.likesInfo.dislikesCount++;
-      await this.commentsRepository.save(comment);
+      post.likesInfo.likesCount--;
+      post.likesInfo.dislikesCount++;
+      await this.postRepository.save(post);
       return;
     }
     if (oldLikeStatus === "Like" && newLikeStatus === "None") {
-      comment.likesInfo.likesCount--;
-      await this.commentsRepository.save(comment);
+      post.likesInfo.likesCount--;
+      await this.postRepository.save(post);
       return;
     }
     if (oldLikeStatus === "Dislike" && newLikeStatus === "Like") {
-      comment.likesInfo.likesCount++;
-      comment.likesInfo.dislikesCount--;
-      await this.commentsRepository.save(comment);
+      post.likesInfo.likesCount++;
+      post.likesInfo.dislikesCount--;
+      await this.postRepository.save(post);
       return;
     }
     if (oldLikeStatus === "Dislike" && newLikeStatus === "None") {
-      comment.likesInfo.dislikesCount--;
-      await this.commentsRepository.save(comment);
+      post.likesInfo.dislikesCount--;
+      await this.postRepository.save(post);
       return;
     }
     if (oldLikeStatus === "None" && newLikeStatus === "Like") {
-      comment.likesInfo.likesCount++;
-      await this.commentsRepository.save(comment);
+      post.likesInfo.likesCount++;
+      await this.postRepository.save(post);
       return;
     }
     if (oldLikeStatus === "None" && newLikeStatus === "Dislike") {
-      comment.likesInfo.dislikesCount++;
-      await this.commentsRepository.save(comment);
+      post.likesInfo.dislikesCount++;
+      await this.postRepository.save(post);
       return;
     }
   }

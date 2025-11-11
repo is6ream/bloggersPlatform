@@ -11,6 +11,10 @@ export class PostsRepository {
     return post._id.toString();
   }
 
+  async save(post: PostDocument): Promise<void> {
+      await post.save();
+  }
+
   async findPost(id: string): Promise<WithId<PostDB> | null> {
     const post = await PostModel.findOne({ _id: new ObjectId(id) }).lean();
     if (!post) {

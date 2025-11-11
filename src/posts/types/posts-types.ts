@@ -7,10 +7,10 @@ export interface PostDB {
   blogName: string;
   createdAt: Date;
   likesInfo: {
-      likesCount: number;
-      dislikesCount: number;
-      myStatus: string;
-  }
+    likesCount: number;
+    dislikesCount: number;
+    myStatus: string;
+  };
 }
 
 export interface PostViewModel {
