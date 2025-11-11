@@ -11,6 +11,8 @@ import { CommentsService } from "../../comments/application/comments.service";
 import { CommentsRepository } from "../../comments/infrastructure/comment.repository";
 import { PostsRepository } from "../infrastructure/postRepository";
 import { inject, injectable } from "inversify";
+import { LikeStatus } from "../../comments/likes/likesMongoose";
+import { PostLikeStatusDto } from "../../comments/likes/likeStatusType";
 
 @injectable()
 export class PostsController {
@@ -118,6 +120,31 @@ export class PostsController {
       return;
     } catch (error: unknown) {
       console.log(error);
+      res.sendStatus(HttpStatus.InternalServerError);
+    }
+  }
+
+  async updateLikeStatus(
+    req: RequestWithParamsAndBodyAndUserId<string, LikeStatus, IdType>,
+    res: Response,
+  ) {
+    try {
+      if (!req.userId) {
+        return res.status(HttpStatus.Unauthorized);
+      }
+      const dto: PostLikeStatusDto = {
+        status: req.body,
+        postId: req.params,
+        userId: req.userId,
+      };
+
+      const result = await this.postsService.updateLikeForPostStatus(dto);
+      if (result.status !== ResultStatus.Success) {
+        return res.status(HttpStatus.NotFound).send(result.extensions);
+      }
+      return res.sendStatus(HttpStatus.NoContent);
+    } catch (err: unknown) {
+      console.log(err);
       res.sendStatus(HttpStatus.InternalServerError);
     }
   }

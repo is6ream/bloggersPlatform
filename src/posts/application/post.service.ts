@@ -80,8 +80,9 @@ export class PostsService {
 
   async updateLikeForPostStatus(
     dto: PostLikeStatusDto,
-  ): Promise<Result<null> | void> {
-    let like = await LikeModel.findOne({ //ищем лайк по полям из dto
+  ): Promise<Result<null | void>> {
+    let like = await LikeModel.findOne({
+      //ищем лайк по полям из dto
       userId: dto.userId,
       parentId: dto.postId,
     });
@@ -89,7 +90,8 @@ export class PostsService {
     if (!post) {
       return handleNotFoundResult("Post not found", "postId");
     }
-    if (!like) { //если нет лайка, создаем новый
+    if (!like) {
+      //если нет лайка, создаем новый
       like = new LikeModel();
       like.status = dto.status;
       like.userId = dto.userId;
@@ -99,7 +101,8 @@ export class PostsService {
       await this.postRepository.likeStatusSave(like);
       return handleSuccessResult();
     }
-    if (like.status === dto.status) { //если статус найденного лайка равен данным из дто, ничего не делаем
+    if (like.status === dto.status) {
+      //если статус найденного лайка равен данным из дто, ничего не делаем
       return handleSuccessResult();
     }
     let oldLikeStatus = like.status; //в противном случае сохраняем старый статус
