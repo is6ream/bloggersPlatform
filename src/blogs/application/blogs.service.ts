@@ -6,7 +6,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { injectable, inject } from "inversify";
-import { BlogDocument, BlogModel } from "../types/mongoose";
+import { BlogDocument, BlogModel } from "../domain/blogDomainModel";
 
 @injectable()
 export class BlogsService {

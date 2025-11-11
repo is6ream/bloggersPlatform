@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { HttpStatus } from "../core/http-statuses";
 import { Request, Response } from "express";
-import { BlogModel } from "../blogs/types/mongoose";
+import { BlogModel } from "../blogs/domain/blogDomainModel";
 import { UserModel } from "../users/types/usersMongoose";
 import { PostModel } from "../posts/types/postMongoose";
 import { CommentModel } from "../comments/types/mongoose/mongoose";

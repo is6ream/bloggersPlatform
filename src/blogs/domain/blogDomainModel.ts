@@ -1,5 +1,5 @@
 import mongoose, { HydratedDocument, model, Model } from "mongoose";
-import { BlogDB } from "./blogs-types";
+import { BlogDB } from "../types/blogs-types";
 
 export type BlogModel = Model<BlogDB>;
 export type BlogDocument = HydratedDocument<BlogDB>; //можно добавить статистические методы для сохранения пользователя

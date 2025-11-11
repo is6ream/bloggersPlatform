@@ -4,7 +4,7 @@ import { WithId } from "mongodb";
 import { Blog, BlogViewModel } from "../types/blogs-types";
 import { ObjectId } from "mongodb";
 import { injectable } from "inversify";
-import { BlogModel } from "../types/mongoose";
+import { BlogModel } from "../domain/blogDomainModel";
 
 @injectable()
 export class BlogsQueryRepository {
