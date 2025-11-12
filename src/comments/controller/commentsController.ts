@@ -14,7 +14,10 @@ import {
   CommentId,
 } from "../types/input/updateCommentTypes";
 import { inject, injectable } from "inversify";
-import { LikeStatusDto, LikeStatusRequest } from "../likes/likeStatusType";
+import {
+  CommentLikeStatusDto,
+  LikeStatusRequest,
+} from "../likes/likeStatusType";
 
 @injectable()
 export class CommentsController {
@@ -79,7 +82,7 @@ export class CommentsController {
       if (!req.userId) {
         return res.sendStatus(HttpStatus.Unauthorized);
       }
-      const dto: LikeStatusDto = {
+      const dto: CommentLikeStatusDto = {
         status: req.body.likeStatus,
         commentId: req.params.id,
         userId: req.userId,

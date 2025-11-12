@@ -4,7 +4,10 @@ import { ResultStatus } from "../../core/result/resultCode";
 import { resultCodeToHttpException } from "../../core/result/resultCodeToHttpException";
 import { PostsService } from "../application/post.service";
 import { createErrorMessages } from "../../core/middlewares/validation/input-validation-result.middleware";
-import { RequestWithParamsAndBodyAndUserId } from "../../core/types/common/requests";
+import {
+  RequestWithParamsAndBody,
+  RequestWithParamsAndBodyAndUserId,
+} from "../../core/types/common/requests";
 import { ContentDto, PostId } from "../../comments/types/commentsTypes";
 import { IdType } from "../../core/types/authorization/id";
 import { CommentsService } from "../../comments/application/comments.service";
@@ -12,7 +15,10 @@ import { CommentsRepository } from "../../comments/infrastructure/comment.reposi
 import { PostsRepository } from "../infrastructure/postRepository";
 import { inject, injectable } from "inversify";
 import { LikeStatus } from "../../comments/likes/likesMongoose";
-import { PostLikeStatusDto } from "../../comments/likes/likeStatusType";
+import {
+  LikeStatusRequest,
+  PostLikeStatusDto,
+} from "../../comments/likes/likeStatusType";
 
 @injectable()
 export class PostsController {
@@ -125,7 +131,7 @@ export class PostsController {
   }
 
   async updateLikeStatus(
-    req: RequestWithParamsAndBodyAndUserId<string, LikeStatus, IdType>,
+    req: RequestWithParamsAndBody<{ id: string }, LikeStatusRequest>,
     res: Response,
   ) {
     try {
@@ -133,19 +139,22 @@ export class PostsController {
         return res.status(HttpStatus.Unauthorized);
       }
       const dto: PostLikeStatusDto = {
-        status: req.body,
-        postId: req.params,
+        status: req.body.likeStatus,
+        postId: req.params.id,
         userId: req.userId,
       };
 
       const result = await this.postsService.updateLikeForPostStatus(dto);
       if (result.status !== ResultStatus.Success) {
-        return res.status(HttpStatus.NotFound).send(result.extensions);
+        res.status(HttpStatus.NotFound).send(result.extensions);
+        return;
       }
-      return res.sendStatus(HttpStatus.NoContent);
+      res.sendStatus(HttpStatus.NoContent);
+      return;
     } catch (err: unknown) {
       console.log(err);
       res.sendStatus(HttpStatus.InternalServerError);
+      return;
     }
   }
 }

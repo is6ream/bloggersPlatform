@@ -12,6 +12,7 @@ import { PostsController } from "../api/postsController";
 import { container } from "../../container";
 import { PostsQueryController } from "../api/postsQueryController";
 import { optionalGuard } from "../../core/guards/optionalGuard";
+import { likeStatusValidator } from "../../comments/likes/likeStatusValidator";
 
 const postsController = container.get(PostsController);
 const postsQueryController = container.get(PostsQueryController);
@@ -66,4 +67,12 @@ postRouter
     paginationAndSortingValidation(CommentsSortField),
     idValidation,
     postsQueryController.getCommentByPostId.bind(postsQueryController),
+  )
+  .put(
+    "/:id/like-status",
+    optionalGuard,
+    idValidation,
+    likeStatusValidator,
+    inputValidationResultMiddleware,
+    postsController.updateLikeStatus.bind(postsController), //остановился на разборе этой ошибки
   );
