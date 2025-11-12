@@ -1,5 +1,4 @@
 import { LikeStatus } from "./likesMongoose";
-import { IdType } from "../../core/types/authorization/id";
 
 export type LikeStatusRequest = {
   likeStatus: LikeStatus;

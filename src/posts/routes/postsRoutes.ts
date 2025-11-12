@@ -74,5 +74,5 @@ postRouter
     idValidation,
     likeStatusValidator,
     inputValidationResultMiddleware,
-    postsController.updateLikeStatus.bind(postsController), //остановился на разборе этой ошибки
+    postsController.updateLikeStatus.bind(postsController),
   );
