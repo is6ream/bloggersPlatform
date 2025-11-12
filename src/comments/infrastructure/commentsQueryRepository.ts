@@ -113,7 +113,6 @@ export class CommentsQueryRepository {
       .skip(skip)
       .limit(+pageSize)
       .lean();
-    //нужно разобраться в каком формате возвращать данные`
     const items: CommentInputType[] = await Promise.all(
       comments.map(async (comment) => {
         const userLike = await LikeModel.findOne({

@@ -8,11 +8,13 @@ import {
 } from "../../core/result/handleResult";
 import { injectable } from "inversify";
 import { PostModel } from "../types/postMongoose";
+import { LikeModel } from "../../comments/likes/likesMongoose";
 
 @injectable()
 export class PostsQueryRepository {
   async findAll(
     queryDto: PostQueryInput,
+    userId: string,
   ): Promise<{ items: WithId<PostDB>[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -23,12 +25,20 @@ export class PostsQueryRepository {
     if (searchPostNameTerm) {
       filter["name"] = { $regex: searchPostNameTerm, $options: "i" };
     }
-    const items = await PostModel.find(filter)
+    const posts = await PostModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(+pageSize)
-      .lean();
+      .lean(); //получили массив постов
 
+    const items = await Promise.all(
+      posts.map(async (post) => {
+        const userLike = await LikeModel.findOne({
+          postId: post._id,
+          userId: userId,
+        });
+      }),
+    );
     const totalCount = await PostModel.countDocuments(filter);
 
     return { items, totalCount };

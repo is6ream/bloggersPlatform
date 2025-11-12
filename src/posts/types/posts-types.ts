@@ -21,6 +21,18 @@ export interface PostViewModel {
   blogId: string;
   blogName: string;
   createdAt: Date;
+  extendedLikeInfo: {
+    likesCount: number;
+    dislikesCount: number;
+    myStatus: string;
+    newestLikes: [
+      {
+        addedAt: Date;
+        userId: string;
+        login: string;
+      },
+    ];
+  };
 }
 
 export interface PostInputDto {
