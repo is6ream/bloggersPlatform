@@ -30,12 +30,13 @@ export class PostsController {
 
   async createPost(req: Request, res: Response) {
     try {
-      const result = await this.postsService.create({
+      const createPostDto = {
         title: req.body.title,
         shortDescription: req.body.shortDescription,
         content: req.body.content,
         blogId: req.body.blogId,
-      });
+      };
+      const result = await this.postsService.create(createPostDto);
       if (result.status !== ResultStatus.Success) {
         res
           .status(resultCodeToHttpException(result.status))

@@ -16,7 +16,7 @@ import { UserModel } from "../../users/types/usersMongoose";
 export class PostsQueryRepository {
   async findAll(
     queryDto: PostQueryInput,
-    userId: string,
+    userId?: string,
   ): Promise<{ items: PostViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;

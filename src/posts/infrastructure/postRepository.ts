@@ -36,9 +36,7 @@ export class PostsRepository {
     }
 
     //2. Получаем реакции текущего пользователя на эти посты
-    const userLikes = await LikeModel.find({
-      
-    })
+    const userLikes = await LikeModel.find({});
     return {
       id: post._id.toString(),
       title: post.title,

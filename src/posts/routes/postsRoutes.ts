@@ -21,12 +21,12 @@ export const postRouter = Router();
 postRouter
   .get(
     "/",
+    optionalGuard,
     paginationAndSortingValidation(PostSortField),
     postsQueryController.getAllPosts.bind(postsQueryController),
   )
   .post(
     "/",
-    optionalGuard,
     superAdminGuardMiddleware,
     postValidators,
     inputValidationResultMiddleware,
@@ -38,7 +38,6 @@ postRouter
     inputValidationResultMiddleware,
     postsQueryController.findPost.bind(postsQueryController),
   )
-
   .put(
     "/:id",
     superAdminGuardMiddleware,

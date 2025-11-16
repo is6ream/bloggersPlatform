@@ -39,9 +39,11 @@ export class PostsQueryController {
       const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
         req.query,
       );
-
-      const { items, totalCount } =
-        await this.postQueryRepository.findAll(queryInput);
+      const userId = req.userId;
+      const { items, totalCount } = await this.postQueryRepository.findAll(
+        queryInput,
+        userId,
+      );
 
       const postsListOutput = mapToPostListPaginatedOutput(items, {
         pageNumber: Number(queryInput.pageNumber),
