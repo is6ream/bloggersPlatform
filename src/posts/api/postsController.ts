@@ -48,7 +48,8 @@ export class PostsController {
         res.sendStatus(HttpStatus.BadRequest);
         return;
       }
-      const newPost = await this.postsRepository.findById(newPostId);
+      const userId = req.userId;
+      const newPost = await this.postsRepository.findById(newPostId, userId);
       res.status(HttpStatus.Created).send(newPost);
       return;
     } catch (error: unknown) {

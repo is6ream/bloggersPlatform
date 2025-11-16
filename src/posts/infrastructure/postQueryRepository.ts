@@ -1,4 +1,5 @@
-import { PostDB, PostViewModel } from "../types/posts-types";
+import { newestLikes } from "./../types/posts-types";
+import { newestLikes, PostDB, PostViewModel } from "../types/posts-types";
 import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
 import { Result } from "../../core/result/result.type";
@@ -8,7 +9,11 @@ import {
 } from "../../core/result/handleResult";
 import { injectable } from "inversify";
 import { PostModel } from "../types/postMongoose";
-import { LikeDocument, LikeModel } from "../../comments/likes/likesMongoose";
+import {
+  LikeDocument,
+  LikeModel,
+  LikesDbType,
+} from "../../comments/likes/likesMongoose";
 import { getNewestLikesAggregation } from "../../comments/features/getNewestLikesAggregation";
 import { UserModel } from "../../users/types/usersMongoose";
 
@@ -38,13 +43,14 @@ export class PostsQueryRepository {
     //2. Получаем реакции текущего пользователя на эти посты
     const userLikes = await LikeModel.find({
       userId: userId,
-      postIds: { $in: postIds },
+      parentId: { $in: postIds },
       parentType: "Post",
     }).lean(); //все лайки пользователя к полученным постам
+
     //3. Создаем карту статусов пользователя: postId : likeStatus
-    const userStatusMap: Record<string, string> | null = {};
+    const userStatusMap: Record<string, string> = {};
     userLikes.forEach((like) => {
-      userStatusMap[like.parentId.toString()] = like.status;
+      userStatusMap[like._id.toString()] = like.status;
     });
 
     //4. Получаем последние 3 лайка для каждого поста
@@ -57,23 +63,23 @@ export class PostsQueryRepository {
       userLoginMap[user._id.toString()] = user.login;
     });
 
-    console.log(userLoginMap);
-
     //6. Создаем карту newestLikes по postId
-    const newestLikesMap: Record<string, string> = {};
-    last3LikesForEachPost.map((item) => {
-      // Добавляем логин к каждому лайку
-      const likesWithLogin = item.newestLikes.map((like: LikeDocument) => ({
-        ...like,
-        login: userLoginMap[like.userId] || "None",
-      }));
+    const newestLikesMap: Record<string, newestLikes> = {};
+    last3LikesForEachPost.forEach((item) => {
+      const likesWithLogin: newestLikes = item.newestLikes.map(
+        (like: LikesDbType) => {
+          addedAt: like.createdAt;
+          userId: like.userId;
+          login: userLoginMap[like.userId] || "None";
+        },
+      );
       newestLikesMap[item.postId.toString()] = likesWithLogin;
     });
 
-    console.log(newestLikesMap, "newestLikesMap check");
     //7. Формируем финальный ответ
     const items = posts.map((post) => {
       const postIdString = post._id.toString();
+      console.log(newestLikesMap[postIdString], "newestLikesMap check");
 
       return {
         id: postIdString,
@@ -87,7 +93,7 @@ export class PostsQueryRepository {
           likesCount: post.likesInfo.likesCount,
           dislikesCount: post.likesInfo.dislikesCount,
           myStatus: userStatusMap[postIdString] || "None", //статус текущего пользователя
-          newestLikes: newestLikesMap[postIdString], //здесь он почему-то возвращает string а не массив с тремя последними лайками
+          newestLikes: newestLikesMap[postIdString] || [],
         },
       };
     });

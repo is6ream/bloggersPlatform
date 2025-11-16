@@ -27,6 +27,7 @@ postRouter
   )
   .post(
     "/",
+    optionalGuard,
     superAdminGuardMiddleware,
     postValidators,
     inputValidationResultMiddleware,

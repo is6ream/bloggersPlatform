@@ -27,7 +27,7 @@ export class PostsRepository {
     };
   }
 
-  async findById(id: string): Promise<PostViewModel | null> {
+  async findById(id: string, userId?: string): Promise<PostViewModel | null> {
     const post: WithId<PostDB> | null = await PostModel.findOne({
       _id: new ObjectId(id),
     }).lean();
@@ -35,8 +35,14 @@ export class PostsRepository {
       return null;
     }
 
-    //2. Получаем реакции текущего пользователя на эти посты
-    const userLikes = await LikeModel.find({});
+    //2. Нам нужно получить реакции текущего пользователя на этот пост
+    const userLikes = await LikeModel.find({
+      userId: userId,
+      postId: id,
+      parentType: "Post",
+    }).lean();
+
+    console.log("user likes check", userLikes);
     return {
       id: post._id.toString(),
       title: post.title,
