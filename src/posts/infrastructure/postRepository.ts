@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
 import { PostDocument, PostModel } from "../types/postMongoose";
-import { LikeDocument } from "../../comments/likes/likesMongoose";
+import { LikeDocument, LikeModel } from "../../comments/likes/likesMongoose";
 
 @injectable()
 export class PostsRepository {
@@ -28,10 +28,17 @@ export class PostsRepository {
   }
 
   async findById(id: string): Promise<PostViewModel | null> {
-    const post = await PostModel.findOne({ _id: new ObjectId(id) }).lean();
+    const post: WithId<PostDB> | null = await PostModel.findOne({
+      _id: new ObjectId(id),
+    }).lean();
     if (!post) {
       return null;
     }
+
+    //2. Получаем реакции текущего пользователя на эти посты
+    const userLikes = await LikeModel.find({
+      
+    })
     return {
       id: post._id.toString(),
       title: post.title,
@@ -40,6 +47,14 @@ export class PostsRepository {
       blogId: post.blogId,
       blogName: post.blogName,
       createdAt: post.createdAt,
+      extendedLikesInfo: {
+        likesCount: post.likesInfo.likesCount,
+        dislikesCount: post.likesInfo.dislikesCount,
+        myStatus: post.likesInfo.myStatus,
+        newestLikes: {
+          addedAt: post.extendedLikesInfo.newestLikesInfo.addedAt,
+        },
+      },
     };
   }
 

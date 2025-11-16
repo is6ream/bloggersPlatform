@@ -14,7 +14,6 @@ import { CommentsService } from "../../comments/application/comments.service";
 import { CommentsRepository } from "../../comments/infrastructure/comment.repository";
 import { PostsRepository } from "../infrastructure/postRepository";
 import { inject, injectable } from "inversify";
-import { LikeStatus } from "../../comments/likes/likesMongoose";
 import {
   LikeStatusRequest,
   PostLikeStatusDto,

@@ -13,6 +13,12 @@ export interface PostDB {
   };
 }
 
+export type newestLikes = {
+  addedAt: Date;
+  userId: string;
+  login: string;
+}[];
+
 export interface PostViewModel {
   id: string;
   title: string;
@@ -21,17 +27,11 @@ export interface PostViewModel {
   blogId: string;
   blogName: string;
   createdAt: Date;
-  extendedLikeInfo: {
+  extendedLikesInfo: {
     likesCount: number;
     dislikesCount: number;
     myStatus: string;
-    newestLikes: [
-      {
-        addedAt: Date;
-        userId: string;
-        login: string;
-      },
-    ];
+    newestLikes: newestLikes;
   };
 }
 

@@ -13,7 +13,6 @@ import { PostDocument, PostModel } from "../types/postMongoose";
 import { PostLikeStatusDto } from "../../comments/likes/likeStatusType";
 import { LikeModel, LikeStatus } from "../../comments/likes/likesMongoose";
 import { ObjectId } from "mongodb";
-import { CommentDocument } from "../../comments/types/mongoose/mongoose";
 
 @injectable()
 export class PostsService {
