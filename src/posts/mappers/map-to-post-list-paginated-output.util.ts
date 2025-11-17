@@ -1,10 +1,8 @@
-import { PostDataOutput } from "./../output/post-data-output";
-import { WithId } from "mongodb";
-import { PostDB } from "../types/posts-types";
+import { PostViewModel } from "../types/posts-types";
 import { PostListPaginatedOutput } from "../output/post-list-paginated.output";
 
 export function mapToPostListPaginatedOutput(
-  posts: WithId<PostDB>[],
+  posts: PostViewModel[],
   meta: { pageNumber: number; pageSize: number; totalCount: number },
 ): PostListPaginatedOutput {
   return {
@@ -13,16 +11,6 @@ export function mapToPostListPaginatedOutput(
     pageSize: meta.pageSize,
     totalCount: meta.totalCount,
 
-    items: posts.map(
-      (post): PostDataOutput => ({
-        id: post._id.toString(),
-        title: post.title,
-        shortDescription: post.shortDescription,
-        content: post.content,
-        blogId: post.blogId,
-        blogName: post.blogName,
-        createdAt: post.createdAt,
-      }),
-    ),
+    items: posts,
   };
 }

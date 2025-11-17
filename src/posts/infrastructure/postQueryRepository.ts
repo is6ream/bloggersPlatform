@@ -94,7 +94,7 @@ export class PostsQueryRepository {
           dislikesCount: post.likesInfo.dislikesCount,
           myStatus: userStatusMap[postIdString] || "None", //статус текущего пользователя
           newestLikes: newestLikesMap[postIdString] || [],
-        },
+        }, //остановился тут. Теперь нужно отмапить данные в функции выше и отдать их в корректном формате
       };
     });
 
