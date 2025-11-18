@@ -71,7 +71,7 @@ postRouter
   )
   .put(
     "/:id/like-status",
-    optionalGuard,
+    accessTokenGuard,
     idValidation,
     likeStatusValidator,
     inputValidationResultMiddleware,
