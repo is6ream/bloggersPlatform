@@ -13,7 +13,7 @@ export interface PostDB {
   };
 }
 
-export type newestLikes = {
+export type NewestLikes = {
   addedAt: Date;
   userId: string;
   login: string;
@@ -31,7 +31,7 @@ export interface PostViewModel {
     likesCount: number;
     dislikesCount: number;
     myStatus: string;
-    newestLikes: newestLikes;
+    newestLikes: NewestLikes;
   };
 }
 

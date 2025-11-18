@@ -20,10 +20,11 @@ export const getNewestLikesAggregation = async (postIds: string[]) => {
       $group: {
         _id: "$parentId", // группируем по parentId (это id поста)
         allLikes: {
+          //создаем массив
           $push: {
             likeId: "$_id",
             userId: "$userId",
-            createdAt: "$createdAt",
+            addedAt: "$createdAt",
             status: "$status",
           },
         },
@@ -39,62 +40,5 @@ export const getNewestLikesAggregation = async (postIds: string[]) => {
         },
       },
     },
-
-    // // ШАГ 5: "РАЗВОРАЧИВАЕМ" ДЛЯ РАБОТЫ С КАЖДЫМ ЛАЙКОМ
-    // {
-    //   $unwind: "$newestLikes",
-    // },
-    //
-    // // ШАГ 6: Получаем данные пользователя
-    // {
-    //   $lookup: {
-    //     from: "usermodels",
-    //     localField: "newestLikes.userdId",
-    //     foreignField: "_id",
-    //     as: "userData",
-    //   },
-    // },
-    //
-    // // ШАГ 7: Преобразуем массив пользователей в объект
-    // {
-    //   $unwind: {
-    //     path: "$userData",
-    //     preserveNullAndEmptyArrays: true,
-    //   },
-    // },
-    //
-    // //ШАГ 8: Формируем нужную структуру
-    // {
-    //   $project: {
-    //     _id: 0,
-    //     postId: 1,
-    //     addedAt: "$newestLikes.createdAt",
-    //     userId: "$newestLikes.userId",
-    //     login: "$userData.login",
-    //   },
-    // },
-    //
-    // //ШАГ 9: Снова группируем по постам
-    // {
-    //   $group: {
-    //     _id: "$postId",
-    //     newestLikes: {
-    //       $push: {
-    //         addedAt: "$addedAt",
-    //         userId: "$userId",
-    //         login: "$login",
-    //       },
-    //     },
-    //   },
-    // },
-    //
-    // //ШАГ 10: Финальная стурктура
-    // {
-    //   $project: {
-    //     _id: 0,
-    //     postId: "$_id",
-    //     newestLikes: 1,
-    //   },
-    // },
   ]);
 };
