@@ -4,6 +4,21 @@ import { HydratedDocument, Model, Schema, model } from "mongoose";
 export type PostModel = Model<PostDB>;
 export type PostDocument = HydratedDocument<PostDB>;
 
+const NewestLikesSchema = new Schema({
+  addedAt: {
+    type: Date,
+    required: true,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
+  login: {
+    type: String,
+    required: true,
+  },
+});
+
 const postSchema = new Schema<PostDB, PostModel>({
   title: { type: String, required: true },
   shortDescription: { type: String, required: true },
@@ -14,6 +29,7 @@ const postSchema = new Schema<PostDB, PostModel>({
   likesInfo: {
     likesCount: { type: Number, required: true, default: 0 },
     dislikesCount: { type: Number, required: true, default: 0 },
+    last3Likes: { type: [NewestLikesSchema], default: [] },
     myStatus: { type: String, required: true, default: "None" },
   },
 });

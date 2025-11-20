@@ -23,7 +23,7 @@ const likesSchema = new Schema<LikesDbType, LikeModel>({
   userLogin: { type: String, required: true },
   parentId: { type: String, required: true },
   parentType: { type: String, required: true },
-  createdAt: { type: Date, default: () => Date.now(), required: true }, //изменил тут время создания даты
+  createdAt: { type: Date, default: () => Date.now(), required: true },
 });
 
 export const LikeModel = model<LikesDbType, LikeModel>(

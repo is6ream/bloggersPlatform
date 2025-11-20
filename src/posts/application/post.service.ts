@@ -7,12 +7,14 @@ import {
   handleBadRequestResult,
   handleNotFoundResult,
   handleSuccessResult,
+  handleUnauthorizedFResult,
 } from "../../core/result/handleResult";
 import { inject, injectable } from "inversify";
 import { PostDocument, PostModel } from "../types/postMongoose";
 import { PostLikeStatusDto } from "../../likes/likeStatusType";
 import { LikeModel, LikeStatus } from "../../likes/likesMongoose";
 import { ObjectId } from "mongodb";
+import { UserModel } from "../../users/types/usersMongoose";
 
 @injectable()
 export class PostsService {
@@ -80,6 +82,12 @@ export class PostsService {
   async updateLikeForPostStatus(
     dto: PostLikeStatusDto,
   ): Promise<Result<null | void>> {
+    let user = await UserModel.findOne({
+      _id: new ObjectId(dto.userId),
+    });
+    if (!user) {
+      return handleUnauthorizedFResult("user not found", "userId");
+    }
     let like = await LikeModel.findOne({
       //ищем лайк по полям из dto
       userId: dto.userId,
@@ -94,6 +102,7 @@ export class PostsService {
       like = new LikeModel();
       like.status = dto.status;
       like.userId = dto.userId;
+      like.userLogin = user.login;
       like.parentId = dto.postId;
       like.parentType = "Post";
       await this.likesForPostCount(post, "None" as LikeStatus, like.status); //обновляем счетчик
