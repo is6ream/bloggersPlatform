@@ -6,7 +6,7 @@ import { UserModel } from "../users/types/usersMongoose";
 import { PostModel } from "../posts/types/postMongoose";
 import { CommentModel } from "../comments/types/mongoose/mongoose";
 import { SessionModel } from "../securityDevices/types/securityDevicesMongoose";
-import { LikeModel } from "../comments/likes/likesMongoose";
+import { LikeModel } from "../likes/likesMongoose";
 
 export const testingRouter = Router();
 

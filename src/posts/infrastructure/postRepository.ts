@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
 import { PostDocument, PostModel } from "../types/postMongoose";
-import { LikeDocument, LikeModel } from "../../comments/likes/likesMongoose";
+import { LikeDocument, LikeModel } from "../../likes/likesMongoose";
 
 @injectable()
 export class PostsRepository {

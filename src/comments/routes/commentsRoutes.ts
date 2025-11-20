@@ -6,7 +6,7 @@ import { commentValidator } from "../../core/middlewares/commentValidation/comme
 import { container } from "../../container";
 import { CommentsController } from "../controller/commentsController";
 import { CommentsQueryController } from "../controller/commentsQueryController";
-import { likeStatusValidator } from "../likes/likeStatusValidator";
+import { likeStatusValidator } from "../../likes/likeStatusValidator";
 import { optionalGuard } from "../../core/guards/optionalGuard";
 
 export const commentsRouter = Router();

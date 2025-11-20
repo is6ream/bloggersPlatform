@@ -10,8 +10,8 @@ import {
 } from "../../core/result/handleResult";
 import { injectable, inject } from "inversify";
 import { CommentDocument, CommentModel } from "../types/mongoose/mongoose";
-import { CommentLikeStatusDto } from "../likes/likeStatusType";
-import { LikeModel, LikeStatus } from "../likes/likesMongoose";
+import { CommentLikeStatusDto } from "../../likes/likeStatusType";
+import { LikeModel, LikeStatus } from "../../likes/likesMongoose";
 import { ObjectId } from "mongodb";
 
 @injectable()

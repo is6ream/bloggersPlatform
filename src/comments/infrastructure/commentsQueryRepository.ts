@@ -11,7 +11,7 @@ import { ObjectId } from "mongodb";
 import { WithId } from "mongodb";
 import { injectable } from "inversify";
 import { CommentModel } from "../types/mongoose/mongoose";
-import { LikeModel } from "../likes/likesMongoose";
+import { LikeModel } from "../../likes/likesMongoose";
 
 @injectable()
 export class CommentsQueryRepository {

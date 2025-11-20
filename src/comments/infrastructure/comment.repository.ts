@@ -3,7 +3,7 @@ import { injectable } from "inversify";
 import { CommentDocument } from "../types/mongoose/mongoose";
 import { CommentModel } from "../types/mongoose/mongoose";
 import { CommentViewModel } from "../types/commentsTypes";
-import { LikeDocument } from "../likes/likesMongoose";
+import { LikeDocument } from "../../likes/likesMongoose";
 
 @injectable()
 export class CommentsRepository {

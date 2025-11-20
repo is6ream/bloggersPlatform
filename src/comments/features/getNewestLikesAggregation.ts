@@ -1,4 +1,4 @@
-import { LikeModel } from "../likes/likesMongoose";
+import { LikeModel } from "../../likes/likesMongoose";
 
 export const getNewestLikesAggregation = async (postIds: string[]) => {
   return LikeModel.aggregate([

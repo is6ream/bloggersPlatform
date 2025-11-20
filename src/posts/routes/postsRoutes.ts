@@ -12,7 +12,7 @@ import { PostsController } from "../api/postsController";
 import { container } from "../../container";
 import { PostsQueryController } from "../api/postsQueryController";
 import { optionalGuard } from "../../core/guards/optionalGuard";
-import { likeStatusValidator } from "../../comments/likes/likeStatusValidator";
+import { likeStatusValidator } from "../../likes/likeStatusValidator";
 
 const postsController = container.get(PostsController);
 const postsQueryController = container.get(PostsQueryController);

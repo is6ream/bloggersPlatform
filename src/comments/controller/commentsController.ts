@@ -17,7 +17,7 @@ import { inject, injectable } from "inversify";
 import {
   CommentLikeStatusDto,
   LikeStatusRequest,
-} from "../likes/likeStatusType";
+} from "../../likes/likeStatusType";
 
 @injectable()
 export class CommentsController {
