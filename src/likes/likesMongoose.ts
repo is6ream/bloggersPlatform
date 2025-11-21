@@ -20,7 +20,6 @@ export type LikeDocument = HydratedDocument<LikesDbType>;
 const likesSchema = new Schema<LikesDbType, LikeModel>({
   status: { type: String, enum: Object.values(LikeStatus), required: true },
   userId: { type: String, required: true },
-  userLogin: { type: String, required: true },
   parentId: { type: String, required: true },
   parentType: { type: String, required: true },
   createdAt: { type: Date, default: () => Date.now(), required: true },

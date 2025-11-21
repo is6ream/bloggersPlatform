@@ -80,6 +80,7 @@ export class PostsService {
   }
 
   async updateLikeForPostStatus(
+    //сейчас нужно записывать три последних лайка в коллекцию  постов
     dto: PostLikeStatusDto,
   ): Promise<Result<null | void>> {
     let user = await UserModel.findOne({
