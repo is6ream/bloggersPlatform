@@ -1,5 +1,4 @@
-import { NewestLikes } from "./../types/posts-types";
-import { NewestLikes, PostDB, PostViewModel } from "../types/posts-types";
+import { PostDB, PostViewModel } from "../types/posts-types";
 import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
 import { Result } from "../../core/result/result.type";
@@ -8,12 +7,7 @@ import {
   handleSuccessResult,
 } from "../../core/result/handleResult";
 import { injectable } from "inversify";
-import { PostDocument, PostModel } from "../types/postMongoose";
-import {
-  LikeDocument,
-  LikeModel,
-  LikesDbType,
-} from "../../likes/likesMongoose";
+import { PostModel } from "../types/postMongoose";
 
 export type NewestLikesType = {
   addedAt: Date;
@@ -31,127 +25,17 @@ export class PostsQueryRepository {
       queryDto;
 
     const skip = (pageNumber - 1) * pageSize;
+    const filter: any = {};
 
-    // 1. Создаем основной пайплайн агрегации
-    const aggregationPipeline: any[] = [];
-
-    // Фильтрация постов
     if (searchPostNameTerm) {
-      aggregationPipeline.push({
-        $match: {
-          title: { $regex: searchPostNameTerm, $options: "i" },
-        },
-      });
+      filter["name"] = { $regex: searchPostNameTerm, $options: "i" };
     }
 
-    // 2. Получаем общее количество ДО пагинации
-    const totalCountPipeline = [...aggregationPipeline, { $count: "total" }]; //
-    const totalCountResult = await PostModel.aggregate(totalCountPipeline);
-    const totalCount = totalCountResult[0]?.total || 0;
-
-    // 3. Продолжаем основной пайплайн
-    aggregationPipeline.push(
-      { $sort: { [sortBy]: sortDirection === "asc" ? 1 : -1 } },
-      { $skip: skip },
-      { $limit: +pageSize },
-    );
-
-    // 4. Соединение с лайками для newestLikes (только Like статус)
-    aggregationPipeline.push({
-      $lookup: {
-        from: "likemodels",
-        let: { postId: "$_id" },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $and: [
-                  { $eq: ["$parentId", "$$postId"] },
-                  { $eq: ["$parentType", "Post"] },
-                  { $eq: ["$status", "Like"] },
-                ],
-              },
-            },
-          },
-          { $sort: { createdAt: -1 } },
-          { $limit: 3 },
-          {
-            $lookup: {
-              from: "users", // предполагаем, что есть коллекция пользователей
-              localField: "userId",
-              foreignField: "_id",
-              as: "user",
-            },
-          },
-          {
-            $project: {
-              _id: 0,
-              addedAt: "$createdAt",
-              userId: 1,
-              login: { $arrayElemAt: ["$user.login", 0] }, // получаем логин из коллекции пользователей
-            },
-          },
-        ],
-        as: "newestLikes",
-      },
-    });
-
-    // 5. Соединение для получения статуса текущего пользователя
-    if (userId) {
-      aggregationPipeline.push({
-        $lookup: {
-          from: "likemodels",
-          let: { postId: "$_id" },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $and: [
-                    { $eq: ["$parentId", "$$postId"] },
-                    { $eq: ["$parentType", "Post"] },
-                    { $eq: ["$userId", new mongoose.Types.ObjectId(userId)] },
-                  ],
-                },
-              },
-            },
-          ],
-          as: "myLike",
-        },
-      });
-    }
-
-    // 6. Выполняем агрегацию
-    const posts = await PostModel.aggregate(aggregationPipeline);
-
-    // 7. Преобразуем в нужный формат
-    const items: PostViewModel[] = posts.map((post) => {
-      // Определяем myStatus
-      let myStatus = "None";
-      if (userId && post.myLike && post.myLike.length > 0) {
-        myStatus = post.myLike[0].status;
-      }
-
-      return {
-        id: post._id.toString(),
-        title: post.title,
-        shortDescription: post.shortDescription,
-        content: post.content,
-        blogId: post.blogId,
-        blogName: post.blogName,
-        createdAt: post.createdAt,
-        extendedLikesInfo: {
-          likesCount: post.likesInfo?.likesCount || 0,
-          dislikesCount: post.likesInfo?.dislikesCount || 0,
-          myStatus: myStatus,
-          newestLikes: post.newestLikes || [],
-        },
-      };
-    });
-
-    return {
-      items,
-      totalCount,
-    };
+    const posts = await PostModel.find(filter)
+      .sort({ [sortBy]: sortDirection })
+      .skip(skip)
+      .limit(pageSize)
+      .lean();
   }
 
   async findPostsByBlogId(

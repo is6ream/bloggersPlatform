@@ -1,4 +1,4 @@
-import { BlogInputDto, BlogViewModel } from "../types/blogs-types";
+import { BlogViewModel } from "../types/blogs-types";
 import { ObjectId } from "mongodb";
 import { injectable } from "inversify";
 import { BlogDocument } from "../domain/blogDomainModel";
