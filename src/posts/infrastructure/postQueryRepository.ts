@@ -1,3 +1,4 @@
+import { getNewestLikesAggregation } from "./../../comments/features/getNewestLikesAggregation";
 import { PostDB, PostViewModel } from "../types/posts-types";
 import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
@@ -36,6 +37,19 @@ export class PostsQueryRepository {
       .skip(skip)
       .limit(pageSize)
       .lean();
+
+    if (!posts) {
+      return { items: [], totalCount: 0 };
+    }
+
+    const postIds = posts.map((post) => post._id); //собираем id постов
+
+    //нужно сделать агрегационную функцию и получить доступ к:
+    //1. Статус текущего пользователя
+    //2. 3 последних лайка
+    //3. Счетчики
+
+    const aggregationResult;
   }
 
   async findPostsByBlogId(
