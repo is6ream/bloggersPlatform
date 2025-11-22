@@ -1,4 +1,4 @@
-import { NewestLikes } from './../types/posts-types';
+import { NewestLikes } from "./../types/posts-types";
 import { PostViewModel } from "../types/posts-types";
 import { PostQueryInput } from "../input/post-query.input";
 import { injectable } from "inversify";
@@ -99,116 +99,52 @@ export class PostsQueryRepository {
 
   async findById(
     postId: string,
-    userId: string,
+    userId: string | undefined
   ): Promise<PostViewModel | null> {
     const post = await PostModel.findOne({ _id: new ObjectId(postId) }).lean();
     if (!post) {
       return null;
     }
 
+    // Упрощенный вариант для одного поста
     const newestLikes = await LikeModel.aggregate([
-    {
-      $match: {
-        parentId: postId,
-        parentType: "Post",
-      },
-    },
-    {
-      $lookup: {
-        from: "usermodels",
-        let: { userIdString: "$userId" },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $eq: ["$_id", { $toObjectId: "$$userIdString" }],
-              },
-            },
-          },
-        ],
-        as: "user",
-      },
-    },
-    {
-      $sort: { createdAt: -1 },
-    },
-    {
-      $group: {
-        _id: "$parentId",
-        allReactions: { $push: "$$ROOT" },
-        userReaction: {
-          $push: {
-            $cond: [{ $eq: ["$userId", userId] }, "$status", null],
-          },
-        },
-        newestLikes: {
-          $push: {
-            $cond: [
-              { $eq: ["$status", "Like"] },
-              {
-                addedAt: "$createdAt",
-                userId: "$userId",
-                login: { $arrayElemAt: ["$user.login", 0] },
-              },
-              null,
-            ],
-          },
+      {
+        $match: {
+          parentId: postId,
+          parentType: "Post",
+          status: "Like", // сразу фильтруем только лайки
         },
       },
-    },
-    {
-      $project: {
-        postId: "$_id",
-        userReaction: {
-          $arrayElemAt: [
+      {
+        $lookup: {
+          from: "usermodels",
+          let: { userIdString: "$userId" },
+          pipeline: [
             {
-              $filter: {
-                input: "$userReaction",
-                as: "reaction",
-                cond: { $ne: ["$$reaction", null] },
+              $match: {
+                $expr: {
+                  $eq: ["$_id", { $toObjectId: "$$userIdString" }],
+                },
               },
             },
-            0,
           ],
-        },
-        newestLikes: {
-          $slice: [
-            {
-              $filter: {
-                input: "$newestLikes",
-                as: "like",
-                cond: { $ne: ["$$like", null] },
-              },
-            },
-            0,
-            3,
-          ],
-        },
-        likesCount: {
-          $size: {
-            $filter: {
-              input: "$allReactions",
-              as: "reaction",
-              cond: { $eq: ["$$reaction.status", "Like"] },
-            },
-          },
-        },
-        dislikesCount: {
-          $size: {
-            $filter: {
-              input: "$allReactions",
-              as: "reaction",
-              cond: { $eq: ["$$reaction.status", "Dislike"] },
-            },
-          },
+          as: "user",
         },
       },
-    },
-  ]);
+      { $sort: { createdAt: -1 } },
+      { $limit: 3 },
+      {
+        $project: {
+          addedAt: "$createdAt",
+          userId: 1,
+          login: { $arrayElemAt: ["$user.login", 0] },
+        },
+      },
+    ]);
 
-  console.log(newestLikes, "nl check")
+    console.log(newestLikes, "nl check");
 
-  return {
+    return {
       id: post._id.toString(),
       title: post.title,
       shortDescription: post.shortDescription,
@@ -220,13 +156,10 @@ export class PostsQueryRepository {
         likesCount: post.likesInfo.likesCount,
         dislikesCount: post.likesInfo.dislikesCount,
         myStatus: post.likesInfo.myStatus,
-        newestLikes: 
-      }
-    }
+        newestLikes: newestLikes,
+      },
+    };
   }
-
 }
 
 //тут нужно сделать запрос к лайкам по полю parentId и передать туда postId
-
-    
