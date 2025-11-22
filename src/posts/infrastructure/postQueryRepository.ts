@@ -1,15 +1,9 @@
-import { NewestLikes } from "./../types/posts-types";
-import { PostDB, PostViewModel } from "../types/posts-types";
+import { PostViewModel } from "../types/posts-types";
 import { PostQueryInput } from "../input/post-query.input";
-import { WithId, ObjectId } from "mongodb";
-import { Result } from "../../core/result/result.type";
-import {
-  handleNotFoundResult,
-  handleSuccessResult,
-} from "../../core/result/handleResult";
 import { injectable } from "inversify";
 import { PostModel } from "../types/postMongoose";
 import { getNewestLikesAggregation } from "../../comments/features/getNewestLikesAggregation";
+import { LikeModel } from "../../likes/likesMongoose";
 
 export type NewestLikesType = {
   addedAt: Date;
@@ -46,6 +40,23 @@ export class PostsQueryRepository {
     //3. Собрать id постов
     const postIds = posts.map((post) => post._id.toString()); //собираем id постов
 
+    const likes = await LikeModel.find({});
+    console.log(likes, "likes");
+    // Проверьте что lookup работает
+    const testLookup = await LikeModel.aggregate([
+      { $match: { parentId: { $in: postIds } } },
+      { $limit: 1 },
+      {
+        $lookup: {
+          from: "usermodels",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+    ]);
+    console.log("LOOKUP TEST:", testLookup[0]?.user);
+
     //4. Агрегация лайков, получаем статус текущего пользователя, 3 последних лайка, счетчики
     const aggregationResult = await getNewestLikesAggregation(postIds, userId!); //агрегационная функция работает
     console.log(aggregationResult, "aggregationResult check");
@@ -64,50 +75,38 @@ export class PostsQueryRepository {
       },
       {} as Record<string, any>,
     );
+    const items: PostViewModel[] = posts.map((post) => {
+      /*здесь мы обращаемся к тем постам, которые изначально получили по id и пребразуем их в нужный формат данных**/
+      const postId = post._id.toString();
 
-    console.log(likesMap, "likesMap check")
-  }
+      const postLikes = likesMap[postId] || {
+        //на каждой итерации достаем сущность лайка и передаем данные из нее на в queryController
+        userReaction: "None",
+        newestLikes: [],
+        likesCount: 0,
+        dislikesCount: 0,
+      };
 
-  async findPostsByBlogId(
-    queryDto: PostQueryInput,
-    blogId: string,
-  ): Promise<{ items: WithId<PostDB>[]; totalCount: number }> {
-    const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
-      queryDto;
-    const skip = (pageNumber - 1) * pageSize;
-    const filter: Record<string, any> = {
-      blogId,
-    };
+      console.log(postLikes.newestLikes, "newestLikes check"); //поля userLogin здесь нет
 
-    if (searchPostNameTerm) {
-      filter.name = { $regex: searchPostNameTerm, $options: "i" };
-    }
+      return {
+        id: postId,
+        title: post.title,
+        shortDescription: post.shortDescription,
+        content: post.content,
+        blogId: post.blogId,
+        blogName: post.blogName,
+        createdAt: post.createdAt,
+        extendedLikesInfo: {
+          likesCount: postLikes.likesCount,
+          dislikesCount: postLikes.dislikesCount,
+          myStatus: userId ? postLikes.userReaction : "None",
+          newestLikes: postLikes.newestLikes,
+        },
+      };
+    });
 
-    const items = await PostModel.find(filter) //тут изменил на findOne, изменил обратно, т.к нужен массив
-      .sort({ [sortBy]: sortDirection })
-      .skip(skip)
-      .limit(+pageSize)
-      .lean();
-
-    const totalCount = await PostModel.countDocuments(filter);
-
-    return { items, totalCount };
-  }
-
-  async findById(id: string): Promise<Result<PostViewModel | null>> {
-    const post = await PostModel.findOne({ _id: new ObjectId(id) });
-    if (!post) {
-      return handleNotFoundResult("post not found", "postId");
-    }
-    const data = {
-      id: post._id.toString(),
-      title: post.title,
-      shortDescription: post.shortDescription,
-      content: post.content,
-      blogId: post.blogId,
-      blogName: post.blogName,
-      createdAt: post.createdAt,
-    };
-    return handleSuccessResult(data);
+    const totalCount = await PostModel.countDocuments({});
+    return { items: items, totalCount: totalCount };
   }
 }

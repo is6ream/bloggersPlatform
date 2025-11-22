@@ -13,8 +13,16 @@ export async function getNewestLikesAggregation(
     {
       $lookup: {
         from: "usermodels",
-        localField: "userId",
-        foreignField: "_id",
+        let: { userIdString: "$userId" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$_id", { $toObjectId: "$$userIdString" }], 
+              },
+            },
+          },
+        ],
         as: "user",
       },
     },
