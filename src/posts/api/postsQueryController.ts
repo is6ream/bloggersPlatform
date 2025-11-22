@@ -21,10 +21,7 @@ export class PostsQueryController {
   async findPost(req: Request, res: Response) {
     try {
       const userId = req.userId;
-      const post = await this.postQueryRepository.findById(
-        req.params.id,
-        userId,
-      );
+      const post = await this.postQueryRepository.findById(req.params.id);
       if (post.status !== ResultStatus.Success) {
         res.status(HttpStatus.NotFound).send("Post not found!");
         return;
