@@ -17,7 +17,7 @@ export type NewestLikesType = {
 export class PostsQueryRepository {
   async findAll(
     queryDto: PostQueryInput,
-    userId?: string,
+    userId?: string
   ): Promise<{ items: PostViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -60,7 +60,7 @@ export class PostsQueryRepository {
         };
         return acc;
       },
-      {} as Record<string, any>,
+      {} as Record<string, any>
     );
     const items: PostViewModel[] = posts.map((post) => {
       /*здесь мы обращаемся к тем постам, которые изначально получили по id и пребразуем их в нужный формат данных**/
@@ -99,6 +99,7 @@ export class PostsQueryRepository {
 
   async findById(postId: string): Promise<PostViewModel | null> {
     const post = await PostModel.findOne({ _id: new ObjectId(postId) }).lean();
+    console.log(post, "post check");
     if (!post) {
       return null;
     }
@@ -138,8 +139,6 @@ export class PostsQueryRepository {
         },
       },
     ]);
-
-    console.log(newestLikes, "nl check");
 
     return {
       id: post._id.toString(),
