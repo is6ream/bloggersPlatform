@@ -31,6 +31,8 @@ export class PostsRepository {
     const post: WithId<PostDB> | null = await PostModel.findOne({
       _id: new ObjectId(id),
     }).lean();
+
+    console.log(post, "post check");
     if (!post) {
       return null;
     }

@@ -18,7 +18,7 @@ export async function getNewestLikesAggregation(
           {
             $match: {
               $expr: {
-                $eq: ["$_id", { $toObjectId: "$$userIdString" }], 
+                $eq: ["$_id", { $toObjectId: "$$userIdString" }],
               },
             },
           },

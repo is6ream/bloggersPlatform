@@ -35,6 +35,7 @@ postRouter
   )
   .get(
     "/:id",
+    optionalGuard,
     idValidation,
     inputValidationResultMiddleware,
     postsQueryController.findPost.bind(postsQueryController),
