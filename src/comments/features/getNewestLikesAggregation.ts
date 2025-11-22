@@ -1,19 +1,15 @@
 import { LikeModel } from "../../likes/likesMongoose";
-
-export const getNewestLikesAggregation = async (
+export async function getNewestLikesAggregation(
   postIds: string[],
   userId: string,
-) => {
-  return LikeModel.aggregate([
-    // ШАГ 1: ФИЛЬТРАЦИЯ
+) {
+  return await LikeModel.aggregate([
     {
       $match: {
         parentId: { $in: postIds },
         parentType: "Post",
       },
     },
-
-    //ШАГ 2: lookup в коллекцию users для доступа к полю userLogin
     {
       $lookup: {
         from: "usermodels",
@@ -22,104 +18,80 @@ export const getNewestLikesAggregation = async (
         as: "user",
       },
     },
-
-    // ШАГ 3: СОРТИРОВКА
     {
-      $sort: { createdAt: -1 }, // новые лайки first
+      $sort: { createdAt: -1 },
     },
-
-    // ШАГ 4: ГРУППИРОВКА ПО ПОСТАМ
     {
       $group: {
-        _id: "$parentId", //группируем по ID поста
-        //Сохраняем все исходные документы лайков
+        _id: "$parentId",
         allReactions: { $push: "$$ROOT" },
-
-        //Собираем статусы текущего пользователя
         userReaction: {
           $push: {
-            $cond: [
-              //аналог if
-              { $eq: ["$userId", userId] }, //если это текущий пользователь,
-              "$status", //ставим его статус
-              "None", //по дефолту null //вот тут может быть null
-            ],
+            $cond: [{ $eq: ["$userId", userId] }, "$status", null],
           },
         },
-
         newestLikes: {
           $push: {
             $cond: [
-              { $eq: ["$status", "Like"] }, //если это лайк
+              { $eq: ["$status", "Like"] },
               {
                 addedAt: "$createdAt",
                 userId: "$userId",
-                login: { $arrayElemAt: ["$user.login", 0] }, //первый элемент из массива lookup
+                login: { $arrayElemAt: ["$user.login", 0] },
               },
-              null, // иначе null для дизлайков или null
+              null,
             ],
           },
         },
       },
     },
-
-    // ШАГ 5: ОГРАНИЧЕНИЕ КОЛИЧЕСТВА
     {
       $project: {
         postId: "$_id",
-
-        //1. userReaction: первый не null статус
         userReaction: {
           $arrayElemAt: [
-            //берем первый елемент
             {
               $filter: {
                 input: "$userReaction",
                 as: "reaction",
-                cond: { $ne: ["$$reaction", "None"] }, //тут возможен затык из-за поля "None"
+                cond: { $ne: ["$$reaction", null] },
               },
             },
             0,
           ],
         },
-
-        //2. newestLikes: срез 3 элементов
         newestLikes: {
           $slice: [
             {
               $filter: {
                 input: "$newestLikes",
                 as: "like",
-                cond: { $ne: ["$$Like", null] },
+                cond: { $ne: ["$$like", null] },
               },
             },
-            0, //начальный индекс
-            3, //количество элементов
+            0,
+            3,
           ],
         },
-
-        //3. likesCount: размер отфильтрованного массива
         likesCount: {
           $size: {
             $filter: {
               input: "$allReactions",
               as: "reaction",
-              cond: { $eq: ["$$reaction.status", "Like"] }, //берем только лайки
+              cond: { $eq: ["$$reaction.status", "Like"] },
             },
           },
         },
-
-        //4. dislikesCount: размер отфильтрованного массива
         dislikesCount: {
           $size: {
             $filter: {
-              input: "allReactions",
+              input: "$allReactions",
               as: "reaction",
-              cond: { $eq: ["$$reaction.status", "Dislike"] }, //только дизлайки
+              cond: { $eq: ["$$reaction.status", "Dislike"] },
             },
           },
         },
       },
     },
   ]);
-};
+}

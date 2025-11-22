@@ -1,4 +1,4 @@
-import { getNewestLikesAggregation } from "./../../comments/features/getNewestLikesAggregation";
+import { NewestLikes } from "./../types/posts-types";
 import { PostDB, PostViewModel } from "../types/posts-types";
 import { PostQueryInput } from "../input/post-query.input";
 import { WithId, ObjectId } from "mongodb";
@@ -9,6 +9,7 @@ import {
 } from "../../core/result/handleResult";
 import { injectable } from "inversify";
 import { PostModel } from "../types/postMongoose";
+import { getNewestLikesAggregation } from "../../comments/features/getNewestLikesAggregation";
 
 export type NewestLikesType = {
   addedAt: Date;
@@ -32,24 +33,39 @@ export class PostsQueryRepository {
       filter["name"] = { $regex: searchPostNameTerm, $options: "i" };
     }
 
+    //1. Получить посты с пагинацией
     const posts = await PostModel.find(filter)
       .sort({ [sortBy]: sortDirection })
       .skip(skip)
       .limit(pageSize)
       .lean();
-
+    //2. Если есть вернуть, нет -> пустой объект
     if (!posts) {
       return { items: [], totalCount: 0 };
     }
+    //3. Собрать id постов
+    const postIds = posts.map((post) => post._id.toString()); //собираем id постов
 
-    const postIds = posts.map((post) => post._id); //собираем id постов
+    //4. Агрегация лайков, получаем статус текущего пользователя, 3 последних лайка, счетчики
+    const aggregationResult = await getNewestLikesAggregation(postIds, userId!); //агрегационная функция работает
+    console.log(aggregationResult, "aggregationResult check");
 
-    //нужно сделать агрегационную функцию и получить доступ к:
-    //1. Статус текущего пользователя
-    //2. 3 последних лайка
-    //3. Счетчики
+    //5. Перобразуем в объект-карту для доступа к полям по postId
 
-    const aggregationResult;
+    const likesMap = aggregationResult.reduce(
+      (acc, item) => {
+        acc[item.postId] = {
+          userReaction: item.userReaction || "None",
+          newestLikes: item.newestLikes,
+          likesCount: item.likesCount,
+          dislikesCount: item.dislikesCount,
+        };
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+
+    console.log(likesMap, "likesMap check")
   }
 
   async findPostsByBlogId(
