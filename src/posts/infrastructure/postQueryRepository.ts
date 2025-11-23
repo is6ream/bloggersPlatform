@@ -1,4 +1,3 @@
-import { NewestLikes } from "./../types/posts-types";
 import { PostViewModel } from "../types/posts-types";
 import { PostQueryInput } from "../input/post-query.input";
 import { injectable } from "inversify";
@@ -6,6 +5,11 @@ import { PostModel } from "../types/postMongoose";
 import { getNewestLikesAggregation } from "../../comments/features/getNewestLikesAggregation";
 import { LikeModel } from "../../likes/likesMongoose";
 import { ObjectId } from "mongodb";
+import { Result } from "../../core/result/result.type";
+import {
+  handleNotFoundResult,
+  handleSuccessResult,
+} from "../../core/result/handleResult";
 
 export type NewestLikesType = {
   addedAt: Date;
@@ -97,11 +101,11 @@ export class PostsQueryRepository {
     return { items: items, totalCount: totalCount };
   }
 
-  async findById(postId: string): Promise<PostViewModel | null> {
+  async findById(postId: string): Promise<Result<null | PostViewModel>> {
     const post = await PostModel.findOne({ _id: new ObjectId(postId) }).lean();
     console.log(post, "post check");
     if (!post) {
-      return null;
+      return handleNotFoundResult("post not found", "postId");
     }
 
     // Упрощенный вариант для одного поста
@@ -140,7 +144,7 @@ export class PostsQueryRepository {
       },
     ]);
 
-    return {
+    return handleSuccessResult({
       id: post._id.toString(),
       title: post.title,
       shortDescription: post.shortDescription,
@@ -154,7 +158,7 @@ export class PostsQueryRepository {
         myStatus: post.likesInfo.myStatus,
         newestLikes: newestLikes,
       },
-    };
+    });
   }
 }
 
