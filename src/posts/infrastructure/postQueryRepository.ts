@@ -1,3 +1,4 @@
+import { query } from "express-validator";
 import { PostViewModel } from "../types/posts-types";
 import { PostQueryInput } from "../input/post-query.input";
 import { injectable } from "inversify";
@@ -10,7 +11,6 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
-
 export type NewestLikesType = {
   addedAt: Date;
   userId: string;
@@ -108,7 +108,6 @@ export class PostsQueryRepository {
       return handleNotFoundResult("post not found", "postId");
     }
 
-    // Упрощенный вариант для одного поста
     const newestLikes = await LikeModel.aggregate([
       {
         $match: {
@@ -159,6 +158,22 @@ export class PostsQueryRepository {
         newestLikes: newestLikes,
       },
     });
+  }
+
+  async findPostByBlogId(
+    queryDto: PostQueryInput,
+    blogId: string,
+    userId: string
+  ): Promise<{ items: PostViewModel[]; totalCount: number }> {
+    const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
+      queryDto;
+
+    const skip = (pageNumber - 1) * pageSize;
+    const filter: any = {};
+
+    if (searchPostNameTerm) {
+      filter["name"] = { $regex: searchPostNameTerm, $options: "i" };
+    }
   }
 }
 
