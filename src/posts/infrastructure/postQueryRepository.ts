@@ -104,7 +104,7 @@ export class PostsQueryRepository {
 
   async findById(postId: string): Promise<Result<null | PostViewModel>> {
     const post = await PostModel.findOne({ _id: new ObjectId(postId) }).lean();
-    console.log(post, "post check");
+    console.log("post check", post);
     if (!post) {
       return handleNotFoundResult("post not found", "postId");
     }
@@ -164,7 +164,7 @@ export class PostsQueryRepository {
   async findPostsByBlogId(
     queryDto: PostQueryInput,
     blogId: string,
-    userId: string | undefined,
+    userId: string | undefined
   ): Promise<{ items: PostViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -206,7 +206,7 @@ export class PostsQueryRepository {
         };
         return acc;
       },
-      {} as Record<string, any>,
+      {} as Record<string, any>
     );
 
     const items: PostViewModel[] = posts.map((post) => {
