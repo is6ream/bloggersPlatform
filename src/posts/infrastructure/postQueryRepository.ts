@@ -164,7 +164,7 @@ export class PostsQueryRepository {
   async findPostsByBlogId(
     queryDto: PostQueryInput,
     blogId: string,
-    userId: string | undefined
+    userId: string | undefined,
   ): Promise<{ items: PostViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -193,9 +193,10 @@ export class PostsQueryRepository {
     }
 
     const postIds = posts.map((post) => post._id.toString());
-    const aggregationResult = await getNewestLikesAggregation(postIds, userId!);
+    const aggregationResult = await getNewestLikesAggregation(postIds, userId!); //получаем последние три лайка
 
     const likesMap = aggregationResult.reduce(
+      //создаем объект-карту с ключом postId
       (acc, item) => {
         acc[item.postId] = {
           userReaction: item.userReaction || "None",
@@ -209,6 +210,7 @@ export class PostsQueryRepository {
     );
 
     const items: PostViewModel[] = posts.map((post) => {
+      //мапим во ViewModel
       const postId = post._id.toString();
       const postLikes = likesMap[postId] || {
         userReaction: "None",

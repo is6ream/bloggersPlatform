@@ -4,7 +4,11 @@ import { WithId } from "mongodb";
 import { injectable } from "inversify";
 import { PostDocument, PostModel } from "../types/postMongoose";
 import { LikeDocument, LikeModel } from "../../likes/likesMongoose";
-
+import {
+  handleSuccessResult,
+  handleNotFoundResult,
+} from "../../core/result/handleResult";
+import { Result } from "../../core/result/result.type";
 @injectable()
 export class PostsRepository {
   async create(post: PostDocument): Promise<string> {
@@ -27,25 +31,49 @@ export class PostsRepository {
     };
   }
 
-  async findById(id: string, userId?: string): Promise<PostViewModel | null> {
-    const post: WithId<PostDB> | null = await PostModel.findOne({
-      _id: new ObjectId(id),
-    }).lean();
-
+  async findById(postId: string): Promise<Result<null | PostViewModel>> {
+    const post = await PostModel.findOne({ _id: new ObjectId(postId) }).lean();
     console.log(post, "post check");
     if (!post) {
-      return null;
+      return handleNotFoundResult("post not found", "postId");
     }
 
-    //2. Нам нужно получить реакции текущего пользователя на этот пост
-    const userLikes = await LikeModel.find({
-      userId: userId,
-      postId: id,
-      parentType: "Post",
-    }).lean();
+    const newestLikes = await LikeModel.aggregate([
+      {
+        $match: {
+          parentId: postId,
+          parentType: "Post",
+          status: "Like",
+        },
+      },
+      {
+        $lookup: {
+          from: "usermodels",
+          let: { userIdString: "$userId" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", { $toObjectId: "$$userIdString" }],
+                },
+              },
+            },
+          ],
+          as: "user",
+        },
+      },
+      { $sort: { createdAt: -1 } },
+      { $limit: 3 },
+      {
+        $project: {
+          addedAt: "$createdAt",
+          userId: 1,
+          login: { $arrayElemAt: ["$user.login", 0] },
+        },
+      },
+    ]);
 
-    console.log("user likes check", userLikes);
-    return {
+    return handleSuccessResult({
       id: post._id.toString(),
       title: post.title,
       shortDescription: post.shortDescription,
@@ -57,11 +85,9 @@ export class PostsRepository {
         likesCount: post.likesInfo.likesCount,
         dislikesCount: post.likesInfo.dislikesCount,
         myStatus: post.likesInfo.myStatus,
-        newestLikes: {
-          addedAt: post.extendedLikesInfo.newestLikesInfo.addedAt,
-        },
+        newestLikes: newestLikes,
       },
-    };
+    });
   }
 
   async update(post: PostDocument): Promise<boolean> {

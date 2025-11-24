@@ -16,7 +16,7 @@ export class BlogsController {
     @inject(BlogsService) private blogsService: BlogsService,
     @inject(PostsService) private postsService: PostsService,
     @inject(BlogsRepository) private blogsRepository: BlogsRepository,
-    @inject(PostsRepository) private postsRepository: PostsRepository,
+    @inject(PostsRepository) private postsRepository: PostsRepository
   ) {}
 
   async createBlog(req: Request, res: Response) {
@@ -81,7 +81,7 @@ export class BlogsController {
         res
           .status(HttpStatus.NotFound)
           .send(
-            createErrorMessages([{ field: "id", message: "Blog not found" }]),
+            createErrorMessages([{ field: "id", message: "Blog not found" }])
           );
         return;
       }

@@ -25,7 +25,7 @@ export class PostsController {
     @inject(PostsService) private postsService: PostsService,
     @inject(PostsRepository) private postsRepository: PostsRepository,
     @inject(CommentsService) private commentsService: CommentsService,
-    @inject(CommentsRepository) private commentsRepository: CommentsRepository,
+    @inject(CommentsRepository) private commentsRepository: CommentsRepository
   ) {}
 
   async createPost(req: Request, res: Response) {
@@ -48,9 +48,9 @@ export class PostsController {
         res.sendStatus(HttpStatus.BadRequest);
         return;
       }
-      const userId = req.userId;
-      const newPost = await this.postsRepository.findById(newPostId, userId);
-      res.status(HttpStatus.Created).send(newPost);
+      const newPost = await this.postsRepository.findById(newPostId);
+      console.log(newPost, "api check");
+      res.status(HttpStatus.Created).send(newPost.data);
       return;
     } catch (error: unknown) {
       console.log(error);
@@ -83,7 +83,7 @@ export class PostsController {
         res
           .status(HttpStatus.NotFound)
           .send(
-            createErrorMessages([{ field: "id", message: "Post not found" }]),
+            createErrorMessages([{ field: "id", message: "Post not found" }])
           );
         return;
       }
@@ -98,7 +98,7 @@ export class PostsController {
 
   async createComment(
     req: RequestWithParamsAndBodyAndUserId<PostId, { content: string }, IdType>,
-    res: Response,
+    res: Response
   ) {
     try {
       const userId = req.userId as string;
@@ -133,7 +133,7 @@ export class PostsController {
 
   async updateLikeStatus(
     req: RequestWithParamsAndBody<{ id: string }, LikeStatusRequest>,
-    res: Response,
+    res: Response
   ) {
     try {
       if (!req.userId) {
