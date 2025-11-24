@@ -169,9 +169,11 @@ export class PostsQueryRepository {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
 
+    console.log(blogId, "blogId check");
+
     const skip = (pageNumber - 1) * pageSize;
     const filter: any = {
-      blodId: blogId,
+      blogId: blogId,
     };
 
     if (searchPostNameTerm) {
@@ -185,7 +187,54 @@ export class PostsQueryRepository {
       .lean();
 
     console.log(posts, "posts check");
+
+    if (!posts || posts.length === 0) {
+      return { items: [], totalCount: 0 };
+    }
+
+    const postIds = posts.map((post) => post._id.toString());
+    const aggregationResult = await getNewestLikesAggregation(postIds, userId!);
+
+    const likesMap = aggregationResult.reduce(
+      (acc, item) => {
+        acc[item.postId] = {
+          userReaction: item.userReaction || "None",
+          newestLikes: item.newestLikes,
+          likesCount: item.likesCount,
+          dislikesCount: item.dislikesCount,
+        };
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+
+    const items: PostViewModel[] = posts.map((post) => {
+      const postId = post._id.toString();
+      const postLikes = likesMap[postId] || {
+        userReaction: "None",
+        newestLikes: [],
+        likesCount: 0,
+        dislikesCount: 0,
+      };
+
+      return {
+        id: postId,
+        title: post.title,
+        shortDescription: post.shortDescription,
+        content: post.content,
+        blogId: post.blogId,
+        blogName: post.blogName,
+        createdAt: post.createdAt,
+        extendedLikesInfo: {
+          likesCount: postLikes.likesCount,
+          dislikesCount: postLikes.dislikesCount,
+          myStatus: userId ? postLikes.userReaction : "None",
+          newestLikes: postLikes.newestLikes,
+        },
+      };
+    });
+
+    const totalCount = await PostModel.countDocuments(filter);
+    return { items, totalCount };
   }
 }
-
-//тут нужно сделать запрос к лайкам по полю parentId и передать туда postId
