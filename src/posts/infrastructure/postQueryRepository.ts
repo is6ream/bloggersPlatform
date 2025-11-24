@@ -11,6 +11,7 @@ import {
   handleNotFoundResult,
   handleSuccessResult,
 } from "../../core/result/handleResult";
+import { stringify } from "querystring";
 export type NewestLikesType = {
   addedAt: Date;
   userId: string;
@@ -160,20 +161,30 @@ export class PostsQueryRepository {
     });
   }
 
-  async findPostByBlogId(
+  async findPostsByBlogId(
     queryDto: PostQueryInput,
     blogId: string,
-    userId: string
+    userId: string | undefined
   ): Promise<{ items: PostViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
 
     const skip = (pageNumber - 1) * pageSize;
-    const filter: any = {};
+    const filter: any = {
+      blodId: blogId,
+    };
 
     if (searchPostNameTerm) {
       filter["name"] = { $regex: searchPostNameTerm, $options: "i" };
     }
+
+    const posts = await PostModel.find(filter)
+      .sort({ [sortBy]: sortDirection })
+      .skip(skip)
+      .limit(pageSize)
+      .lean();
+
+    console.log(posts, "posts check");
   }
 }
 

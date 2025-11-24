@@ -17,7 +17,7 @@ export class BlogsQueryController {
     @inject(BlogsQueryRepository)
     private blogsQueryRepository: BlogsQueryRepository,
     @inject(PostsQueryRepository)
-    private postsQueryRepository: PostsQueryRepository,
+    private postsQueryRepository: PostsQueryRepository
   ) {}
 
   async findBlog(req: Request, res: Response) {
@@ -30,7 +30,7 @@ export class BlogsQueryController {
         res
           .status(HttpStatus.NotFound)
           .send(
-            createErrorMessages([{ field: "id", message: "Blog not found" }]),
+            createErrorMessages([{ field: "id", message: "Blog not found" }])
           );
         return;
       }
@@ -69,13 +69,18 @@ export class BlogsQueryController {
         req.query,
       );
       const { id: blogId } = req.params;
+      const userId = req.userId;
       const foundBlog = await this.blogsQueryRepository.findById(blogId);
       if (!foundBlog) {
         res.sendStatus(HttpStatus.NotFound);
         return;
       }
       const { items, totalCount } =
-        await this.postsQueryRepository.findPostsByBlogId(queryInput, blogId);
+        await this.postsQueryRepository.findPostsByBlogId(
+          queryInput,
+          blogId,
+          userId,
+        );
 
       const postsListOutput = mapToPostListPaginatedOutput(items, {
         pageNumber: Number(queryInput.pageNumber),

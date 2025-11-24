@@ -10,6 +10,7 @@ import { PostSortField } from "../../posts/input/post-sort-field";
 import { BlogsController } from "./controller/blogsController";
 import { container } from "../../container";
 import { BlogsQueryController } from "./controller/blogsQueryController";
+import { optionalGuard } from "../../core/guards/optionalGuard";
 
 export const blogsRouter = Router();
 const blogsController = container.get(BlogsController);
@@ -18,20 +19,21 @@ blogsRouter
   .get(
     "/",
     paginationAndSortingValidation(BlogSortField),
-    blogsQueryController.getAllBlogs.bind(blogsQueryController),
+    blogsQueryController.getAllBlogs.bind(blogsQueryController)
   )
   .post(
     "/",
     superAdminGuardMiddleware,
     blogValidators,
     inputValidationResultMiddleware,
-    blogsController.createBlog.bind(blogsController),
+    blogsController.createBlog.bind(blogsController)
   )
   .get(
     "/:id/posts",
+    optionalGuard,
     paginationAndSortingValidation(PostSortField),
     idValidation,
-    blogsQueryController.getPostsByBlogId.bind(blogsQueryController),
+    blogsQueryController.getPostsByBlogId.bind(blogsQueryController)
   )
 
   .post(
@@ -40,14 +42,14 @@ blogsRouter
     idValidation,
     createPostByBlogIdValidators,
     inputValidationResultMiddleware,
-    blogsController.createPostByBlogId.bind(blogsController),
+    blogsController.createPostByBlogId.bind(blogsController)
   )
 
   .get(
     "/:id",
     idValidation,
     inputValidationResultMiddleware,
-    blogsQueryController.findBlog.bind(blogsQueryController),
+    blogsQueryController.findBlog.bind(blogsQueryController)
   )
 
   .put(
@@ -56,7 +58,7 @@ blogsRouter
     idValidation,
     blogValidators,
     inputValidationResultMiddleware,
-    blogsController.updateBlog.bind(blogsController),
+    blogsController.updateBlog.bind(blogsController)
   )
 
   .delete(
@@ -64,5 +66,5 @@ blogsRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    blogsController.deleteBlog.bind(blogsController),
+    blogsController.deleteBlog.bind(blogsController)
   );
