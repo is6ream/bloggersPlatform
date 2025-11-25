@@ -79,7 +79,7 @@ export class PostsQueryRepository {
         dislikesCount: 0,
       };
 
-      console.log(postLikes.newestLikes, "newestLikes check"); //поля userLogin здесь нет
+      console.log(postLikes.newestLikes, "newestLikes check");
 
       return {
         id: postId,
@@ -104,7 +104,7 @@ export class PostsQueryRepository {
 
   async findById(
     postId: string,
-    userId?: string,
+    userId?: string
   ): Promise<Result<null | PostViewModel>> {
     console.log(userId, "userId check");
     const post = await PostModel.findOne({ _id: new ObjectId(postId) }).lean();
@@ -113,6 +113,7 @@ export class PostsQueryRepository {
     }
 
     const newestLikesData = await LikeModel.aggregate([
+      //Данная функция не возвращает статус текущего пользователя
       {
         $match: {
           parentId: postId,
@@ -223,9 +224,9 @@ export class PostsQueryRepository {
       blogName: post.blogName,
       createdAt: post.createdAt,
       extendedLikesInfo: {
-        likesCount: post.likesInfo.likesCount,
-        dislikesCount: post.likesInfo.dislikesCount,
-        myStatus: post.likesInfo.myStatus,
+        likesCount: likesResult.likesCount,
+        dislikesCount: likesResult.dislikesCount,
+        myStatus: likesResult.userReaction,
         newestLikes: likesResult.newestLikes || [],
       },
     });
@@ -234,7 +235,7 @@ export class PostsQueryRepository {
   async findPostsByBlogId(
     queryDto: PostQueryInput,
     blogId: string,
-    userId: string | undefined
+    userId: string | undefined,
   ): Promise<{ items: PostViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -276,7 +277,7 @@ export class PostsQueryRepository {
         };
         return acc;
       },
-      {} as Record<string, any>
+      {} as Record<string, any>,
     );
 
     const items: PostViewModel[] = posts.map((post) => {
