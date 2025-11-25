@@ -35,7 +35,6 @@ export class PostsService {
     newPost.blogId = foundBlog.id;
     newPost.blogName = foundBlog.name;
     const newPostId = await this.postRepository.create(newPost);
-    console.log(newPostId, "post id check in BLL");
     return handleSuccessResult(newPostId);
   }
 

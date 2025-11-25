@@ -25,7 +25,7 @@ export class PostsController {
     @inject(PostsService) private postsService: PostsService,
     @inject(PostsRepository) private postsRepository: PostsRepository,
     @inject(CommentsService) private commentsService: CommentsService,
-    @inject(CommentsRepository) private commentsRepository: CommentsRepository
+    @inject(CommentsRepository) private commentsRepository: CommentsRepository,
   ) {}
 
   async createPost(req: Request, res: Response) {

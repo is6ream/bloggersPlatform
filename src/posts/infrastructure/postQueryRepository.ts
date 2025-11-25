@@ -213,8 +213,9 @@ export class PostsQueryRepository {
         },
       },
     ]);
-    const likesResult = newestLikesData[0] || {};
+    const likesResult = newestLikesData[0] || {}; //нужно типизировать эту переменную
 
+    console.log(likesResult, "likeRes check");
     return handleSuccessResult({
       id: post._id.toString(),
       title: post.title,
@@ -224,9 +225,9 @@ export class PostsQueryRepository {
       blogName: post.blogName,
       createdAt: post.createdAt,
       extendedLikesInfo: {
-        likesCount: likesResult.likesCount,
-        dislikesCount: likesResult.dislikesCount,
-        myStatus: likesResult.userReaction,
+        likesCount: likesResult.likesCount || 0,
+        dislikesCount: likesResult.dislikesCount || 0,
+        myStatus: likesResult.userReaction || "None",
         newestLikes: likesResult.newestLikes || [],
       },
     });
@@ -235,7 +236,7 @@ export class PostsQueryRepository {
   async findPostsByBlogId(
     queryDto: PostQueryInput,
     blogId: string,
-    userId: string | undefined,
+    userId: string | undefined
   ): Promise<{ items: PostViewModel[]; totalCount: number }> {
     const { pageNumber, pageSize, sortBy, sortDirection, searchPostNameTerm } =
       queryDto;
@@ -277,7 +278,7 @@ export class PostsQueryRepository {
         };
         return acc;
       },
-      {} as Record<string, any>,
+      {} as Record<string, any>
     );
 
     const items: PostViewModel[] = posts.map((post) => {
