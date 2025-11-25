@@ -38,6 +38,7 @@ export class BlogsController {
   async createPostByBlogId(req: Request, res: Response): Promise<void> {
     try {
       const { id: id } = req.params;
+      console.log(id, "id check");
       const result = await this.postsService.createPostByBlogId(id, req.body);
       if (result.status !== ResultStatus.Success) {
         res

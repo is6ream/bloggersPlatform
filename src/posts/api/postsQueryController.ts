@@ -20,7 +20,11 @@ export class PostsQueryController {
   ) {}
   async findPost(req: Request, res: Response) {
     try {
-      const post = await this.postQueryRepository.findById(req.params.id);
+      const userId = req.userId;
+      const post = await this.postQueryRepository.findById(
+        req.params.id,
+        userId,
+      );
       if (!post.data) {
         res.status(HttpStatus.NotFound).send("Post not found!");
         return;
@@ -37,12 +41,12 @@ export class PostsQueryController {
   async getAllPosts(req: Request, res: Response) {
     try {
       const queryInput: PostQueryInput = setDefaultPaginationIfNotExist(
-        req.query,
+        req.query
       );
       const userId = req.userId;
       const { items, totalCount } = await this.postQueryRepository.findAll(
         queryInput,
-        userId,
+        userId
       );
 
       const postsListOutput = mapToPostListPaginatedOutput(items, {
@@ -60,7 +64,7 @@ export class PostsQueryController {
   async getCommentByPostId(req: Request, res: Response): Promise<void> {
     try {
       const queryInput: CommentsQueryInput = setDefaultPaginationIfNotExist(
-        req.query,
+        req.query
       );
       const { id: postId } = req.params;
       const userId = req.userId;

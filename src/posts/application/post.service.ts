@@ -20,7 +20,7 @@ import { UserModel } from "../../users/types/usersMongoose";
 export class PostsService {
   constructor(
     @inject(PostsRepository) private postRepository: PostsRepository,
-    @inject(BlogsRepository) private blogsRepository: BlogsRepository,
+    @inject(BlogsRepository) private blogsRepository: BlogsRepository
   ) {}
 
   async create(dto: PostInputDto): Promise<Result<string>> {
@@ -35,16 +35,19 @@ export class PostsService {
     newPost.blogId = foundBlog.id;
     newPost.blogName = foundBlog.name;
     const newPostId = await this.postRepository.create(newPost);
+    console.log(newPostId, "post id check in BLL");
     return handleSuccessResult(newPostId);
   }
 
   async createPostByBlogId(
     blogId: string,
-    dto: PostByIdInputDto,
-  ): Promise<Result<string>> {
+    dto: PostByIdInputDto
+  ): Promise<Result<string | null>> {
+    console.log(blogId, "blogId check in BLL");
     const blog = await this.blogsRepository.findById(blogId);
+    console.log("blog check", blog)
     if (!blog) {
-      return handleBadRequestResult("blog not found", "blogId");
+      return handleNotFoundResult("blog not found", "blogId");
     }
     const newPost = new PostModel();
     newPost.title = dto.title;
@@ -80,7 +83,7 @@ export class PostsService {
   }
 
   async updateLikeForPostStatus(
-    dto: PostLikeStatusDto,
+    dto: PostLikeStatusDto
   ): Promise<Result<null | void>> {
     let user = await UserModel.findOne({
       _id: new ObjectId(dto.userId),
@@ -119,7 +122,7 @@ export class PostsService {
   private async likesForPostCount(
     post: PostDocument,
     oldLikeStatus: LikeStatus,
-    newLikeStatus: LikeStatus,
+    newLikeStatus: LikeStatus
   ) {
     if (oldLikeStatus === "Like" && newLikeStatus === "Dislike") {
       post.likesInfo.likesCount--;

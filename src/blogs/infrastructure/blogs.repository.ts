@@ -12,12 +12,13 @@ export class BlogsRepository {
   }
 
   async findById(id: string): Promise<BlogViewModel | false> {
-    const blog = await BlogModel.findOne({ _id: new ObjectId(id) }).lean();
+    console.log(id, "id check dal");
+    const blog = await BlogModel.findById(id).lean();
+    console.log(blog, "DAL");
     if (!blog) {
       return false;
     }
     return {
-      //todo убрать маппинг из репозитория
       id: blog._id.toString(),
       name: blog.name,
       description: blog.description,
@@ -39,3 +40,4 @@ export class BlogsRepository {
     return deleteResult.deletedCount === 1;
   }
 }
+

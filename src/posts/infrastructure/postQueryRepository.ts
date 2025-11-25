@@ -102,9 +102,11 @@ export class PostsQueryRepository {
     return { items: items, totalCount: totalCount };
   }
 
-  async findById(postId: string): Promise<Result<null | PostViewModel>> {
+  async findById(
+    postId: string,
+    userId: string | undefined,
+  ): Promise<Result<null | PostViewModel>> {
     const post = await PostModel.findOne({ _id: new ObjectId(postId) }).lean();
-    console.log("post check", post);
     if (!post) {
       return handleNotFoundResult("post not found", "postId");
     }
@@ -114,7 +116,7 @@ export class PostsQueryRepository {
         $match: {
           parentId: postId,
           parentType: "Post",
-          status: "Like", // сразу фильтруем только лайки
+          // УБИРАЕМ фильтр по status - нужны ВСЕ реакции для myStatus
         },
       },
       {
@@ -134,12 +136,64 @@ export class PostsQueryRepository {
         },
       },
       { $sort: { createdAt: -1 } },
-      { $limit: 3 },
+      {
+        $group: {
+          _id: "$parentId",
+          // Все реакции для подсчетов и поиска статуса пользователя
+          allReactions: { $push: "$$ROOT" },
+          // Статус текущего пользователя
+          userReaction: {
+            $push: {
+              $cond: [
+                { $eq: ["$userId", userId] }, // если это текущий пользователь
+                "$status", // берем его статус
+                null,
+              ],
+            },
+          },
+          // Только лайки для newestLikes
+          newestLikes: {
+            $push: {
+              $cond: [
+                { $eq: ["$status", "Like"] }, // только лайки
+                {
+                  addedAt: "$createdAt",
+                  userId: "$userId",
+                  login: { $arrayElemAt: ["$user.login", 0] },
+                },
+                null,
+              ],
+            },
+          },
+        },
+      },
       {
         $project: {
-          addedAt: "$createdAt",
-          userId: 1,
-          login: { $arrayElemAt: ["$user.login", 0] },
+          userReaction: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: "$userReaction",
+                  as: "reaction",
+                  cond: { $ne: ["$$reaction", null] },
+                },
+              },
+              0,
+            ],
+          },
+          newestLikes: {
+            $slice: [
+              {
+                $filter: {
+                  input: "$newestLikes",
+                  as: "like",
+                  cond: { $ne: ["$$like", null] },
+                },
+              },
+              0,
+              3,
+            ],
+          },
         },
       },
     ]);
