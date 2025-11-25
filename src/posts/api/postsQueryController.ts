@@ -23,8 +23,9 @@ export class PostsQueryController {
       const userId = req.userId;
       const post = await this.postQueryRepository.findById(
         req.params.id,
-        userId,
+        userId
       );
+      console.log(post.data, "API");
       if (!post.data) {
         res.status(HttpStatus.NotFound).send("Post not found!");
         return;

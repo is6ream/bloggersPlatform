@@ -23,7 +23,7 @@ postRouter
     "/",
     optionalGuard,
     paginationAndSortingValidation(PostSortField),
-    postsQueryController.getAllPosts.bind(postsQueryController),
+    postsQueryController.getAllPosts.bind(postsQueryController)
   )
   .post(
     "/",
@@ -31,13 +31,14 @@ postRouter
     superAdminGuardMiddleware,
     postValidators,
     inputValidationResultMiddleware,
-    postsController.createPost.bind(postsController),
+    postsController.createPost.bind(postsController)
   )
   .get(
     "/:id",
+    optionalGuard,
     idValidation,
     inputValidationResultMiddleware,
-    postsQueryController.findPost.bind(postsQueryController),
+    postsQueryController.findPost.bind(postsQueryController)
   )
   .put(
     "/:id",
@@ -45,21 +46,21 @@ postRouter
     idValidation,
     postValidators,
     inputValidationResultMiddleware,
-    postsController.updatePost.bind(postsController),
+    postsController.updatePost.bind(postsController)
   )
   .delete(
     "/:id",
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    postsController.deletePost.bind(postsController),
+    postsController.deletePost.bind(postsController)
   )
   .post(
     "/:id/comments",
     accessTokenGuard,
     commentValidator,
     inputValidationResultMiddleware,
-    postsController.createComment.bind(postsController),
+    postsController.createComment.bind(postsController)
   )
 
   .get(
@@ -67,7 +68,7 @@ postRouter
     optionalGuard,
     paginationAndSortingValidation(CommentsSortField),
     idValidation,
-    postsQueryController.getCommentByPostId.bind(postsQueryController),
+    postsQueryController.getCommentByPostId.bind(postsQueryController)
   )
   .put(
     "/:id/like-status",
@@ -75,5 +76,5 @@ postRouter
     idValidation,
     likeStatusValidator,
     inputValidationResultMiddleware,
-    postsController.updateLikeStatus.bind(postsController),
+    postsController.updateLikeStatus.bind(postsController)
   );

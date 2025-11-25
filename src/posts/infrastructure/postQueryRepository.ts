@@ -104,19 +104,19 @@ export class PostsQueryRepository {
 
   async findById(
     postId: string,
-    userId: string | undefined,
+    userId?: string,
   ): Promise<Result<null | PostViewModel>> {
+    console.log(userId, "userId check");
     const post = await PostModel.findOne({ _id: new ObjectId(postId) }).lean();
     if (!post) {
       return handleNotFoundResult("post not found", "postId");
     }
 
-    const newestLikes = await LikeModel.aggregate([
+    const newestLikesData = await LikeModel.aggregate([
       {
         $match: {
           parentId: postId,
           parentType: "Post",
-          // УБИРАЕМ фильтр по status - нужны ВСЕ реакции для myStatus
         },
       },
       {
@@ -139,23 +139,18 @@ export class PostsQueryRepository {
       {
         $group: {
           _id: "$parentId",
-          // Все реакции для подсчетов и поиска статуса пользователя
           allReactions: { $push: "$$ROOT" },
           // Статус текущего пользователя
           userReaction: {
             $push: {
-              $cond: [
-                { $eq: ["$userId", userId] }, // если это текущий пользователь
-                "$status", // берем его статус
-                null,
-              ],
+              $cond: [{ $eq: ["$userId", userId] }, "$status", null],
             },
           },
           // Только лайки для newestLikes
           newestLikes: {
             $push: {
               $cond: [
-                { $eq: ["$status", "Like"] }, // только лайки
+                { $eq: ["$status", "Like"] },
                 {
                   addedAt: "$createdAt",
                   userId: "$userId",
@@ -169,6 +164,7 @@ export class PostsQueryRepository {
       },
       {
         $project: {
+          _id: 0, // ← УБИРАЕМ _id
           userReaction: {
             $arrayElemAt: [
               {
@@ -194,9 +190,29 @@ export class PostsQueryRepository {
               3,
             ],
           },
+          // Добавляем счетчики
+          likesCount: {
+            $size: {
+              $filter: {
+                input: "$allReactions",
+                as: "reaction",
+                cond: { $eq: ["$$reaction.status", "Like"] },
+              },
+            },
+          },
+          dislikesCount: {
+            $size: {
+              $filter: {
+                input: "$allReactions",
+                as: "reaction",
+                cond: { $eq: ["$$reaction.status", "Dislike"] },
+              },
+            },
+          },
         },
       },
     ]);
+    const likesResult = newestLikesData[0] || {};
 
     return handleSuccessResult({
       id: post._id.toString(),
@@ -210,7 +226,7 @@ export class PostsQueryRepository {
         likesCount: post.likesInfo.likesCount,
         dislikesCount: post.likesInfo.dislikesCount,
         myStatus: post.likesInfo.myStatus,
-        newestLikes: newestLikes,
+        newestLikes: likesResult.newestLikes || [],
       },
     });
   }
